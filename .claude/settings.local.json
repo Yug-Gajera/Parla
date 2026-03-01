@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc --noEmit --skipLibCheck 2>&1 | head -50)",
+      "Bash(npx tsc --noEmit --skipLibCheck app/api/test/available/route.ts app/api/test/generate/route.ts app/api/test/submit/route.ts 2>&1)",
+      "Bash(grep -n \"export async function\" /Users/yug/Desktop/FluentLoop/app/api/test/*/route.ts)"
+    ]
+  }
+}

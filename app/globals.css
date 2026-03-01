@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 4%;          /* #0a0a0a */
+    --foreground: 0 0% 98%;         /* #fafafa */
+    --card: 0 0% 7.8%;              /* #141414 */
+    --card-foreground: 0 0% 98%;    /* #fafafa */
+    --popover: 0 0% 7.8%;           /* #141414 */
+    --popover-foreground: 0 0% 98%; /* #fafafa */
+    --primary: 263 70% 58%;         /* #7c3aed - deep violet */
+    --primary-foreground: 0 0% 100%; /* white */
+    --secondary: 0 0% 10%;          /* #1a1a1a */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 10%;              /* #1a1a1a */
+    --muted-foreground: 0 0% 64%;   /* muted text hierarchy */
+    --accent: 263 70% 58%;          /* matches primary violet */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 16.5%;           /* #2a2a2a */
+    --input: 0 0% 16.5%;            /* #2a2a2a */
+    --ring: 263 70% 58%;            /* violet ring */
+    --chart-1: 263 70% 58%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
