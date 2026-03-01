@@ -2,7 +2,7 @@ import React from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { ProfileView } from '@/components/profile/ProfileView';
-import { BADGES, computeEarnedBadges } from '@/lib/data/badges';
+import { computeEarnedBadges } from '@/lib/data/badges';
 import { LEVEL_POINTS, getWeekStartDate } from '@/lib/utils/level';
 
 export const dynamic = 'force-dynamic';
@@ -96,10 +96,7 @@ export default async function ProfilePage() {
             levelScore,
             daysToNextLevel
         },
-        badges: BADGES.map((b) => ({
-            ...b,
-            earned: earnedBadges.find((e) => e.badgeId === b.id)
-        }))
+        earnedBadges
     };
 
     return (

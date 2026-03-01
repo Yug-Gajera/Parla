@@ -9,6 +9,7 @@ import { EditProfileSheet } from './EditProfileSheet';
 import { toast } from 'sonner';
 import { useProfile } from '@/hooks/useProfile';
 import { useRouter } from 'next/navigation';
+import { BADGES, type UserBadgeEarned } from '@/lib/data/badges';
 
 const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -27,7 +28,7 @@ interface ProfileViewProps {
         levelProgress: { currentLevel: string; levelScore: number; daysToNextLevel: number | null };
         certificates: Array<{ id: string; level_achieved: string; issued_at: string; verification_code: string; languages?: { flag_emoji?: string } }>;
         studySessions: Array<{ created_at: string; duration_minutes?: number }>;
-        badges: Array<{ id: string; name: string; description: string; icon: React.ElementType; earnedCriteria: string; earned?: { badgeId: string; earnedAt: string } }>;
+        earnedBadges: UserBadgeEarned[];
     };
 }
 
@@ -41,8 +42,13 @@ export function ProfileView({ initialData }: ProfileViewProps) {
     const stats = initialData.stats;
     const levelProgress = initialData.levelProgress;
     const certificates = initialData.certificates;
-    const badges = initialData.badges;
     const studySessions = initialData.studySessions || [];
+    const earnedBadges = initialData.earnedBadges;
+
+    const badges = BADGES.map((b) => ({
+        ...b,
+        earned: earnedBadges.find((e) => e.badgeId === b.id),
+    }));
 
     const languageName = (lang?.languages as { name?: string } | undefined)?.name || 'Spanish';
     const startedAt = lang?.started_at || profile?.created_at;
