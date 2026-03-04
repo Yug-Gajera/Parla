@@ -157,7 +157,7 @@ export default function StepDiagnostic() {
                 </div>
                 <h2 className="text-2xl font-semibold mb-2">Connection Error</h2>
                 <p className="text-muted-foreground text-center max-w-sm mb-6">
-                    We couldn't reach the AI assessor. Please check your connection and try again.
+                    We couldn&apos;t reach the AI assessor. Please check your connection and try again.
                 </p>
                 <Button
                     onClick={() => setViewState('loading_questions')}

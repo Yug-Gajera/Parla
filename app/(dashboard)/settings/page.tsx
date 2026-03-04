@@ -1,26 +1,29 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState, useRef } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import React, { useState, useEffect } from 'react';
+import { useProfile } from '@/hooks/useProfile';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Input } from '@/components/ui/input';
-import { Mail, Key, Trash2, Bell, Moon, Database, Shield } from 'lucide-react';
 import { toast } from 'sonner';
+import { Loader2, ShieldAlert, Lock, Mail, Palette, Database, Eye, EyeOff, Brain } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 
-const DAILY_GOAL_OPTIONS = [10, 20, 30, 45] as const;
 const CONTENT_TYPES = [
     { id: 'news', label: 'News' },
     { id: 'cooking', label: 'Cooking' },
@@ -31,265 +34,234 @@ const CONTENT_TYPES = [
 ];
 
 export default function SettingsPage() {
-    const supabase = createClient();
-    const [email, setEmail] = useState<string>('');
-    const [settings, setSettings] = useState<{
-        daily_goal_minutes: number;
-        notification_enabled: boolean;
-        preferred_content_types: string[];
-    } | null>(null);
-    const [saved, setSaved] = useState(false);
+    const { user, settings, isLoading, updateSettings } = useProfile();
     const [deleteConfirm, setDeleteConfirm] = useState('');
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const supabase = createClient();
 
-    useEffect(() => {
-        (async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
-            setEmail(user.email || '');
-            const { data } = await supabase.from('user_settings').select('*').eq('user_id', user?.id).single();
-            if (data) {
-                setSettings({
-                    daily_goal_minutes: data.daily_goal_minutes ?? 20,
-                    notification_enabled: data.notification_enabled ?? true,
-                    preferred_content_types: Array.isArray(data.preferred_content_types) ? data.preferred_content_types : ['news', 'cooking', 'vlog'],
-                });
-            } else {
-                setSettings({
-                    daily_goal_minutes: 20,
-                    notification_enabled: true,
-                    preferred_content_types: ['news', 'cooking', 'vlog'],
-                });
-            }
-        })().catch(console.error);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const handleGoalChange = async (value: string) => {
+        setIsSaving(true);
+        await updateSettings({ daily_goal_minutes: parseInt(value) });
+        setIsSaving(false);
+    };
 
-    const saveSettings = async (updates: Partial<typeof settings>) => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-        try {
-            const res = await fetch('/api/settings/update', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updates),
-            });
-            if (!res.ok) throw new Error();
-            setSettings((s) => (s ? { ...s, ...updates } : s));
-            setSaved(true);
-            setTimeout(() => setSaved(false), 2000);
-        } catch {
-            toast.error('Failed to save settings');
+    const handleContentTypeToggle = async (typeId: string, checked: boolean) => {
+        const currentTypes = settings?.preferred_content_types || [];
+        let newTypes;
+        if (checked) {
+            newTypes = [...currentTypes, typeId];
+        } else {
+            newTypes = currentTypes.filter((t: string) => t !== typeId);
         }
+        setIsSaving(true);
+        await updateSettings({ preferred_content_types: newTypes });
+        setIsSaving(false);
     };
 
-    const scheduleSave = (updates: Partial<typeof settings>) => {
-        if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-        setSettings((s) => (s ? { ...s, ...updates } : s));
-        saveTimeoutRef.current = setTimeout(() => {
-            saveSettings(updates);
-            saveTimeoutRef.current = null;
-        }, 500);
-    };
-
-    const handleDailyGoal = (mins: number) => {
-        scheduleSave({ daily_goal_minutes: mins });
-    };
-
-    const handleNotification = (checked: boolean) => {
-        scheduleSave({ notification_enabled: checked });
-    };
-
-    const handleContentType = (id: string, checked: boolean) => {
-        if (!settings) return;
-        const current = settings.preferred_content_types;
-        const arr = checked
-            ? (current.includes(id) ? current : [...current, id])
-            : current.filter((t) => t !== id);
-        scheduleSave({ preferred_content_types: arr });
-        setSettings({ ...settings, preferred_content_types: arr });
-    };
-
-    const handleChangePassword = async () => {
-        try {
-            const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/login`,
-            });
-            if (error) throw error;
-            toast.success('Check your email for the reset link');
-        } catch {
-            toast.error('Failed to send reset email');
+    const handlePasswordReset = async () => {
+        if (!user?.email) return;
+        const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+            redirectTo: `${window.location.origin}/auth/callback?next=/settings`,
+        });
+        if (error) {
+            toast.error(error.message);
+        } else {
+            toast.success("Password reset email sent!");
         }
     };
 
     const handleDeleteAccount = async () => {
         if (deleteConfirm !== 'DELETE') return;
-        setIsDeleting(true);
-        toast.error('Account deletion requires the service role. See docs for setup.');
-        setIsDeleting(false);
-        setIsDeleteOpen(false);
-        setDeleteConfirm('');
+        toast.error("Account deletion requires administrative privileges. Please contact support.");
+        // In a real app, you'd call a secure edge function that uses the service role to delete the user.
     };
 
-    if (!settings) {
+    if (isLoading) {
         return (
-            <div className="flex flex-col w-full max-w-2xl mx-auto p-8 animate-pulse">
-                <div className="h-8 bg-muted rounded w-48 mb-8" />
-                <div className="space-y-6">
-                    {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="h-24 bg-muted rounded-lg" />
-                    ))}
-                </div>
+            <div className="flex items-center justify-center min-h-screen">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col w-full max-w-2xl mx-auto px-4 sm:px-6 py-8 pb-24">
-            <div className="flex items-center justify-between mb-8">
-                <h1 className="text-3xl font-black text-foreground tracking-tight">Settings</h1>
-                {saved && <span className="text-xs text-primary font-medium">Saved</span>}
+        <div className="max-w-4xl mx-auto px-4 py-12 pb-32">
+            <div className="flex justify-between items-end mb-8">
+                <div>
+                    <h1 className="text-4xl font-black text-foreground tracking-tight">Settings</h1>
+                    <p className="text-muted-foreground mt-2">Manage your account and learning preferences.</p>
+                </div>
+                {isSaving && (
+                    <div className="flex items-center text-xs font-bold text-primary animate-pulse">
+                        SAVING...
+                    </div>
+                )}
             </div>
 
-            {/* Account */}
-            <Card className="p-6 border-border/50 bg-card mb-6">
-                <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-                    <Mail className="w-4 h-4" /> Account
-                </h2>
-                <div className="space-y-4">
-                    <div>
-                        <Label className="text-muted-foreground text-sm">Email</Label>
-                        <p className="text-foreground mt-1 opacity-70">{email}</p>
+            <div className="space-y-12">
+                {/* Account Section */}
+                <section>
+                    <div className="flex items-center gap-2 mb-6">
+                        <Mail className="w-5 h-5 text-primary" />
+                        <h2 className="text-xl font-bold">Account</h2>
                     </div>
-                    <Button variant="outline" size="sm" onClick={handleChangePassword}>
-                        <Key className="w-4 h-4 mr-2" /> Change Password
-                    </Button>
-                </div>
-                <Separator className="my-6" />
-                <div>
-                    <Label className="text-destructive font-medium">Danger Zone</Label>
-                    <p className="text-sm text-muted-foreground mt-1 mb-4">Permanently delete your account and all data.</p>
-                    <Button variant="destructive" size="sm" onClick={() => setIsDeleteOpen(true)}>
-                        <Trash2 className="w-4 h-4 mr-2" /> Delete Account
-                    </Button>
-                </div>
-            </Card>
-
-            {/* Learning Preferences */}
-            <Card className="p-6 border-border/50 bg-card mb-6">
-                <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-                    <Bell className="w-4 h-4" /> Learning Preferences
-                </h2>
-                <div className="space-y-6">
-                    <div>
-                        <Label className="text-sm mb-3 block">Daily Goal</Label>
-                        <div className="flex flex-wrap gap-2">
-                            {DAILY_GOAL_OPTIONS.map((mins) => (
-                                <button
-                                    key={mins}
-                                    onClick={() => handleDailyGoal(mins)}
-                                    className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors
-                                        ${settings.daily_goal_minutes === mins
-                                            ? 'bg-primary text-primary-foreground border-primary'
-                                            : 'bg-secondary/50 border-border hover:border-primary/50'}`}
-                                >
-                                    {mins}+ min
-                                </button>
-                            ))}
+                    <Card className="p-6 bg-card border-border/50 divide-y divide-border/50">
+                        <div className="pb-6">
+                            <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 block">Email Address</Label>
+                            <div className="flex items-center justify-between">
+                                <span className="text-foreground font-medium opacity-50">{user?.email}</span>
+                                <span className="text-[10px] bg-secondary px-2 py-1 rounded text-muted-foreground">PRIMARY</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <Label>Notifications</Label>
-                            <p className="text-xs text-muted-foreground">Get reminders to practice (coming soon)</p>
+                        <div className="py-6">
+                            <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 block">Password</Label>
+                            <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground text-sm italic">••••••••••••</span>
+                                <Button variant="outline" size="sm" className="rounded-full" onClick={handlePasswordReset}>
+                                    Change Password
+                                </Button>
+                            </div>
                         </div>
-                        <Switch
-                            checked={settings.notification_enabled}
-                            onCheckedChange={handleNotification}
-                        />
-                    </div>
-                    <div>
-                        <Label className="text-sm mb-3 block">Preferred Content Types</Label>
-                        <div className="grid grid-cols-2 gap-3">
-                            {CONTENT_TYPES.map((ct) => (
-                                <div key={ct.id} className="flex items-center space-x-2">
-                                    <Checkbox
-                                        id={ct.id}
-                                        checked={settings.preferred_content_types.includes(ct.id)}
-                                        onCheckedChange={(c) => handleContentType(ct.id, !!c)}
+                        <div className="pt-6">
+                            <Label className="text-xs font-bold uppercase tracking-wider text-destructive mb-2 block">Danger Zone</Label>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button variant="destructive" size="sm" className="rounded-full">
+                                        Delete Account
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="bg-card border-border">
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle className="text-xl font-bold">Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogDescription className="text-muted-foreground">
+                                            This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                                            Please type <span className="font-bold text-foreground">DELETE</span> to confirm.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <Input
+                                        value={deleteConfirm}
+                                        onChange={(e) => setDeleteConfirm(e.target.value)}
+                                        className="bg-background border-border my-4"
+                                        placeholder="DELETE"
                                     />
-                                    <Label htmlFor={ct.id} className="cursor-pointer font-normal">{ct.label}</Label>
-                                </div>
-                            ))}
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel className="rounded-full">Cancel</AlertDialogCancel>
+                                        <AlertDialogAction
+                                            onClick={handleDeleteAccount}
+                                            disabled={deleteConfirm !== 'DELETE'}
+                                            className="bg-destructive hover:bg-destructive/90 rounded-full font-bold"
+                                        >
+                                            Delete My Account
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                    </Card>
+                </section>
+
+                <Separator className="bg-border/50" />
+
+                {/* Learning Preferences */}
+                <section>
+                    <div className="flex items-center gap-2 mb-6">
+                        <Brain className="w-5 h-5 text-primary" />
+                        <h2 className="text-xl font-bold">Learning Preferences</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                            <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Daily Goal</Label>
+                            <RadioGroup
+                                defaultValue={settings?.daily_goal_minutes?.toString() || "20"}
+                                onValueChange={handleGoalChange}
+                                className="grid grid-cols-2 gap-4"
+                            >
+                                {[10, 20, 30, 45].map((mins) => (
+                                    <div key={mins}>
+                                        <RadioGroupItem value={mins.toString()} id={`goal-${mins}`} className="peer sr-only" />
+                                        <Label
+                                            htmlFor={`goal-${mins}`}
+                                            className="flex flex-col items-center justify-center rounded-2xl border-2 border-muted bg-card p-4 hover:bg-muted peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all"
+                                        >
+                                            <span className="text-2xl font-black">{mins}</span>
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">MINUTES</span>
+                                        </Label>
+                                    </div>
+                                ))}
+                            </RadioGroup>
+                        </div>
+
+                        <div className="space-y-4">
+                            <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Content Types</Label>
+                            <div className="grid grid-cols-2 gap-3 bg-card p-4 rounded-2xl border border-border/50">
+                                {CONTENT_TYPES.map((type) => (
+                                    <div key={type.id} className="flex items-center space-x-2">
+                                        <Checkbox
+                                            id={type.id}
+                                            checked={settings?.preferred_content_types?.includes(type.id)}
+                                            onCheckedChange={(checked) => handleContentTypeToggle(type.id, !!checked)}
+                                        />
+                                        <label
+                                            htmlFor={type.id}
+                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                        >
+                                            {type.label}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Card>
+                </section>
 
-            {/* Appearance */}
-            <Card className="p-6 border-border/50 bg-card mb-6">
-                <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-                    <Moon className="w-4 h-4" /> Appearance
-                </h2>
-                <p className="text-sm text-muted-foreground">Dark mode only for now. Light mode coming soon.</p>
-            </Card>
+                <Separator className="bg-border/50" />
 
-            {/* Data */}
-            <Card className="p-6 border-border/50 bg-card mb-6">
-                <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-                    <Database className="w-4 h-4" /> Data
-                </h2>
-                <div className="space-y-4">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => toast.info("We'll email you a data export within 24 hours")}
-                    >
-                        Export My Data
-                    </Button>
-                    <div>
-                        <a
-                            href="/privacy"
-                            className="text-sm text-primary hover:underline flex items-center gap-2"
-                        >
-                            <Shield className="w-4 h-4" /> View Privacy Policy
-                        </a>
+                {/* Appearance */}
+                <section>
+                    <div className="flex items-center gap-2 mb-6">
+                        <Palette className="w-5 h-5 text-primary" />
+                        <h2 className="text-xl font-bold">Appearance</h2>
                     </div>
-                </div>
-            </Card>
+                    <Card className="p-6 bg-card border-border/50">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h4 className="font-bold">Dark Mode</h4>
+                                <p className="text-sm text-muted-foreground">Always on for focused learning sessions.</p>
+                            </div>
+                            <span className="text-[10px] bg-primary/10 text-primary font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+                                LIGHT MODE COMING SOON
+                            </span>
+                        </div>
+                    </Card>
+                </section>
 
-            {/* Delete confirmation dialog */}
-            <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Delete Account</DialogTitle>
-                        <DialogDescription>
-                            This action cannot be undone. All your data will be permanently removed.
-                            Type <strong>DELETE</strong> to confirm.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <Input
-                        placeholder="Type DELETE to confirm"
-                        value={deleteConfirm}
-                        onChange={(e) => setDeleteConfirm(e.target.value)}
-                        className="font-mono"
-                    />
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => { setIsDeleteOpen(false); setDeleteConfirm(''); }}>
-                            Cancel
+                <Separator className="bg-border/50" />
+
+                {/* Data Section */}
+                <section>
+                    <div className="flex items-center gap-2 mb-6">
+                        <Database className="w-5 h-5 text-primary" />
+                        <h2 className="text-xl font-bold">Privacy & Data</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Button
+                            variant="outline"
+                            className="h-auto p-6 flex flex-col items-start gap-1 rounded-2xl border-border/50 bg-card hover:bg-muted"
+                            onClick={() => toast.success("We'll email you a data export within 24 hours")}
+                        >
+                            <span className="font-bold">Export My Data</span>
+                            <span className="text-xs text-muted-foreground">Download all your study history.</span>
                         </Button>
                         <Button
-                            variant="destructive"
-                            onClick={handleDeleteAccount}
-                            disabled={deleteConfirm !== 'DELETE' || isDeleting}
+                            variant="outline"
+                            className="h-auto p-6 flex flex-col items-start gap-1 rounded-2xl border-border/50 bg-card hover:bg-muted"
                         >
-                            {isDeleting ? 'Deleting...' : 'Delete Account'}
+                            <span className="font-bold">Privacy Policy</span>
+                            <span className="text-xs text-muted-foreground">Read how we protect your information.</span>
                         </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+                    </div>
+                </section>
+            </div>
         </div>
     );
 }

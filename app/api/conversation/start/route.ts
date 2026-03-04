@@ -16,21 +16,78 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { scenario_id, language_id, level } = body;
+        const { scenario_id, language_id, level, skip_situation_id } = body;
 
         const scenario = SCENARIOS.find(s => s.id === scenario_id);
         if (!scenario) {
             return NextResponse.json({ error: 'Scenario not found' }, { status: 404 });
         }
 
-        // 1. Generate the opening message from Claude using OpenAI
-        const systemPrompt = CONVERSATION_SYSTEM_PROMPT
-            .replace('{CONTEXT}', scenario.opening_context)
-            .replace('{GOAL}', scenario.goal)
-            .replace('{LEVEL}', level || 'A2');
+        // ── Situation Selection Algorithm ────────────────────────
+        const fourteenDaysAgo = new Date();
+        fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
 
+        const { data: recentHistory } = await (supabase as any)
+            .from('user_situation_history')
+            .select('situation_id, completed_at')
+            .eq('user_id', user.id)
+            .eq('scenario_type', scenario.id)
+            .gte('completed_at', fourteenDaysAgo.toISOString())
+            .order('completed_at', { ascending: true });
+
+        const recentSituationIds = new Set(
+            (recentHistory || []).map((h: { situation_id: string }) => h.situation_id)
+        );
+
+        // Filter out the situation we want to skip (when user clicks "Try Different")
+        const candidateSituations = scenario.situations.filter(
+            s => s.id !== skip_situation_id
+        );
+
+        // Find fresh situations (not done in last 14 days)
+        const freshSituations = candidateSituations.filter(
+            s => !recentSituationIds.has(s.id)
+        );
+
+        let selectedSituation;
+        if (freshSituations.length > 0) {
+            // Pick randomly from fresh ones
+            selectedSituation = freshSituations[
+                Math.floor(Math.random() * freshSituations.length)
+            ];
+        } else {
+            // All done recently — pick the one done longest ago
+            const historyMap = new Map(
+                (recentHistory || []).map((h: { situation_id: string; completed_at: string }) => [h.situation_id, h.completed_at])
+            );
+            const sorted = [...candidateSituations].sort((a, b) => {
+                const aTime = historyMap.get(a.id) || '9999';
+                const bTime = historyMap.get(b.id) || '9999';
+                return aTime < bTime ? -1 : 1;
+            });
+            selectedSituation = sorted[0];
+        }
+
+        // Fallback safety
+        if (!selectedSituation) {
+            selectedSituation = scenario.situations[0];
+        }
+
+        // ── Build System Prompt ─────────────────────────────────
+        const difficultyNote = selectedSituation.difficulty_modifier > 0
+            ? 'This is a more challenging variation — be realistic and do not make it too easy for the user.'
+            : '';
+
+        const systemPrompt = CONVERSATION_SYSTEM_PROMPT
+            .replace('{CONTEXT}', scenario.base_context)
+            .replace('{SITUATION}', selectedSituation.modifier)
+            .replace('{GOAL}', scenario.goal)
+            .replace('{LEVEL}', level || 'A2')
+            .replace('{DIFFICULTY_NOTE}', difficultyNote);
+
+        // ── Generate Opening Message ────────────────────────────
         const completion = await openai.chat.completions.create({
-            model: 'gpt-4o', // Using GPT-4o instead of Claude as per env
+            model: 'gpt-4o',
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: 'START SCENARIO. Send your opening actual dialogue now.' }
@@ -49,7 +106,7 @@ export async function POST(req: Request) {
             }
         ];
 
-        // 2. Create the session in DB
+        // ── Create Session in DB ────────────────────────────────
         const { data: session, error: insertError } = await (supabase as any)
             .from('conversation_sessions')
             .insert({
@@ -58,7 +115,10 @@ export async function POST(req: Request) {
                 scenario_type: scenario.id,
                 scenario_name: scenario.name,
                 mode: 'text',
-                messages: initialMessages
+                messages: initialMessages,
+                situation_id: selectedSituation.id,
+                situation_name: selectedSituation.name,
+                situation_twist: selectedSituation.twist,
             })
             .select()
             .single();
@@ -72,7 +132,11 @@ export async function POST(req: Request) {
             success: true,
             session_id: session.id,
             message: openingMessage,
-            scenario
+            scenario,
+            situation_name: selectedSituation.name,
+            situation_teaser: selectedSituation.teaser,
+            situation_twist: selectedSituation.twist,
+            situation_id: selectedSituation.id,
         });
 
     } catch (error) {

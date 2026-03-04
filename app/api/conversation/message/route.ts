@@ -24,7 +24,7 @@ export async function POST(req: Request) {
         // Validate session belongs to user
         const { data: session, error: sessionFetchError } = await (supabase as any)
             .from('conversation_sessions')
-            .select('id, messages')
+            .select('id, messages, situation_id, situation_name, situation_twist')
             .eq('id', session_id)
             .eq('user_id', user.id)
             .single();
@@ -34,10 +34,19 @@ export async function POST(req: Request) {
         }
 
         const scenario = SCENARIOS.find(s => s.id === scenario_id);
+        // Find the situation modifier for this session
+        const situation = scenario?.situations?.find((s: { id: string }) => s.id === session.situation_id);
+        const situationModifier = situation?.modifier || 'Continue the conversation naturally.';
+        const difficultyNote = (situation?.difficulty_modifier || 0) > 0
+            ? 'This is a more challenging variation — be realistic and do not make it too easy for the user.'
+            : '';
+
         const systemPrompt = CONVERSATION_SYSTEM_PROMPT
-            .replace('{CONTEXT}', scenario?.opening_context || '')
+            .replace('{CONTEXT}', scenario?.base_context || '')
+            .replace('{SITUATION}', situationModifier)
             .replace('{GOAL}', scenario?.goal || '')
-            .replace('{LEVEL}', level || 'A2');
+            .replace('{LEVEL}', level || 'A2')
+            .replace('{DIFFICULTY_NOTE}', difficultyNote);
 
         // Construct standard OpenAI message array
         const apiMessages = [

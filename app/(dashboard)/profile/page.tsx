@@ -40,7 +40,7 @@ export default async function ProfilePage() {
         supabase.from('study_sessions').select('created_at, duration_minutes, xp_earned').eq('user_id', user.id).gte('created_at', oneYearAgo.toISOString()),
         supabase.from('leaderboard_entries').select('*').eq('user_id', user.id).eq('week_start_date', weekStart).maybeSingle(),
         supabase.from('user_vocabulary').select('*', { count: 'exact', head: true }).eq('user_id', user.id).in('status', ['learning', 'familiar', 'mastered']),
-        supabase.from('conversation_sessions').select('created_at').eq('user_id', user.id).order('created_at', { ascending: true }).limit(1).single()
+        supabase.from('conversation_sessions').select('created_at').eq('user_id', user.id).order('created_at', { ascending: true }).limit(1).maybeSingle()
     ]);
 
     const { count: convCount } = await supabase
@@ -64,12 +64,12 @@ export default async function ProfilePage() {
     const stats = {
         vocabKnown: vocabCount || 0,
         conversations: convCount || 0,
-        streak: primaryLang?.streak_days ?? 0,
+        streak: (primaryLang as any)?.streak_days ?? 0,
         totalHours: Math.round(totalMins / 60)
     };
 
-    const levelScore = primaryLang?.level_score ?? 0;
-    const currentLevel = primaryLang?.current_level ?? 'A1';
+    const levelScore = (primaryLang as any)?.level_score ?? 0;
+    const currentLevel = (primaryLang as any)?.current_level ?? 'A1';
     const remainingPoints = Math.max(0, LEVEL_POINTS - levelScore);
     const daysToNextLevel = avgPointsPerDay > 0 ? Math.ceil(remainingPoints / avgPointsPerDay) : null;
 

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { VocabularyWord } from '@/hooks/useVocabulary';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, RotateCcw, ArrowRight, Brain, Zap, X } from 'lucide-react';
+import { CheckCircle2, RotateCcw, Brain, Zap, X } from 'lucide-react';
 import { calculateSM2 } from '@/lib/utils/vocabulary';
 
 type SessionState = 'idle' | 'reviewing' | 'complete';
@@ -71,7 +71,7 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
         if (!currentWord) return;
 
         // Update local session stats
-        let isCorrect = quality >= 3;
+        const isCorrect = quality >= 3;
 
         setStats(prev => ({
             ...prev,

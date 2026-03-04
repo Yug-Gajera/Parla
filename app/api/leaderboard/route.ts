@@ -32,7 +32,7 @@ export async function GET(req: Request) {
             .from('leaderboard_entries')
             .select(`
                 id, user_id, weekly_score, total_score,
-                users ( name )
+                users!user_id ( full_name )
             `)
             .eq('language_id', language_id)
             .eq('level_band', level_band)
@@ -50,8 +50,8 @@ export async function GET(req: Request) {
             rank: index + 1,
             id: entry.id,
             user_id: entry.user_id,
-            name: entry.users?.name || 'Anonymous',
-            avatar: (entry.users?.name || 'A').substring(0, 2).toUpperCase(),
+            name: entry.users?.full_name || 'Anonymous',
+            avatar: (entry.users?.full_name || 'A').substring(0, 2).toUpperCase(),
             weekly_score: entry.weekly_score,
             total_score: entry.total_score,
             is_current_user: entry.user_id === user.id
@@ -63,7 +63,7 @@ export async function GET(req: Request) {
         if (!currentUserEntry) {
             const { data: userRow } = await supabase
                 .from('leaderboard_entries')
-                .select(`id, user_id, weekly_score, total_score, users ( name )`)
+                .select(`id, user_id, weekly_score, total_score, users!user_id ( full_name )`)
                 .eq('language_id', language_id)
                 .eq('level_band', level_band)
                 .eq('week_start_date', weekStartIso)
@@ -84,8 +84,8 @@ export async function GET(req: Request) {
                     rank: (count || 0) + 1,
                     id: (userRow as any).id,
                     user_id: (userRow as any).user_id,
-                    name: (userRow as any).users?.name || 'Anonymous',
-                    avatar: ((userRow as any).users?.name || 'A').substring(0, 2).toUpperCase(),
+                    name: (userRow as any).users?.full_name || 'Anonymous',
+                    avatar: ((userRow as any).users?.full_name || 'A').substring(0, 2).toUpperCase(),
                     weekly_score: (userRow as any).weekly_score,
                     total_score: (userRow as any).total_score,
                     is_current_user: true
@@ -111,6 +111,10 @@ export async function GET(req: Request) {
             current_user_entry: currentUserEntry,
             week_start_date: weekStartDate.toISOString(),
             week_end_date: weekEndDate.toISOString()
+        }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30'
+            }
         });
 
     } catch (error) {

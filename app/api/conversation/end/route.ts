@@ -129,10 +129,49 @@ export async function POST(req: Request) {
             console.error('Failed to update leaderboard via fetch', lbErr);
         }
 
+        // 6. Upsert situation history for variation tracking
+        if (session.situation_id) {
+            try {
+                // Check if a row already exists for this user+scenario+situation
+                const { data: existing } = await (supabase as any)
+                    .from('user_situation_history')
+                    .select('id')
+                    .eq('user_id', user.id)
+                    .eq('scenario_type', scenario_id)
+                    .eq('situation_id', session.situation_id)
+                    .maybeSingle();
+
+                if (existing) {
+                    await (supabase as any)
+                        .from('user_situation_history')
+                        .update({
+                            completed_at: new Date().toISOString(),
+                            overall_score: finalScores.overall_score,
+                        })
+                        .eq('id', existing.id);
+                } else {
+                    await (supabase as any)
+                        .from('user_situation_history')
+                        .insert({
+                            user_id: user.id,
+                            language_id: session.language_id,
+                            scenario_type: scenario_id,
+                            situation_id: session.situation_id,
+                            overall_score: finalScores.overall_score,
+                        });
+                }
+            } catch (shErr) {
+                console.error('Failed to upsert situation history', shErr);
+            }
+        }
+
         return NextResponse.json({
             success: true,
             scoring: finalScores,
-            xpEarned
+            xpEarned,
+            situation_id: session.situation_id,
+            situation_name: session.situation_name,
+            situation_twist: session.situation_twist,
         });
 
     } catch (error) {

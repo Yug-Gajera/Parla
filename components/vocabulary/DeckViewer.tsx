@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useVocabulary, VocabularyWord } from '@/hooks/useVocabulary';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Plus, Filter, LayoutGrid } from 'lucide-react';
+import { Search, Plus, LayoutGrid } from 'lucide-react';
 import { WordDetailSheet } from './WordDetailSheet';
 import { AddWordSheet } from './AddWordSheet';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -98,13 +98,13 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                 {words.length === 0 && !isLoading ? (
                     <div className="flex flex-col items-center justify-center p-12 h-full text-center">
                         <LayoutGrid className="h-12 w-12 text-muted-foreground/30 mb-4" />
-                        <h3 className="text-xl font-semibold mb-2">No words found</h3>
+                        <h3 className="text-xl font-semibold mb-2">Your vocabulary deck is empty</h3>
                         <p className="text-muted-foreground max-w-sm mb-6">
-                            {search ? `We couldn't find any words matching "${search}".` : "Your vocabulary deck is empty right now. Add some new words to start learning."}
+                            Words you learn in conversations will appear here. Add your first word to start building your deck.
                         </p>
                         {!search && (
                             <Button onClick={() => setIsAddOpen(true)} className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6">
-                                <Plus className="mr-2 h-4 w-4" /> Add Words
+                                <Plus className="mr-2 h-4 w-4" /> Add your first word
                             </Button>
                         )}
                     </div>

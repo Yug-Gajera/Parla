@@ -140,6 +140,6 @@ export function AddWordSheet({ open, onOpenChange, languageId, refreshDeck }: Ad
                     )}
                 </div>
             </SheetContent>
-        </Sheet>
+        </Sheet >
     );
 }

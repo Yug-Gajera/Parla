@@ -31,9 +31,7 @@ export default function StepLevel() {
             </button>
 
             {/* ── Header ── */}
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2 text-center text-balance">
-                How much do you already know?
-            </h1>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 text-center text-balance">What&apos;s your current level?</h1>
             <p className="text-muted-foreground text-center mb-10">
                 Be honest — we'll verify this in the next step
             </p>

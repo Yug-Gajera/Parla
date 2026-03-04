@@ -1,21 +1,41 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, XCircle, Share, RefreshCcw, LayoutGrid, MessageSquareQuote } from 'lucide-react';
+import { CheckCircle2, XCircle, Share, RefreshCcw, LayoutGrid, MessageSquareQuote, Shuffle, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
+import { SCENARIOS } from '@/lib/data/scenarios';
 
 interface ScoreCardProps {
     scoring: any;
     xpEarned: number;
     scenario: any;
     onClose: () => void;
+    // Situation variation props
+    situationName?: string | null;
+    situationTwist?: string | null;
+    situationId?: string | null;
+    onReplay?: () => void;
+    onTryAnother?: () => void;
+    completedSituationIds?: string[];
+    situationBestScores?: Record<string, number | null>;
 }
 
-export function ScoreCard({ scoring, xpEarned, scenario, onClose }: ScoreCardProps) {
+export function ScoreCard({
+    scoring,
+    scenario,
+    onClose,
+    situationName,
+    situationTwist,
+    situationId,
+    onReplay,
+    onTryAnother,
+    completedSituationIds = [],
+    situationBestScores = {},
+}: ScoreCardProps) {
 
     const getScoreColor = (score: number) => {
         if (score >= 85) return 'text-violet-500';
@@ -36,6 +56,14 @@ export function ScoreCard({ scoring, xpEarned, scenario, onClose }: ScoreCardPro
         navigator.clipboard.writeText(text);
         toast.success("Score copied to clipboard!");
     };
+
+    // Find the full scenario data for variation dots
+    const fullScenario = SCENARIOS.find(s => s.id === scenario?.id);
+    const situations = fullScenario?.situations || [];
+
+    // Build completed list including current situation
+    const allCompletedIds = new Set([...completedSituationIds]);
+    if (situationId) allCompletedIds.add(situationId);
 
     // Staggered animation variants
     const containerV: any = {
@@ -94,6 +122,61 @@ export function ScoreCard({ scoring, xpEarned, scenario, onClose }: ScoreCardPro
                 {/* Metrics Breakdown */}
                 <motion.div variants={containerV} initial="hidden" animate="show" className="w-full flex flex-col gap-10">
 
+                    {/* Situation Reveal Card */}
+                    {situationName && (
+                        <motion.div variants={itemV}>
+                            <div className="bg-primary/5 border border-primary/20 rounded-3xl p-6 sm:p-8 text-center">
+                                <span className="text-sm font-semibold tracking-widest text-muted-foreground uppercase block mb-3">
+                                    You just completed
+                                </span>
+                                <h2 className="text-2xl font-bold text-foreground mb-3">{situationName}</h2>
+                                {situationTwist && (
+                                    <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold border border-primary/20">
+                                        <Sparkles className="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" />
+                                        {situationTwist}
+                                    </span>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {/* Variation Progress */}
+                    {situations.length > 0 && (
+                        <motion.div variants={itemV}>
+                            <h3 className="text-lg font-bold mb-4 text-center">
+                                {scenario?.name} Variations
+                            </h3>
+                            <div className="flex justify-center gap-3 flex-wrap">
+                                {situations.map((sit) => {
+                                    const isCompleted = allCompletedIds.has(sit.id);
+                                    const isCurrent = sit.id === situationId;
+                                    const bestScore = situationBestScores[sit.id] ?? (isCurrent ? scoring.overall_score : null);
+
+                                    return (
+                                        <div key={sit.id} className="flex flex-col items-center gap-1.5">
+                                            <div
+                                                className={`w-4 h-4 rounded-full transition-all ${isCurrent
+                                                        ? 'bg-primary ring-2 ring-primary/30 ring-offset-2 ring-offset-background'
+                                                        : isCompleted
+                                                            ? 'bg-primary/60'
+                                                            : 'bg-border/40'
+                                                    }`}
+                                            />
+                                            {isCompleted && bestScore !== null && (
+                                                <span className="text-[10px] font-bold text-muted-foreground">
+                                                    {bestScore}%
+                                                </span>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <p className="text-xs text-muted-foreground text-center mt-3">
+                                {allCompletedIds.size} of {situations.length} variations discovered
+                            </p>
+                        </motion.div>
+                    )}
+
                     {/* Progress Bars */}
                     <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 bg-card border border-border/50 p-6 rounded-3xl">
                         <motion.div variants={itemV} className="flex flex-col gap-2">
@@ -144,7 +227,7 @@ export function ScoreCard({ scoring, xpEarned, scenario, onClose }: ScoreCardPro
                                 {scoring.feedback?.summary}
                             </p>
                             <div className="bg-primary text-primary-foreground p-4 rounded-2xl mb-4 font-medium italic">
-                                "{scoring.feedback?.encouragement}"
+                                &quot;{scoring.feedback?.encouragement}&quot;
                             </div>
                             <div className="flex items-start gap-3 mt-6 pt-6 border-t border-primary/10">
                                 <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
@@ -170,9 +253,7 @@ export function ScoreCard({ scoring, xpEarned, scenario, onClose }: ScoreCardPro
                                                 {err.error}
                                             </span>
                                             <span className="hidden sm:inline text-muted-foreground">→</span>
-                                            <span className="text-emerald-500 font-bold">
-                                                {err.correction}
-                                            </span>
+                                            <span className="font-semibold text-emerald-500">{err.correction}</span>
                                         </div>
                                         <p className="text-sm text-foreground/80">{err.explanation}</p>
                                     </Card>
@@ -212,28 +293,32 @@ export function ScoreCard({ scoring, xpEarned, scenario, onClose }: ScoreCardPro
 
                     {/* Action Buttons */}
                     <motion.div variants={itemV} className="flex flex-col sm:flex-row gap-4 mt-8 w-full justify-center pb-20">
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            className="h-14 px-8 rounded-full border-2 border-primary/20 hover:bg-primary/5 text-primary"
-                            onClick={() => window.location.reload()} // Quick hack to retry, normally would reset state
-                        >
-                            <RefreshCcw className="w-5 h-5 mr-2" /> Try Again
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            size="lg"
-                            className="h-14 px-8 rounded-full"
-                            onClick={handleShare}
-                        >
-                            <Share className="w-5 h-5 mr-2" /> Share Score
-                        </Button>
+                        {onReplay && (
+                            <Button
+                                variant="outline"
+                                size="lg"
+                                className="h-14 px-8 rounded-full border-2 border-primary/20 hover:bg-primary/5 text-primary"
+                                onClick={onReplay}
+                            >
+                                <RefreshCcw className="w-5 h-5 mr-2" /> Replay This Variation
+                            </Button>
+                        )}
+                        {onTryAnother && (
+                            <Button
+                                variant="secondary"
+                                size="lg"
+                                className="h-14 px-8 rounded-full"
+                                onClick={onTryAnother}
+                            >
+                                <Shuffle className="w-5 h-5 mr-2" /> Try Another Variation
+                            </Button>
+                        )}
                         <Button
                             size="lg"
                             className="h-14 px-8 rounded-full bg-primary text-primary-foreground font-bold"
                             onClick={onClose}
                         >
-                            <LayoutGrid className="w-5 h-5 mr-2" /> Browse Scenarios
+                            <LayoutGrid className="w-5 h-5 mr-2" /> New Scenario
                         </Button>
                     </motion.div>
 

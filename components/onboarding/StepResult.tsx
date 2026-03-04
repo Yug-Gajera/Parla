@@ -5,21 +5,16 @@
 // ============================================================
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useOnboardingStore } from '@/store/onboarding';
-import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function StepResult() {
-    const router = useRouter();
-    const supabase = createClient();
     const {
         assessedLevel,
         levelScore,
-        selectedLanguageId,
         selectedLanguageCode,
         dailyGoalMinutes,
     } = useOnboardingStore();
@@ -35,54 +30,30 @@ export default function StepResult() {
 
     const handleStartLearning = async () => {
         setIsSaving(true);
-        console.log('[StepResult] Starting save process...');
+        console.log('[StepResult] Starting save via API...');
 
         try {
-            console.log('[StepResult] Fetching user...');
-            const { data: { user }, error: authError } = await supabase.auth.getUser();
-            console.log('[StepResult] User result:', user?.id, authError);
-            if (authError || !user) throw new Error('Not authenticated');
-
-            console.log('[StepResult] Fetching real language ID for:', selectedLanguageCode);
-            const { data: langData, error: langFindError } = await (supabase as any)
-                .from('languages')
-                .select('id')
-                .eq('code', selectedLanguageCode)
-                .single();
-
-            if (langFindError || !langData) throw new Error('Language not found in database');
-            const dbLanguageId = langData.id;
-
-            console.log('[StepResult] Saving language:', dbLanguageId, assessedLevel, levelScore);
-            // 1. Save language
-            const { error: langSaveError } = await (supabase as any)
-                .from('user_languages')
-                .upsert({
-                    user_id: user.id,
-                    language_id: dbLanguageId,
-                    current_level: assessedLevel || 'A1',
+            const res = await fetch('/api/onboarding/complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    language_code: selectedLanguageCode,
+                    assessed_level: assessedLevel || 'A1',
                     level_score: levelScore || 0,
-                }, { onConflict: 'user_id, language_id' });
-
-            console.log('[StepResult] Language save error:', langSaveError);
-            if (langSaveError) throw new Error(langSaveError.message);
-
-            console.log('[StepResult] Saving daily goal:', dailyGoalMinutes);
-            // 2. Save daily goal
-            const { error: settingsError } = await (supabase as any)
-                .from('user_settings')
-                .update({
                     daily_goal_minutes: dailyGoalMinutes || 20,
-                })
-                .eq('user_id', user.id);
+                }),
+            });
 
-            console.log('[StepResult] Settings save error:', settingsError);
-            if (settingsError) throw new Error(settingsError.message);
+            const data = await res.json();
+            console.log('[StepResult] API response:', res.status, data);
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to save progress');
+            }
 
             console.log('[StepResult] Success! Redirecting to /home');
-            // Success
             toast.success('Your personalized plan is ready!');
-            router.push('/home');
+            window.location.href = '/home';
 
         } catch (err) {
             console.error('[StepResult] Error caught:', err);
@@ -158,7 +129,7 @@ export default function StepResult() {
             <div className="flex flex-col items-center z-10 mb-8">
                 <h2 className="text-2xl font-semibold mb-1">{getLevelName(assessedLevel || 'A1')}</h2>
                 <p className="text-muted-foreground text-center max-w-sm">
-                    You've got a great foundation. We'll build on what you know and fix the gaps in your grammar.
+                    You&apos;ve got a great foundation. We&apos;ll build on what you know and fix the gaps in your grammar.
                 </p>
             </div>
 

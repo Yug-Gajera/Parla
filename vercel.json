@@ -1,0 +1,33 @@
+{
+    "crons": [
+        {
+            "path": "/api/articles/fetch",
+            "schedule": "0 0 * * *"
+        },
+        {
+            "path": "/api/books/process",
+            "schedule": "0 2 * * *"
+        },
+        {
+            "path": "/api/listen/fetch",
+            "schedule": "0 0 */3 * *"
+        }
+    ],
+    "functions": {
+        "app/api/articles/fetch/route.ts": {
+            "maxDuration": 120
+        },
+        "app/api/books/import/route.ts": {
+            "maxDuration": 300
+        },
+        "app/api/books/process/route.ts": {
+            "maxDuration": 120
+        },
+        "app/api/watch/process/route.ts": {
+            "maxDuration": 60
+        },
+        "app/api/listen/fetch/route.ts": {
+            "maxDuration": 120
+        }
+    }
+}

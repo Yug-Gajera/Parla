@@ -81,9 +81,10 @@ async function DashboardData() {
 
         // Active Language Data (Level, Streak, Score)
         supabase.from('user_languages')
-            .select('*, languages(*)')
+            .select('streak_days, level_score, current_level, language_id, languages(name)')
             .eq('user_id', user.id)
-            .single(),
+            .limit(1)
+            .maybeSingle(),
 
         // User Settings (Daily Goal)
         supabase.from('user_settings')
@@ -124,7 +125,7 @@ async function DashboardData() {
     }
 
     // Calculations
-    const streak = (userLanguage as any)?.streak || 0;
+    const streak = (userLanguage as any)?.streak_days || 0;
     const levelScore = (userLanguage as any)?.level_score || 0;
     const currentLevel = (userLanguage as any)?.current_level || 'A1';
 

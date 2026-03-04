@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -90,7 +91,13 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                     <div className="relative">
                         <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-secondary border-2 border-border flex items-center justify-center overflow-hidden">
                             {profile?.avatar_url ? (
-                                <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                <Image
+                                    src={profile.avatar_url}
+                                    alt={profile?.full_name || 'Profile Avatar'}
+                                    fill
+                                    priority
+                                    className="object-cover"
+                                />
                             ) : (
                                 <span className="text-3xl font-black text-secondary-foreground">
                                     {(profile?.full_name || 'U').trim().substring(0, 2).toUpperCase() || 'U'}
@@ -201,7 +208,9 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                             <Award className="w-8 h-8 text-muted-foreground" />
                         </div>
                         <h4 className="font-bold text-foreground mb-1">No Certificates Yet</h4>
-                        <p className="text-sm text-muted-foreground">Pass a level test to earn your first certificate.</p>
+                        <p className="text-sm text-muted-foreground max-w-xs">
+                            Complete a level test and purchase your certificate to show it here.
+                        </p>
                     </Card>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -314,7 +323,14 @@ function ActivityChart({ activityByDate }: { activityByDate: Record<string, numb
     return (
         <div className="flex flex-col gap-4">
             <h3 className="font-bold text-lg">Activity (Last 365 days)</h3>
-            <Card className="p-6 border-border/50 bg-card overflow-x-auto">
+            <Card className="p-6 border-border/50 bg-card overflow-x-auto relative">
+                {Object.keys(activityByDate).length === 0 && (
+                    <div className="absolute inset-0 bg-background/50 backdrop-blur-[1px] z-10 flex items-center justify-center p-4">
+                        <div className="bg-card border border-border px-4 py-2 rounded-lg shadow-xl text-xs font-bold text-foreground">
+                            Start studying to see your activity chart fill up
+                        </div>
+                    </div>
+                )}
                 <svg viewBox={`0 0 ${width + 60} ${height + 40}`} className="min-w-[600px]" style={{ maxWidth: '100%' }}>
                     {/* Day labels - Sun, Mon, Tue... */}
                     {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((label, i) => (

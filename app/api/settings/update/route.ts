@@ -13,7 +13,7 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { daily_goal_minutes, notification_enabled, preferred_content_types } = body;
 
-        const updates: any = { updated_at: new Date().toISOString() };
+        const updates: any = {};
         if (daily_goal_minutes !== undefined) updates.daily_goal_minutes = daily_goal_minutes;
         if (notification_enabled !== undefined) updates.notification_enabled = notification_enabled;
         if (preferred_content_types !== undefined) updates.preferred_content_types = preferred_content_types;

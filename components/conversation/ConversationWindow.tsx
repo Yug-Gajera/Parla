@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useConversation } from '@/hooks/useConversation';
+import { useSituationHistory } from '@/hooks/useSituationHistory';
 import { MessageBubble } from './MessageBubble';
 import { ScoreCard } from './ScoreCard';
 import { Button } from '@/components/ui/button';
@@ -18,8 +19,11 @@ interface ConversationWindowProps {
 export function ConversationWindow({ scenarioId, languageId, level, onClose }: ConversationWindowProps) {
     const {
         scenario, messages, isLoading, isStreaming, elapsedSeconds,
-        startSession, sendMessage, endSession
+        situationName, situationTwist, situationId,
+        startSession, sendMessage, endSession, resetConversation,
     } = useConversation(scenarioId, languageId, level);
+
+    const { getCompletedSituationIds, getBestScore, refetch: refetchHistory } = useSituationHistory(languageId);
 
     const [input, setInput] = useState('');
     const [scoringData, setScoringData] = useState<any>(null);
@@ -28,7 +32,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
     // Format MM:SS
     const mins = Math.floor(elapsedSeconds / 60);
     const secs = elapsedSeconds % 60;
-    const timerStr = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    const timerStr = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')} `;
 
     // Start immediately on mount
     useEffect(() => {
@@ -42,6 +46,17 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
         }
     }, [messages, isStreaming]);
 
+    // Handle keyboard opening (mobile resize)
+    useEffect(() => {
+        const handleResize = () => {
+            if (scrollRef.current) {
+                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const handleSend = () => {
         if (!input.trim() || isStreaming) return;
         sendMessage(input);
@@ -54,19 +69,45 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
 
         const result = await endSession();
         if (result && result.scoring) {
+            await refetchHistory(); // Refresh history so ScoreCard dots are up to date
             setScoringData(result);
         } else {
             onClose(); // Failed or errored, just close
         }
     };
 
+    const handleReplay = () => {
+        setScoringData(null);
+        resetConversation();
+        startSession();
+    };
+
+    const handleTryAnother = () => {
+        setScoringData(null);
+        resetConversation();
+        startSession(situationId || undefined); // skip current situation
+    };
+
     if (scoringData) {
+        const completedIds = getCompletedSituationIds(scenarioId);
+        const bestScores: Record<string, number | null> = {};
+        (scenario?.situations || []).forEach(sit => {
+            bestScores[sit.id] = getBestScore(scenarioId, sit.id);
+        });
+
         return (
             <ScoreCard
                 scoring={scoringData.scoring}
                 xpEarned={scoringData.xpEarned}
                 scenario={scenario}
                 onClose={onClose}
+                situationName={situationName}
+                situationTwist={situationTwist}
+                situationId={situationId}
+                onReplay={handleReplay}
+                onTryAnother={handleTryAnother}
+                completedSituationIds={completedIds}
+                situationBestScores={bestScores}
             />
         );
     }
@@ -143,7 +184,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
             </div>
 
             {/* Input Area */}
-            <div className="w-full border-t border-border bg-card/80 backdrop-blur-md p-4 pb-8 shrink-0">
+            <div className="w-full border-t border-border bg-card/90 backdrop-blur-md p-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] shrink-0">
                 <div className="max-w-2xl mx-auto">
                     <div className="relative flex items-end w-full">
                         <textarea

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card } from '@/components/ui/card';
 import { LeaderboardEntry } from '@/hooks/useLeaderboard';
+import Link from 'next/link';
 
 interface LeaderboardTabProps {
     entries: LeaderboardEntry[];
@@ -135,10 +136,13 @@ export function LeaderboardTab({
                     <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                         <Trophy className="w-8 h-8 text-primary opacity-50" />
                     </div>
-                    <h3 className="text-xl font-bold mb-2">No scores this week... yet</h3>
-                    <p className="text-muted-foreground max-w-md">
-                        Be the first to claim the #1 spot! Complete a conversation or learn new words to gain XP.
+                    <h3 className="text-xl font-bold mb-2">Be the first on the leaderboard!</h3>
+                    <p className="text-muted-foreground max-w-md mb-6">
+                        Complete a conversation or vocabulary session to appear here and claim the #1 spot.
                     </p>
+                    <Button asChild className="font-bold">
+                        <Link href="/practice">Start Practicing</Link>
+                    </Button>
                 </Card>
             ) : (
                 <motion.div variants={listV} initial="hidden" animate="show" className="flex flex-col gap-3 relative">

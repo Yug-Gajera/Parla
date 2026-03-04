@@ -13,14 +13,14 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { full_name, native_language, avatar_url } = body;
 
-        const updates: any = { updated_at: new Date().toISOString() };
+        const updates: any = {};
         if (full_name !== undefined) updates.full_name = full_name;
         if (native_language !== undefined) updates.native_language = native_language;
         if (avatar_url !== undefined) updates.avatar_url = avatar_url;
 
         // Perform update on users table
-        const { data, error } = await supabase
-            .from('users')
+        const { data, error } = await (supabase
+            .from('users') as any)
             .update(updates)
             .eq('id', user.id)
             .select()

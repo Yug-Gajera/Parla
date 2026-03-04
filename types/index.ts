@@ -153,6 +153,9 @@ export interface ConversationSession {
     naturalness_score: number | null;
     goal_completed: boolean;
     feedback: ConversationFeedback | null;
+    situation_id: string | null;
+    situation_name: string | null;
+    situation_twist: string | null;
     created_at: string;
 }
 
@@ -273,4 +276,135 @@ export interface QuickActionProps {
     description?: string;
     onClick: () => void;
     disabled?: boolean;
+}
+
+// ─── Beginner Pathway Types ─────────────────────────────────
+
+export interface DialogueLine {
+    id: number;
+    speaker: 'a' | 'b';
+    spanish: string;
+    english: string;
+    vocabulary: {
+        word: string;
+        translation: string;
+        note: string;
+    }[];
+}
+
+export interface DialogueQuestion {
+    id: number;
+    question: string;
+    options: string[];
+    correct: number;
+    explanation: string;
+}
+
+export interface DialogueContent {
+    title: string;
+    setting: string;
+    characters: {
+        a: string;
+        b: string;
+    };
+    lines: DialogueLine[];
+    questions: DialogueQuestion[];
+}
+
+export interface PhraseItem {
+    id: number;
+    spanish: string;
+    english: string;
+    phonetic: string;
+    usage: string;
+    category: 'greeting' | 'ordering' | 'asking' | 'responding' | 'closing';
+}
+
+export interface PhraseSet {
+    scenario: string;
+    phrases: PhraseItem[];
+}
+
+export interface ChallengeQuestion {
+    id: number;
+    type: 'translate_to_spanish' | 'translate_to_english' | 'fill_blank' | 'choose_response';
+    prompt: string;
+    context: string;
+    options: string[];
+    correct: number;
+    explanation: string;
+}
+
+export interface MiniChallengeContent {
+    scenario: string;
+    instructions: string;
+    questions: ChallengeQuestion[];
+}
+
+export interface ScenarioModule {
+    id: string;
+    scenario_type: string;
+    language_id: string;
+    dialogue_content: DialogueContent | null;
+    phrase_set: PhraseSet | null;
+    challenge_content: MiniChallengeContent | null;
+    target_level: string;
+    created_at: string;
+}
+
+export interface UserModuleProgress {
+    id: string;
+    user_id: string;
+    scenario_type: string;
+    language_id: string;
+    dialogue_completed: boolean;
+    dialogue_score: number;
+    phrases_completed: boolean;
+    phrases_learned: number;
+    challenge_completed: boolean;
+    challenge_score: number;
+    scenario_unlocked: boolean;
+    dialogue_completed_at: string | null;
+    phrases_completed_at: string | null;
+    challenge_completed_at: string | null;
+    scenario_unlocked_at: string | null;
+    created_at: string;
+}
+
+// ─── Scenario Variation Types ─────────────────────────────────
+
+export interface ScenarioSituation {
+    id: string;
+    name: string;
+    modifier: string;
+    twist: string;
+    difficulty_modifier: number;
+    teaser: string;
+}
+
+export interface Scenario {
+    id: string;
+    type: ScenarioType;
+    name: string;
+    description: string;
+    setting: string;
+    character_name: string;
+    character_role: string;
+    user_role: string;
+    goal: string;
+    base_difficulty: CEFRLevel;
+    estimated_minutes: number;
+    icon: string;
+    base_context: string;
+    situations: ScenarioSituation[];
+}
+
+export interface UserSituationHistory {
+    id: string;
+    user_id: string;
+    language_id: string;
+    scenario_type: string;
+    situation_id: string;
+    completed_at: string;
+    overall_score: number | null;
 }

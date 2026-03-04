@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { SCENARIOS, Scenario } from '@/lib/data/scenarios';
+import { SCENARIOS } from '@/lib/data/scenarios';
+import type { Scenario } from '@/types';
 import { toast } from 'sonner';
 
 export interface ChatMessage {
@@ -7,6 +8,8 @@ export interface ChatMessage {
     content: string;
     timestamp?: string;
 }
+
+export type ConversationPhase = 'idle' | 'pre-session' | 'active' | 'ended';
 
 export function useConversation(scenarioId: string, languageId: string, level: string) {
     const [sessionId, setSessionId] = useState<string | null>(null);
@@ -18,6 +21,13 @@ export function useConversation(scenarioId: string, languageId: string, level: s
 
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Situation state
+    const [situationName, setSituationName] = useState<string | null>(null);
+    const [situationTeaser, setSituationTeaser] = useState<string | null>(null);
+    const [situationTwist, setSituationTwist] = useState<string | null>(null);
+    const [situationId, setSituationId] = useState<string | null>(null);
+    const [phase, setPhase] = useState<ConversationPhase>('idle');
 
     // Timer logic
     useEffect(() => {
@@ -31,7 +41,7 @@ export function useConversation(scenarioId: string, languageId: string, level: s
         };
     }, [sessionId]);
 
-    const startSession = useCallback(async () => {
+    const startSession = useCallback(async (skipSituationId?: string) => {
         setIsLoading(true);
         setElapsedSeconds(0);
         setMessages([]);
@@ -40,7 +50,12 @@ export function useConversation(scenarioId: string, languageId: string, level: s
             const res = await fetch('/api/conversation/start', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ scenario_id: scenarioId, language_id: languageId, level })
+                body: JSON.stringify({
+                    scenario_id: scenarioId,
+                    language_id: languageId,
+                    level,
+                    skip_situation_id: skipSituationId,
+                })
             });
 
             const data = await res.json();
@@ -49,27 +64,51 @@ export function useConversation(scenarioId: string, languageId: string, level: s
 
             setSessionId(data.session_id);
             setScenario(data.scenario);
+            setSituationName(data.situation_name);
+            setSituationTeaser(data.situation_teaser);
+            setSituationTwist(data.situation_twist);
+            setSituationId(data.situation_id);
             setMessages([{
                 role: 'assistant',
                 content: data.message,
                 timestamp: new Date().toISOString()
             }]);
+            setPhase('active');
 
         } catch (err) {
             console.error(err);
             toast.error('Could not connect to conversation partner. Please try again.');
+            setPhase('idle');
         } finally {
             setIsLoading(false);
         }
     }, [scenarioId, languageId, level]);
 
+    // Pre-session: fetch situation info without starting conversation yet
+    const prepareSession = useCallback(async () => {
+        setIsLoading(true);
+        setPhase('pre-session');
+
+        const foundScenario = SCENARIOS.find(s => s.id === scenarioId);
+        if (foundScenario) {
+            setScenario(foundScenario);
+        }
+
+        // We'll start the actual session when user confirms
+        setIsLoading(false);
+    }, [scenarioId]);
+
+    const skipToNewVariation = useCallback(async () => {
+        // Start a new session with a different situation
+        await startSession(situationId || undefined);
+    }, [startSession, situationId]);
+
     const sendMessage = async (text: string) => {
         if (!sessionId || !text.trim() || isStreaming) return;
 
         const userMsg: ChatMessage = { role: 'user', content: text, timestamp: new Date().toISOString() };
-        const historyForApi = [...messages]; // capture before optimistic update
+        const historyForApi = [...messages];
 
-        // Optimistic UI update
         setMessages(prev => [...prev, userMsg]);
         setIsStreaming(true);
 
@@ -80,7 +119,7 @@ export function useConversation(scenarioId: string, languageId: string, level: s
                 body: JSON.stringify({
                     session_id: sessionId,
                     user_message: text,
-                    conversation_history: historyForApi.slice(-6), // Send last 6 messages to save context limits
+                    conversation_history: historyForApi.slice(-6),
                     scenario_id: scenarioId,
                     level
                 })
@@ -89,7 +128,6 @@ export function useConversation(scenarioId: string, languageId: string, level: s
             if (!res.ok) throw new Error('API Error');
             if (!res.body) throw new Error('No stream body');
 
-            // Setup a blank assistant message to stream into
             setMessages(prev => [...prev, { role: 'assistant', content: '', timestamp: new Date().toISOString() }]);
 
             const reader = res.body.getReader();
@@ -103,7 +141,6 @@ export function useConversation(scenarioId: string, languageId: string, level: s
                 if (value) {
                     const chunk = decoder.decode(value, { stream: true });
                     finalContent += chunk;
-                    // Update the last message in the array
                     setMessages(prev => {
                         const newArr = [...prev];
                         newArr[newArr.length - 1] = {
@@ -145,7 +182,8 @@ export function useConversation(scenarioId: string, languageId: string, level: s
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
 
-            return data; // contains `scoring` and `xpEarned`
+            setPhase('ended');
+            return data; // contains `scoring`, `xpEarned`, situation info
         } catch (err) {
             console.error('Failed to end session and score', err);
             toast.error('Failed to save session scores. They may take a moment to appear.');
@@ -155,14 +193,36 @@ export function useConversation(scenarioId: string, languageId: string, level: s
         }
     };
 
+    const resetConversation = useCallback(() => {
+        setSessionId(null);
+        setScenario(null);
+        setMessages([]);
+        setSituationName(null);
+        setSituationTeaser(null);
+        setSituationTwist(null);
+        setSituationId(null);
+        setPhase('idle');
+        setElapsedSeconds(0);
+        if (timerRef.current) clearInterval(timerRef.current);
+        timerRef.current = null;
+    }, []);
+
     return {
         scenario,
         messages,
         isLoading,
         isStreaming,
         elapsedSeconds,
+        phase,
+        situationName,
+        situationTeaser,
+        situationTwist,
+        situationId,
         startSession,
+        prepareSession,
+        skipToNewVariation,
         sendMessage,
-        endSession
+        endSession,
+        resetConversation,
     };
 }

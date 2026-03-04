@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Camera, Loader2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import Image from 'next/image';
 import { toast } from 'sonner';
 
 interface EditProfileUser {
-    id: string;
+    id?: string;
     full_name?: string | null;
     avatar_url?: string | null;
+    native_language?: string;
 }
 
 interface EditProfileSheetProps {
@@ -53,7 +55,7 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
             let finalAvatarUrl = user?.avatar_url;
 
             // Upload image if changed - path: {user_id}/avatar.{ext}
-            if (avatarFile) {
+            if (avatarFile && user?.id) {
                 const ext = avatarFile.name.split('.').pop() || 'jpg';
                 const filePath = `${user.id}/avatar.${ext}`;
 
@@ -70,7 +72,7 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
             const success = await onSave({
                 full_name: name,
                 native_language: nativeLang,
-                avatar_url: finalAvatarUrl
+                avatar_url: finalAvatarUrl || undefined
             });
 
             if (success) {
@@ -116,7 +118,12 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
                             <Label htmlFor="avatar-upload" className="cursor-pointer block">
                                 <div className={`w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 bg-secondary flex items-center justify-center relative transition-all group-hover:border-primary`}>
                                     {previewUrl ? (
-                                        <img src={previewUrl} alt="Avatar preview" className="w-full h-full object-cover" />
+                                        <Image
+                                            src={previewUrl}
+                                            alt="Avatar preview"
+                                            fill
+                                            className="object-cover"
+                                        />
                                     ) : (
                                         <span className="text-2xl font-bold text-secondary-foreground">
                                             {(name || 'U').substring(0, 2).toUpperCase()}

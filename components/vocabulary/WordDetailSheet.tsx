@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { VocabularyWord } from '@/hooks/useVocabulary';
 import { Brain, Play, Trash2, Calendar, Target, Loader2 } from 'lucide-react';

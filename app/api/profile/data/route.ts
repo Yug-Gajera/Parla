@@ -60,7 +60,8 @@ export async function GET() {
             stats: {
                 vocabKnown: vocabCount || 0,
                 conversations: convCount.count || 0,
-                streak: primaryLang?.streak_days ?? 0,
+                streak: (primaryLang as any)?.streak_days ?? 0,
+                avatar_url: (userRow as any)?.avatar_url || undefined,
                 totalHours: Math.round(totalMins / 60)
             },
             avgPointsPerDay

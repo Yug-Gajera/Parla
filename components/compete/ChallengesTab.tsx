@@ -60,7 +60,7 @@ export function ChallengesTab({ activeChallenge, userProgress, pastChallenges }:
                                     +{activeChallenge.reward_xp} XP
                                 </div>
                                 <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider bg-secondary px-2 py-1 rounded-md">
-                                    "{activeChallenge.reward_badge}" Badge
+                                    &quot;{activeChallenge.reward_badge}&quot; Badge
                                 </span>
                             </div>
                         </div>

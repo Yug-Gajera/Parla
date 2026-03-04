@@ -19,17 +19,8 @@ export async function GET(req: Request) {
 
         // We can do a single query grouping by status, or multiple counts. 
         // Grouping by status:
-        const { data, error } = await supabase
-            .from('user_vocabulary')
-            .select('status')
-            .eq('user_id', user.id)
-            .eq('vocabulary_words.language_id', languageId)
-        // Implicit join isn't easily grouped in PostgREST unless we use a rpc.
-        // Let's do it simply by fetching statuses for this user.
-        // Actually, we can just fetch all 'status' and 'next_review_date' for the user 
-        // and do the aggregation in JS since decks usually aren't millions of rows per user.
-
-        const { data: rows, error: rowsError } = await (supabase as any)
+        // Fetch statuses for this user for the specific language
+        const { data: rows, error: rowsError } = await supabase
             .from('user_vocabulary')
             .select('status, next_review_date, vocabulary_words!inner(language_id)')
             .eq('user_id', user.id)

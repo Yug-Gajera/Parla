@@ -11,10 +11,11 @@ import { Home, BookOpen, Mic, Trophy, User, AudioLines, Settings } from 'lucide-
 
 const NAV_ITEMS = [
     { icon: Home, label: 'Home', href: '/home' },
-    { icon: BookOpen, label: 'Learn', href: '/learn' },
+    { icon: BookOpen, label: 'Read', href: '/read' },
     { icon: Mic, label: 'Practice', href: '/practice' },
     { icon: Trophy, label: 'Compete', href: '/compete' },
     { icon: User, label: 'Profile', href: '/profile' },
+    { icon: Settings, label: 'Settings', href: '/settings' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -43,8 +44,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium ${isActive
-                                        ? 'bg-primary/10 text-primary hover:bg-primary/20'
-                                        : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                                    ? 'bg-primary/10 text-primary hover:bg-primary/20'
+                                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                                     }`}
                             >
                                 <Icon size={20} className={isActive ? 'text-primary' : 'text-muted-foreground'} />
@@ -60,7 +61,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium ${pathname.startsWith('/settings')
                         ? 'bg-primary/10 text-primary hover:bg-primary/20'
                         : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                    }`}
+                        }`}
                 >
                     <Settings size={20} className={pathname.startsWith('/settings') ? 'text-primary' : 'text-muted-foreground'} />
                     <span>Settings</span>
@@ -94,7 +95,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </main>
 
             {/* ── Mobile Bottom Nav ── */}
-            <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/80 backdrop-blur-xl border-t border-border flex items-center justify-around px-2 z-50 rounded-t-2xl shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.5)]">
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 pb-[env(safe-area-inset-bottom)] bg-card/80 backdrop-blur-xl border-t border-border flex items-center justify-around px-2 z-50 rounded-t-2xl shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.5)]">
                 {NAV_ITEMS.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname.startsWith(item.href);

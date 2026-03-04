@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FluentLoop — Stop Studying. Start Speaking.</title>
+    <meta name="description"
+        content="FluentLoop uses AI conversation practice to build real Spanish fluency. No streaks, no gamification — just real conversations that make you fluent.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Syne', 'sans-serif'] },
+                    colors: {
+                        primary: '#7c3aed', 'primary-light': '#a855f7',
+                        accent: '#06b6d4', surface: '#111111', brd: '#222222',
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'bounce-dot': 'bounceDot 1.4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-10px)' } },
+                        bounceDot: { '0%, 80%, 100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-6px)' } },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: #080808;
+            color: #fafafa;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-up.visible:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+
+        .fade-up.visible:nth-child(3) {
+            transition-delay: 0.2s;
+        }
+
+        .fade-up.visible:nth-child(4) {
+            transition-delay: 0.25s;
+        }
+
+        .fade-up.visible:nth-child(5) {
+            transition-delay: 0.3s;
+        }
+
+        .fade-up.visible:nth-child(6) {
+            transition-delay: 0.35s;
+        }
+
+        .glass {
+            background: rgba(17, 17, 17, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid #222;
+        }
+
+        .glow-violet {
+            box-shadow: 0 0 80px 20px rgba(124, 58, 237, 0.15);
+        }
+
+        .glow-violet-lg {
+            box-shadow: 0 0 120px 40px rgba(124, 58, 237, 0.12);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-answer.open {
+            max-height: 400px;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        ::selection {
+            background: #7c3aed;
+            color: #fff;
+        }
+
+        .phone-notch {
+            width: 120px;
+            height: 28px;
+            background: #080808;
+            border-radius: 0 0 16px 16px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #71717a;
+            display: inline-block;
+            animation: bounceDot 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+
+<body class="antialiased overflow-x-hidden">
+
+    <!-- ═══════════════ NAVIGATION ═══════════════ -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        style="backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(8,8,8,0.6);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+            <a href="#" class="flex items-center gap-2">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <rect x="2" y="4" width="18" height="16" rx="8" stroke="#7c3aed" stroke-width="2.2" />
+                    <path d="M10 20l-3 4" stroke="#7c3aed" stroke-width="2.2" stroke-linecap="round" />
+                    <circle cx="8" cy="12" r="1.5" fill="#7c3aed" />
+                    <circle cx="13" cy="12" r="1.5" fill="#a855f7" />
+                    <circle cx="18" cy="12" r="1.5" fill="#06b6d4" />
+                </svg>
+                <span class="text-lg font-bold tracking-tight">Fluent<span class="text-primary">Loop</span></span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+                <a href="#how" class="nav-link hover:text-white transition">How It Works</a>
+                <a href="#features" class="nav-link hover:text-white transition">Features</a>
+                <a href="#pricing" class="nav-link hover:text-white transition">Pricing</a>
+                <a href="#faq" class="nav-link hover:text-white transition">FAQ</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="#cta"
+                    class="hidden sm:inline-flex bg-primary hover:bg-primary-light text-white text-sm font-semibold px-5 py-2.5 rounded-full transition">Start
+                    Learning Free</a>
+                <button id="menuBtn" class="md:hidden p-2 text-zinc-400 hover:text-white"><svg width="24" height="24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16M4 18h16" />
+                    </svg></button>
+            </div>
+        </div>
+        <div id="mobileMenu"
+            class="hidden md:hidden border-t border-brd px-4 pb-4 pt-2 flex flex-col gap-3 text-sm font-medium text-zinc-400">
+            <a href="#how" class="py-2 hover:text-white transition mobile-link">How It Works</a>
+            <a href="#features" class="py-2 hover:text-white transition mobile-link">Features</a>
+            <a href="#pricing" class="py-2 hover:text-white transition mobile-link">Pricing</a>
+            <a href="#faq" class="py-2 hover:text-white transition mobile-link">FAQ</a>
+        </div>
+    </nav>
+
+    <!-- ═══════════════ HERO ═══════════════ -->
+    <section class="relative pt-28 sm:pt-36 pb-16 sm:pb-24 px-4">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div
+                class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]">
+            </div>
+        </div>
+        <div class="relative max-w-4xl mx-auto text-center">
+            <h1 class="font-display text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
+                Stop studying Spanish.<br><span
+                    class="bg-gradient-to-r from-primary-light to-accent bg-clip-text text-transparent">Start speaking
+                    it.</span>
+            </h1>
+            <p class="text-zinc-400 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+                FluentLoop uses AI conversation to build real fluency — not streaks, not points, not gamified nonsense.
+                Just you, speaking Spanish, getting better every day.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+                <a href="#cta"
+                    class="bg-primary hover:bg-primary-light text-white font-bold px-8 py-3.5 rounded-full text-base transition shadow-lg shadow-primary/25">Start
+                    for Free</a>
+                <a href="#demo"
+                    class="border border-brd hover:border-zinc-500 text-zinc-300 font-semibold px-8 py-3.5 rounded-full text-base transition">See
+                    How It Works</a>
+            </div>
+            <div class="flex items-center justify-center gap-3 text-sm text-zinc-500">
+                <div class="flex -space-x-2">
+                    <div
+                        class="w-7 h-7 rounded-full bg-primary/60 flex items-center justify-center text-[10px] font-bold text-white ring-2 ring-[#080808]">
+                        S</div>
+                    <div
+                        class="w-7 h-7 rounded-full bg-accent/60 flex items-center justify-center text-[10px] font-bold text-white ring-2 ring-[#080808]">
+                        M</div>
+                    <div
+                        class="w-7 h-7 rounded-full bg-primary-light/60 flex items-center justify-center text-[10px] font-bold text-white ring-2 ring-[#080808]">
+                        P</div>
+                    <div
+                        class="w-7 h-7 rounded-full bg-emerald-500/60 flex items-center justify-center text-[10px] font-bold text-white ring-2 ring-[#080808]">
+                        A</div>
+                    <div
+                        class="w-7 h-7 rounded-full bg-amber-500/60 flex items-center justify-center text-[10px] font-bold text-white ring-2 ring-[#080808]">
+                        J</div>
+                </div>
+                <span class="text-amber-400">★★★★★</span>
+                <span>Join 2,000+ learners who ditched Duolingo</span>
+            </div>
+        </div>
+        <!-- Phone Mockup -->
+        <div class="relative max-w-sm mx-auto mt-14 animate-float">
+            <div class="absolute inset-0 -m-8 glow-violet-lg rounded-[40px]"></div>
+            <div class="relative bg-[#0a0a0a] rounded-[36px] border-2 border-brd p-3 shadow-2xl">
+                <div class="phone-notch"></div>
+                <div class="bg-surface rounded-[28px] p-4 pt-10 space-y-3 min-h-[380px]">
+                    <div class="flex items-start gap-2">
+                        <div
+                            class="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center text-[9px] font-bold text-primary shrink-0 mt-0.5">
+                            C</div>
+                        <div
+                            class="bg-[#1a1a1a] rounded-2xl rounded-tl-sm px-3.5 py-2.5 max-w-[85%] text-sm leading-relaxed">
+                            ¡Hola! Bienvenido a mi café. ¿Qué desea tomar?</div>
+                    </div>
+                    <div class="flex items-start gap-2 justify-end">
+                        <div
+                            class="bg-primary/20 border border-primary/30 rounded-2xl rounded-tr-sm px-3.5 py-2.5 max-w-[85%] text-sm leading-relaxed">
+                            Quiero un café con leche, por favor</div>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <div
+                            class="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center text-[9px] font-bold text-primary shrink-0 mt-0.5">
+                            C</div>
+                        <div
+                            class="bg-[#1a1a1a] rounded-2xl rounded-tl-sm px-3.5 py-2.5 max-w-[85%] text-sm leading-relaxed">
+                            ¡Perfecto! ¿Algo más? Tenemos croissants muy buenos hoy.</div>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <div
+                            class="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center text-[9px] font-bold text-primary shrink-0 mt-0.5">
+                            C</div>
+                        <div class="bg-[#1a1a1a] rounded-2xl rounded-tl-sm px-3 py-2 max-w-[70%]"><span
+                                class="typing-dot"></span><span class="typing-dot"></span><span
+                                class="typing-dot"></span></div>
+                    </div>
+                    <div
+                        class="mt-auto pt-4 flex items-center justify-between bg-[#0d0d0d] -mx-4 -mb-4 px-4 py-3 rounded-b-[28px] border-t border-brd text-[11px] font-semibold">
+                        <span class="text-emerald-400">Grammar <span class="text-white">94%</span></span>
+                        <span class="text-accent">Vocab <span class="text-white">88%</span></span>
+                        <span class="text-primary-light">Natural <span class="text-white">91%</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SOCIAL PROOF BAR ═══════════════ -->
+    <section class="py-10 border-y border-brd/50">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <p class="text-xs uppercase tracking-widest text-zinc-600 mb-5">Used by learners from</p>
+            <div
+                class="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-zinc-600 text-lg font-semibold">
+                <span>Google</span><span>Spotify</span><span>Harvard</span><span>MIT</span><span>Netflix</span><span>Airbnb</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ PROBLEM SECTION ═══════════════ -->
+    <section class="py-20 sm:py-28 px-4">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-center mb-14 tracking-tight fade-up">
+                Duolingo taught you to learn.<br>We&rsquo;ll teach you to <span class="text-primary-light">speak</span>.
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass rounded-2xl p-7 border-red-500/10 bg-red-500/[0.03] fade-up">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-red-400 mb-5">✗ The Old Way</h3>
+                    <ul class="space-y-3.5 text-zinc-400 text-[15px]">
+                        <li class="flex gap-3"><span class="text-red-500 mt-0.5">✗</span>Gamified streaks that feel good
+                            but don&rsquo;t work</li>
+                        <li class="flex gap-3"><span class="text-red-500 mt-0.5">✗</span>No real conversations — just
+                            fill in the blank</li>
+                        <li class="flex gap-3"><span class="text-red-500 mt-0.5">✗</span>Hit a wall at intermediate and
+                            have nowhere to go</li>
+                        <li class="flex gap-3"><span class="text-red-500 mt-0.5">✗</span>Forget everything because
+                            there&rsquo;s no real context</li>
+                        <li class="flex gap-3"><span class="text-red-500 mt-0.5">✗</span>Learning a language for years
+                            and still can&rsquo;t speak</li>
+                    </ul>
+                </div>
+                <div class="glass rounded-2xl p-7 border-emerald-500/10 bg-emerald-500/[0.03] fade-up">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-emerald-400 mb-5">✓ The FluentLoop Way
+                    </h3>
+                    <ul class="space-y-3.5 text-zinc-300 text-[15px]">
+                        <li class="flex gap-3"><span class="text-emerald-500 mt-0.5">✓</span>Real AI conversations in
+                            actual scenarios</li>
+                        <li class="flex gap-3"><span class="text-emerald-500 mt-0.5">✓</span>Instant feedback on
+                            grammar, vocabulary, naturalness</li>
+                        <li class="flex gap-3"><span class="text-emerald-500 mt-0.5">✓</span>Beginner to advanced —
+                            structured progression</li>
+                        <li class="flex gap-3"><span class="text-emerald-500 mt-0.5">✓</span>Words learned in context
+                            stick 3x longer</li>
+                        <li class="flex gap-3"><span class="text-emerald-500 mt-0.5">✓</span>Speak confidently in weeks,
+                            not years</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+    <section id="how" class="py-20 sm:py-28 px-4">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-center mb-16 tracking-tight fade-up">From
+                zero to conversation in <span class="text-accent">three steps</span></h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-7 text-center fade-up">
+                    <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5"><svg
+                            width="28" height="28" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round">
+                            <circle cx="14" cy="14" r="10" />
+                            <circle cx="14" cy="14" r="5" />
+                            <circle cx="14" cy="14" r="1" />
+                        </svg></div>
+                    <div class="text-xs font-bold text-primary mb-2 uppercase tracking-wider">Step 1</div>
+                    <h3 class="text-lg font-bold mb-3">Get Assessed</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Take a 10-minute diagnostic conversation. Our AI
+                        figures out your real level — not what you think it is. No fake guessing.</p>
+                </div>
+                <div class="glass rounded-2xl p-7 text-center fade-up">
+                    <div class="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-5"><svg
+                            width="28" height="28" fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round">
+                            <path d="M4 8h12a4 4 0 010 8H8" />
+                            <path d="M8 16l-4 4" />
+                            <path d="M16 4h4a4 4 0 010 8h-4" />
+                            <path d="M20 12l2 2" />
+                        </svg></div>
+                    <div class="text-xs font-bold text-accent mb-2 uppercase tracking-wider">Step 2</div>
+                    <h3 class="text-lg font-bold mb-3">Learn Through Real Scenarios</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Practice real conversations — order food, negotiate
+                        prices, handle problems. AI plays the native speaker. You get scored in real time.</p>
+                </div>
+                <div class="glass rounded-2xl p-7 text-center fade-up">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-5">
+                        <svg width="28" height="28" fill="none" stroke="#22c55e" stroke-width="2"
+                            stroke-linecap="round">
+                            <path d="M4 22V10l6-6 6 6v12" />
+                            <path d="M16 18l6-4v8" />
+                            <path d="M10 22v-6h4v6" />
+                        </svg>
+                    </div>
+                    <div class="text-xs font-bold text-emerald-400 mb-2 uppercase tracking-wider">Step 3</div>
+                    <h3 class="text-lg font-bold mb-3">Track Real Progress</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Watch your scores improve week over week. Earn
+                        verified level certificates. Compete on leaderboards with learners at your exact level.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ FEATURES ═══════════════ -->
+    <section id="features" class="py-20 sm:py-28 px-4 border-t border-brd/50">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-center mb-4 tracking-tight fade-up">
+                Everything serious learners need.</h2>
+            <p class="text-zinc-500 text-center mb-14 fade-up">Nothing they don&rsquo;t.</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div
+                    class="glass rounded-2xl p-6 hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 fade-up">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4"><svg
+                            width="20" height="20" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round">
+                            <path d="M3 16V6a2 2 0 012-2h3l2 2h5a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <path d="M8 10v4M10 12H6" />
+                        </svg></div>
+                    <h3 class="font-bold mb-2">AI Conversation Practice</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">8 real-world scenarios. AI plays a native speaker
+                        with personality. Your responses are scored in real time.</p>
+                </div>
+                <div
+                    class="glass rounded-2xl p-6 hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 fade-up">
+                    <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center mb-4"><svg width="20"
+                            height="20" fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round">
+                            <path d="M3 12h4l3-9 4 18 3-9h4" />
+                        </svg></div>
+                    <h3 class="font-bold mb-2">Beginner Pathway</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Complete beginners start with guided dialogues and
+                        key phrases before attempting conversations. No deep end.</p>
+                </div>
+                <div
+                    class="glass rounded-2xl p-6 hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 fade-up">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4"><svg
+                            width="20" height="20" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round">
+                            <circle cx="10" cy="10" r="7" />
+                            <path d="M10 6v4l3 2" />
+                        </svg></div>
+                    <h3 class="font-bold mb-2">Smart Vocabulary</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Words you encounter in conversations are
+                        automatically saved to your deck. Spaced repetition handles the rest.</p>
+                </div>
+                <div
+                    class="glass rounded-2xl p-6 hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 fade-up">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4"><svg
+                            width="20" height="20" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round">
+                            <path d="M6 3h8l3 4v9a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                            <path d="M7 12l2 2 4-4" />
+                        </svg></div>
+                    <h3 class="font-bold mb-2">Verified Certificates</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Pass a level test and earn a certificate with a
+                        unique verification code. Put it on your LinkedIn. It means something.</p>
+                </div>
+                <div
+                    class="glass rounded-2xl p-6 hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 fade-up">
+                    <div class="w-10 h-10 rounded-xl bg-pink-500/10 flex items-center justify-center mb-4"><svg
+                            width="20" height="20" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round">
+                            <path d="M6 9l4-5 4 5" />
+                            <path d="M4 20h12" />
+                            <path d="M6 15h8" />
+                            <path d="M10 4v16" />
+                        </svg></div>
+                    <h3 class="font-bold mb-2">Leaderboards</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Compete with learners at your exact level. Weekly
+                        challenges keep it fresh. Accountability without toxicity.</p>
+                </div>
+                <div
+                    class="glass rounded-2xl p-6 hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 fade-up">
+                    <div class="w-10 h-10 rounded-xl bg-primary-light/10 flex items-center justify-center mb-4"><svg
+                            width="20" height="20" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round">
+                            <path d="M18 12H6" />
+                            <path d="M12 6v12" />
+                            <rect x="3" y="3" width="14" height="14" rx="3" />
+                        </svg></div>
+                    <h3 class="font-bold mb-2">Real Progress Tracking</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Skill radar showing speaking, listening, reading,
+                        writing, vocabulary, grammar. Know exactly where you&rsquo;re weak.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ DEMO ═══════════════ -->
+    <section id="demo" class="py-20 sm:py-28 px-4 relative overflow-hidden">
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none">
+        </div>
+        <div class="relative max-w-5xl mx-auto">
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-center mb-14 tracking-tight fade-up">See a
+                real <span class="text-primary-light">practice session</span></h2>
+            <div class="glass rounded-3xl p-4 sm:p-6 glow-violet fade-up">
+                <div class="grid md:grid-cols-[280px_1fr] gap-4">
+                    <div class="bg-[#0a0a0a] rounded-2xl p-4 space-y-3">
+                        <p class="text-xs uppercase tracking-wider text-zinc-600 font-bold mb-3">Scenarios</p>
+                        <div class="bg-primary/10 border border-primary/30 rounded-xl p-3">
+                            <div class="flex items-center gap-2 mb-1"><span class="text-sm">☕</span><span
+                                    class="text-sm font-bold">Café Order</span></div>
+                            <p class="text-[11px] text-zinc-500">A1 · 3 min</p>
+                        </div>
+                        <div class="bg-[#111] rounded-xl p-3 opacity-60">
+                            <div class="flex items-center gap-2 mb-1"><span class="text-sm">🏪</span><span
+                                    class="text-sm font-semibold text-zinc-400">Market Negotiation</span></div>
+                            <p class="text-[11px] text-zinc-600">A2 · 5 min</p>
+                        </div>
+                        <div class="bg-[#111] rounded-xl p-3 opacity-40">
+                            <div class="flex items-center gap-2 mb-1"><span class="text-sm">🏠</span><span
+                                    class="text-sm font-semibold text-zinc-500">Apartment Problem</span></div>
+                            <p class="text-[11px] text-zinc-600">B1 · 5 min</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#0a0a0a] rounded-2xl p-4 sm:p-5 flex flex-col">
+                        <div class="flex items-center gap-2 mb-4 pb-3 border-b border-brd"><span
+                                class="text-base">☕</span><span class="font-bold text-sm">Café Order</span><span
+                                class="ml-auto text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded font-bold">A1</span>
+                        </div>
+                        <div class="space-y-3 flex-1 text-sm">
+                            <div class="flex gap-2">
+                                <div
+                                    class="w-5 h-5 rounded-full bg-primary/20 text-primary text-[8px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                    C</div>
+                                <div class="bg-[#151515] rounded-xl rounded-tl-sm px-3 py-2 max-w-[80%]">¡Buenos días!
+                                    ¿Qué le puedo servir?</div>
+                            </div>
+                            <div class="flex gap-2 justify-end">
+                                <div
+                                    class="bg-primary/15 border border-primary/20 rounded-xl rounded-tr-sm px-3 py-2 max-w-[80%]">
+                                    Buenos días. Un café con leche, por favor.</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <div
+                                    class="w-5 h-5 rounded-full bg-primary/20 text-primary text-[8px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                    C</div>
+                                <div class="bg-[#151515] rounded-xl rounded-tl-sm px-3 py-2 max-w-[80%]">¡Muy bien!
+                                    ¿Grande o pequeño?</div>
+                            </div>
+                            <div class="flex gap-2 justify-end">
+                                <div
+                                    class="bg-primary/15 border border-primary/20 rounded-xl rounded-tr-sm px-3 py-2 max-w-[80%]">
+                                    Grande, por favor. ¿Tienen wifi?</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <div
+                                    class="w-5 h-5 rounded-full bg-primary/20 text-primary text-[8px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                    C</div>
+                                <div class="bg-[#151515] rounded-xl rounded-tl-sm px-3 py-2 max-w-[80%]">Sí, la
+                                    contraseña está en la pizarra. Son 3 euros con 50.</div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-brd grid grid-cols-3 gap-2 text-center text-[11px]">
+                            <div class="bg-emerald-500/10 rounded-lg py-2"><span
+                                    class="text-emerald-400 font-bold block">94%</span>Grammar</div>
+                            <div class="bg-accent/10 rounded-lg py-2"><span
+                                    class="text-accent font-bold block">88%</span>Vocabulary</div>
+                            <div class="bg-primary-light/10 rounded-lg py-2"><span
+                                    class="text-primary-light font-bold block">91%</span>Naturalness</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4 max-w-xl mx-auto mt-10">
+                <div class="text-center fade-up">
+                    <div class="text-2xl font-extrabold text-emerald-400 mb-1">94%</div>
+                    <p class="text-xs text-zinc-500">Grammar Score</p>
+                </div>
+                <div class="text-center fade-up">
+                    <div class="text-2xl font-extrabold text-accent mb-1">3x</div>
+                    <p class="text-xs text-zinc-500">Faster Vocabulary Retention</p>
+                </div>
+                <div class="text-center fade-up">
+                    <div class="text-2xl font-extrabold text-primary-light mb-1">8</div>
+                    <p class="text-xs text-zinc-500">Real World Scenarios</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ TESTIMONIALS ═══════════════ -->
+    <!-- TODO: Replace placeholder testimonials with real ones -->
+    <section class="py-20 sm:py-28 px-4 border-t border-brd/50">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-center mb-14 tracking-tight fade-up">What
+                learners are <span class="text-primary-light">saying</span></h2>
+            <div class="grid md:grid-cols-3 gap-5">
+                <div class="glass rounded-2xl p-6 fade-up">
+                    <div class="text-amber-400 mb-3 text-sm">★★★★★</div>
+                    <p class="text-sm text-zinc-300 leading-relaxed mb-5">&ldquo;I tried Duolingo for 2 years and could
+                        barely order coffee. After 3 weeks with FluentLoop I had my first real conversation with my
+                        Mexican colleague.&rdquo;</p>
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                            S</div>
+                        <div>
+                            <p class="text-sm font-semibold">Sarah K.</p>
+                            <p class="text-xs text-zinc-500">Learning Spanish · Former Duolingo user</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-6 fade-up">
+                    <div class="text-amber-400 mb-3 text-sm">★★★★★</div>
+                    <p class="text-sm text-zinc-300 leading-relaxed mb-5">&ldquo;The scenario practice is unlike
+                        anything else. The AI actually pushes back like a real person would. My confidence has gone
+                        through the roof.&rdquo;</p>
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-xs font-bold text-accent">
+                            M</div>
+                        <div>
+                            <p class="text-sm font-semibold">Marcus T.</p>
+                            <p class="text-xs text-zinc-500">B2 Level · 4 months in</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-6 fade-up">
+                    <div class="text-amber-400 mb-3 text-sm">★★★★★</div>
+                    <p class="text-sm text-zinc-300 leading-relaxed mb-5">&ldquo;Finally an app that takes learning
+                        seriously. No owl guilt tripping me. Just real practice and real improvement I can
+                        measure.&rdquo;</p>
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-400">
+                            P</div>
+                        <div>
+                            <p class="text-sm font-semibold">Priya M.</p>
+                            <p class="text-xs text-zinc-500">Preparing for DELE exam</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ PRICING ═══════════════ -->
+    <section id="pricing" class="py-20 sm:py-28 px-4">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-center mb-3 tracking-tight fade-up">Simple,
+                honest pricing</h2>
+            <p class="text-zinc-500 text-center mb-14 max-w-md mx-auto fade-up">No hidden fees. Cancel anytime. Start
+                free and upgrade when you&rsquo;re ready.</p>
+            <div class="grid md:grid-cols-3 gap-5 items-start">
+                <div class="glass rounded-2xl p-6 fade-up">
+                    <h3 class="font-bold text-lg mb-1">Free</h3>
+                    <div class="text-3xl font-extrabold mb-1">$0<span class="text-base font-normal text-zinc-500"> /
+                            forever</span></div>
+                    <ul class="space-y-2.5 mt-6 text-sm text-zinc-400">
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>1 language (Spanish)</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>2 AI conversations per week</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Basic vocabulary deck</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Access to leaderboard</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Beginner pathway included</li>
+                    </ul>
+                    <a href="#cta"
+                        class="mt-6 block text-center border border-brd hover:border-zinc-500 text-zinc-300 font-semibold py-2.5 rounded-full transition text-sm">Start
+                        Free</a>
+                </div>
+                <div
+                    class="relative glass rounded-2xl p-6 border-primary/40 -mt-0 md:-mt-3 shadow-xl shadow-primary/10 fade-up">
+                    <div
+                        class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-wider">
+                        Most Popular</div>
+                    <h3 class="font-bold text-lg mb-1 mt-2">Pro</h3>
+                    <div class="text-3xl font-extrabold mb-0.5">$15<span class="text-base font-normal text-zinc-500"> /
+                            month</span></div>
+                    <p class="text-xs text-zinc-500 mb-1">or $99/year <span class="text-emerald-400 font-semibold">(save
+                            45%)</span></p>
+                    <ul class="space-y-2.5 mt-6 text-sm text-zinc-300">
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Everything in Free</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Unlimited AI conversations</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Full vocabulary system</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Bi-weekly level tests</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Leaderboard + weekly challenges
+                        </li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Priority support</li>
+                    </ul>
+                    <a href="#cta"
+                        class="mt-6 block text-center bg-primary hover:bg-primary-light text-white font-bold py-2.5 rounded-full transition text-sm shadow-lg shadow-primary/25">Start
+                        Pro — 7 Days Free</a>
+                </div>
+                <div class="glass rounded-2xl p-6 fade-up">
+                    <h3 class="font-bold text-lg mb-1">Certificate</h3>
+                    <div class="text-3xl font-extrabold mb-0.5">$29<span class="text-base font-normal text-zinc-500"> /
+                            each</span></div>
+                    <p class="text-xs text-zinc-500 mb-1">One-time purchase after passing a level test</p>
+                    <ul class="space-y-2.5 mt-6 text-sm text-zinc-400">
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Verified level certificate</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Unique QR verification code</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>LinkedIn compatible</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>Valid permanently</li>
+                        <li class="flex gap-2"><span class="text-emerald-500">✓</span>PDF download</li>
+                    </ul>
+                    <a href="#features"
+                        class="mt-6 block text-center border border-brd hover:border-zinc-500 text-zinc-300 font-semibold py-2.5 rounded-full transition text-sm">Learn
+                        More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ FAQ ═══════════════ -->
+    <section id="faq" class="py-20 sm:py-28 px-4 border-t border-brd/50">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-center mb-14 tracking-tight fade-up">
+                Common questions</h2>
+            <div class="space-y-3 fade-up" id="faqList">
+                <div class="faq-item glass rounded-xl">
+                    <button
+                        class="faq-toggle w-full flex items-center justify-between p-5 text-left font-semibold text-sm"><span>Is
+                            FluentLoop only for beginners?</span><span
+                            class="faq-icon text-zinc-500 text-xl leading-none">+</span></button>
+                    <div class="faq-answer px-5 text-sm text-zinc-400 leading-relaxed">No. FluentLoop works for all
+                        levels from complete beginner to advanced. Beginners start with our structured pathway before
+                        conversations. Intermediate and advanced learners jump straight into scenarios. Our AI adapts to
+                        your level automatically.</div>
+                </div>
+                <div class="faq-item glass rounded-xl">
+                    <button
+                        class="faq-toggle w-full flex items-center justify-between p-5 text-left font-semibold text-sm"><span>How
+                            is this different from Duolingo?</span><span
+                            class="faq-icon text-zinc-500 text-xl leading-none">+</span></button>
+                    <div class="faq-answer px-5 text-sm text-zinc-400 leading-relaxed">Duolingo teaches you to complete
+                        exercises. FluentLoop teaches you to have conversations. Our AI plays a real native speaker
+                        character who responds naturally, pushes back, and scores your grammar and vocabulary in real
+                        time. There are no streaks, no animated owls, no gamification. Just real practice.</div>
+                </div>
+                <div class="faq-item glass rounded-xl">
+                    <button
+                        class="faq-toggle w-full flex items-center justify-between p-5 text-left font-semibold text-sm"><span>What
+                            if I&rsquo;m a complete beginner?</span><span
+                            class="faq-icon text-zinc-500 text-xl leading-none">+</span></button>
+                    <div class="faq-answer px-5 text-sm text-zinc-400 leading-relaxed">Perfect &mdash; we built the
+                        beginner pathway for you. Before any conversation you read guided dialogues, learn key phrases,
+                        and pass a quick readiness check. By the time you attempt your first conversation you&rsquo;ll
+                        have what you need.</div>
+                </div>
+                <div class="faq-item glass rounded-xl">
+                    <button
+                        class="faq-toggle w-full flex items-center justify-between p-5 text-left font-semibold text-sm"><span>How
+                            does the scoring work?</span><span
+                            class="faq-icon text-zinc-500 text-xl leading-none">+</span></button>
+                    <div class="faq-answer px-5 text-sm text-zinc-400 leading-relaxed">After every conversation session
+                        you receive scores for grammar accuracy, vocabulary range, and naturalness. You also see
+                        specific errors, corrections, and suggestions. It&rsquo;s like having a patient tutor review
+                        every conversation.</div>
+                </div>
+                <div class="faq-item glass rounded-xl">
+                    <button
+                        class="faq-toggle w-full flex items-center justify-between p-5 text-left font-semibold text-sm"><span>What
+                            languages are available?</span><span
+                            class="faq-icon text-zinc-500 text-xl leading-none">+</span></button>
+                    <div class="faq-answer px-5 text-sm text-zinc-400 leading-relaxed">Spanish is available now. French,
+                        Mandarin, Japanese, Portuguese, and German are coming soon. Join the waitlist for your language
+                        below.</div>
+                </div>
+                <div class="faq-item glass rounded-xl">
+                    <button
+                        class="faq-toggle w-full flex items-center justify-between p-5 text-left font-semibold text-sm"><span>Can
+                            I really earn a certificate?</span><span
+                            class="faq-icon text-zinc-500 text-xl leading-none">+</span></button>
+                    <div class="faq-answer px-5 text-sm text-zinc-400 leading-relaxed">Yes. Pass a bi-weekly level test
+                        and purchase your verified certificate for $29. Each has a unique verification code and QR code.
+                        We&rsquo;re building employer and university recognition over time.</div>
+                </div>
+                <div class="faq-item glass rounded-xl">
+                    <button
+                        class="faq-toggle w-full flex items-center justify-between p-5 text-left font-semibold text-sm"><span>Do
+                            I need any special equipment?</span><span
+                            class="faq-icon text-zinc-500 text-xl leading-none">+</span></button>
+                    <div class="faq-answer px-5 text-sm text-zinc-400 leading-relaxed">No. FluentLoop is text-based
+                        &mdash; you type your responses in Spanish. No microphone required. Works on any device with a
+                        browser.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ LANGUAGE WAITLIST ═══════════════ -->
+    <section class="py-20 sm:py-28 px-4">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold mb-3 tracking-tight fade-up">More languages
+                coming soon</h2>
+            <p class="text-zinc-500 mb-10 fade-up">Be first to know when your language launches</p>
+            <div class="flex flex-wrap justify-center gap-3 mb-8 fade-up" id="langCards">
+                <button data-lang="French"
+                    class="lang-card glass px-5 py-3 rounded-xl text-sm font-semibold transition-all hover:border-primary/40 border-2 border-transparent">🇫🇷
+                    French</button>
+                <button data-lang="Mandarin"
+                    class="lang-card glass px-5 py-3 rounded-xl text-sm font-semibold transition-all hover:border-primary/40 border-2 border-transparent">🇨🇳
+                    Mandarin</button>
+                <button data-lang="Japanese"
+                    class="lang-card glass px-5 py-3 rounded-xl text-sm font-semibold transition-all hover:border-primary/40 border-2 border-transparent">🇯🇵
+                    Japanese</button>
+                <button data-lang="Portuguese"
+                    class="lang-card glass px-5 py-3 rounded-xl text-sm font-semibold transition-all hover:border-primary/40 border-2 border-transparent">🇧🇷
+                    Portuguese</button>
+                <button data-lang="German"
+                    class="lang-card glass px-5 py-3 rounded-xl text-sm font-semibold transition-all hover:border-primary/40 border-2 border-transparent">🇩🇪
+                    German</button>
+            </div>
+            <!-- TODO: Wire up to actual API endpoint for waitlist signup -->
+            <div id="waitlistForm" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto fade-up">
+                <input id="waitlistEmail" type="email" placeholder="Enter your email"
+                    class="flex-1 bg-surface border border-brd rounded-full px-5 py-3 text-sm focus:outline-none focus:border-primary transition placeholder:text-zinc-600">
+                <button id="waitlistBtn"
+                    class="bg-primary hover:bg-primary-light text-white font-bold px-6 py-3 rounded-full text-sm transition whitespace-nowrap">Notify
+                    Me</button>
+            </div>
+            <div id="waitlistSuccess" class="hidden mt-4 text-emerald-400 font-semibold text-sm"></div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ FINAL CTA ═══════════════ -->
+    <section id="cta" class="py-20 sm:py-28 px-4 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 pointer-events-none">
+        </div>
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#080808] pointer-events-none">
+        </div>
+        <div class="relative max-w-2xl mx-auto text-center">
+            <h2 class="font-display text-3xl sm:text-5xl font-extrabold mb-4 tracking-tight fade-up">Ready to actually
+                speak Spanish?</h2>
+            <p class="text-zinc-400 mb-8 fade-up">Join thousands of serious learners. Start free. No credit card
+                required.</p>
+            <a href="#"
+                class="inline-block bg-white text-[#080808] font-extrabold px-10 py-4 rounded-full text-base hover:bg-zinc-200 transition shadow-xl fade-up">Start
+                Learning Free</a>
+            <p class="text-xs text-zinc-500 mt-4 fade-up">7-day free trial on Pro &middot; Cancel anytime</p>
+            <div class="flex items-center justify-center gap-6 mt-8 text-xs text-zinc-500 flex-wrap fade-up">
+                <span>🔒 No credit card required</span>
+                <span>⭐ 4.9/5 average rating</span>
+                <span>🌍 2,000+ active learners</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="border-t border-brd/50 py-16 px-4">
+        <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
+            <div class="col-span-2 md:col-span-1">
+                <div class="flex items-center gap-2 mb-3">
+                    <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+                        <rect x="2" y="4" width="18" height="16" rx="8" stroke="#7c3aed" stroke-width="2.2" />
+                        <path d="M10 20l-3 4" stroke="#7c3aed" stroke-width="2.2" stroke-linecap="round" />
+                        <circle cx="8" cy="12" r="1.5" fill="#7c3aed" />
+                        <circle cx="13" cy="12" r="1.5" fill="#a855f7" />
+                        <circle cx="18" cy="12" r="1.5" fill="#06b6d4" />
+                    </svg>
+                    <span class="font-bold">Fluent<span class="text-primary">Loop</span></span>
+                </div>
+                <p class="text-xs text-zinc-500 leading-relaxed">Real conversations. Real fluency. AI-powered language
+                    learning that gets you speaking, not just studying.</p>
+            </div>
+            <div>
+                <h4 class="font-semibold text-sm mb-4">Product</h4>
+                <ul class="space-y-2 text-sm text-zinc-500">
+                    <li><a href="#how" class="hover:text-white transition">How It Works</a></li>
+                    <li><a href="#features" class="hover:text-white transition">Features</a></li>
+                    <li><a href="#pricing" class="hover:text-white transition">Pricing</a></li>
+                    <li><a href="#" class="hover:text-white transition">Changelog</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-sm mb-4">Languages</h4>
+                <ul class="space-y-2 text-sm text-zinc-500">
+                    <li><span class="text-white">Spanish</span> <span
+                            class="text-emerald-500 text-[10px] font-bold">LIVE</span></li>
+                    <li>French <span class="text-zinc-600 text-[10px]">Soon</span></li>
+                    <li>Mandarin <span class="text-zinc-600 text-[10px]">Soon</span></li>
+                    <li>Japanese <span class="text-zinc-600 text-[10px]">Soon</span></li>
+                    <li>Portuguese <span class="text-zinc-600 text-[10px]">Soon</span></li>
+                    <li>German <span class="text-zinc-600 text-[10px]">Soon</span></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-sm mb-4">Company</h4>
+                <ul class="space-y-2 text-sm text-zinc-500">
+                    <li><a href="#" class="hover:text-white transition">About</a></li>
+                    <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                    <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div
+            class="max-w-5xl mx-auto mt-12 pt-6 border-t border-brd/50 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-600">
+            <span>&copy; 2026 FluentLoop. All rights reserved.</span>
+            <span>Built with 🤍 for serious language learners</span>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // Scroll animations
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+        // Navbar scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.style.background = scrollY > 60 ? 'rgba(8,8,8,0.88)' : 'rgba(8,8,8,0.6)';
+            navbar.style.borderBottom = scrollY > 60 ? '1px solid #222' : 'none';
+        });
+
+        // Active nav link
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(s => { if (scrollY >= s.offsetTop - 200) current = s.getAttribute('id'); });
+            navLinks.forEach(l => { l.classList.toggle('text-white', l.getAttribute('href') === '#' + current); });
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const answer = item.querySelector('.faq-answer');
+                const wasOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-answer').classList.remove('open'); });
+                if (!wasOpen) { item.classList.add('open'); answer.classList.add('open'); }
+            });
+        });
+
+        // Language waitlist
+        let selectedLang = null;
+        document.querySelectorAll('.lang-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.lang-card').forEach(c => c.style.borderColor = 'transparent');
+                card.style.borderColor = '#7c3aed';
+                selectedLang = card.dataset.lang;
+            });
+        });
+        document.getElementById('waitlistBtn').addEventListener('click', () => {
+            const email = document.getElementById('waitlistEmail').value;
+            if (!email || !email.includes('@')) return;
+            if (!selectedLang) selectedLang = 'your chosen language';
+            document.getElementById('waitlistForm').classList.add('hidden');
+            const s = document.getElementById('waitlistSuccess');
+            s.classList.remove('hidden');
+            s.textContent = "You're on the list for " + selectedLang + "! We'll email you first.";
+        });
+    </script>
+</body>
+
+</html>
