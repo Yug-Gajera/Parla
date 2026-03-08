@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Story Topics & Content Types
+// Parlova — Story Topics & Content Types
 // ============================================================
 
 export interface TopicCategory {

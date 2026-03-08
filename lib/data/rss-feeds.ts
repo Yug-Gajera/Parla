@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — RSS Feed Configuration (3 Launch Feeds)
+// Parlova — RSS Feed Configuration (3 Launch Feeds)
 // ============================================================
 
 export interface RSSFeed {

@@ -1,7 +1,7 @@
 "use client";
 
 // ============================================================
-// FluentLoop — Story Browser (Generate + Browse)
+// Parlova — Story Browser (Generate + Browse)
 // ============================================================
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -197,7 +197,7 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                     <h3 className="text-lg font-bold">Stories at your level</h3>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                    Read by other FluentLoop learners
+                    Read by other Parlova learners
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

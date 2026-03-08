@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — useModules Hook
+// Parlova — useModules Hook
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';

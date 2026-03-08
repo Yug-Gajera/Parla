@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Article Processor (Claude Haiku — Cost-Optimized)
+// Parlova — Article Processor (Claude Haiku — Cost-Optimized)
 // ============================================================
 
 import Anthropic from '@anthropic-ai/sdk';

@@ -41,7 +41,7 @@ export function CompeteView({ languageId, initialLevel, activeChallenge, userSta
 
             <div className="mb-8">
                 <h1 className="text-4xl font-black text-foreground mb-2 tracking-tight">Compete</h1>
-                <p className="text-muted-foreground">See how you stack up against the rest of the FluentLoop community.</p>
+                <p className="text-muted-foreground">See how you stack up against the rest of the Parlova community.</p>
             </div>
 
             <Tabs defaultValue="leaderboard" className="w-full flex-1 flex flex-col">

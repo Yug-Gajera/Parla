@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Test Availability Check API
+// Parlova — Test Availability Check API
 // ============================================================
 
 import { NextResponse } from 'next/server';

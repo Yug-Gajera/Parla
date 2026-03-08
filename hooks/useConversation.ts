@@ -7,9 +7,24 @@ export interface ChatMessage {
     role: 'user' | 'assistant' | 'system';
     content: string;
     timestamp?: string;
+    voiceData?: {
+        confidence: number;
+        lowConfidenceWords: string[];
+        usedWhisper: boolean;
+        durationSeconds: number;
+    };
 }
 
 export type ConversationPhase = 'idle' | 'pre-session' | 'active' | 'ended';
+
+export interface TranscriptionRecord {
+    message_index: number;
+    spoken_text: string;
+    transcription_confidence: number;
+    low_confidence_words: string[];
+    used_whisper: boolean;
+    recording_duration_seconds: number;
+}
 
 export function useConversation(scenarioId: string, languageId: string, level: string) {
     const [sessionId, setSessionId] = useState<string | null>(null);
@@ -28,6 +43,10 @@ export function useConversation(scenarioId: string, languageId: string, level: s
     const [situationTwist, setSituationTwist] = useState<string | null>(null);
     const [situationId, setSituationId] = useState<string | null>(null);
     const [phase, setPhase] = useState<ConversationPhase>('idle');
+
+    // Voice mode state
+    const [inputMode, setInputMode] = useState<'voice' | 'text'>('voice');
+    const pronunciationDataRef = useRef<TranscriptionRecord[]>([]);
 
     // Timer logic
     useEffect(() => {
@@ -103,11 +122,36 @@ export function useConversation(scenarioId: string, languageId: string, level: s
         await startSession(situationId || undefined);
     }, [startSession, situationId]);
 
-    const sendMessage = async (text: string) => {
+    const sendMessage = async (
+        text: string,
+        voiceData?: {
+            confidence: number;
+            lowConfidenceWords: string[];
+            usedWhisper: boolean;
+            durationSeconds: number;
+        }
+    ) => {
         if (!sessionId || !text.trim() || isStreaming) return;
 
-        const userMsg: ChatMessage = { role: 'user', content: text, timestamp: new Date().toISOString() };
+        const userMsg: ChatMessage = {
+            role: 'user',
+            content: text,
+            timestamp: new Date().toISOString(),
+            voiceData,
+        };
         const historyForApi = [...messages];
+
+        // Track pronunciation data for scoring
+        if (voiceData) {
+            pronunciationDataRef.current.push({
+                message_index: messages.filter(m => m.role === 'user').length,
+                spoken_text: text,
+                transcription_confidence: voiceData.confidence,
+                low_confidence_words: voiceData.lowConfidenceWords,
+                used_whisper: voiceData.usedWhisper,
+                recording_duration_seconds: voiceData.durationSeconds,
+            });
+        }
 
         setMessages(prev => [...prev, userMsg]);
         setIsStreaming(true);
@@ -121,7 +165,12 @@ export function useConversation(scenarioId: string, languageId: string, level: s
                     user_message: text,
                     conversation_history: historyForApi.slice(-6),
                     scenario_id: scenarioId,
-                    level
+                    level,
+                    // Voice metadata
+                    transcription_confidence: voiceData?.confidence,
+                    low_confidence_words: voiceData?.lowConfidenceWords,
+                    used_whisper: voiceData?.usedWhisper,
+                    recording_duration: voiceData?.durationSeconds,
                 })
             });
 
@@ -160,6 +209,10 @@ export function useConversation(scenarioId: string, languageId: string, level: s
         }
     };
 
+    const switchToTextMode = useCallback(() => {
+        setInputMode('text');
+    }, []);
+
     const endSession = async () => {
         if (!sessionId) return null;
         setIsLoading(true);
@@ -175,7 +228,9 @@ export function useConversation(scenarioId: string, languageId: string, level: s
                     session_id: sessionId,
                     scenario_id: scenarioId,
                     level,
-                    duration_minutes: Math.ceil(elapsedSeconds / 60)
+                    duration_minutes: Math.ceil(elapsedSeconds / 60),
+                    input_mode: inputMode,
+                    transcription_data: pronunciationDataRef.current,
                 })
             });
 
@@ -203,6 +258,8 @@ export function useConversation(scenarioId: string, languageId: string, level: s
         setSituationId(null);
         setPhase('idle');
         setElapsedSeconds(0);
+        setInputMode('voice');
+        pronunciationDataRef.current = [];
         if (timerRef.current) clearInterval(timerRef.current);
         timerRef.current = null;
     }, []);
@@ -218,11 +275,13 @@ export function useConversation(scenarioId: string, languageId: string, level: s
         situationTeaser,
         situationTwist,
         situationId,
+        inputMode,
         startSession,
         prepareSession,
         skipToNewVariation,
         sendMessage,
         endSession,
         resetConversation,
+        switchToTextMode,
     };
 }

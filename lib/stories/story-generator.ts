@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Story Generation Service (Cost-Optimized)
+// Parlova — Story Generation Service (Cost-Optimized)
 // ============================================================
 
 import Anthropic from '@anthropic-ai/sdk';

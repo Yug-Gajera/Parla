@@ -43,13 +43,13 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            setBannerDismissed(localStorage.getItem('fluentloop_learn_banner_dismissed') === 'true');
+            setBannerDismissed(localStorage.getItem('parlova_learn_banner_dismissed') === 'true');
         }
     }, []);
 
     const dismissBanner = () => {
         setBannerDismissed(true);
-        localStorage.setItem('fluentloop_learn_banner_dismissed', 'true');
+        localStorage.setItem('parlova_learn_banner_dismissed', 'true');
     };
 
     const levelMap: Record<string, number> = {

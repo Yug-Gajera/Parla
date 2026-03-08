@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Supabase Server Client
+// Parlova — Supabase Server Client
 // ============================================================
 
 import { createServerClient } from '@supabase/ssr';

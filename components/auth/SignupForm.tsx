@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Signup Form
+// Parlova — Signup Form
 // ============================================================
 
 import * as React from 'react';
@@ -136,7 +136,7 @@ export default function SignupForm() {
             <div className="flex flex-col items-center gap-2 text-center mb-2">
                 <div className="flex items-center gap-2 text-primary font-bold text-2xl mb-2">
                     <AudioLines size={28} />
-                    <span>FluentLoop</span>
+                    <span>Parlova</span>
                 </div>
                 <h1 className="text-2xl font-semibold tracking-tight">Start learning today</h1>
                 <p className="text-sm text-muted-foreground mb-2">

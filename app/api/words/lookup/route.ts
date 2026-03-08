@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — On-the-fly Word Lookup via Claude Haiku
+// Parlova — On-the-fly Word Lookup via Claude Haiku
 // ============================================================
 
 import { NextResponse } from 'next/server';

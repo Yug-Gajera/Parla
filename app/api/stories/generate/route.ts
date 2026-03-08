@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Story Generate API
+// Parlova — Story Generate API
 // ============================================================
 
 import { NextResponse } from 'next/server';

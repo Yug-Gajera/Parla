@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Global Error Boundary
+// Parlova — Global Error Boundary
 // ============================================================
 
 import { useEffect } from 'react';

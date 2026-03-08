@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Goal Progress Ring
+// Parlova — Goal Progress Ring
 // ============================================================
 
 import React, { useEffect, useState } from 'react';

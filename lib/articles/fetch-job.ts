@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Article Fetch Job (Cost-Optimized)
+// Parlova — Article Fetch Job (Cost-Optimized)
 // ============================================================
 
 import { fetchAllNewArticles } from './rss-fetcher';

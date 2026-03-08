@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Recent Activity List
+// Parlova — Recent Activity List
 // ============================================================
 
 import React from 'react';

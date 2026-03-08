@@ -1,12 +1,12 @@
 // ============================================================
-// FluentLoop — Signup Page
+// Parlova — Signup Page
 // ============================================================
 
 import { Metadata } from 'next';
 import SignupForm from '@/components/auth/SignupForm';
 
 export const metadata: Metadata = {
-    title: 'Sign Up | FluentLoop',
+    title: 'Sign Up | Parlova',
     description: 'Join thousands of language learners and start your journey today.',
 };
 

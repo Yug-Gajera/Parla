@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Onboarding Step 3: Daily Time
+// Parlova — Onboarding Step 3: Daily Time
 // ============================================================
 
 import React from 'react';

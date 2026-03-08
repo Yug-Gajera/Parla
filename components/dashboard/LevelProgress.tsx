@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Level Progress Card
+// Parlova — Level Progress Card
 // ============================================================
 
 import React, { useEffect, useState } from 'react';

@@ -104,7 +104,7 @@ async function DashboardData() {
         supabase.from('user_vocabulary')
             .select('*', { count: 'exact', head: true })
             .eq('user_id', user.id)
-            .gte('created_at', startOfWeek),
+            .gte('added_at', startOfWeek),
 
         // Conversations this week
         supabase.from('conversation_sessions')

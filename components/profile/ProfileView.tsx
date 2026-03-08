@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Edit2, Share, Brain, MessageSquare, Flame, Clock, Award, Download, ExternalLink } from 'lucide-react';
+import { Edit2, Share, Brain, MessageSquare, Flame, Clock, Award, Download, ExternalLink, Settings, LogOut } from 'lucide-react';
 import { EditProfileSheet } from './EditProfileSheet';
 import { toast } from 'sonner';
 import { useProfile } from '@/hooks/useProfile';
@@ -195,6 +195,51 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                     </div>
                 </Card>
             </div>
+
+            {/* Section 4: Account Actions */}
+            <Card className="border-border/40 shadow-sm bg-card/40 backdrop-blur-sm">
+                <CardHeader>
+                    <CardTitle className="text-xl flex items-center text-foreground">
+                        <Settings className="w-5 h-5 mr-2 text-primary" />
+                        Account Settings
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-background/50 rounded-lg border border-border/50">
+                        <div>
+                            <h4 className="font-medium text-foreground">Sign Out</h4>
+                            <p className="text-sm text-muted-foreground mt-1">
+                                Sign out of your account on this device.
+                            </p>
+                        </div>
+                        <Button
+                            variant="outline"
+                            className="mt-4 md:mt-0 font-medium"
+                            onClick={async () => {
+                                const { createClient } = await import('@/lib/supabase/client');
+                                const supabase = createClient();
+                                await supabase.auth.signOut();
+                                window.location.href = '/';
+                            }}
+                        >
+                            <LogOut className="w-4 h-4 mr-2" />
+                            Sign Out
+                        </Button>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-red-500/10 rounded-lg border border-red-500/20">
+                        <div>
+                            <h4 className="font-medium text-red-600 dark:text-red-400">Danger Zone</h4>
+                            <p className="text-sm text-red-600/80 dark:text-red-400/80 mt-1">
+                                Permanently delete your account and all learning data.
+                            </p>
+                        </div>
+                        <Button variant="destructive" className="mt-4 md:mt-0 font-medium bg-red-600 hover:bg-red-700">
+                            Delete Account
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
 
             {/* Section 4: Activity Chart */}
             <ActivityChart activityByDate={activityByDate} />

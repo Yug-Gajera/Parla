@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Article Fetch API (cron + manual trigger)
+// Parlova — Article Fetch API (cron + manual trigger)
 // ============================================================
 
 import { NextResponse } from 'next/server';

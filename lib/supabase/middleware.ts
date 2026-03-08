@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Supabase Auth Middleware
+// Parlova — Supabase Auth Middleware
 // ============================================================
 
 import { createServerClient } from '@supabase/ssr';

@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Articles List API (15 per page)
+// Parlova — Articles List API (15 per page)
 // ============================================================
 
 import { NextResponse } from 'next/server';

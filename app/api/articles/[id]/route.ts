@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Single Article API
+// Parlova — Single Article API
 // ============================================================
 
 import { NextResponse } from 'next/server';

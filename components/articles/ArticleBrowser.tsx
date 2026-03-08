@@ -1,7 +1,7 @@
 "use client";
 
 // ============================================================
-// FluentLoop — Article Browser (Cost-Optimized, 3 feeds)
+// Parlova — Article Browser (Cost-Optimized, 3 feeds)
 // ============================================================
 
 import React, { useEffect, useRef, useCallback, useState } from 'react';
@@ -130,8 +130,8 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                         key={topic}
                         onClick={() => setTopicFilter(topic)}
                         className={`px-3 py-1 rounded-full text-xs font-medium capitalize whitespace-nowrap transition-all ${topicFilter === topic
-                                ? 'bg-primary/20 text-primary border border-primary/30'
-                                : 'bg-card border border-border text-muted-foreground hover:text-foreground'
+                            ? 'bg-primary/20 text-primary border border-primary/30'
+                            : 'bg-card border border-border text-muted-foreground hover:text-foreground'
                             }`}
                     >
                         {topic === 'all' ? 'All Topics' : topic}

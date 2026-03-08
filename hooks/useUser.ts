@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — useUser Hook
+// Parlova — useUser Hook
 // ============================================================
 
 import { useEffect, useState } from 'react';

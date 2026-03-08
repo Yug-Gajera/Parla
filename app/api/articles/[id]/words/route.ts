@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Article Word Tap API
+// Parlova — Article Word Tap API
 // ============================================================
 
 import { NextResponse } from 'next/server';

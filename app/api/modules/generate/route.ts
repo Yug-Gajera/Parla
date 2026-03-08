@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Module Generate API
+// Parlova — Module Generate API
 // ============================================================
 // Generates or retrieves cached learning module content for a scenario.
 

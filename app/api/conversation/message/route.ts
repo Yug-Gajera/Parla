@@ -15,7 +15,10 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { session_id, user_message, conversation_history, scenario_id, level } = body;
+        const {
+            session_id, user_message, conversation_history, scenario_id, level,
+            transcription_confidence, low_confidence_words, used_whisper, recording_duration
+        } = body;
 
         if (!session_id || !user_message || !scenario_id) {
             return new Response('Missing required fields', { status: 400 });
@@ -96,7 +99,9 @@ export async function POST(req: Request) {
 
                     await (supabase as any)
                         .from('conversation_sessions')
-                        .update({ messages: updatedMessagesLocal })
+                        .update({
+                            messages: updatedMessagesLocal,
+                        })
                         .eq('id', session_id);
 
                 } catch (streamErr) {

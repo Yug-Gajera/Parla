@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Dashboard Header
+// Parlova — Dashboard Header
 // ============================================================
 
 import React from 'react';

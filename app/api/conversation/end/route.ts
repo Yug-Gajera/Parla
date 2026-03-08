@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { session_id, scenario_id, level, duration_minutes } = body;
+        const { session_id, scenario_id, level, duration_minutes, input_mode, transcription_data } = body;
 
         if (!session_id || !scenario_id) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -39,10 +39,37 @@ export async function POST(req: Request) {
             .join('\n\n');
 
         const scenario = SCENARIOS.find(s => s.id === scenario_id);
+
+        // Calculate pronunciation score from transcription data
+        let pronunciationScore: number | null = null;
+        if (input_mode === 'voice' && transcription_data && transcription_data.length > 0) {
+            const avgConfidence = transcription_data.reduce(
+                (acc: number, r: any) => acc + (r.transcription_confidence || 0), 0
+            ) / transcription_data.length;
+
+            const baseScore = avgConfidence * 100;
+
+            // Penalty for low confidence words
+            const totalWords = transcription_data.reduce(
+                (acc: number, r: any) => acc + (r.spoken_text?.split(/\s+/).length || 0), 0
+            );
+            const lowConfWords = transcription_data.reduce(
+                (acc: number, r: any) => acc + (r.low_confidence_words?.length || 0), 0
+            );
+            const penalty = totalWords > 0 ? Math.min(20, (lowConfWords / totalWords) * 20) : 0;
+
+            // Bonus for longer utterances
+            const avgWordsPerMsg = totalWords / transcription_data.length;
+            const bonus = avgWordsPerMsg >= 15 ? 10 : avgWordsPerMsg >= 10 ? 5 : 0;
+
+            pronunciationScore = Math.max(0, Math.min(100, Math.round(baseScore - penalty + bonus)));
+        }
+
         const scoringPrompt = CONVERSATION_SCORING_PROMPT
             .replace('{TRANSCRIPT}', transcript)
             .replace('{GOAL}', scenario?.goal || '')
-            .replace('{LEVEL}', level || 'A2');
+            .replace('{LEVEL}', level || 'A2')
+            .replace('{PRONUNCIATION_SCORE}', pronunciationScore !== null ? String(pronunciationScore) : 'N/A (text session)');
 
         // 2. Score via OpenAI JSON mode
         const completion = await openai.chat.completions.create({
@@ -167,11 +194,15 @@ export async function POST(req: Request) {
 
         return NextResponse.json({
             success: true,
-            scoring: finalScores,
+            scoring: {
+                ...finalScores,
+                pronunciation_score: pronunciationScore,
+            },
             xpEarned,
             situation_id: session.situation_id,
             situation_name: session.situation_name,
             situation_twist: session.situation_twist,
+            input_mode: input_mode || 'text',
         });
 
     } catch (error) {

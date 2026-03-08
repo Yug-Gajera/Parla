@@ -1,12 +1,12 @@
 // ============================================================
-// FluentLoop — Onboarding Main Page
+// Parlova — Onboarding Main Page
 // ============================================================
 
 import { Metadata } from 'next';
 import OnboardingFlow from '@/components/onboarding/OnboardingFlow';
 
 export const metadata: Metadata = {
-    title: 'Welcome | FluentLoop',
+    title: 'Welcome | Parlova',
     description: 'Let\'s personalize your language learning journey.',
 };
 

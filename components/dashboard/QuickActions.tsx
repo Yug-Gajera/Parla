@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Quick Actions Grid
+// Parlova — Quick Actions Grid
 // ============================================================
 
 import React from 'react';

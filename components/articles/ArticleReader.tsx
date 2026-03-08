@@ -1,7 +1,7 @@
 "use client";
 
 // ============================================================
-// FluentLoop — Article Reader (3 questions, 90% trigger)
+// Parlova — Article Reader (3 questions, 90% trigger)
 // ============================================================
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';

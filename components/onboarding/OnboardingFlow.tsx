@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Onboarding Flow Container
+// Parlova — Onboarding Flow Container
 // ============================================================
 
 import React from 'react';

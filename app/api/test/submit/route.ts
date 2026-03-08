@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Test Submission & Scoring API
+// Parlova — Test Submission & Scoring API
 // ============================================================
 
 import { NextResponse } from 'next/server';
@@ -25,7 +25,7 @@ interface WritingScore {
     feedback: string;
 }
 
-const WRITING_SCORING_PROMPT = `You are an expert language assessor for FluentLoop.
+const WRITING_SCORING_PROMPT = `You are an expert language assessor for Parlova.
 
 Score the following writing response from a learner attempting to achieve {LEVEL} level in {LANGUAGE}.
 

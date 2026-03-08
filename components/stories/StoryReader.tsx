@@ -1,7 +1,7 @@
 "use client";
 
 // ============================================================
-// FluentLoop — Story Reader (dialogue/letter/journal support)
+// Parlova — Story Reader (dialogue/letter/journal support)
 // ============================================================
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';

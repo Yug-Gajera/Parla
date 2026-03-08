@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Test Generation API
+// Parlova — Test Generation API
 // ============================================================
 
 import { NextResponse } from 'next/server';
@@ -38,7 +38,7 @@ interface GeneratedTest {
     writing: WritingPrompt;
 }
 
-const TEST_GENERATION_PROMPT = `You are a language proficiency test generator for FluentLoop.
+const TEST_GENERATION_PROMPT = `You are a language proficiency test generator for Parlova.
 
 Generate a CEFR-aligned level test for a learner attempting to advance to level {LEVEL} in {LANGUAGE}.
 

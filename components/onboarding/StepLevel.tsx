@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Onboarding Step 4: Self-Reported Level
+// Parlova — Onboarding Step 4: Self-Reported Level
 // ============================================================
 
 import React from 'react';

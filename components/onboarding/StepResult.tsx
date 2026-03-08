@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Onboarding Step 6: Result
+// Parlova — Onboarding Step 6: Result
 // ============================================================
 
 import React, { useState, useEffect } from 'react';

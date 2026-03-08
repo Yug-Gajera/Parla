@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Module Progress API
+// Parlova — Module Progress API
 // ============================================================
 
 import { NextResponse } from 'next/server';
@@ -194,6 +194,32 @@ export async function POST(req: Request) {
                 }
 
                 console.log(`[modules/progress] Saved ${learned_phrases.length} phrases to vocabulary for user ${user.id}`);
+
+                // 3. Update leaderboard vocabulary_learned counter
+                try {
+                    const { data: userLang } = await serviceClient
+                        .from('user_languages')
+                        .select('current_level')
+                        .eq('user_id', user.id)
+                        .eq('language_id', language_id)
+                        .single();
+
+                    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+                    const host = req.headers.get('host') || 'localhost:3000';
+                    await fetch(`${protocol}://${host}/api/leaderboard/update`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            user_id: user.id,
+                            language_id,
+                            points_to_add: learned_phrases.length * 5,
+                            type: 'vocabulary',
+                            level: userLang?.current_level || 'A1',
+                        }),
+                    });
+                } catch (lbErr) {
+                    console.error('[modules/progress] Leaderboard update error:', lbErr);
+                }
             } catch (vocabErr) {
                 // Don't fail the main request if vocab save fails
                 console.error('[modules/progress] Vocab save error:', vocabErr);

@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Onboarding Completion API
+// Parlova — Onboarding Completion API
 // ============================================================
 // Server-side route to save onboarding data — avoids RLS issues
 // that can cause client-side upserts to silently fail.

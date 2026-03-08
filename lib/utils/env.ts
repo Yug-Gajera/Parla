@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Environment Variable Validation
+// Parlova — Environment Variable Validation
 // ============================================================
 
 const requiredServerVars = [

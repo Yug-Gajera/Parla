@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Onboarding Step 5: Diagnostic Test
+// Parlova — Onboarding Step 5: Diagnostic Test
 // ============================================================
 
 import React, { useEffect, useState } from 'react';

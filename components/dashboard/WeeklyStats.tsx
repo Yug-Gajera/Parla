@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Weekly Stats Cards
+// Parlova — Weekly Stats Cards
 // ============================================================
 
 import React, { useEffect, useState } from 'react';

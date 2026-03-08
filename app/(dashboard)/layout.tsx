@@ -1,21 +1,21 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Dashboard Layout
+// Parlova — Dashboard Layout
 // ============================================================
 
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BookOpen, Mic, Trophy, User, AudioLines, Settings } from 'lucide-react';
+import { Home, BookOpen, Mic, Trophy, User, AudioLines, Settings, GraduationCap } from 'lucide-react';
 
 const NAV_ITEMS = [
     { icon: Home, label: 'Home', href: '/home' },
+    { icon: GraduationCap, label: 'Learn', href: '/learn' },
     { icon: BookOpen, label: 'Read', href: '/read' },
     { icon: Mic, label: 'Practice', href: '/practice' },
     { icon: Trophy, label: 'Compete', href: '/compete' },
     { icon: User, label: 'Profile', href: '/profile' },
-    { icon: Settings, label: 'Settings', href: '/settings' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -30,7 +30,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 {/* Logo */}
                 <Link href="/home" className="flex items-center gap-2 text-primary font-bold text-xl mb-10 px-2">
                     <AudioLines size={24} />
-                    <span>FluentLoop</span>
+                    <span>Parlova</span>
                 </Link>
 
                 {/* Nav Links */}

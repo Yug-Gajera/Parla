@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Login Loading Skeleton
+// Parlova — Login Loading Skeleton
 // ============================================================
 
 import { AudioLines } from 'lucide-react';
@@ -11,7 +11,7 @@ export default function LoginLoading() {
             <div className="flex flex-col items-center gap-2 text-center mb-2">
                 <div className="flex items-center gap-2 text-primary font-bold text-2xl mb-2 opacity-50">
                     <AudioLines size={28} />
-                    <span>FluentLoop</span>
+                    <span>Parlova</span>
                 </div>
                 <div className="h-8 w-40 bg-muted rounded-md mb-1" />
                 <div className="h-4 w-56 bg-muted rounded-md" />

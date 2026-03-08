@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Supabase Browser Client (Singleton)
+// Parlova — Supabase Browser Client (Singleton)
 // ============================================================
 
 import { createBrowserClient } from '@supabase/ssr';

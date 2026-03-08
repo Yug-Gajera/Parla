@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — SM-2 Spaced Repetition Algorithm
+// Parlova — SM-2 Spaced Repetition Algorithm
 // ============================================================
 
 export interface SM2Result {

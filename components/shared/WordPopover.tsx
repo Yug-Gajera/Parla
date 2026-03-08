@@ -1,7 +1,7 @@
 "use client";
 
 // ============================================================
-// FluentLoop — Shared Word Popover Component
+// Parlova — Shared Word Popover Component
 // ============================================================
 
 import React, { useState, useCallback } from 'react';

@@ -22,6 +22,7 @@ interface ScoreCardProps {
     onTryAnother?: () => void;
     completedSituationIds?: string[];
     situationBestScores?: Record<string, number | null>;
+    inputMode?: string;
 }
 
 export function ScoreCard({
@@ -35,6 +36,7 @@ export function ScoreCard({
     onTryAnother,
     completedSituationIds = [],
     situationBestScores = {},
+    inputMode,
 }: ScoreCardProps) {
 
     const getScoreColor = (score: number) => {
@@ -52,7 +54,7 @@ export function ScoreCard({
     };
 
     const handleShare = () => {
-        const text = `I just scored ${scoring.overall_score}% on the '${scenario?.name}' Spanish scenario in FluentLoop! 🗣️✨`;
+        const text = `I just scored ${scoring.overall_score}% on the '${scenario?.name}' Spanish scenario in Parlova! 🗣️✨`;
         navigator.clipboard.writeText(text);
         toast.success("Score copied to clipboard!");
     };
@@ -156,10 +158,10 @@ export function ScoreCard({
                                         <div key={sit.id} className="flex flex-col items-center gap-1.5">
                                             <div
                                                 className={`w-4 h-4 rounded-full transition-all ${isCurrent
-                                                        ? 'bg-primary ring-2 ring-primary/30 ring-offset-2 ring-offset-background'
-                                                        : isCompleted
-                                                            ? 'bg-primary/60'
-                                                            : 'bg-border/40'
+                                                    ? 'bg-primary ring-2 ring-primary/30 ring-offset-2 ring-offset-background'
+                                                    : isCompleted
+                                                        ? 'bg-primary/60'
+                                                        : 'bg-border/40'
                                                     }`}
                                             />
                                             {isCompleted && bestScore !== null && (
@@ -213,6 +215,38 @@ export function ScoreCard({
                                 )}
                             </div>
                             <div className={`h-2 rounded-full w-full ${scoring.goal_completed ? 'bg-emerald-500' : 'bg-red-500/20'}`} />
+                        </motion.div>
+
+                        {/* Pronunciation */}
+                        <motion.div variants={itemV} className="flex flex-col gap-2">
+                            <div className="flex justify-between items-end">
+                                <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Pronunciation</span>
+                                {inputMode === 'voice' && scoring.pronunciation_score != null ? (
+                                    <span className="font-bold">{scoring.pronunciation_score}</span>
+                                ) : (
+                                    <span className="text-xs text-muted-foreground">N/A</span>
+                                )}
+                            </div>
+                            {inputMode === 'voice' && scoring.pronunciation_score != null ? (
+                                <>
+                                    <Progress value={scoring.pronunciation_score} className={`h-2 ${getScoreProgressColor(scoring.pronunciation_score)}`} />
+                                    {scoring.pronunciation_feedback && (
+                                        <p className="text-xs text-muted-foreground mt-1">{scoring.pronunciation_feedback}</p>
+                                    )}
+                                    {scoring.clarity_issues && scoring.clarity_issues.length > 0 && (
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                            <span className="text-[10px] text-amber-500 font-medium mr-1">Practice:</span>
+                                            {scoring.clarity_issues.map((word: string, i: number) => (
+                                                <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                                    {word}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <div className="h-2 rounded-full w-full bg-muted/30" />
+                            )}
                         </motion.div>
                     </div>
 

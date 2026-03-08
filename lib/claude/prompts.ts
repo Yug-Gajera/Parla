@@ -41,8 +41,13 @@ Here is the conversation transcript:
 
 Target Scenario Goal: {GOAL}
 Target Language Level: {LEVEL}
+Pronunciation Score (from speech recognition): {PRONUNCIATION_SCORE}
 
 Analyze the student's performance strictly against standard Spanish grammar, appropriate vocabulary for the context, and overall conversational pragmatics.
+
+If the pronunciation score is a number, factor it into your feedback:
+- Below 60: suggest speaking more slowly and clearly
+- Above 85: acknowledge their clear pronunciation
 
 Provide your response EXACTLY as a valid JSON object matching this structure (and absolutely nothing else outside the JSON):
 
@@ -52,7 +57,7 @@ Provide your response EXACTLY as a valid JSON object matching this structure (an
   "vocabulary_score": 0-100, // Number representing vocabulary range and correctness
   "naturalness_score": 0-100, // Number representing how natural/idiomatic they sounded
   "goal_completed": true/false, // Boolean: Did they achieve the scenario goal?
-  "overall_score": 0-100, // Weighted average (Grammar 30%, Vocab 30%, Naturalness 25%, Goal 15%)
+  "overall_score": 0-100,
   "grammar_errors": [
     {
       "error": "The exact phrase the user said incorrectly",
@@ -66,6 +71,8 @@ Provide your response EXACTLY as a valid JSON object matching this structure (an
   "vocabulary_suggestions": [
     "Word or phrase they should have used instead of a simpler/clunky alternative"
   ],
+  "pronunciation_feedback": "One sentence about speaking clarity based on the pronunciation score. If N/A say Text session.",
+  "clarity_issues": [],
   "summary": "A 2-3 sentence plain English summary of how they did overall.",
   "encouragement": "One short, highly personalized sentence of encouragement based on their specific performance.",
   "next_focus": "One specific grammar or vocabulary topic they should review before their next session."

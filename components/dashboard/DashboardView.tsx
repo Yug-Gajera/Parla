@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// FluentLoop — Main Dashboard View 
+// Parlova — Main Dashboard View 
 // ============================================================
 
 import React from 'react';

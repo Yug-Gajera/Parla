@@ -75,10 +75,29 @@ export async function POST(req: Request) {
             newRow = data;
         }
 
-        // Rank notification logic
-        // We get their rank before and after. If it moved up by 5 or they broke top 10, return a flag.
-        // For simplicity in a single transaction, we skip the exact "before" snapshot here 
-        // and return the newRow. The calling API can decide to issue a toast based on new points.
+        // Also increment user_languages.level_score (0-100 scale)
+        // Scale: every 25 leaderboard points = 1 level point, capped at 100
+        try {
+            const levelIncrement = Math.max(1, Math.round(points_to_add / 25));
+
+            const { data: currentLang } = await supabaseAdmin
+                .from('user_languages')
+                .select('level_score')
+                .eq('user_id', user_id)
+                .eq('language_id', language_id)
+                .single();
+
+            if (currentLang) {
+                const newScore = Math.min(100, (currentLang.level_score || 0) + levelIncrement);
+                await supabaseAdmin
+                    .from('user_languages')
+                    .update({ level_score: newScore })
+                    .eq('user_id', user_id)
+                    .eq('language_id', language_id);
+            }
+        } catch (levelErr) {
+            console.error('Failed to update level_score:', levelErr);
+        }
 
         return NextResponse.json({ success: true, entry: newRow });
 

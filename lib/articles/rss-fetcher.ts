@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — RSS Feed Fetcher (Cost-Optimized)
+// Parlova — RSS Feed Fetcher (Cost-Optimized)
 // ============================================================
 
 import Parser from 'rss-parser';
@@ -21,7 +21,7 @@ export interface RawArticle {
 
 const parser = new Parser({
     timeout: 10000, // 10s timeout — don't let one slow feed hang the job
-    headers: { 'User-Agent': 'FluentLoop/1.0 (Language Learning App)' },
+    headers: { 'User-Agent': 'Parlova/1.0 (Language Learning App)' },
 });
 
 // Common Spanish words for language detection

@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Story Progress API (3 questions, 25+10 XP)
+// Parlova — Story Progress API (3 questions, 25+10 XP)
 // ============================================================
 
 import { NextResponse } from 'next/server';
