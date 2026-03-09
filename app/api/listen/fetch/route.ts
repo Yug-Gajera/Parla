@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // POST /api/listen/fetch — Fetch & process new podcast episodes
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';

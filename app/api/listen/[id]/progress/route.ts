@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // POST /api/listen/[id]/progress — Episode completion + XP
 // GET /api/listen/[id]/progress — Fetch single episode with transcript
 import { NextResponse } from 'next/server';

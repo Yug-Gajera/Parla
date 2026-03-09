@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // ============================================================
 // Parlova — Article Fetch API (cron + manual trigger)
 // ============================================================

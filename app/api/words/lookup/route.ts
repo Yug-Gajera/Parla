@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // ============================================================
 // Parlova — On-the-fly Word Lookup via Claude Haiku
 // ============================================================

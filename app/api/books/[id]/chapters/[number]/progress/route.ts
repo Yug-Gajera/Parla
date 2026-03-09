@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // POST /api/books/[id]/chapters/[number]/progress — Complete a chapter
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';

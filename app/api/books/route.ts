@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // GET /api/books — Browse books library
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';

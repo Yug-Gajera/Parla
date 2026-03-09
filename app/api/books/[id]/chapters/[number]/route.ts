@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // GET /api/books/[id]/chapters/[number] — Chapter content (on-demand processing)
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';

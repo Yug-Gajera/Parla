@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { NextResponse } from 'next/server';
 import { callChatGPT } from '@/lib/openai/client';
 import { DIAGNOSTIC_SYSTEM_PROMPT } from '@/lib/openai/prompts';

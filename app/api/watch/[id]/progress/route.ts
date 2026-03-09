@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // POST /api/watch/[id]/progress — Video completion + XP
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import DashboardView from '@/components/dashboard/DashboardView';

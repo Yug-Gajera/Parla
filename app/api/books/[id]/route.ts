@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // GET /api/books/[id] — Single book with chapter list + user progress
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';

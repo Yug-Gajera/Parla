@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // Temporary seeder route — delete after use
 import { NextResponse } from 'next/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';

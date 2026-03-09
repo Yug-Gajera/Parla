@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js'; // Bypass RLS auth check with service role
 import { getWeekStartDate, getLevelBand } from '@/lib/utils/level';

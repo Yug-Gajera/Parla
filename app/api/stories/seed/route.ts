@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // Temporary seeder for sample stories — delete after use
 import { NextResponse } from 'next/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';

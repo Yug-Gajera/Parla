@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // POST /api/books/process — Daily cron: process unprocessed chapters
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';

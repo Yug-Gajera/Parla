@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { createClient } from '@/lib/supabase/server';
 import { SCENARIOS } from '@/lib/data/scenarios';
 import { CONVERSATION_SYSTEM_PROMPT } from '@/lib/claude/prompts';

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // POST /api/watch/process — Add & process a single video
 import { NextResponse } from 'next/server';
 import { processVideo } from '@/lib/watch/video-processor';

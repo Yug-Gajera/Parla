@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // POST /api/books/import — One-time manual import of classic books
 import { NextResponse } from 'next/server';
 import { importAllClassicBooks } from '@/lib/books/import-job';
