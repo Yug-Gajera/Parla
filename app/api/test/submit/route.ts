@@ -6,7 +6,8 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let _openai: OpenAI | null = null;
+function getOpenAI() { if (!_openai) { _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); } return _openai; }
 
 // CEFR level order
 const CEFR_ORDER = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const;
@@ -178,7 +179,7 @@ export async function POST(req: Request) {
         let writingScoreResult: WritingScore;
 
         try {
-            const completion = await openai.chat.completions.create({
+            const completion = await getOpenAI().chat.completions.create({
                 model: 'gpt-4o',
                 messages: [{ role: 'user', content: writingPromptText }],
                 response_format: { type: 'json_object' },

@@ -3,7 +3,8 @@ import { SCENARIOS } from '@/lib/data/scenarios';
 import { CONVERSATION_SYSTEM_PROMPT } from '@/lib/claude/prompts';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let _openai: OpenAI | null = null;
+function getOpenAI() { if (!_openai) { _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); } return _openai; }
 
 export async function POST(req: Request) {
     try {
@@ -72,7 +73,7 @@ export async function POST(req: Request) {
         const stream = new ReadableStream({
             async start(controller) {
                 try {
-                    const oaiStream = await openai.chat.completions.create({
+                    const oaiStream = await getOpenAI().chat.completions.create({
                         model: 'gpt-4o',
                         messages: apiMessages as any,
                         temperature: 0.7,

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let _openai: OpenAI | null = null;
+function getOpenAI() { if (!_openai) { _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); } return _openai; }
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
         }
 
         // Call OpenAI Whisper API with verbose_json for word-level data
-        const transcription = await openai.audio.transcriptions.create({
+        const transcription = await getOpenAI().audio.transcriptions.create({
             file: audioFile,
             model: 'whisper-1',
             language,

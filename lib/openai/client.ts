@@ -1,10 +1,15 @@
 import OpenAI from 'openai';
 import { env } from '@/lib/utils/env';
 
-// Singleton instance
-const openai = new OpenAI({
-    apiKey: env.OPENAI_API_KEY,
-});
+// Lazy singleton — created on first use, not at import time.
+// This prevents Vercel builds from crashing during page-data collection.
+let _openai: OpenAI | null = null;
+function getOpenAI(): OpenAI {
+    if (!_openai) {
+        _openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
+    }
+    return _openai;
+}
 
 /**
  * Helper to call ChatGPT and get a complete string response.
@@ -31,7 +36,7 @@ export async function callChatGPT(
             ...messages,
         ];
 
-        const response = await openai.chat.completions.create({
+        const response = await getOpenAI().chat.completions.create({
             model,
             messages: formattedMessages,
             temperature,
