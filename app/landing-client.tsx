@@ -161,16 +161,38 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
     (card.querySelector('.lang-form input') as HTMLInputElement).focus();
   };
 
-  const waitlistEmails: Record<string, string[]> = {};
-  const submitWaitlist = (lang: string) => {
+  const submitWaitlist = async (lang: string) => {
     const card = document.getElementById('lang-' + lang);
     if (!card) return;
-    const email = (card.querySelector('.lang-form input') as HTMLInputElement).value;
+    const input = card.querySelector('.lang-form input') as HTMLInputElement;
+    const email = input.value;
     if (!email || !email.includes('@')) return;
-    waitlistEmails[lang] = waitlistEmails[lang] || [];
-    waitlistEmails[lang].push(email);
-    card.querySelector('.lang-form')!.setAttribute('style', 'display:none');
-    card.querySelector('.lang-success')!.setAttribute('style', 'display:block');
+
+    // Disable button while submitting
+    const btn = card.querySelector('.lang-form button') as HTMLButtonElement;
+    btn.textContent = '...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, language: lang }),
+      });
+
+      if (res.ok) {
+        card.querySelector('.lang-form')!.setAttribute('style', 'display:none');
+        card.querySelector('.lang-success')!.setAttribute('style', 'display:block');
+      } else {
+        btn.textContent = 'Submit';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again.');
+      }
+    } catch {
+      btn.textContent = 'Submit';
+      btn.disabled = false;
+      alert('Network error. Please try again.');
+    }
   };
 
   return (
