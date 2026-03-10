@@ -21,10 +21,10 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Use the anon key — the RLS policy allows anonymous inserts
+        // Use service role to bypass RLS (safe — this is a server-side route with validation)
         const supabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+            process.env.SUPABASE_SERVICE_ROLE_KEY!
         );
 
         const { error } = await supabase
