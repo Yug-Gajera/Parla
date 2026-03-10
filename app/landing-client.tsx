@@ -122,22 +122,41 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
     });
     toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click() } });
 
-    // ── Language Waitlist ────────────────────────────
-    const waitlistEmails = {};
     window.showWaitlist = function (lang) {
       const card = document.getElementById('lang-' + lang);
       card.querySelector('.waitlist-btn').style.display = 'none';
       card.querySelector('.lang-form').style.display = 'flex';
       card.querySelector('.lang-form input').focus();
     }
-    window.submitWaitlist = function (lang) {
+    window.submitWaitlist = async function (lang) {
       const card = document.getElementById('lang-' + lang);
-      const email = card.querySelector('.lang-form input').value;
+      const input = card.querySelector('.lang-form input');
+      const email = input.value;
       if (!email || !email.includes('@')) return;
-      waitlistEmails[lang] = waitlistEmails[lang] || [];
-      waitlistEmails[lang].push(email);
-      card.querySelector('.lang-form').style.display = 'none';
-      card.querySelector('.lang-success').style.display = 'block';
+
+      const btn = card.querySelector('.lang-form button');
+      btn.textContent = '...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, language: lang }),
+        });
+        if (res.ok) {
+          card.querySelector('.lang-form').style.display = 'none';
+          card.querySelector('.lang-success').style.display = 'block';
+        } else {
+          btn.textContent = 'Submit';
+          btn.disabled = false;
+          alert('Something went wrong. Please try again.');
+        }
+      } catch {
+        btn.textContent = 'Submit';
+        btn.disabled = false;
+        alert('Network error. Please try again.');
+      }
     }
 
 
