@@ -6,7 +6,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { VIDEO_ANALYSIS_PROMPT } from '@/lib/claude/prompts';
 import { createClient } from '@supabase/supabase-js';
 
-const HAIKU_MODEL = 'claude-haiku-4-5-20241022';
+const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 
 function getServiceClient() {
     return createClient(

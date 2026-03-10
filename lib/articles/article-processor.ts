@@ -7,7 +7,7 @@ import { ARTICLE_ANALYSIS_PROMPT } from '@/lib/claude/prompts';
 import { RawArticle } from './rss-fetcher';
 
 // Use Haiku — roughly 10x cheaper than Sonnet
-const HAIKU_MODEL = 'claude-haiku-4-5-20241022';
+const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 
 // Haiku pricing per token
 const HAIKU_INPUT_COST = 0.00000025;   // $0.25 per 1M input tokens

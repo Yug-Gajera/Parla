@@ -7,7 +7,7 @@ import { PODCAST_ANALYSIS_PROMPT } from '@/lib/claude/prompts';
 import { createClient } from '@supabase/supabase-js';
 import Parser from 'rss-parser';
 
-const HAIKU_MODEL = 'claude-haiku-4-5-20241022';
+const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 
 function getServiceClient() {
     return createClient(

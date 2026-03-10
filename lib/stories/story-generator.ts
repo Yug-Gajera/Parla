@@ -6,7 +6,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { STORY_GENERATION_PROMPT } from '@/lib/claude/prompts';
 
-const HAIKU_MODEL = 'claude-haiku-4-5-20241022';
+const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 const DAILY_LIMIT = 3;
 
 function getServiceClient() {
@@ -166,11 +166,14 @@ export async function generateNewStory(
         throw new Error('No text in Claude response');
     }
 
+    let rawText = textBlock.text;
+    rawText = rawText.replace(/```json\n?|\n?```/g, '').trim();
+
     let analysis;
     try {
-        analysis = JSON.parse(textBlock.text);
+        analysis = JSON.parse(rawText);
     } catch {
-        console.error('[StoryGen] JSON parse failed:', textBlock.text.slice(0, 300));
+        console.error('[StoryGen] JSON parse failed:', rawText.slice(0, 300));
         throw new Error('Claude returned invalid JSON — story generation failed');
     }
 

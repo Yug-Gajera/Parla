@@ -46,7 +46,8 @@ export default async function ProfilePage() {
     const { count: convCount } = await supabase
         .from('conversation_sessions')
         .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .not('grammar_score', 'is', null);
 
     const primaryLang = Array.isArray(userLanguages) && userLanguages.length > 0 ? userLanguages[0] : null;
 
