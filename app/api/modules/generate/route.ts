@@ -1,12 +1,12 @@
 export const dynamic = "force-dynamic";
 // ============================================================
-// Parlova — Module Generate API
+// Parlova — Module Generate API (Claude Haiku)
 // ============================================================
 // Generates or retrieves cached learning module content for a scenario.
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { callChatGPT } from '@/lib/openai/client';
+import { callClaude } from '@/lib/claude/client';
 import { SCENARIOS } from '@/lib/data/scenarios';
 import {
     DIALOGUE_GENERATION_PROMPT,
@@ -23,10 +23,10 @@ function fillPrompt(template: string, vars: Record<string, string>): string {
 }
 
 async function generateJSON(prompt: string): Promise<any> {
-    const { content } = await callChatGPT(
+    const { content } = await callClaude(
         [{ role: 'user', content: 'Generate the content now.' }],
         prompt,
-        { temperature: 0.8, maxTokens: 4000, model: 'gpt-4o-mini' }
+        { temperature: 0.8, maxTokens: 4000, model: 'haiku' }
     );
 
     // Strip potential markdown fencing
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
             LEVEL: 'A1',
         };
 
-        // 3. Generate all 3 in parallel
+        // 3. Generate all 3 in parallel using Haiku (fast + cheap)
         console.log(`[modules/generate] Generating module for ${scenario.name}...`);
 
         const [dialogue, phrases] = await Promise.all([
@@ -86,7 +86,6 @@ export async function POST(req: Request) {
             generateJSON(fillPrompt(PHRASE_SET_GENERATION_PROMPT, vars)),
         ]);
 
-        // Challenge needs dialogue + phrase context
         const challengeVars = {
             ...vars,
             DIALOGUE_SUMMARY: dialogue.lines
@@ -121,12 +120,10 @@ export async function POST(req: Request) {
 
         if (saveError) {
             console.error('[modules/generate] Save error:', saveError);
-            // Return generated content even if cache save fails
             return NextResponse.json({
                 success: true,
                 data: {
-                    scenario_type,
-                    language_id,
+                    scenario_type, language_id,
                     dialogue_content: dialogue,
                     phrase_set: phrases,
                     challenge_content: challenge,

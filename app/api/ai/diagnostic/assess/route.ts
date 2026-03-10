@@ -1,8 +1,36 @@
 export const dynamic = "force-dynamic";
 import { NextResponse } from 'next/server';
-import { callChatGPT } from '@/lib/openai/client';
-import { LEVEL_ASSESSMENT_SYSTEM_PROMPT } from '@/lib/openai/prompts';
+import { callClaude } from '@/lib/claude/client';
 import { DiagnosticResult, DiagnosticQuestion } from '@/types';
+
+const LEVEL_ASSESSMENT_SYSTEM_PROMPT = `You are a language level assessor for Parlova — a premium language learning platform.
+
+You will receive a learner's answers to a fun diagnostic quiz. Based on their performance, assess their CEFR level.
+
+You MUST return valid JSON and nothing else — no markdown fencing, no explanation text.
+
+Return a single JSON object:
+{
+  "assessed_level": "A1",
+  "confidence": 85,
+  "score": 70,
+  "breakdown": {
+    "reading": 75,
+    "vocabulary": 60,
+    "grammar": 65
+  },
+  "explanation": "string — 2-3 sentences. Be warm and encouraging! Mention one strength and one growth area. Use their name if available.",
+  "fun_fact": "string — one cool fact about the language at their level, like 'At A2, you can already understand 70% of everyday conversations!'"
+}
+
+Rules:
+- "assessed_level" must be one of: A1, A2, B1, B2, C1, C2.
+- "confidence" is 0–100 representing how confident you are.
+- "score" is 0–100 representing overall performance.
+- "breakdown" has three keys (reading, vocabulary, grammar), each 0–100.
+- "explanation" should be encouraging but honest.
+- "fun_fact" adds a motivational language fact.
+- Do NOT include any text outside the JSON object.`;
 
 export async function POST(req: Request) {
     try {
@@ -18,7 +46,6 @@ export async function POST(req: Request) {
             );
         }
 
-        // Prepare the payload to send to Claude
         const evaluationData = questions.map((q) => {
             const userAnswerIndex = answers[q.id];
             const isCorrect = userAnswerIndex === Number(q.correct_answer);
@@ -33,13 +60,12 @@ export async function POST(req: Request) {
 
         const promptMessage = `Here are the results of the 10-question diagnostic test:\n${JSON.stringify(evaluationData, null, 2)}`;
 
-        const response = await callChatGPT(
+        const response = await callClaude(
             [{ role: 'user', content: promptMessage }],
             LEVEL_ASSESSMENT_SYSTEM_PROMPT,
-            { temperature: 0.5, maxTokens: 1000 }
+            { temperature: 0.5, maxTokens: 1000, model: 'sonnet' }
         );
 
-        // Parse the JSON output from Claude
         let assessment: DiagnosticResult;
         try {
             const cleanedContent = response.content.replace(/```json\n?|\n?```/g, '').trim();

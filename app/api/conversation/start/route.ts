@@ -3,10 +3,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { SCENARIOS } from '@/lib/data/scenarios';
 import { CONVERSATION_SYSTEM_PROMPT } from '@/lib/claude/prompts';
-import OpenAI from 'openai';
-
-let _openai: OpenAI | null = null;
-function getOpenAI() { if (!_openai) { _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); } return _openai; }
+import { callClaude } from '@/lib/claude/client';
 
 export async function POST(req: Request) {
     try {
@@ -41,24 +38,20 @@ export async function POST(req: Request) {
             (recentHistory || []).map((h: { situation_id: string }) => h.situation_id)
         );
 
-        // Filter out the situation we want to skip (when user clicks "Try Different")
         const candidateSituations = scenario.situations.filter(
             s => s.id !== skip_situation_id
         );
 
-        // Find fresh situations (not done in last 14 days)
         const freshSituations = candidateSituations.filter(
             s => !recentSituationIds.has(s.id)
         );
 
         let selectedSituation;
         if (freshSituations.length > 0) {
-            // Pick randomly from fresh ones
             selectedSituation = freshSituations[
                 Math.floor(Math.random() * freshSituations.length)
             ];
         } else {
-            // All done recently — pick the one done longest ago
             const historyMap = new Map(
                 (recentHistory || []).map((h: { situation_id: string; completed_at: string }) => [h.situation_id, h.completed_at])
             );
@@ -70,7 +63,6 @@ export async function POST(req: Request) {
             selectedSituation = sorted[0];
         }
 
-        // Fallback safety
         if (!selectedSituation) {
             selectedSituation = scenario.situations[0];
         }
@@ -87,18 +79,14 @@ export async function POST(req: Request) {
             .replace('{LEVEL}', level || 'A2')
             .replace('{DIFFICULTY_NOTE}', difficultyNote);
 
-        // ── Generate Opening Message ────────────────────────────
-        const completion = await getOpenAI().chat.completions.create({
-            model: 'gpt-4o',
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: 'START SCENARIO. Send your opening actual dialogue now.' }
-            ],
-            temperature: 0.7,
-            max_tokens: 150,
-        });
+        // ── Generate Opening Message via Claude Sonnet ──────────
+        const response = await callClaude(
+            [{ role: 'user', content: 'START SCENARIO. Send your opening actual dialogue now.' }],
+            systemPrompt,
+            { temperature: 0.7, maxTokens: 150, model: 'sonnet' }
+        );
 
-        const openingMessage = completion.choices[0].message.content || 'Hola.';
+        const openingMessage = response.content || 'Hola.';
 
         const initialMessages = [
             {

@@ -3,10 +3,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { SCENARIOS } from '@/lib/data/scenarios';
 import { CONVERSATION_SCORING_PROMPT } from '@/lib/claude/prompts';
-import OpenAI from 'openai';
-
-let _openai: OpenAI | null = null;
-function getOpenAI() { if (!_openai) { _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); } return _openai; }
+import { callClaude } from '@/lib/claude/client';
 
 export async function POST(req: Request) {
     try {
@@ -50,8 +47,6 @@ export async function POST(req: Request) {
             ) / transcription_data.length;
 
             const baseScore = avgConfidence * 100;
-
-            // Penalty for low confidence words
             const totalWords = transcription_data.reduce(
                 (acc: number, r: any) => acc + (r.spoken_text?.split(/\s+/).length || 0), 0
             );
@@ -59,11 +54,8 @@ export async function POST(req: Request) {
                 (acc: number, r: any) => acc + (r.low_confidence_words?.length || 0), 0
             );
             const penalty = totalWords > 0 ? Math.min(20, (lowConfWords / totalWords) * 20) : 0;
-
-            // Bonus for longer utterances
             const avgWordsPerMsg = totalWords / transcription_data.length;
             const bonus = avgWordsPerMsg >= 15 ? 10 : avgWordsPerMsg >= 10 ? 5 : 0;
-
             pronunciationScore = Math.max(0, Math.min(100, Math.round(baseScore - penalty + bonus)));
         }
 
@@ -73,15 +65,14 @@ export async function POST(req: Request) {
             .replace('{LEVEL}', level || 'A2')
             .replace('{PRONUNCIATION_SCORE}', pronunciationScore !== null ? String(pronunciationScore) : 'N/A (text session)');
 
-        // 2. Score via OpenAI JSON mode
-        const completion = await getOpenAI().chat.completions.create({
-            model: 'gpt-4o',
-            messages: [{ role: 'user', content: scoringPrompt }],
-            response_format: { type: 'json_object' },
-            temperature: 0.3, // Lower temp for factual JSON extraction
-        });
+        // 2. Score via Claude Sonnet
+        const response = await callClaude(
+            [{ role: 'user', content: scoringPrompt }],
+            'You are a conversation scoring engine. Return valid JSON only.',
+            { temperature: 0.3, maxTokens: 1500, model: 'sonnet' }
+        );
 
-        const scoreJsonString = completion.choices[0].message.content || '{}';
+        const scoreJsonString = response.content.replace(/```json\n?|\n?```/g, '').trim();
         let scoringResult;
 
         try {
@@ -91,7 +82,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Failed to generate valid scores' }, { status: 500 });
         }
 
-        // Normalizing potentially missing fields
         const finalScores = {
             grammar_score: scoringResult.grammar_score || 0,
             vocabulary_score: scoringResult.vocabulary_score || 0,
@@ -123,7 +113,7 @@ export async function POST(req: Request) {
 
         if (updateError) throw updateError;
 
-        // 4. Log a generic study session (adds overall lifetime XP)
+        // 4. Log study session
         const xpEarned = Math.round(finalScores.overall_score / 2) + (finalScores.goal_completed ? 25 : 0);
 
         await (supabase as any)
@@ -140,7 +130,6 @@ export async function POST(req: Request) {
         const leaderboardPoints = 50 + Math.round(finalScores.overall_score / 2) + (finalScores.goal_completed ? 75 : 0);
 
         try {
-            // Internal fetch to the leaderboard upsert endpoint
             const host = req.headers.get('host') || 'localhost:3000';
             const protocol = host.includes('localhost') ? 'http' : 'https';
             await fetch(`${protocol}://${host}/api/leaderboard/update`, {
@@ -158,10 +147,9 @@ export async function POST(req: Request) {
             console.error('Failed to update leaderboard via fetch', lbErr);
         }
 
-        // 6. Upsert situation history for variation tracking
+        // 6. Upsert situation history
         if (session.situation_id) {
             try {
-                // Check if a row already exists for this user+scenario+situation
                 const { data: existing } = await (supabase as any)
                     .from('user_situation_history')
                     .select('id')

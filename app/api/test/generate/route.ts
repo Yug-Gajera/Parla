@@ -1,14 +1,11 @@
 export const dynamic = "force-dynamic";
 // ============================================================
-// Parlova — Test Generation API
+// Parlova — Test Generation API (Claude Sonnet)
 // ============================================================
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import OpenAI from 'openai';
-
-let _openai: OpenAI | null = null;
-function getOpenAI() { if (!_openai) { _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); } return _openai; }
+import { callClaude } from '@/lib/claude/client';
 
 // CEFR level order
 const CEFR_ORDER = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const;
@@ -77,8 +74,8 @@ Return a single JSON object with this exact structure:
       "id": "g1",
       "type": "grammar",
       "question": "Choose the correct form to complete the sentence",
-      "context": "Sentence in {LANGUAGE} with a blank: 'Yo ____ estudiante.'",
-      "options": ["soy", "estoy", "ser", "estar"],
+      "context": "Sentence in {LANGUAGE} with a blank",
+      "options": ["option A", "option B", "option C", "option D"],
       "correct_answer": 0,
       "points": 10
     }
@@ -120,12 +117,10 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing language_id or level' }, { status: 400 });
         }
 
-        // Validate level
         if (!CEFR_ORDER.includes(level)) {
             return NextResponse.json({ error: 'Invalid level' }, { status: 400 });
         }
 
-        // Get language info
         const { data: language, error: langError } = await (supabase as any)
             .from('languages')
             .select('id, code, name')
@@ -136,7 +131,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Language not found' }, { status: 404 });
         }
 
-        // Verify user is studying this language
         const { data: userLanguage, error: ulError } = await (supabase as any)
             .from('user_languages')
             .select('current_level, level_score')
@@ -148,7 +142,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'You are not studying this language' }, { status: 403 });
         }
 
-        // Verify the user is at the previous level
         const currentLevelIndex = CEFR_ORDER.indexOf(userLanguage.current_level as CEFRLevel);
         const targetLevelIndex = CEFR_ORDER.indexOf(level);
 
@@ -158,19 +151,18 @@ export async function POST(req: Request) {
             }, { status: 400 });
         }
 
-        // Generate the test using OpenAI
+        // Generate the test using Claude Sonnet
         const prompt = TEST_GENERATION_PROMPT
             .replace(/{LEVEL}/g, level)
             .replace(/{LANGUAGE}/g, language.name);
 
-        const completion = await getOpenAI().chat.completions.create({
-            model: 'gpt-4o',
-            messages: [{ role: 'user', content: prompt }],
-            response_format: { type: 'json_object' },
-            temperature: 0.7,
-        });
+        const response = await callClaude(
+            [{ role: 'user', content: prompt }],
+            'You are a test generator. Return valid JSON only.',
+            { temperature: 0.7, maxTokens: 4000, model: 'sonnet' }
+        );
 
-        const responseContent = completion.choices[0].message.content || '{}';
+        const responseContent = response.content.replace(/```json\n?|\n?```/g, '').trim();
         let testContent: GeneratedTest;
 
         try {
@@ -180,14 +172,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Failed to generate valid test' }, { status: 500 });
         }
 
-        // Validate the generated test has all required sections
         if (!testContent.reading?.length || !testContent.vocabulary?.length ||
             !testContent.grammar?.length || !testContent.writing) {
             console.error('Incomplete test generated:', testContent);
             return NextResponse.json({ error: 'Generated test is incomplete' }, { status: 500 });
         }
 
-        // Create the test record in the database
         const { data: testRecord, error: insertError } = await (supabase as any)
             .from('level_tests')
             .insert({
@@ -210,44 +200,30 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Failed to create test' }, { status: 500 });
         }
 
-        // Return the test without correct answers (client shouldn't see them)
         const clientTest = {
             test_id: testRecord.id,
             level: level,
             language: language,
             reading: testContent.reading.map(q => ({
-                id: q.id,
-                type: q.type,
-                context: q.context,
-                question: q.question,
-                options: q.options,
-                points: q.points,
+                id: q.id, type: q.type, context: q.context,
+                question: q.question, options: q.options, points: q.points,
             })),
             vocabulary: testContent.vocabulary.map(q => ({
-                id: q.id,
-                type: q.type,
-                question: q.question,
-                context: q.context,
-                options: q.options,
-                points: q.points,
+                id: q.id, type: q.type, question: q.question,
+                context: q.context, options: q.options, points: q.points,
             })),
             grammar: testContent.grammar.map(q => ({
-                id: q.id,
-                type: q.type,
-                question: q.question,
-                context: q.context,
-                options: q.options,
-                points: q.points,
+                id: q.id, type: q.type, question: q.question,
+                context: q.context, options: q.options, points: q.points,
             })),
             writing: {
-                id: testContent.writing.id,
-                type: testContent.writing.type,
+                id: testContent.writing.id, type: testContent.writing.type,
                 prompt: testContent.writing.prompt,
                 min_words: testContent.writing.min_words,
                 max_words: testContent.writing.max_words,
                 points: testContent.writing.points,
             },
-            total_points: 140, // 50 reading + 50 vocabulary + 30 grammar + 40 writing
+            total_points: 140,
         };
 
         return NextResponse.json(clientTest);

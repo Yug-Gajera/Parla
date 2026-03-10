@@ -2,10 +2,7 @@ export const dynamic = "force-dynamic";
 import { createClient } from '@/lib/supabase/server';
 import { SCENARIOS } from '@/lib/data/scenarios';
 import { CONVERSATION_SYSTEM_PROMPT } from '@/lib/claude/prompts';
-import OpenAI from 'openai';
-
-let _openai: OpenAI | null = null;
-function getOpenAI() { if (!_openai) { _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); } return _openai; }
+import { streamClaude } from '@/lib/claude/client';
 
 export async function POST(req: Request) {
     try {
@@ -39,7 +36,6 @@ export async function POST(req: Request) {
         }
 
         const scenario = SCENARIOS.find(s => s.id === scenario_id);
-        // Find the situation modifier for this session
         const situation = scenario?.situations?.find((s: { id: string }) => s.id === session.situation_id);
         const situationModifier = situation?.modifier || 'Continue the conversation naturally.';
         const difficultyNote = (situation?.difficulty_modifier || 0) > 0
@@ -53,46 +49,42 @@ export async function POST(req: Request) {
             .replace('{LEVEL}', level || 'A2')
             .replace('{DIFFICULTY_NOTE}', difficultyNote);
 
-        // Construct standard OpenAI message array
+        // Build Claude message array
         const apiMessages = [
-            { role: 'system', content: systemPrompt },
-            // Add prior history. Format should ideally omit the timestamp for the API.
             ...conversation_history.map((m: any) => ({
-                role: m.role,
+                role: m.role as 'user' | 'assistant',
                 content: m.content
             })),
-            { role: 'user', content: user_message }
+            { role: 'user' as const, content: user_message }
         ];
 
-        // Update local session immediately with the user's message
+        // Update local session with user's message
         const updatedMessagesLocal = [
             ...(session.messages || []),
             { role: 'user', content: user_message, timestamp: new Date().toISOString() }
         ];
 
-        // Create a ReadableStream to stream the OpenAI response chunks back to the client
+        // Create a ReadableStream to stream Claude response chunks
         const stream = new ReadableStream({
             async start(controller) {
                 try {
-                    const oaiStream = await getOpenAI().chat.completions.create({
-                        model: 'gpt-4o',
-                        messages: apiMessages as any,
-                        temperature: 0.7,
-                        max_tokens: 300,
-                        stream: true,
-                    });
+                    const claudeStream = await streamClaude(
+                        apiMessages,
+                        systemPrompt,
+                        { temperature: 0.7, maxTokens: 300, model: 'sonnet' }
+                    );
 
                     let fullAiResponse = '';
 
-                    for await (const chunk of oaiStream) {
-                        const content = chunk.choices[0]?.delta?.content || '';
-                        if (content) {
-                            fullAiResponse += content;
-                            controller.enqueue(new TextEncoder().encode(content));
-                        }
-                    }
+                    claudeStream.on('text', (text) => {
+                        fullAiResponse += text;
+                        controller.enqueue(new TextEncoder().encode(text));
+                    });
 
-                    // After streaming finishes, save both messages to the DB
+                    // Wait for the stream to finish
+                    await claudeStream.finalMessage();
+
+                    // Save both messages to DB
                     updatedMessagesLocal.push({
                         role: 'assistant',
                         content: fullAiResponse,

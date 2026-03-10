@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
-const HAIKU_MODEL = 'claude-haiku-4-5-20241022';
+const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 const DAILY_LOOKUP_LIMIT = 30;
 
 function getServiceClient() {
@@ -97,10 +97,14 @@ Return this JSON:
         });
 
         const textBlock = response.content.find(b => b.type === 'text');
+        let rawText = textBlock && textBlock.type === 'text' ? textBlock.text : '{}';
+        // Strip markdown fencing if Claude wrapped the JSON
+        rawText = rawText.replace(/```json\n?|\n?```/g, '').trim();
         let wordInfo;
         try {
-            wordInfo = JSON.parse(textBlock && textBlock.type === 'text' ? textBlock.text : '{}');
+            wordInfo = JSON.parse(rawText);
         } catch {
+            console.error('[word/lookup] Failed to parse Claude response:', rawText);
             wordInfo = {
                 word: cleanWord,
                 translation: 'Translation unavailable',

@@ -189,7 +189,10 @@ export default function StepDiagnostic() {
             </div>
 
             {/* ── Question ── */}
-            <div className="w-full max-w-xl mx-auto mb-10 min-h-[120px] flex items-center justify-center text-center">
+            <div className="w-full max-w-xl mx-auto mb-10 min-h-[120px] flex flex-col items-center justify-center text-center">
+                {(q as any).emoji && (
+                    <span className="text-4xl mb-3 block">{(q as any).emoji}</span>
+                )}
                 <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-balance leading-snug">
                     {q.question}
                 </h1>
