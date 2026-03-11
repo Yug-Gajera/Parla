@@ -156,7 +156,7 @@ export async function generateNewStory(
 
     const response = await anthropic.messages.create({
         model: HAIKU_MODEL,
-        max_tokens: 1200,
+        max_tokens: 2500,
         system: STORY_GENERATION_PROMPT,
         messages: [{ role: 'user', content: userMessage }],
     });

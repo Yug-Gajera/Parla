@@ -15,27 +15,30 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
     window.addEventListener('scroll', () => {
       const h = document.documentElement;
       const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-      document.getElementById('progress-bar').style.width = pct + '%';
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = pct + '%';
     });
 
     // ── Nav blur on scroll ───────────────────────────
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 50);
+      if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
     }, { passive: true });
 
     // ── Hamburger ────────────────────────────────────
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
-    });
-    // Close on link click
-    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      hamburger.classList.remove('open');
-      mobileMenu.classList.remove('open');
-    }));
+    if (hamburger && mobileMenu) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+      });
+      // Close on link click
+      mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      }));
+    }
 
     // ── Scroll Reveal ────────────────────────────────
     const reveals = document.querySelectorAll('.reveal');

@@ -22,10 +22,10 @@ export default function DashboardShell({ children }: { children: React.ReactNode
     const pathname = usePathname();
 
     return (
-        <div className="min-h-screen bg-background flex flex-col md:flex-row w-full text-foreground relative">
+        <div className="min-h-screen bg-background flex flex-col w-full text-foreground relative md:pl-[260px]">
 
             {/* ── Desktop Sidebar ── */}
-            <aside className="hidden md:flex flex-col w-[260px] border-r border-border bg-card/50 backdrop-blur-xl h-screen sticky top-0 px-4 py-8 z-40">
+            <aside className="hidden md:flex flex-col w-[260px] border-r border-border bg-card/50 backdrop-blur-xl h-screen fixed top-0 left-0 px-4 py-8 z-40">
 
                 {/* Logo */}
                 <Link href="/home" className="flex items-center gap-2 text-primary font-bold text-xl mb-10 px-2">
