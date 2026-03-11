@@ -1,11 +1,10 @@
 'use client';
 
 // ============================================================
-// Parlova — Main Dashboard View 
+// Parlova — Main Dashboard View (Redesigned)
 // ============================================================
 
 import React from 'react';
-import { motion, Variants } from 'framer-motion';
 
 import Header from '@/components/dashboard/Header';
 import GoalProgress from '@/components/dashboard/GoalProgress';
@@ -27,22 +26,6 @@ interface DashboardViewProps {
     currentLevel: string;
 }
 
-// Helper animation variant for staggered fade-up children
-const containerV: Variants = {
-    hidden: { opacity: 0 },
-    show: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1
-        }
-    }
-};
-
-const itemV: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
-};
-
 export default function DashboardView({
     user,
     userLanguage,
@@ -61,7 +44,7 @@ export default function DashboardView({
     const langEmoji = userLanguage?.languages?.emoji || '🌍';
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full h-full">
             {/* ── Header ── */}
             <Header
                 userName={userName}
@@ -72,56 +55,48 @@ export default function DashboardView({
             />
 
             {/* ── Dashboard Grid ── */}
-            <motion.div
-                variants={containerV}
-                initial="hidden"
-                animate="show"
-                className="w-full flex justify-center p-4 md:p-8"
-            >
-                <div className="w-full max-w-[1000px] flex flex-col gap-6 lg:gap-8">
+            <div className="w-full flex justify-center py-[40px] px-[24px] md:px-[40px]">
+                <div className="w-full max-w-[900px] flex flex-col gap-[40px]">
 
-                    {/* Top Row: Goal (1/3) + Quick Actions (2/3) */}
-                    <div className="flex flex-col lg:flex-row gap-6 w-full">
-                        <motion.div variants={itemV} className="w-full lg:w-1/3">
-                            <GoalProgress minutesStudied={minutesStudied} dailyGoal={dailyGoal} />
-                        </motion.div>
-
-                        <motion.div variants={itemV} className="w-full lg:w-2/3 flex flex-col">
-                            <QuickActions />
-                        </motion.div>
-                    </div>
-
-                    {/* Middle Row: Stats */}
-                    <motion.div variants={itemV} className="w-full">
+                    {/* Top Section: Welcome & Quick Stats */}
+                    <div className="flex flex-col w-full animate-fade-up-1">
                         <WeeklyStats
                             conversations={conversations}
                             wordsLearned={wordsLearned}
                             minutesStudied={minutesStudied}
                             streak={streak}
                         />
-                    </motion.div>
+                    </div>
 
-                    {/* Bottom Row: Level (1/3) + Activity (2/3) */}
-                    <div className="flex flex-col lg:flex-row gap-6 w-full">
-                        <motion.div variants={itemV} className="w-full lg:w-1/3 flex flex-col gap-6">
-                            {/* Stack level progress and anything else that might fit here */}
+                    {/* Middle Section: Quick Actions & Goal */}
+                    <div className="flex flex-col lg:flex-row gap-[16px] w-full animate-fade-up-2">
+                        <div className="w-full lg:w-[30%]">
+                            <GoalProgress minutesStudied={minutesStudied} dailyGoal={dailyGoal} />
+                        </div>
+                        <div className="w-full lg:w-[70%]">
+                            <QuickActions />
+                        </div>
+                    </div>
+
+                    {/* Bottom Section: Level & Activity */}
+                    <div className="flex flex-col lg:flex-row gap-[16px] w-full animate-fade-up-3">
+                        <div className="w-full lg:w-[30%] flex flex-col gap-[16px]">
                             <LevelProgress currentLevel={currentLevel} score={levelScore} />
 
-                            {/* Decorative filler if needed on desktop */}
-                            <div className="hidden lg:flex flex-1 rounded-3xl bg-secondary/30 border border-border/30 items-center justify-center p-6 text-center shadow-inner">
-                                <p className="text-sm font-medium text-muted-foreground/60">
-                                    Keep practicing entirely in {langName} to level up faster.
+                            <div className="hidden lg:flex flex-1 rounded-[14px] border border-[#1e1e1e] bg-[rgba(255,255,255,0.02)] items-center justify-center p-[24px] text-center">
+                                <p className="text-[13px] text-[#5a5652] leading-relaxed">
+                                    Keep practicing entirely in <span className="text-[#f0ece4] opacity-80">{langName}</span> to level up faster.
                                 </p>
                             </div>
-                        </motion.div>
+                        </div>
 
-                        <motion.div variants={itemV} className="w-full lg:w-2/3">
+                        <div className="w-full lg:w-[70%]">
                             <RecentActivity sessions={sessions} />
-                        </motion.div>
+                        </div>
                     </div>
 
                 </div>
-            </motion.div>
+            </div>
 
         </div>
     );

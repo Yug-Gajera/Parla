@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useOnboardingStore } from '@/store/onboarding';
 import { Button } from '@/components/ui/button';
-import { Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Loader2, Sparkles, Target, Settings2, Brain } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function StepResult() {
@@ -20,11 +20,10 @@ export default function StepResult() {
     } = useOnboardingStore();
 
     const [isSaving, setIsSaving] = useState(false);
-    const [showConfetti, setShowConfetti] = useState(false);
+    const [showParticles, setShowParticles] = useState(false);
 
     useEffect(() => {
-        // Small delay for the confetti burst effect
-        const t = setTimeout(() => setShowConfetti(true), 400);
+        const t = setTimeout(() => setShowParticles(true), 400);
         return () => clearTimeout(t);
     }, []);
 
@@ -36,7 +35,7 @@ export default function StepResult() {
             const res = await fetch('/api/onboarding/complete', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+            body: JSON.stringify({
                     language_code: selectedLanguageCode,
                     assessed_level: assessedLevel || 'A1',
                     level_score: levelScore || 0,
@@ -52,35 +51,35 @@ export default function StepResult() {
             }
 
             console.log('[StepResult] Success! Redirecting to /home');
-            toast.success('Your personalized plan is ready!');
+            toast.success('System Initialized.');
             window.location.href = '/home';
 
         } catch (err) {
             console.error('[StepResult] Error caught:', err);
-            toast.error(err instanceof Error ? err.message : 'Failed to save progress');
+            toast.error(err instanceof Error ? err.message : 'Initialization failure');
             setIsSaving(false);
         }
     };
 
     const getLevelName = (lvl: string) => {
         const map: Record<string, string> = {
-            'A1': 'Beginner',
-            'A2': 'Upper Beginner',
-            'B1': 'Intermediate',
-            'B2': 'Upper Intermediate',
-            'C1': 'Advanced',
+            'A1': 'Novice Data State',
+            'A2': 'Basic Constructs',
+            'B1': 'Intermediate Matrix',
+            'B2': 'Advanced Processing',
+            'C1': 'Near-Native Ops',
             'C2': 'Mastery'
         };
-        return map[lvl] || 'Beginner';
+        return map[lvl] || 'Novice Data State';
     };
 
     return (
-        <div className="flex flex-col items-center w-full animation-fade-in pt-10 pb-20 relative">
+        <div className="flex flex-col items-center w-full animation-fade-in pt-16 pb-20 relative font-sans">
 
             {/* ── Background Effects ── */}
-            {showConfetti && (
-                <div className="absolute inset-0 pointer-events-none flex justify-center items-center overflow-hidden">
-                    {Array.from({ length: 40 }).map((_, i) => (
+            {showParticles && (
+                <div className="absolute inset-0 pointer-events-none flex justify-center items-center overflow-hidden opacity-30">
+                    {Array.from({ length: 20 }).map((_, i) => (
                         <motion.div
                             key={i}
                             initial={{
@@ -88,107 +87,123 @@ export default function StepResult() {
                                 x: 0,
                                 y: 0,
                                 scale: 0,
-                                rotate: 0
                             }}
                             animate={{
-                                opacity: 0,
-                                x: (Math.random() - 0.5) * 500,
-                                y: (Math.random() - 0.5) * 500,
-                                scale: Math.random() * 1.5 + 0.5,
-                                rotate: Math.random() * 360
+                                opacity: [0, 1, 0],
+                                x: (Math.random() - 0.5) * 400,
+                                y: (Math.random() - 0.5) * 400,
+                                scale: Math.random() * 2 + 0.5,
                             }}
-                            transition={{ duration: 1.5, ease: 'easeOut' }}
-                            className="absolute w-3 h-3 rounded-full"
-                            style={{
-                                backgroundColor: ['#7c3aed', '#a78bfa', '#fcd34d', '#34d399', '#f472b6'][Math.floor(Math.random() * 5)]
-                            }}
+                            transition={{ duration: 2.5, ease: 'easeOut', delay: i * 0.1 }}
+                            className="absolute w-1.5 h-1.5 rounded-full bg-[#c9a84c] shadow-[0_0_15px_rgba(201,168,76,0.8)]"
                         />
                     ))}
                 </div>
             )}
 
             {/* ── Header ── */}
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-8 text-center text-balance z-10">
-                Your Spanish Level
+            <h1 className="text-[10px] md:text-sm font-mono uppercase tracking-[0.3em] font-bold mb-10 text-center text-[#9a9590] z-10">
+                Diagnostic Conclusion
             </h1>
 
             {/* ── Badge ── */}
             <motion.div
-                initial={{ scale: 0.5, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                className="w-40 h-40 rounded-full bg-gradient-to-br from-primary to-primary/60 flex flex-col items-center justify-center p-1 shadow-[0_0_40px_rgba(124,58,237,0.4)] mb-3 z-10"
+                transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
+                className="relative flex items-center justify-center mb-8 z-10"
             >
-                <div className="w-full h-full rounded-full bg-card flex flex-col items-center justify-center">
-                    <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary/60">
+                <div className="absolute inset-0 bg-[#c9a84c]/5 rounded-full blur-2xl" />
+                <div className="w-48 h-48 rounded-full border border-[#c9a84c]/30 bg-[#141414] shadow-[0_0_50px_rgba(201,168,76,0.1)] flex flex-col items-center justify-center ring-1 ring-[#c9a84c]/10 ring-offset-8 ring-offset-[#080808]">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#c9a84c] mb-2 font-bold">Class</span>
+                    <span className="text-7xl font-serif text-[#f0ece4] tracking-tight drop-shadow-md">
                         {assessedLevel || 'A1'}
+                    </span>
+                    <span className="text-[10px] font-mono text-[#5a5652] uppercase tracking-[0.2em] mt-3 border border-[#2a2a2a] bg-[#0f0f0f] px-3 py-1 rounded-sm">
+                        Score: {levelScore || 0}%
                     </span>
                 </div>
             </motion.div>
 
-            <div className="flex flex-col items-center z-10 mb-8">
-                <h2 className="text-2xl font-semibold mb-1">{getLevelName(assessedLevel || 'A1')}</h2>
-                <p className="text-muted-foreground text-center max-w-sm">
-                    You&apos;ve got a great foundation. We&apos;ll build on what you know and fix the gaps in your grammar.
+            <motion.div 
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="flex flex-col items-center z-10 mb-14 px-4"
+            >
+                <h2 className="text-3xl font-serif mb-4 text-[#f0ece4] tracking-wide">{getLevelName(assessedLevel || 'A1')}</h2>
+                <p className="text-[#9a9590] font-sans text-center max-w-sm leading-relaxed">
+                    System calibrated. Your unique neural mapping has been defined. We will proceed to integrate missing grammar nodes.
                 </p>
-            </div>
+            </motion.div>
 
             {/* ── Capabilities ── */}
-            <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-6 z-10 mb-12">
-
-                <div className="p-6 rounded-2xl bg-card border border-border">
-                    <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                        <CheckCircle2 className="text-primary" size={20} /> What you can do
+            <motion.div 
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-6 z-10 mb-16 px-4"
+            >
+                <div className="p-8 rounded-2xl bg-[#0f0f0f] border border-[#1e1e1e] shadow-inner">
+                    <h3 className="font-mono text-[11px] font-bold tracking-widest uppercase text-[#5a5652] mb-6 flex items-center gap-3 border-b border-[#1e1e1e] pb-4">
+                        <Target className="text-[#c9a84c] w-4 h-4" /> Current Matrix
                     </h3>
-                    <ul className="space-y-3 text-sm text-muted-foreground">
-                        <li className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-foreground mt-1.5 flex-shrink-0" />
-                            <span>Understand the main points of clear standard input on familiar matters</span>
+                    <ul className="space-y-4 text-sm font-sans text-[#f0ece4]/80">
+                        <li className="flex items-start gap-4 group">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]/50 mt-1.5 flex-shrink-0 group-hover:bg-[#c9a84c] transition-colors" />
+                            <span className="leading-relaxed">Process primary standard input within familiar domains</span>
                         </li>
-                        <li className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-foreground mt-1.5 flex-shrink-0" />
-                            <span>Deal with most situations likely to arise while traveling</span>
+                        <li className="flex items-start gap-4 group">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]/50 mt-1.5 flex-shrink-0 group-hover:bg-[#c9a84c] transition-colors" />
+                            <span className="leading-relaxed">Navigate standard global transit scenarios</span>
                         </li>
-                        <li className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-foreground mt-1.5 flex-shrink-0" />
-                            <span>Produce simple connected text on topics that are familiar</span>
+                        <li className="flex items-start gap-4 group">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]/50 mt-1.5 flex-shrink-0 group-hover:bg-[#c9a84c] transition-colors" />
+                            <span className="leading-relaxed">Generate basic connected syntax streams</span>
                         </li>
                     </ul>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-primary/5 border border-primary/20">
-                    <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                        <Sparkles className="text-primary" size={20} /> Next level goals
+                <div className="p-8 rounded-2xl bg-[#141414] border border-[#c9a84c]/20 shadow-inner relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                        <Brain className="w-32 h-32 text-[#c9a84c]" />
+                    </div>
+                    <h3 className="font-mono text-[11px] font-bold tracking-widest uppercase text-[#c9a84c] mb-6 flex items-center gap-3 border-b border-[#2a2a2a] pb-4">
+                        <Settings2 className="text-[#c9a84c] w-4 h-4" /> Trajectory Targets
                     </h3>
-                    <ul className="space-y-3 text-sm text-muted-foreground">
-                        <li className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                            <span>Understand the main ideas of complex text on both concrete and abstract topics</span>
+                    <ul className="space-y-4 text-sm font-sans text-[#f0ece4]/90 relative z-10">
+                        <li className="flex items-start gap-4 group">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c] mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(201,168,76,0.8)]" />
+                            <span className="leading-relaxed">Decode complex abstractions and profound semantics</span>
                         </li>
-                        <li className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                            <span>Interact with a degree of fluency and spontaneity</span>
+                        <li className="flex items-start gap-4 group">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c] mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(201,168,76,0.8)]" />
+                            <span className="leading-relaxed">Engage with zero latency and absolute fluidity</span>
                         </li>
-                        <li className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                            <span>Produce clear, detailed text on a wide range of subjects</span>
+                        <li className="flex items-start gap-4 group">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c] mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(201,168,76,0.8)]" />
+                            <span className="leading-relaxed">Synthesize articulate logic structures dynamically</span>
                         </li>
                     </ul>
                 </div>
-
-            </div>
+            </motion.div>
 
             {/* ── Start Button ── */}
-            <div className="w-full max-w-md z-10">
+            <motion.div 
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="w-full max-w-sm z-10 px-4"
+            >
                 <Button
                     onClick={handleStartLearning}
                     disabled={isSaving}
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-lg py-7 rounded-xl shadow-[0_10px_20px_-10px_rgba(124,58,237,0.5)]"
+                    className="w-full bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[12px] font-bold uppercase tracking-widest h-16 rounded-full shadow-[0_4px_30px_rgba(201,168,76,0.25)] transition-all flex items-center justify-center gap-3 border border-[#c9a84c]/50"
                 >
-                    {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
-                    Start Learning
+                    {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
+                    Initialize Interface
                 </Button>
-            </div>
+            </motion.div>
 
         </div>
     );

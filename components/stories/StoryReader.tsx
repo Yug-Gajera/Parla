@@ -1,13 +1,11 @@
 "use client";
 
 // ============================================================
-// Parlova — Story Reader (dialogue/letter/journal support)
+// Parlova — Story Reader (Redesigned)
 // ============================================================
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useStoryReader } from '@/hooks/useStoryReader';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import WordPopover from '@/components/shared/WordPopover';
 import { TOPIC_CATEGORIES, CONTENT_TYPES } from '@/lib/data/story-topics';
 import {
@@ -83,8 +81,11 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
     if (isLoading) {
         return (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[60] bg-background flex items-center justify-center">
-                <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                className="fixed inset-0 z-[60] bg-[#080808] flex items-center justify-center">
+                <div className="flex flex-col items-center">
+                    <Loader2 className="w-[32px] h-[32px] text-[#c9a84c] animate-spin mb-[16px]" />
+                    <p className="text-[#9a9590] text-[15px]">Loading story...</p>
+                </div>
             </motion.div>
         );
     }
@@ -92,10 +93,10 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
     if (error || !story) {
         return (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[60] bg-background flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-destructive font-medium mb-4">{error || 'Story not found'}</p>
-                    <Button onClick={onClose} variant="outline">Go Back</Button>
+                className="fixed inset-0 z-[60] bg-[#080808] flex items-center justify-center p-[24px]">
+                <div className="parlova-card text-center max-w-[400px] w-full p-[32px]">
+                    <p className="text-[#f87171] font-medium mb-[24px]">{error || 'Story not found'}</p>
+                    <button onClick={onClose} className="btn btn-secondary w-full">Go Back</button>
                 </div>
             </motion.div>
         );
@@ -111,35 +112,43 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
     if (phase === 'results' && comprehensionResult) {
         return (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[60] bg-background flex items-center justify-center p-4">
-                <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.2 }} className="max-w-md w-full">
-                    <Card className="p-8 text-center border-primary/20 bg-gradient-to-b from-primary/5 to-transparent">
+                className="fixed inset-0 z-[60] bg-[#080808] flex items-center justify-center p-[24px]">
+                <motion.div initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.2 }} className="max-w-[400px] w-full">
+                    <div className="parlova-card parlova-card-accent text-center p-[40px]">
                         <motion.div initial={{ scale: 0 }} animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
                             transition={{ delay: 0.3, type: 'spring' }}
-                            className="mx-auto mb-6 p-4 rounded-full bg-primary/10 w-fit">
-                            <Award className="w-10 h-10 text-primary" />
+                            className="mx-auto mb-[24px] w-[64px] h-[64px] rounded-full bg-[rgba(201,168,76,0.1)] border border-[rgba(201,168,76,0.2)] flex items-center justify-center text-[#c9a84c]">
+                            <Award className="w-[32px] h-[32px]" />
                         </motion.div>
-                        <h2 className="text-2xl font-bold mb-2">Story Complete!</h2>
-                        <p className="text-muted-foreground mb-6">{comprehensionResult.message}</p>
-                        <div className={`text-5xl font-black mb-2 ${comprehensionResult.score >= 70 ? 'text-emerald-500' : comprehensionResult.score >= 40 ? 'text-amber-500' : 'text-red-400'}`}>
-                            {comprehensionResult.correct}/{comprehensionResult.total}
-                        </div>
-                        <p className="text-sm text-muted-foreground mb-6">Score: {comprehensionResult.score}%</p>
-                        <div className="grid grid-cols-2 gap-3 mb-6">
-                            <div className="p-3 rounded-xl bg-card border border-border">
-                                <p className="text-2xl font-bold text-primary">+{comprehensionResult.xp_earned}</p>
-                                <p className="text-[11px] text-muted-foreground">XP Earned</p>
+
+                        <h2 className="font-display text-[28px] font-semibold text-[#f0ece4] mb-[8px]">Story Complete</h2>
+                        <p className="text-[15px] text-[#9a9590] mb-[32px]">{comprehensionResult.message}</p>
+
+                        <div className="mb-[32px]">
+                            <div className="font-mono-num text-[48px] font-semibold leading-none mb-[8px] text-[#c9a84c]">
+                                {comprehensionResult.correct}<span className="text-[24px] text-[#5a5652]">/{comprehensionResult.total}</span>
                             </div>
-                            <div className="p-3 rounded-xl bg-card border border-border">
-                                <p className="text-2xl font-bold text-foreground">{wordsTapped}</p>
-                                <p className="text-[11px] text-muted-foreground">Words Looked Up</p>
+                            <p className="text-[13px] text-[#5a5652] uppercase tracking-widest font-medium">
+                                Score: {comprehensionResult.score}%
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-[16px] mb-[32px]">
+                            <div className="bg-[#141414] border border-[#1e1e1e] p-[16px] rounded-xl flex flex-col items-center">
+                                <span className="font-mono-num text-[20px] font-semibold text-[#4ade80] mb-[4px]">+{comprehensionResult.xp_earned}</span>
+                                <span className="text-[11px] text-[#5a5652] uppercase tracking-widest">XP Earned</span>
+                            </div>
+                            <div className="bg-[#141414] border border-[#1e1e1e] p-[16px] rounded-xl flex flex-col items-center">
+                                <span className="font-mono-num text-[20px] font-semibold text-[#f0ece4] mb-[4px]">{wordsTapped}</span>
+                                <span className="text-[11px] text-[#5a5652] uppercase tracking-widest">Words Looked Up</span>
                             </div>
                         </div>
-                        <Button onClick={onClose} className="w-full bg-primary font-bold">
+
+                        <button onClick={onClose} className="btn btn-primary w-full">
                             Back to Stories
-                        </Button>
-                    </Card>
+                        </button>
+                    </div>
                 </motion.div>
             </motion.div>
         );
@@ -153,55 +162,65 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
 
         return (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[60] bg-background flex flex-col">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-                    <span className="text-sm font-bold">Comprehension</span>
-                    <div className="flex gap-1.5">
+                className="fixed inset-0 z-[60] bg-[#080808] flex flex-col pt-safe-top">
+                <div className="flex items-center justify-between px-[20px] h-[64px] border-b border-[#1e1e1e]">
+                    <span className="text-[14px] font-semibold text-[#f0ece4]">Comprehension Check</span>
+                    <div className="flex gap-[6px]">
                         {story.comprehension_questions.map((_: unknown, i: number) => (
-                            <div key={i} className={`w-3 h-3 rounded-full transition-all ${i === currentQuestion ? 'bg-primary scale-125' :
-                                i < currentQuestion ? 'bg-emerald-500' : 'bg-muted'
-                                }`} />
+                            <div key={i} className={`h-[4px] rounded-full transition-all duration-300 ${
+                                i === currentQuestion ? 'w-[24px] bg-[#c9a84c]' :
+                                i < currentQuestion ? 'w-[12px] bg-[#c9a84c] opacity-50' : 'w-[12px] bg-[#2a2a2a]'
+                            }`} />
                         ))}
                     </div>
-                    <span className="text-xs text-muted-foreground">{currentQuestion + 1}/{story.comprehension_questions.length}</span>
+                    <span className="font-mono-num text-[13px] text-[#9a9590]">
+                        {currentQuestion + 1}/{story.comprehension_questions.length}
+                    </span>
                 </div>
 
-                <div className="flex-1 flex items-center justify-center p-4">
-                    <motion.div key={currentQuestion} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="max-w-lg w-full">
-                        <h3 className="text-lg font-bold mb-6 text-center ">{q.question}</h3>
-                        <div className="flex flex-col gap-3 mb-6">
+                <div className="flex-1 flex items-center justify-center p-[24px] overflow-y-auto">
+                    <motion.div key={currentQuestion} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="max-w-[500px] w-full py-[40px]">
+                        <h3 className="font-display text-[22px] font-semibold mb-[32px] text-[#f0ece4] leading-snug">
+                            {q.question}
+                        </h3>
+                        <div className="flex flex-col gap-[16px] mb-[32px]">
                             {q.options.map((opt: string, optIdx: number) => {
-                                let cls = 'border-border hover:border-primary/50';
+                                let optClass = 'border-[#2a2a2a] hover:border-[#1e1e1e] hover:bg-[#141414] text-[#9a9590]';
                                 if (showExplanation) {
-                                    if (optIdx === q.correct) cls = 'border-emerald-500 bg-emerald-500/10';
-                                    else if (optIdx === selected && !isCorrect) cls = 'border-red-500 bg-red-500/10';
-                                } else if (selected === optIdx) cls = 'border-primary bg-primary/10';
+                                    if (optIdx === q.correct) optClass = 'border-[rgba(74,222,128,0.3)] bg-[rgba(74,222,128,0.05)] text-[#4ade80]';
+                                    else if (optIdx === selected && !isCorrect) optClass = 'border-[rgba(248,113,113,0.3)] bg-[rgba(248,113,113,0.05)] text-[#f87171]';
+                                } else if (selected === optIdx) {
+                                    optClass = 'border-[#c9a84c] bg-[rgba(201,168,76,0.05)] text-[#f0ece4]';
+                                }
                                 return (
                                     <button key={optIdx}
                                         onClick={() => !showExplanation && handleSelectAnswer(currentQuestion, optIdx)}
                                         disabled={showExplanation}
-                                        className={`p-4 rounded-xl border-2 text-left text-sm transition-all ${cls}`}>
-                                        <span className="font-bold mr-2">{String.fromCharCode(65 + optIdx)}.</span>{opt}
+                                        className={`w-full p-[20px] rounded-[16px] border text-left text-[16px] transition-all duration-200 ${optClass}`}>
+                                        <span className="font-mono text-[14px] opacity-60 mr-[12px]">{String.fromCharCode(65 + optIdx)}.</span>
+                                        {opt}
                                     </button>
                                 );
                             })}
                         </div>
                         <AnimatePresence>
                             {showExplanation && (
-                                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mb-4">
-                                    <Card className={`p-4 ${isCorrect ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-red-500/30 bg-red-500/5'}`}>
-                                        <p className="text-sm font-bold mb-1">{isCorrect ? '✅ Correct!' : '❌ Not quite'}</p>
-                                        <p className="text-sm text-muted-foreground">{q.explanation}</p>
-                                    </Card>
+                                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mb-[32px] overflow-hidden">
+                                     <div className={`p-[20px] rounded-[16px] border ${isCorrect ? 'border-[rgba(74,222,128,0.2)] bg-[rgba(74,222,128,0.05)]' : 'border-[rgba(248,113,113,0.2)] bg-[rgba(248,113,113,0.05)]'}`}>
+                                        <p className={`text-[15px] font-semibold mb-[8px] ${isCorrect ? 'text-[#4ade80]' : 'text-[#f87171]'}`}>
+                                            {isCorrect ? 'Correct!' : 'Not quite'}
+                                        </p>
+                                        <p className="text-[14px] text-[#9a9590] leading-relaxed">{q.explanation}</p>
+                                    </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
                         {!showExplanation ? (
-                            <Button className="w-full bg-primary font-bold" disabled={selected === null} onClick={handleCheckAnswer}>Check Answer</Button>
+                            <button className="btn btn-primary w-full h-[56px] text-[16px]" disabled={selected === null} onClick={handleCheckAnswer}>Check Answer</button>
                         ) : (
-                            <Button className="w-full bg-primary font-bold" onClick={handleNextQuestion}>
+                            <button className="btn btn-primary w-full h-[56px] text-[16px]" onClick={handleNextQuestion}>
                                 {currentQuestion < story.comprehension_questions.length - 1 ? 'Next Question' : 'See Results'}
-                            </Button>
+                            </button>
                         )}
                     </motion.div>
                 </div>
@@ -212,37 +231,53 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
     // ── Reading Phase ──
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-background flex flex-col">
+            className="fixed inset-0 z-[60] bg-[#080808] flex flex-col">
+            
             {/* Progress bar */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-muted z-10">
-                <motion.div className="h-full bg-gradient-to-r from-primary to-emerald-500"
+            <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#141414] z-10">
+                <motion.div className="h-full bg-[#c9a84c]"
                     animate={{ width: `${readingProgress}%` }} transition={{ ease: 'easeOut' }} />
             </div>
 
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border pt-3">
-                <Button variant="ghost" size="sm" onClick={onClose} className="gap-1">
-                    <ArrowLeft className="w-4 h-4" /> Back
-                </Button>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold text-[10px]">{typeLabel}</span>
-                    <span className="px-1.5 py-0.5 rounded bg-muted text-[10px]">AI Generated</span>
+            <header className="top-bar border-b border-[#1e1e1e]">
+                <button onClick={onClose} className="w-[40px] h-[40px] rounded-full flex items-center justify-center hover:bg-[rgba(255,255,255,0.05)] transition-colors text-[#9a9590]">
+                    <ArrowLeft className="w-[20px] h-[20px]" />
+                </button>
+                <div className="flex-1 flex justify-center items-center gap-[12px] text-[12px] font-medium text-[#5a5652] uppercase tracking-widest">
+                    <span>{typeLabel}</span>
+                    <span>•</span>
+                    <span className="flex items-center gap-[4px]"><Clock className="w-[12px] h-[12px]" /> {Math.max(1, Math.round((story.content || '').split(' ').length / 150))} min</span>
                 </div>
-                <Button variant="ghost" size="sm" onClick={toggleVocabPanel}>
-                    <BookOpen className="w-4 h-4" />
-                </Button>
-            </div>
+                <button onClick={toggleVocabPanel} className="w-[40px] h-[40px] rounded-full flex items-center justify-center hover:bg-[rgba(255,255,255,0.05)] transition-colors text-[#f0ece4] relative">
+                    <BookOpen className="w-[18px] h-[18px]" />
+                    {story.vocabulary_items?.length > 0 && (
+                        <span className="absolute top-[8px] right-[8px] w-[8px] h-[8px] bg-[#c9a84c] rounded-full" />
+                    )}
+                </button>
+            </header>
 
             {/* Content */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 sm:px-8 py-6 pb-24">
-                <div className="max-w-2xl mx-auto">
-                    <h1 className="text-2xl sm:text-3xl font-black leading-tight mb-3">{story.title}</h1>
-                    <div className="flex items-center gap-2 flex-wrap mb-6">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${levelColorFn(story.cefr_level)}`}>{story.cefr_level}</span>
-                        {cat && <span className="text-sm">{cat.emoji} {cat.name}</span>}
-                        <span className="text-xs text-muted-foreground capitalize">{story.topic}</span>
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-[24px] py-[40px] sm:py-[64px] scroll-smooth pb-[160px]">
+                <div className="max-w-[680px] mx-auto">
+                    
+                    {/* Meta Tags */}
+                    <div className="flex items-center gap-[8px] flex-wrap mb-[24px]">
+                        <span className="badge-gold">
+                            Level {story.cefr_level}
+                        </span>
+                        {cat && (
+                            <span className="px-[12px] py-[6px] rounded-full text-[11px] font-medium bg-[#141414] border border-[#1e1e1e] text-[#9a9590]">
+                                {cat.emoji} {cat.name}
+                            </span>
+                        )}
+                        <span className="px-[12px] py-[6px] rounded-full text-[11px] font-medium bg-[#141414] border border-[#1e1e1e] text-[#9a9590] capitalize">
+                            {story.topic?.replace(/-/g, ' ')}
+                        </span>
                     </div>
 
+                    <h1 className="font-display text-[32px] sm:text-[40px] font-semibold leading-[1.1] text-[#f0ece4] mb-[40px]">{story.title}</h1>
+                    
                     {/* Render based on content type */}
                     {isDialogue ? (
                         <DialogueContent content={story.content} onTapWord={tapWord} />
@@ -259,12 +294,12 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
             {/* Comprehension button at 90% */}
             <AnimatePresence>
                 {showComprehensionButton && phase === 'reading' && (
-                    <motion.div initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 80, opacity: 0 }}
-                        className="fixed bottom-6 left-4 right-4 z-[65] flex justify-center">
-                        <Button onClick={handleStartComprehension}
-                            className="bg-primary hover:bg-primary/90 font-bold px-8 gap-2 shadow-xl shadow-primary/20">
-                            <Sparkles className="w-4 h-4" /> Check Your Understanding
-                        </Button>
+                    <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }}
+                        className="absolute bottom-[40px] left-0 right-0 z-[40] flex justify-center pointer-events-none px-[24px]">
+                        <button onClick={handleStartComprehension}
+                            className="btn btn-primary h-[56px] px-[32px] pointer-events-auto shadow-2xl shadow-[rgba(201,168,76,0.2)]">
+                            <Sparkles className="w-[18px] h-[18px] mr-[8px]" /> Check Understanding
+                        </button>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -283,57 +318,54 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
             {/* Vocabulary Panel */}
             <AnimatePresence>
                 {showVocabPanel && (
-                    <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
-                        transition={{ type: 'spring', damping: 25 }}
-                        className="fixed bottom-0 left-0 right-0 z-[65] max-h-[70vh] bg-card border-t border-border rounded-t-2xl overflow-hidden flex flex-col">
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-                            <h3 className="font-bold">Key Vocabulary</h3>
-                            <button onClick={toggleVocabPanel} className="p-1.5 hover:bg-muted rounded-lg">
-                                <ChevronUp className="w-4 h-4 rotate-180" />
-                            </button>
-                        </div>
-                        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                            {story.vocabulary_items?.map((v: { word: string; translation: string; part_of_speech: string; in_context: string; note: string }, i: number) => (
-                                <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-background border border-border">
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2 mb-0.5">
-                                            <span className="font-bold">{v.word}</span>
-                                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary uppercase">{v.part_of_speech}</span>
+                     <>
+                        <motion.div 
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 z-[64] bg-[#080808]/80 backdrop-blur-sm"
+                            onClick={toggleVocabPanel}
+                        />
+                        <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
+                            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                            className="absolute bottom-0 left-0 right-0 z-[65] max-h-[85vh] bg-[#0f0f0f] border-t border-[#1e1e1e] rounded-t-[24px] shadow-[0_-20px_40px_rgba(0,0,0,0.5)] flex flex-col">
+                            
+                            <div className="flex items-center justify-between px-[24px] h-[72px] border-b border-[#1e1e1e] shrink-0">
+                                <h3 className="font-display text-[20px] font-semibold text-[#f0ece4]">Key Vocabulary</h3>
+                                <button onClick={toggleVocabPanel} className="w-[32px] h-[32px] rounded-full flex items-center justify-center bg-[rgba(255,255,255,0.05)] text-[#9a9590] hover:bg-[rgba(255,255,255,0.1)] transition-colors">
+                                    <X className="w-[16px] h-[16px]" />
+                                </button>
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto p-[24px] flex flex-col gap-[16px]">
+                                {story.vocabulary_items?.map((v: any, i: number) => (
+                                    <div key={i} className="parlova-card p-[20px] flex flex-row items-start gap-[16px] justify-between group">
+                                        <div className="flex flex-col gap-[4px] min-w-0">
+                                            <div className="flex items-center gap-[8px]">
+                                                <span className="font-display text-[20px] font-semibold text-[#f0ece4] leading-none">{v.word}</span>
+                                                <span className="text-[10px] uppercase font-medium tracking-widest text-[#5a5652]">{v.part_of_speech}</span>
+                                            </div>
+                                            <p className="text-[15px] text-[#9a9590] truncate">{v.translation}</p>
                                         </div>
-                                        <p className="text-sm text-foreground">{v.translation}</p>
-                                        {v.in_context && <p className="text-xs text-muted-foreground italic mt-1 line-clamp-2">&quot;{v.in_context}&quot;</p>}
+                                        <button className="w-[36px] h-[36px] shrink-0 rounded-full flex items-center justify-center border border-[#2a2a2a] text-[#c9a84c] bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(201,168,76,0.1)] hover:border-[rgba(201,168,76,0.3)] transition-all">
+                                            <Plus className="w-[16px] h-[16px]" />
+                                        </button>
                                     </div>
-                                    <Button size="sm" variant="ghost" className="flex-shrink-0"><Plus className="w-3.5 h-3.5" /></Button>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </>
                 )}
             </AnimatePresence>
         </motion.div>
     );
 }
 
-// ── Helper: Level color ──
-function levelColorFn(level: string): string {
-    const m: Record<string, string> = {
-        A1: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-        A2: 'bg-green-500/10 text-green-400 border-green-500/30',
-        B1: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
-        B2: 'bg-violet-500/10 text-violet-400 border-violet-500/30',
-        C1: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-        C2: 'bg-red-500/10 text-red-400 border-red-500/30',
-    };
-    return m[level] || 'bg-muted text-muted-foreground';
-}
-
 // ── Standard interactive text (short_story) ──
 function InteractiveText({ content, onTapWord }: { content: string; onTapWord: (word: string, ctx: string) => void }) {
     const paragraphs = content.split('\n\n').filter(Boolean);
     return (
-        <div className="space-y-4">
+        <div className="space-y-[24px]">
             {paragraphs.map((p, pIdx) => (
-                <p key={pIdx} className="text-[17px] leading-[1.85] text-foreground/90">
+                <p key={pIdx} className="text-[17px] leading-[1.8] text-[#f0ece4] font-light">
                     <WordTokens text={p} onTapWord={onTapWord} />
                 </p>
             ))}
@@ -345,14 +377,14 @@ function InteractiveText({ content, onTapWord }: { content: string; onTapWord: (
 function DialogueContent({ content, onTapWord }: { content: string; onTapWord: (word: string, ctx: string) => void }) {
     const lines = content.split('\n').filter(Boolean);
     const speakers: string[] = [];
-    const speakerColors = ['border-violet-500', 'border-cyan-500'];
+    const speakerColors = ['border-[#c9a84c]', 'border-[#4ade80]']; // Gold and a fresh green instead of neon violet/cyan
 
     return (
-        <div className="space-y-3">
+        <div className="space-y-[16px]">
             {lines.map((line, i) => {
-                const match = line.match(/^([A-ZÁÉÍÓÚÜÑa-záéíóúüñ]+)\s*:\s*(.*)/);
+                const match = line.match(/^([A-ZÁÉÍÓÚÜÑa-záéíóúüñ\s]+)\s*:\s*(.*)/);
                 if (match) {
-                    const speaker = match[1];
+                    const speaker = match[1].trim();
                     const text = match[2];
                     if (!speakers.includes(speaker)) speakers.push(speaker);
                     const speakerIdx = speakers.indexOf(speaker);
@@ -360,9 +392,9 @@ function DialogueContent({ content, onTapWord }: { content: string; onTapWord: (
 
                     return (
                         <div key={i} className={`flex flex-col ${isRight ? 'items-end' : 'items-start'}`}>
-                            <span className="text-[10px] font-bold uppercase text-muted-foreground mb-1 px-1">{speaker}</span>
-                            <div className={`inline-block max-w-[85%] p-3 rounded-2xl bg-card border-l-3 ${speakerColors[speakerIdx % 2]} border`}>
-                                <p className="text-[16px] leading-[1.7] text-foreground/90">
+                            <span className="text-[11px] font-medium uppercase tracking-widest text-[#5a5652] mb-[6px] px-[8px]">{speaker}</span>
+                            <div className={`inline-block max-w-[85%] p-[16px] rounded-[16px] bg-[#141414] border-l-[3px] border-y border-r border-[#1e1e1e] ${speakerColors[speakerIdx % 2]}`}>
+                                <p className="text-[16px] leading-[1.7] text-[#f0ece4] font-light">
                                     <WordTokens text={text} onTapWord={onTapWord} />
                                 </p>
                             </div>
@@ -371,7 +403,7 @@ function DialogueContent({ content, onTapWord }: { content: string; onTapWord: (
                 }
                 // Non-dialogue line (narration)
                 return (
-                    <p key={i} className="text-sm text-muted-foreground italic text-center py-2">
+                    <p key={i} className="text-[15px] text-[#9a9590] italic text-center py-[12px]">
                         <WordTokens text={line} onTapWord={onTapWord} />
                     </p>
                 );
@@ -384,12 +416,12 @@ function DialogueContent({ content, onTapWord }: { content: string; onTapWord: (
 function LetterContent({ content, onTapWord }: { content: string; onTapWord: (word: string, ctx: string) => void }) {
     const paragraphs = content.split('\n\n').filter(Boolean);
     return (
-        <div className="space-y-4 pl-4 border-l-2 border-primary/20">
+        <div className="space-y-[24px] pl-[20px] border-l-[3px] border-[#c9a84c]/30">
             {paragraphs.map((p, i) => {
                 const isFirst = i === 0;
                 const isLast = i === paragraphs.length - 1;
                 return (
-                    <p key={i} className={`text-[17px] leading-[1.85] text-foreground/90 ${isFirst || isLast ? 'italic text-[18px]' : ''}`}>
+                    <p key={i} className={`text-[17px] leading-[1.8] text-[#f0ece4] font-light ${isFirst || isLast ? 'italic font-medium text-[18px]' : ''}`}>
                         <WordTokens text={p} onTapWord={onTapWord} />
                     </p>
                 );
@@ -402,9 +434,9 @@ function LetterContent({ content, onTapWord }: { content: string; onTapWord: (wo
 function JournalContent({ content, onTapWord }: { content: string; onTapWord: (word: string, ctx: string) => void }) {
     const paragraphs = content.split('\n\n').filter(Boolean);
     return (
-        <div className="space-y-4">
+        <div className="space-y-[24px]">
             {paragraphs.map((p, i) => (
-                <p key={i} className={`text-[17px] leading-[1.85] text-foreground/90 ${i === 0 ? 'italic text-muted-foreground' : ''}`}>
+                <p key={i} className={`text-[17px] leading-[1.8] text-[#f0ece4] font-light ${i === 0 ? 'italic text-[#9a9590] font-medium' : ''}`}>
                     <WordTokens text={p} onTapWord={onTapWord} />
                 </p>
             ))}
@@ -424,7 +456,7 @@ function WordTokens({ text, onTapWord }: { text: string; onTapWord: (word: strin
                 return (
                     <span key={i}
                         onClick={() => onTapWord(cleanWord, text)}
-                        className="cursor-pointer rounded px-[1px] transition-colors hover:bg-primary/20">
+                        className="cursor-pointer transition-colors duration-200 hover:text-[#c9a84c] rounded-[2px]">
                         {token}
                     </span>
                 );

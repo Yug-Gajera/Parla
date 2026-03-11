@@ -1,7 +1,7 @@
 "use client";
 
 // ============================================================
-// Parlova — Story Browser (Generate + Browse)
+// Parlova — Story Browser (Redesigned)
 // ============================================================
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -26,16 +26,17 @@ const TYPE_EMOJI: Record<string, string> = {
     journal: '📓',
 };
 
+// Subtle gold-tinted level indicators for the luxury theme
 function levelColor(level: string): string {
     const colors: Record<string, string> = {
-        A1: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-        A2: 'bg-green-500/10 text-green-400 border-green-500/30',
-        B1: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
-        B2: 'bg-violet-500/10 text-violet-400 border-violet-500/30',
-        C1: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-        C2: 'bg-red-500/10 text-red-400 border-red-500/30',
+        A1: 'bg-[#141414] text-[#c9a84c] border-[#c9a84c]/20',
+        A2: 'bg-[#141414] text-[#e4c76b] border-[#e4c76b]/20',
+        B1: 'bg-[#c9a84c]/5 text-[#c9a84c] border-[#c9a84c]/30',
+        B2: 'bg-[#c9a84c]/10 text-[#e4c76b] border-[#c9a84c]/40',
+        C1: 'bg-[#c9a84c]/15 text-[#e4c76b] border-[#e4c76b]/50',
+        C2: 'bg-[#c9a84c]/20 text-[#f0ece4] border-[#e4c76b]/60',
     };
-    return colors[level] || 'bg-muted text-muted-foreground';
+    return colors[level] || 'bg-[#1e1e1e] text-[#5a5652] border-[#2a2a2a]';
 }
 
 export default function StoryBrowser({ languageId }: StoryBrowserProps) {
@@ -82,7 +83,7 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
     }, [hasMore, fetchMore]);
 
     return (
-        <div className="flex flex-col gap-6 max-w-5xl mx-auto w-full">
+        <div className="flex flex-col gap-10 max-w-5xl mx-auto w-full font-sans">
             <AnimatePresence>
                 {activeStoryId && (
                     <StoryReader
@@ -93,82 +94,89 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
             </AnimatePresence>
 
             {/* ── SECTION 1: Generate a Story ── */}
-            <Card className="p-6 border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-violet-500/5 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <Card className="p-8 sm:p-10 border-[#1e1e1e] bg-[#0f0f0f] relative overflow-hidden rounded-2xl">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#c9a84c]/5 rounded-bl-full -z-10 blur-xl" />
 
-                <div className="relative">
-                    <div className="flex items-center gap-2 mb-1">
-                        <Sparkles className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold">Create a story for your level</h2>
+                <div className="relative z-10 w-full max-w-2xl">
+                    <div className="flex items-center gap-4 mb-3">
+                        <div className="p-3 rounded-full bg-[#141414] border border-[#2a2a2a] shadow-inner">
+                            <Sparkles className="w-5 h-5 text-[#c9a84c]" />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-serif text-[#f0ece4] tracking-tight">Narrative Synthesis</h2>
+                            <p className="text-[10px] font-mono text-[#5a5652] uppercase tracking-widest mt-1">
+                                Generate leveled literature dynamically
+                            </p>
+                        </div>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-5">
-                        Stories are saved and shared — you may get an existing one instantly
-                    </p>
 
-                    {/* Step 1: Category */}
-                    <p className="text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wider">Choose a topic</p>
-                    <div className="flex gap-2 flex-wrap mb-4">
-                        {TOPIC_CATEGORIES.map(cat => (
-                            <button
-                                key={cat.id}
-                                onClick={() => setSelectedCategory(cat.id)}
-                                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${selectedCategory === cat.id
-                                        ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-                                        : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/30'
-                                    }`}
+                    <div className="bg-[#141414] border border-[#1e1e1e] rounded-xl p-6 mt-8">
+                        <p className="text-[10px] font-mono uppercase text-[#5a5652] mb-3 tracking-[0.2em] font-medium">Domain Specification</p>
+                        <div className="flex gap-2 flex-wrap mb-8">
+                            {TOPIC_CATEGORIES.map(cat => (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(cat.id)}
+                                    className={`px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest transition-all border ${selectedCategory === cat.id
+                                            ? 'bg-[#c9a84c]/10 text-[#c9a84c] border-[#c9a84c]/30 shadow-inner'
+                                            : 'bg-[#0f0f0f] border-[#2a2a2a] text-[#5a5652] hover:text-[#9a9590] hover:border-[#c9a84c]/20'
+                                        }`}
+                                >
+                                    {cat.name}
+                                </button>
+                            ))}
+                        </div>
+
+                        <p className="text-[10px] font-mono uppercase text-[#5a5652] mb-3 tracking-[0.2em] font-medium">Format Parameters</p>
+                        <div className="flex gap-2 flex-wrap mb-8">
+                            {CONTENT_TYPES.map(type => (
+                                <button
+                                    key={type.id}
+                                    onClick={() => setSelectedContentType(type.id)}
+                                    className={`px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest transition-all border flex items-center gap-2 ${selectedContentType === type.id
+                                            ? 'bg-[#c9a84c]/10 text-[#c9a84c] border-[#c9a84c]/30 shadow-inner'
+                                            : 'bg-[#0f0f0f] border-[#2a2a2a] text-[#5a5652] hover:text-[#9a9590] hover:border-[#c9a84c]/20'
+                                        }`}
+                                >
+                                    <span className="opacity-80">{TYPE_EMOJI[type.id]}</span> {type.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-6 pt-6 border-t border-[#1e1e1e]">
+                            <Button
+                                onClick={getStory}
+                                disabled={!selectedCategory || !selectedContentType || isGenerating}
+                                className={`h-12 px-8 rounded-full font-mono text-[10px] uppercase tracking-widest font-bold transition-all shadow-[0_4px_20px_rgba(201,168,76,0.15)] flex gap-2 w-full sm:w-auto
+                                    ${(!selectedCategory || !selectedContentType || isGenerating) 
+                                        ? 'bg-[#1e1e1e] text-[#5a5652] cursor-not-allowed border-[#2a2a2a]' 
+                                        : 'bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72]'
+                                    }
+                                `}
                             >
-                                {cat.emoji} {cat.name}
-                            </button>
-                        ))}
-                    </div>
+                                {isGenerating ? (
+                                    <><Loader2 className="w-4 h-4 animate-spin shrink-0" /> Compiling Data...</>
+                                ) : (
+                                    <><Zap className="w-4 h-4 shrink-0" /> Initialize Generation</>
+                                )}
+                            </Button>
 
-                    {/* Step 2: Content type */}
-                    <p className="text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wider">Choose a format</p>
-                    <div className="flex gap-2 flex-wrap mb-5">
-                        {CONTENT_TYPES.map(type => (
-                            <button
-                                key={type.id}
-                                onClick={() => setSelectedContentType(type.id)}
-                                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${selectedContentType === type.id
-                                        ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-                                        : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/30'
-                                    }`}
-                            >
-                                {TYPE_EMOJI[type.id]} {type.label}
-                            </button>
-                        ))}
-                    </div>
+                            <div className="flex flex-col flex-1 pl-4 sm:border-l border-[#2a2a2a]">
+                                <span className={`text-[10px] font-mono uppercase tracking-[0.2em] font-medium ${dailyGenerationsRemaining === 0 ? 'text-[#ef4444]' : 'text-[#c9a84c]'}`}>
+                                    {dailyGenerationsRemaining} Yields Remaining
+                                </span>
+                                <span className="text-[10px] text-[#5a5652] mt-1">
+                                    Resets diurnally at 00:00 GMT
+                                </span>
+                            </div>
+                        </div>
 
-                    {/* Generate button */}
-                    <div className="flex items-center gap-4">
-                        <Button
-                            onClick={getStory}
-                            disabled={!selectedCategory || !selectedContentType || isGenerating}
-                            className="bg-primary hover:bg-primary/90 font-bold px-6 gap-2 shadow-lg shadow-primary/20"
-                        >
-                            {isGenerating ? (
-                                <>
-                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                    Writing your story...
-                                </>
-                            ) : (
-                                <>
-                                    <Zap className="w-4 h-4" />
-                                    Get Story
-                                </>
-                            )}
-                        </Button>
-                        <span className="text-xs text-muted-foreground">
-                            {dailyGenerationsRemaining === 0
-                                ? 'Daily limit reached — browse existing stories below'
-                                : `${dailyGenerationsRemaining} of 3 daily generations remaining`
-                            }
-                        </span>
+                        {error && (
+                            <div className="mt-4 p-3 bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-lg text-xs font-mono text-[#ef4444] tracking-widest uppercase">
+                                Exception: {error}
+                            </div>
+                        )}
                     </div>
-
-                    {error && (
-                        <p className="text-sm text-destructive mt-3">{error}</p>
-                    )}
                 </div>
             </Card>
 
@@ -179,12 +187,14 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[60] bg-background/80 backdrop-blur flex items-center justify-center"
+                        className="fixed inset-0 z-[60] bg-[#080808]/90 backdrop-blur-sm flex items-center justify-center"
                     >
-                        <Card className="p-8 text-center border-primary/30">
-                            <CheckCircle2 className="w-12 h-12 text-primary mx-auto mb-3" />
-                            <h3 className="text-lg font-bold">Found a story for you!</h3>
-                            <p className="text-sm text-muted-foreground mt-1">Opening now...</p>
+                        <Card className="p-10 text-center border-[#c9a84c]/20 bg-[#141414] shadow-[0_0_50px_rgba(201,168,76,0.1)] rounded-3xl max-w-sm">
+                            <div className="w-20 h-20 bg-[#c9a84c]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <CheckCircle2 className="w-10 h-10 text-[#c9a84c]" />
+                            </div>
+                            <h3 className="text-2xl font-serif text-[#f0ece4]">Archived Text Located</h3>
+                            <p className="text-[10px] font-mono text-[#9a9590] mt-3 uppercase tracking-[0.2em]">Retreiving from cache...</p>
                         </Card>
                     </motion.div>
                 )}
@@ -192,24 +202,32 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
 
             {/* ── SECTION 2: Browse Stories ── */}
             <div>
-                <div className="flex items-center gap-2 mb-1">
-                    <BookOpen className="w-5 h-5 text-muted-foreground" />
-                    <h3 className="text-lg font-bold">Stories at your level</h3>
+                <div className="flex items-center gap-4 mb-6">
+                    <div className="p-2.5 rounded-xl border border-[#2a2a2a] bg-[#0f0f0f]">
+                        <BookOpen className="w-4 h-4 text-[#9a9590]" />
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-serif text-[#f0ece4]">Literature Database</h3>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#5a5652] mt-1">
+                            Authored by Parlova operatives
+                        </p>
+                    </div>
                 </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                    Read by other Parlova learners
-                </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {isLoading && stories.length === 0 && (
                         Array.from({ length: 6 }).map((_, i) => (
-                            <Card key={`skeleton-${i}`} className="p-5 animate-pulse">
-                                <div className="h-4 w-16 rounded bg-muted mb-3" />
-                                <div className="h-5 w-3/4 rounded bg-muted mb-2" />
-                                <div className="h-3 w-full rounded bg-muted mb-3" />
-                                <div className="flex gap-2">
-                                    <div className="h-5 w-10 rounded-full bg-muted" />
-                                    <div className="h-5 w-20 rounded-full bg-muted" />
+                            <Card key={`skeleton-${i}`} className="p-6 bg-[#0f0f0f] border-[#1e1e1e] rounded-2xl animate-pulse h-[220px] flex flex-col">
+                                <div className="flex gap-2 mb-4">
+                                    <div className="w-20 h-5 bg-[#141414] rounded-full" />
+                                    <div className="w-6 h-5 bg-[#141414] rounded-full" />
+                                </div>
+                                <div className="w-3/4 h-5 bg-[#1e1e1e] rounded mb-3" />
+                                <div className="w-full h-4 bg-[#141414] rounded mb-2" />
+                                <div className="w-5/6 h-4 bg-[#141414] rounded mb-4" />
+                                <div className="mt-auto flex gap-2">
+                                    <div className="w-12 h-5 bg-[#1e1e1e] rounded-full" />
+                                    <div className="w-16 h-5 bg-[#1e1e1e] rounded-full" />
                                 </div>
                             </Card>
                         ))
@@ -219,38 +237,42 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                         const cat = TOPIC_CATEGORIES.find(c => c.id === story.topic_category);
                         return (
                             <motion.div key={story.id}
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 15 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: i * 0.03 }}>
+                                transition={{ delay: i * 0.04 }}
+                                className="h-full"
+                            >
                                 <Card
-                                    className="p-5 cursor-pointer transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
+                                    className="p-6 h-full cursor-pointer transition-all duration-300 rounded-2xl flex flex-col bg-[#141414] border-[#1e1e1e] hover:border-[#c9a84c]/40 hover:bg-[#171717] hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] group"
                                     onClick={() => setActiveStoryId(story.id)}
                                 >
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                                            {TYPE_EMOJI[story.content_type]} {story.content_type.replace('_', ' ')}
-                                        </span>
-                                        {cat && <span className="text-sm">{cat.emoji}</span>}
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-2 py-1 rounded bg-[#080808] border border-[#2a2a2a] text-[#c9a84c]">
+                                                {TYPE_EMOJI[story.content_type]} {story.content_type.replace('_', ' ')}
+                                            </span>
+                                            {cat && <span className="text-sm grayscale group-hover:grayscale-0 transition-all">{cat.emoji}</span>}
+                                        </div>
                                     </div>
 
-                                    <h4 className="font-bold mb-1 line-clamp-2 leading-snug">
+                                    <h4 className="font-serif text-lg mb-2 line-clamp-2 leading-snug text-[#f0ece4] group-hover:text-[#c9a84c] transition-colors">
                                         {story.title}
                                     </h4>
-                                    <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                                    <p className="text-[13px] font-sans text-[#5a5652] line-clamp-2 mb-6 leading-relaxed">
                                         {story.summary}
                                     </p>
 
-                                    <div className="flex items-center gap-2 flex-wrap">
-                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${levelColor(story.cefr_level)}`}>
+                                    <div className="flex items-center gap-2 mt-auto flex-wrap">
+                                        <span className={`text-[9px] font-mono uppercase tracking-[0.2em] px-2 py-1 flex items-center justify-center rounded border ${levelColor(story.cefr_level)}`}>
                                             {story.cefr_level}
                                         </span>
-                                        <span className="text-[11px] text-muted-foreground">
-                                            {story.word_count} words
+                                        <span className="text-[9px] font-mono text-[#5a5652] uppercase tracking-[0.1em]">
+                                            {story.word_count} W
                                         </span>
                                         {story.times_read > 0 && (
-                                            <span className="flex items-center gap-1 text-[11px] text-muted-foreground ml-auto">
-                                                <Users className="w-3 h-3" />
-                                                {story.times_read}
+                                            <span className="flex items-center gap-1.5 text-[9px] font-mono text-[#5a5652] uppercase tracking-[0.1em] ml-auto bg-[#080808] px-2 py-1 rounded border border-[#1e1e1e]">
+                                                <Users className="w-3 h-3 text-[#c9a84c]/50" />
+                                                {story.times_read} REQS
                                             </span>
                                         )}
                                     </div>
@@ -261,22 +283,28 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                 </div>
 
                 {!isLoading && stories.length === 0 && (
-                    <Card className="p-12 flex flex-col items-center justify-center text-center bg-card/50 border-dashed border-2">
-                        <BookOpen className="w-12 h-12 text-muted-foreground/30 mb-4" />
-                        <h3 className="text-lg font-bold mb-2">No stories yet at your level</h3>
-                        <p className="text-sm text-muted-foreground max-w-md">
-                            Be the first to generate one above!
+                    <Card className="p-16 flex flex-col items-center justify-center text-center bg-[#0f0f0f] border-dashed border-[#1e1e1e] rounded-3xl mt-6">
+                        <BookOpen className="w-10 h-10 text-[#2a2a2a] mb-6" />
+                        <h3 className="text-xl font-serif text-[#f0ece4] mb-3">Database Empty</h3>
+                        <p className="text-sm font-sans text-[#9a9590] max-w-sm leading-relaxed">
+                            No narrative files currently reside at this sector index. Be the first to run the generation sequence above.
                         </p>
                     </Card>
                 )}
 
                 {isLoading && stories.length > 0 && (
-                    <div className="flex items-center justify-center py-6">
-                        <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                    <div className="flex items-center justify-center py-8">
+                        <Loader2 className="w-6 h-6 text-[#c9a84c] animate-spin" />
                     </div>
                 )}
 
-                {hasMore && <div ref={sentinelRef} className="h-4" />}
+                {hasMore && <div ref={sentinelRef} className="h-10 w-full" />}
+                
+                {!hasMore && stories.length > 0 && (
+                    <p className="text-center text-[10px] font-mono uppercase tracking-[0.2em] text-[#5a5652] py-8 border-t border-[#1e1e1e] mt-4">
+                        End of archive
+                    </p>
+                )}
             </div>
         </div>
     );

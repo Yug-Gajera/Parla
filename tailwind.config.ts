@@ -14,11 +14,13 @@ const config: Config = {
 				foreground: 'hsl(var(--foreground))',
 				card: {
 					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))'
+					foreground: 'hsl(var(--card-foreground))',
+					hover: '#171717',
 				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					hover: '#d4b460',
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -31,16 +33,20 @@ const config: Config = {
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
 					foreground: 'hsl(var(--accent-foreground))',
-					gold: 'hsl(var(--accent-gold))',
-					'gold-light': 'hsl(var(--accent-gold-light))'
+					gold: '#c9a84c',
+					'gold-light': '#e4c76b',
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
 				},
+				success: '#4ade80',
+				warning: '#fb923c',
 				border: 'hsl(var(--border))',
+				'border-strong': '#2a2a2a',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
+				surface: '#0f0f0f',
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
 					foreground: 'hsl(var(--popover-foreground))'
@@ -54,16 +60,33 @@ const config: Config = {
 				}
 			},
 			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				'xs': '4px',
+				'sm': '6px',
+				'md': '10px',
+				'lg': '14px',
+				'xl': '20px',
+				'pill': '9999px',
+			},
+			spacing: {
+				'0.5': '2px',
+				'1': '4px',
+				'2': '8px',
+				'3': '12px',
+				'4': '16px',
+				'5': '20px',
+				'6': '24px',
+				'8': '32px',
+				'10': '40px',
+				'12': '48px',
+				'16': '64px',
+				'20': '80px',
 			},
 			fontFamily: {
 				sans: ['var(--font-dm-sans)'],
 				serif: ['var(--font-cormorant-garamond)'],
 				cormorant: ['var(--font-cormorant-garamond)'],
 				mono: ['var(--font-jetbrains-mono)'],
-			}
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

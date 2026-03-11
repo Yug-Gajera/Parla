@@ -1,13 +1,12 @@
 "use client";
 
 // ============================================================
-// Parlova — Shared Word Popover Component
+// Parlova — Shared Word Popover Component (Redesigned)
 // ============================================================
 
-import React, { useState, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
+import React from 'react';
 import { X, Plus, Check, Loader2, BookOpen } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export interface WordData {
     word: string;
@@ -29,31 +28,18 @@ interface WordPopoverProps {
     onUseInReply?: (word: string) => void;
 }
 
-const POS_COLORS: Record<string, string> = {
-    noun: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-    verb: 'bg-violet-500/20 text-violet-400 border-violet-500/30',
-    adjective: 'bg-green-500/20 text-green-400 border-green-500/30',
-    adverb: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-    phrase: 'bg-pink-500/20 text-pink-400 border-pink-500/30',
-    preposition: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-    conjunction: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-};
-
 /**
  * Bolds the tapped word within a context sentence.
  * Uses word-boundary matching to avoid partial matches.
  */
 function highlightWord(sentence: string, word: string): React.ReactNode {
     if (!sentence || !word) return sentence;
-
-    // Escape regex chars, match word boundaries (case insensitive)
     const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`(\\b${escaped}\\b)`, 'gi');
     const parts = sentence.split(regex);
-
     return parts.map((part, i) =>
         regex.test(part)
-            ? <strong key={i} className="text-primary font-bold">{part}</strong>
+            ? <strong key={i} className="text-[#f0ece4] font-semibold">{part}</strong>
             : part
     );
 }
@@ -68,167 +54,118 @@ export default function WordPopover({
 }: WordPopoverProps) {
     if (!wordData && !isLoading) return null;
 
-    const posColor = wordData?.part_of_speech
-        ? POS_COLORS[wordData.part_of_speech.toLowerCase()] || 'bg-muted text-muted-foreground'
-        : '';
-
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 500 }}
-            className="fixed bottom-0 left-0 right-0 z-[70] p-4"
+            initial={{ opacity: 0, y: 16, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.96 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 400 }}
+            className="fixed bottom-[24px] left-0 right-0 z-[70] px-[16px] pointer-events-none flex justify-center"
         >
             <div
-                className="mx-auto"
-                style={{
-                    maxWidth: '320px',
-                    width: '90vw',
-                    background: '#1a1a1a',
-                    border: '1px solid #333333',
-                    borderRadius: '12px',
-                    padding: '16px',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-                }}
+                className="pointer-events-auto w-full max-w-[340px] bg-[#141414] border border-[#1e1e1e] rounded-[14px] p-[20px] shadow-2xl relative"
             >
-                {/* Loading state */}
+                {/* Close Button */}
+                <button
+                    onClick={onDismiss}
+                    className="absolute top-[16px] right-[16px] w-[28px] h-[28px] rounded-full flex items-center justify-center bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.1)] transition-colors text-[#9a9590]"
+                >
+                    <X className="w-[14px] h-[14px]" />
+                </button>
+
+                {/* Loading State */}
                 {isLoading && (
-                    <div className="flex flex-col items-center py-4 gap-3">
-                        <Loader2 className="w-5 h-5 text-primary animate-spin" />
-                        <p className="text-sm text-gray-400">
-                            Looking up <span className="text-white font-bold">{wordData?.word}</span>...
+                    <div className="flex flex-col items-center py-[24px] gap-[12px]">
+                        <Loader2 className="w-[20px] h-[20px] text-[#c9a84c] animate-spin" />
+                        <p className="text-[14px] text-[#9a9590]">
+                            Looking up <span className="text-[#f0ece4] font-medium">{wordData?.word || 'word'}</span>...
                         </p>
                     </div>
                 )}
 
-                {/* Loaded content */}
+                {/* Content */}
                 {!isLoading && wordData && (
-                    <>
-                        {/* Header: word + POS + close */}
-                        <div className="flex items-start justify-between mb-3">
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-white font-bold" style={{ fontSize: '20px' }}>
-                                    {wordData.word}
+                    <div className="flex flex-col">
+                        {/* Header */}
+                        <div className="mb-[20px] pr-[32px]">
+                            <h3 className="font-display text-[26px] font-semibold text-[#f0ece4] leading-none mb-[8px]">
+                                {wordData.word}
+                            </h3>
+                            {wordData.part_of_speech && (
+                                <span className="inline-block px-[8px] py-[2px] rounded-md bg-[rgba(255,255,255,0.05)] border border-[#2a2a2a] text-[#9a9590] text-[11px] font-medium uppercase tracking-wider">
+                                    {wordData.part_of_speech}
                                 </span>
-                                {wordData.part_of_speech && (
-                                    <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded border ${posColor}`}>
-                                        {wordData.part_of_speech}
-                                    </span>
-                                )}
-                            </div>
-                            <button
-                                onClick={onDismiss}
-                                className="p-1 hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"
-                            >
-                                <X className="w-4 h-4 text-gray-500" />
-                            </button>
+                            )}
                         </div>
 
-                        {/* English section */}
-                        {wordData.translation && (
-                            <div className="mb-2.5">
-                                <div className="flex items-center gap-1.5 mb-1">
-                                    <span style={{ fontSize: '11px' }}>🇬🇧</span>
-                                    <span className="text-gray-500" style={{ fontSize: '11px', fontWeight: 600 }}>
-                                        English
-                                    </span>
+                         {/* Definitions */}
+                         <div className="flex flex-col gap-[12px] mb-[20px]">
+                            {/* English */}
+                            {wordData.translation && (
+                                <div className="flex flex-col">
+                                    <span className="text-[11px] font-medium text-[#5a5652] uppercase tracking-widest mb-[4px]">English</span>
+                                    <div className="bg-[#0f0f0f] border border-[#1e1e1e] rounded-lg px-[12px] py-[10px]">
+                                        <p className="text-[15px] text-[#f0ece4]">{wordData.translation}</p>
+                                    </div>
                                 </div>
-                                <div
-                                    className="text-white"
-                                    style={{
-                                        fontSize: '15px',
-                                        background: '#222222',
-                                        padding: '8px 10px',
-                                        borderRadius: '8px',
-                                    }}
-                                >
-                                    {wordData.translation}
-                                </div>
-                            </div>
-                        )}
+                            )}
 
-                        {/* Spanish section */}
-                        {wordData.spanish_explanation && (
-                            <div className="mb-2.5">
-                                <div className="flex items-center gap-1.5 mb-1">
-                                    <span style={{ fontSize: '11px' }}>🇪🇸</span>
-                                    <span className="text-gray-500" style={{ fontSize: '11px', fontWeight: 600 }}>
-                                        En español
-                                    </span>
+                            {/* Spanish Context */}
+                            {wordData.spanish_explanation && (
+                                <div className="flex flex-col">
+                                    <span className="text-[11px] font-medium text-[#5a5652] uppercase tracking-widest mb-[4px]">Español</span>
+                                    <div className="bg-[rgba(201,168,76,0.05)] border border-[rgba(201,168,76,0.15)] rounded-lg px-[12px] py-[10px]">
+                                        <p className="text-[14px] text-[#e4c76b] italic">{wordData.spanish_explanation}</p>
+                                    </div>
                                 </div>
-                                <div
-                                    className="text-white italic"
-                                    style={{
-                                        fontSize: '14px',
-                                        background: 'rgba(124, 58, 237, 0.1)',
-                                        border: '1px solid rgba(124, 58, 237, 0.2)',
-                                        padding: '8px 10px',
-                                        borderRadius: '8px',
-                                    }}
-                                >
-                                    {wordData.spanish_explanation}
-                                </div>
-                            </div>
-                        )}
+                            )}
 
-                        {/* Context section */}
-                        {wordData.in_context && (
-                            <div className="mb-3">
-                                <div className="flex items-center gap-1.5 mb-1">
-                                    <span style={{ fontSize: '11px' }}>📖</span>
-                                    <span className="text-gray-500" style={{ fontSize: '11px', fontWeight: 600 }}>
-                                        En contexto
-                                    </span>
+                             {/* Given Context */}
+                             {wordData.in_context && (
+                                <div className="flex flex-col mt-[4px]">
+                                    <span className="text-[11px] font-medium text-[#5a5652] uppercase tracking-widest mb-[4px]">In Context</span>
+                                    <p className="text-[14px] text-[#9a9590] leading-[1.6]">
+                                        "{highlightWord(wordData.in_context, wordData.word)}"
+                                    </p>
                                 </div>
-                                <p className="text-gray-400" style={{ fontSize: '13px', lineHeight: 1.5 }}>
-                                    &quot;{highlightWord(wordData.in_context, wordData.word)}&quot;
-                                </p>
-                            </div>
-                        )}
+                            )}
+                        </div>
 
-                        {/* Limit reached notice */}
-                        {wordData.note === 'Daily lookup limit reached' && (
-                            <p className="text-amber-500/70 text-xs mb-3 text-center">
+                         {/* Limit Notice */}
+                         {wordData.note === 'Daily lookup limit reached' && (
+                            <p className="text-[12px] text-[#fb923c] mb-[16px] text-center px-[8px] bg-[rgba(251,146,60,0.1)] py-[8px] rounded-lg border border-[rgba(251,146,60,0.2)]">
                                 Daily word lookup limit reached. Try again tomorrow.
                             </p>
                         )}
 
-                        {/* Bottom buttons */}
-                        <div className="flex flex-col gap-2">
+                        {/* Actions */}
+                        <div className="flex flex-col gap-[8px] mt-auto">
                             {wordData.in_deck ? (
-                                <div className="flex items-center justify-center gap-2 py-1.5">
-                                    <Check className="w-3.5 h-3.5 text-emerald-500" />
-                                    <span className="text-emerald-500 text-xs font-medium">
-                                        In Deck{wordData.deck_status ? ` · ${wordData.deck_status}` : ''}
+                                <div className="flex items-center justify-center gap-[6px] py-[8px] bg-[rgba(74,222,128,0.05)] border border-[rgba(74,222,128,0.15)] rounded-lg">
+                                    <Check className="w-[14px] h-[14px] text-[#4ade80]" />
+                                    <span className="text-[#4ade80] text-[13px] font-medium">
+                                        Saved {wordData.deck_status ? ` · ${wordData.deck_status}` : ''}
                                     </span>
                                 </div>
                             ) : onAddToDeck && (
-                                <Button
-                                    size="sm"
+                                <button
                                     onClick={() => onAddToDeck(wordData.word)}
-                                    className="w-full bg-primary hover:bg-primary/90 text-xs font-bold gap-1.5"
-                                    style={{ height: '32px' }}
+                                    className="btn btn-primary w-full h-[40px]"
                                 >
-                                    <Plus className="w-3.5 h-3.5" />
-                                    Add to Deck
-                                </Button>
+                                    <Plus className="w-[16px] h-[16px]" /> Add to Deck
+                                </button>
                             )}
 
                             {showUseInReply && onUseInReply && (
-                                <Button
-                                    size="sm"
-                                    variant="outline"
+                                <button
                                     onClick={() => onUseInReply(wordData.word)}
-                                    className="w-full text-xs font-bold gap-1.5 border-primary/30 text-primary hover:bg-primary/10"
-                                    style={{ height: '32px' }}
+                                    className="btn btn-secondary w-full h-[40px]"
                                 >
-                                    <BookOpen className="w-3.5 h-3.5" />
-                                    Use in reply
-                                </Button>
+                                    <BookOpen className="w-[16px] h-[16px]" /> Use in Reply
+                                </button>
                             )}
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
         </motion.div>

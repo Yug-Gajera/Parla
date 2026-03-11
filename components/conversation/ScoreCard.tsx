@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from 'react';
+// ============================================================
+// Parlova — Score Card (Redesigned)
+// ============================================================
+
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, XCircle, Share, RefreshCcw, LayoutGrid, MessageSquareQuote, Shuffle, Sparkles } from 'lucide-react';
-import { toast } from 'sonner';
+import { CheckCircle2, XCircle, RefreshCcw, LayoutGrid, MessageSquareQuote, Shuffle, Sparkles, AlertTriangle } from 'lucide-react';
 import { SCENARIOS } from '@/lib/data/scenarios';
 
 interface ScoreCardProps {
@@ -14,7 +14,6 @@ interface ScoreCardProps {
     xpEarned: number;
     scenario: any;
     onClose: () => void;
-    // Situation variation props
     situationName?: string | null;
     situationTwist?: string | null;
     situationId?: string | null;
@@ -39,102 +38,61 @@ export function ScoreCard({
     inputMode,
 }: ScoreCardProps) {
 
-    const getScoreColor = (score: number) => {
-        if (score >= 85) return 'text-violet-500';
-        if (score >= 70) return 'text-emerald-500';
-        if (score >= 50) return 'text-amber-500';
-        return 'text-red-500';
-    };
-
-    const getScoreProgressColor = (score: number) => {
-        if (score >= 85) return '[&>div]:bg-violet-500 bg-violet-500/20';
-        if (score >= 70) return '[&>div]:bg-emerald-500 bg-emerald-500/20';
-        if (score >= 50) return '[&>div]:bg-amber-500 bg-amber-500/20';
-        return '[&>div]:bg-red-500 bg-red-500/20';
-    };
-
-    const handleShare = () => {
-        const text = `I just scored ${scoring.overall_score}% on the '${scenario?.name}' Spanish scenario in Parlova! 🗣️✨`;
-        navigator.clipboard.writeText(text);
-        toast.success("Score copied to clipboard!");
-    };
-
-    // Find the full scenario data for variation dots
     const fullScenario = SCENARIOS.find(s => s.id === scenario?.id);
     const situations = fullScenario?.situations || [];
 
-    // Build completed list including current situation
     const allCompletedIds = new Set([...completedSituationIds]);
     if (situationId) allCompletedIds.add(situationId);
 
-    // Staggered animation variants
     const containerV: any = {
         hidden: { opacity: 0 },
-        show: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.3 } }
+        show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
     };
-
     const itemV: any = {
-        hidden: { opacity: 0, y: 20 },
-        show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+        hidden: { opacity: 0, y: 16 },
+        show: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } }
     };
 
     return (
-        <div className="fixed inset-0 z-[60] bg-background overflow-y-auto w-full pt-safe-top pb-safe-bottom">
-            <div className="max-w-3xl mx-auto w-full px-6 py-12 flex flex-col items-center">
+        <div className="fixed inset-0 z-[60] bg-[#080808] overflow-y-auto w-full pt-[40px] pb-[80px]">
+            <div className="max-w-[700px] mx-auto w-full px-[24px] flex flex-col items-center">
 
                 {/* Header & Overall Score */}
                 <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
+                    initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", bounce: 0.5, duration: 0.8 }}
-                    className="flex flex-col items-center text-center mb-12"
+                    transition={{ ease: "easeOut", duration: 0.6 }}
+                    className="flex flex-col items-center text-center mb-[40px]"
                 >
-                    <span className="text-sm font-semibold tracking-widest text-muted-foreground uppercase mb-2">
+                    <span className="label-upper mb-[8px]">
                         Scenario Complete
                     </span>
-                    <h1 className="text-3xl font-bold mb-8">{scenario?.name}</h1>
+                    <h1 className="font-display text-heading-lg font-semibold text-[#f0ece4] mb-[32px]">
+                        {scenario?.name}
+                    </h1>
 
-                    <div className="relative flex items-center justify-center w-48 h-48 rounded-full border-4 border-border/40 shadow-2xl bg-card">
-                        <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="46" fill="transparent" stroke="currentColor" strokeWidth="4" className="text-border/20" />
-                            <motion.circle
-                                cx="50" cy="50" r="46" fill="transparent"
-                                stroke="currentColor" strokeWidth="6" strokeLinecap="round"
-                                className={getScoreColor(scoring.overall_score)}
-                                strokeDasharray="289"
-                                initial={{ strokeDashoffset: 289 }}
-                                animate={{ strokeDashoffset: 289 - (289 * scoring.overall_score) / 100 }}
-                                transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
-                            />
-                        </svg>
-                        <div className="flex flex-col items-center justify-center z-10">
-                            <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 1 }}
-                                className={`text-6xl font-black tracking-tighter ${getScoreColor(scoring.overall_score)}`}
-                            >
-                                {scoring.overall_score}
-                            </motion.span>
-                            <span className="text-sm font-medium text-muted-foreground mt-1">OVERALL</span>
-                        </div>
+                    <div className="score-card flex flex-col items-center justify-center p-[40px] min-w-[280px]">
+                        <span className="score-main mb-[4px]">
+                            {scoring.overall_score}
+                        </span>
+                        <span className="score-label m-0">
+                            Overall Score
+                        </span>
                     </div>
                 </motion.div>
 
                 {/* Metrics Breakdown */}
-                <motion.div variants={containerV} initial="hidden" animate="show" className="w-full flex flex-col gap-10">
+                <motion.div variants={containerV} initial="hidden" animate="show" className="w-full flex flex-col gap-[32px]">
 
-                    {/* Situation Reveal Card */}
+                    {/* Situation Reveal */}
                     {situationName && (
                         <motion.div variants={itemV}>
-                            <div className="bg-primary/5 border border-primary/20 rounded-3xl p-6 sm:p-8 text-center">
-                                <span className="text-sm font-semibold tracking-widest text-muted-foreground uppercase block mb-3">
-                                    You just completed
-                                </span>
-                                <h2 className="text-2xl font-bold text-foreground mb-3">{situationName}</h2>
+                            <div className="parlova-card parlova-card-accent text-center flex flex-col items-center p-[32px]">
+                                <span className="label-upper mb-[12px]">You just completed</span>
+                                <h2 className="text-[20px] font-semibold text-[#f0ece4] mb-[12px]">{situationName}</h2>
                                 {situationTwist && (
-                                    <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold border border-primary/20">
-                                        <Sparkles className="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" />
+                                    <span className="badge-gold">
+                                        <Sparkles className="w-[12px] h-[12px] mr-[4px]" />
                                         {situationTwist}
                                     </span>
                                 )}
@@ -142,102 +100,43 @@ export function ScoreCard({
                         </motion.div>
                     )}
 
-                    {/* Variation Progress */}
-                    {situations.length > 0 && (
-                        <motion.div variants={itemV}>
-                            <h3 className="text-lg font-bold mb-4 text-center">
-                                {scenario?.name} Variations
-                            </h3>
-                            <div className="flex justify-center gap-3 flex-wrap">
-                                {situations.map((sit) => {
-                                    const isCompleted = allCompletedIds.has(sit.id);
-                                    const isCurrent = sit.id === situationId;
-                                    const bestScore = situationBestScores[sit.id] ?? (isCurrent ? scoring.overall_score : null);
-
-                                    return (
-                                        <div key={sit.id} className="flex flex-col items-center gap-1.5">
-                                            <div
-                                                className={`w-4 h-4 rounded-full transition-all ${isCurrent
-                                                    ? 'bg-primary ring-2 ring-primary/30 ring-offset-2 ring-offset-background'
-                                                    : isCompleted
-                                                        ? 'bg-primary/60'
-                                                        : 'bg-border/40'
-                                                    }`}
-                                            />
-                                            {isCompleted && bestScore !== null && (
-                                                <span className="text-[10px] font-bold text-muted-foreground">
-                                                    {bestScore}%
-                                                </span>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                            <p className="text-xs text-muted-foreground text-center mt-3">
-                                {allCompletedIds.size} of {situations.length} variations discovered
-                            </p>
-                        </motion.div>
-                    )}
-
                     {/* Progress Bars */}
-                    <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 bg-card border border-border/50 p-6 rounded-3xl">
-                        <motion.div variants={itemV} className="flex flex-col gap-2">
-                            <div className="flex justify-between items-end">
-                                <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Grammar</span>
-                                <span className="font-bold">{scoring.grammar_score}</span>
-                            </div>
-                            <Progress value={scoring.grammar_score} className={`h-2 ${getScoreProgressColor(scoring.grammar_score)}`} />
-                        </motion.div>
-
-                        <motion.div variants={itemV} className="flex flex-col gap-2">
-                            <div className="flex justify-between items-end">
-                                <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Vocabulary</span>
-                                <span className="font-bold">{scoring.vocabulary_score}</span>
-                            </div>
-                            <Progress value={scoring.vocabulary_score} className={`h-2 ${getScoreProgressColor(scoring.vocabulary_score)}`} />
-                        </motion.div>
-
-                        <motion.div variants={itemV} className="flex flex-col gap-2">
-                            <div className="flex justify-between items-end">
-                                <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Naturalness</span>
-                                <span className="font-bold">{scoring.naturalness_score}</span>
-                            </div>
-                            <Progress value={scoring.naturalness_score} className={`h-2 ${getScoreProgressColor(scoring.naturalness_score)}`} />
-                        </motion.div>
-
-                        <motion.div variants={itemV} className="flex flex-col gap-2">
-                            <div className="flex justify-between items-end">
-                                <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Goal Completed</span>
-                                {scoring.goal_completed ? (
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                                ) : (
-                                    <XCircle className="w-5 h-5 text-red-500" />
-                                )}
-                            </div>
-                            <div className={`h-2 rounded-full w-full ${scoring.goal_completed ? 'bg-emerald-500' : 'bg-red-500/20'}`} />
-                        </motion.div>
+                    <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-[16px] parlova-card p-[24px]">
+                        {[
+                            { label: 'Grammar', score: scoring.grammar_score },
+                            { label: 'Vocabulary', score: scoring.vocabulary_score },
+                            { label: 'Naturalness', score: scoring.naturalness_score },
+                        ].map((metric, i) => (
+                            <motion.div variants={itemV} key={i} className="flex flex-col gap-[8px]">
+                                <div className="flex justify-between items-end">
+                                    <span className="label-upper">{metric.label}</span>
+                                    <span className="font-mono-num font-medium text-[15px]">{metric.score}</span>
+                                </div>
+                                <div className="progress-track">
+                                    <div className="progress-fill" style={{ width: `${metric.score}%` }} />
+                                </div>
+                            </motion.div>
+                        ))}
 
                         {/* Pronunciation */}
-                        <motion.div variants={itemV} className="flex flex-col gap-2">
+                        <motion.div variants={itemV} className="flex flex-col gap-[8px]">
                             <div className="flex justify-between items-end">
-                                <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Pronunciation</span>
+                                <span className="label-upper">Pronunciation</span>
                                 {inputMode === 'voice' && scoring.pronunciation_score != null ? (
-                                    <span className="font-bold">{scoring.pronunciation_score}</span>
+                                    <span className="font-mono-num font-medium text-[15px]">{scoring.pronunciation_score}</span>
                                 ) : (
-                                    <span className="text-xs text-muted-foreground">N/A</span>
+                                    <span className="font-mono-num font-medium text-[13px] text-[#5a5652]">N/A</span>
                                 )}
                             </div>
                             {inputMode === 'voice' && scoring.pronunciation_score != null ? (
                                 <>
-                                    <Progress value={scoring.pronunciation_score} className={`h-2 ${getScoreProgressColor(scoring.pronunciation_score)}`} />
-                                    {scoring.pronunciation_feedback && (
-                                        <p className="text-xs text-muted-foreground mt-1">{scoring.pronunciation_feedback}</p>
-                                    )}
+                                    <div className="progress-track">
+                                        <div className="progress-fill" style={{ width: `${scoring.pronunciation_score}%` }} />
+                                    </div>
                                     {scoring.clarity_issues && scoring.clarity_issues.length > 0 && (
-                                        <div className="flex flex-wrap gap-1 mt-1">
-                                            <span className="text-[10px] text-amber-500 font-medium mr-1">Practice:</span>
+                                        <div className="flex flex-wrap gap-[4px] mt-[4px]">
                                             {scoring.clarity_issues.map((word: string, i: number) => (
-                                                <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                                <span key={i} className="text-[10px] px-[6px] py-[2px] rounded-md bg-[rgba(251,146,60,0.1)] text-[#fb923c] border border-[rgba(251,146,60,0.2)]">
                                                     {word}
                                                 </span>
                                             ))}
@@ -245,119 +144,99 @@ export function ScoreCard({
                                     )}
                                 </>
                             ) : (
-                                <div className="h-2 rounded-full w-full bg-muted/30" />
+                                <div className="progress-track opacity-50"><div className="progress-fill w-0" /></div>
+                            )}
+                        </motion.div>
+
+                        <motion.div variants={itemV} className="sm:col-span-2 pt-[16px] mt-[8px] border-t border-[#1e1e1e] flex items-center justify-between">
+                            <span className="text-[15px] font-medium text-[#f0ece4]">Goal Completed</span>
+                            {scoring.goal_completed ? (
+                                <Badge label="Yes" type="success" icon={CheckCircle2} />
+                            ) : (
+                                <Badge label="No" type="error" icon={XCircle} />
                             )}
                         </motion.div>
                     </div>
 
-                    {/* AI Feedback Summary */}
+                    {/* AI Feedback */}
                     <motion.div variants={itemV}>
-                        <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                            <MessageSquareQuote className="w-5 h-5 text-primary" />
+                        <h3 className="text-[18px] font-semibold mb-[16px] flex items-center gap-[8px]">
+                            <MessageSquareQuote size={20} className="text-[#c9a84c]" />
                             Coach Feedback
                         </h3>
-                        <div className="bg-primary/5 border border-primary/20 rounded-3xl p-6 sm:p-8">
-                            <p className="text-lg leading-relaxed text-foreground mb-4">
+                        <div className="parlova-card parlova-card-accent p-[32px]">
+                            <p className="text-[16px] leading-relaxed text-[#f0ece4] mb-[24px]">
                                 {scoring.feedback?.summary}
                             </p>
-                            <div className="bg-primary text-primary-foreground p-4 rounded-2xl mb-4 font-medium italic">
-                                &quot;{scoring.feedback?.encouragement}&quot;
+                            <div className="bg-[rgba(201,168,76,0.1)] border border-[rgba(201,168,76,0.2)] p-[16px] rounded-[10px] mb-[24px] font-medium italic text-[#e4c76b] text-[15px]">
+                                &ldquo;{scoring.feedback?.encouragement}&rdquo;
                             </div>
-                            <div className="flex items-start gap-3 mt-6 pt-6 border-t border-primary/10">
-                                <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                                    <span className="text-amber-500 font-bold">!</span>
+                            <div className="flex items-start gap-[12px] pt-[24px] border-t border-[rgba(201,168,76,0.15)]">
+                                <div className="w-[32px] h-[32px] rounded-pill bg-[rgba(251,146,60,0.15)] text-[#fb923c] flex items-center justify-center shrink-0 border border-[rgba(251,146,60,0.2)]">
+                                    <AlertTriangle size={14} />
                                 </div>
-                                <div>
-                                    <span className="block text-sm font-bold text-amber-500 uppercase tracking-widest mb-1">Next Focus</span>
-                                    <p className="text-foreground">{scoring.feedback?.next_focus}</p>
+                                <div className="pt-[4px]">
+                                    <span className="label-upper mb-[4px] block text-[#fb923c]">Next Focus</span>
+                                    <p className="text-[14px] leading-relaxed text-[#f0ece4]">{scoring.feedback?.next_focus}</p>
                                 </div>
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* Grammar Errors */}
+                    {/* Grammar Corrections */}
                     {scoring.feedback?.grammar_errors && scoring.feedback.grammar_errors.length > 0 && (
                         <motion.div variants={itemV}>
-                            <h3 className="text-xl font-bold mb-4">Grammar Corrections</h3>
-                            <div className="flex flex-col gap-3">
+                            <h3 className="text-[18px] font-semibold mb-[16px]">Grammar Corrections</h3>
+                            <div className="flex flex-col gap-[12px]">
                                 {scoring.feedback.grammar_errors.map((err: any, i: number) => (
-                                    <Card key={i} className="p-5 border-destructive/20 bg-destructive/5 flex flex-col gap-2">
-                                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-1">
-                                            <span className="line-through text-destructive decoration-2 opacity-80 font-medium">
+                                    <div key={i} className="parlova-card p-[20px] bg-[rgba(248,113,113,0.03)] border border-[rgba(248,113,113,0.15)]">
+                                        <div className="flex flex-col lg:flex-row lg:items-center gap-[8px] lg:gap-[16px] mb-[8px]">
+                                            <span className="text-[15px] line-through text-[#f87171] opacity-90 font-medium">
                                                 {err.error}
                                             </span>
-                                            <span className="hidden sm:inline text-muted-foreground">→</span>
-                                            <span className="font-semibold text-emerald-500">{err.correction}</span>
+                                            <span className="hidden lg:inline text-[#5a5652]">→</span>
+                                            <span className="text-[15px] font-semibold text-[#4ade80]">{err.correction}</span>
                                         </div>
-                                        <p className="text-sm text-foreground/80">{err.explanation}</p>
-                                    </Card>
+                                        <p className="text-[14px] text-[#9a9590] leading-relaxed">{err.explanation}</p>
+                                    </div>
                                 ))}
                             </div>
                         </motion.div>
                     )}
 
-                    {/* Vocabulary Highlights */}
-                    <motion.div variants={itemV} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {scoring.feedback?.vocabulary_highlights && scoring.feedback.vocabulary_highlights.length > 0 && (
-                            <div className="flex flex-col bg-card border border-border p-6 rounded-3xl">
-                                <h4 className="text-sm font-bold uppercase tracking-wider text-emerald-500 mb-4">Great Vocabulary</h4>
-                                <div className="flex flex-wrap gap-2">
-                                    {scoring.feedback.vocabulary_highlights.map((word: string, i: number) => (
-                                        <span key={i} className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 text-sm font-medium border border-emerald-500/20">
-                                            {word}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {scoring.feedback?.vocabulary_suggestions && scoring.feedback.vocabulary_suggestions.length > 0 && (
-                            <div className="flex flex-col bg-card border border-border p-6 rounded-3xl">
-                                <h4 className="text-sm font-bold uppercase tracking-wider text-amber-500 mb-4">Try Using Next Time</h4>
-                                <div className="flex flex-wrap gap-2">
-                                    {scoring.feedback.vocabulary_suggestions.map((word: string, i: number) => (
-                                        <span key={i} className="px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-500 text-sm font-medium border border-amber-500/20">
-                                            {word}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </motion.div>
-
                     {/* Action Buttons */}
-                    <motion.div variants={itemV} className="flex flex-col sm:flex-row gap-4 mt-8 w-full justify-center pb-20">
+                    <motion.div variants={itemV} className="flex flex-col sm:flex-row gap-[12px] mt-[32px] w-full justify-center">
                         {onReplay && (
-                            <Button
-                                variant="outline"
-                                size="lg"
-                                className="h-14 px-8 rounded-full border-2 border-primary/20 hover:bg-primary/5 text-primary"
-                                onClick={onReplay}
-                            >
-                                <RefreshCcw className="w-5 h-5 mr-2" /> Replay This Variation
-                            </Button>
+                            <button className="btn btn-secondary btn-lg" onClick={onReplay}>
+                                <RefreshCcw size={18} /> Replay
+                            </button>
                         )}
                         {onTryAnother && (
-                            <Button
-                                variant="secondary"
-                                size="lg"
-                                className="h-14 px-8 rounded-full"
-                                onClick={onTryAnother}
-                            >
-                                <Shuffle className="w-5 h-5 mr-2" /> Try Another Variation
-                            </Button>
+                            <button className="btn btn-secondary btn-lg" onClick={onTryAnother}>
+                                <Shuffle size={18} /> Try Another Version
+                            </button>
                         )}
-                        <Button
-                            size="lg"
-                            className="h-14 px-8 rounded-full bg-primary text-primary-foreground font-bold"
-                            onClick={onClose}
-                        >
-                            <LayoutGrid className="w-5 h-5 mr-2" /> New Scenario
-                        </Button>
+                        <button className="btn btn-primary btn-lg" onClick={onClose}>
+                            <LayoutGrid size={18} /> New Scenario
+                        </button>
                     </motion.div>
 
                 </motion.div>
             </div>
+        </div>
+    );
+}
+
+// Internal reusable badge
+function Badge({ label, type, icon: Icon }: any) {
+    const classMap: any = {
+        success: 'bg-[rgba(74,222,128,0.1)] text-[#4ade80]',
+        error: 'bg-[rgba(248,113,113,0.1)] text-[#f87171]',
+    };
+    return (
+        <div className={`flex items-center gap-[6px] px-[12px] py-[6px] rounded-md text-[13px] font-medium ${classMap[type]}`}>
+            {Icon && <Icon size={16} />}
+            {label}
         </div>
     );
 }

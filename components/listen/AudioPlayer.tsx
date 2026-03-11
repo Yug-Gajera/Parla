@@ -1,7 +1,7 @@
 "use client";
 
 // ============================================================
-// Parlai — Audio Player (Podcast episode with transcript)
+// Parlova — Audio Player (Redesigned)
 // ============================================================
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
@@ -101,119 +101,137 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
 
     if (isLoading) {
         return (
-            <div className="fixed inset-0 z-50 bg-background flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <div className="fixed inset-0 z-50 bg-[#080808] flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-[#c9a84c]" />
             </div>
         );
     }
 
     if (!episode) {
         return (
-            <div className="fixed inset-0 z-50 bg-background flex flex-col items-center justify-center gap-4">
-                <p className="text-muted-foreground">Episode not found.</p>
-                <Button variant="ghost" onClick={onClose}>Close</Button>
+            <div className="fixed inset-0 z-50 bg-[#080808] flex flex-col items-center justify-center gap-6 font-sans">
+                <p className="text-[#9a9590] uppercase tracking-widest text-xs">Audio segment unavailable</p>
+                <Button variant="outline" onClick={onClose} className="rounded-full bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] px-8 text-xs uppercase tracking-widest">Return to Library</Button>
             </div>
         );
     }
 
     return (
         <motion.div
-            className="fixed inset-0 z-50 bg-background flex flex-col"
+            className="fixed inset-0 z-50 bg-[#080808] flex flex-col font-sans"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
         >
             {/* Hidden audio element */}
             <audio ref={audioRef} src={episode.audio_url} preload="metadata" />
 
             {/* Top bar */}
-            <div className="flex items-center justify-between px-4 py-2 border-b border-border shrink-0">
-                <div className="truncate flex-1 mr-3">
-                    <p className="text-[10px] text-muted-foreground">{show?.name}</p>
-                    <h2 className="font-bold text-sm truncate">{episode.title}</h2>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#1e1e1e] bg-[#141414] shrink-0">
+                <div className="truncate flex-1 mr-4">
+                    <p className="text-[10px] text-[#5a5652] uppercase tracking-[0.2em] mb-1">{show?.name}</p>
+                    <h2 className="font-serif text-lg text-[#f0ece4] truncate">{episode.title}</h2>
                 </div>
-                <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
+                <Button variant="ghost" size="icon" onClick={onClose} className="hover:bg-[#1e1e1e] text-[#9a9590] rounded-full">
+                    <X className="w-5 h-5" />
+                </Button>
             </div>
 
             <AnimatePresence mode="wait">
                 {phase === 'listening' && (
                     <motion.div key="listening" className="flex flex-col flex-1 overflow-hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                         {/* Player section */}
-                        <div className="p-6 border-b border-border shrink-0">
+                        <div className="p-8 border-b border-[#1e1e1e] bg-[#0f0f0f] shrink-0 flex flex-col items-center">
                             {/* Artwork */}
-                            <div className="mx-auto w-32 h-32 sm:w-40 sm:h-40 rounded-2xl flex items-center justify-center mb-5 relative overflow-hidden"
-                                style={{ backgroundColor: show?.cover_color || '#444' }}>
+                            <div className="w-32 h-32 sm:w-48 sm:h-48 rounded-2xl flex items-center justify-center mb-8 relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10"
+                                style={{ backgroundColor: show?.cover_color || '#141414' }}>
                                 <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-white/30 to-transparent" />
-                                <Headphones className="w-12 h-12 text-white/80 relative z-10" />
+                                <Headphones className="w-12 h-12 text-white/50 relative z-10" />
                             </div>
 
-                            {/* Seek bar */}
-                            <div className="flex items-center gap-2 mb-4">
-                                <span className="text-[10px] text-muted-foreground font-mono w-10">{formatTime(currentTime)}</span>
-                                <input
-                                    type="range" min={0} max={duration || 1} value={currentTime}
-                                    onChange={handleSeek}
-                                    className="flex-1 h-1 accent-primary bg-muted rounded-full appearance-none cursor-pointer"
-                                />
-                                <span className="text-[10px] text-muted-foreground font-mono w-10 text-right">{formatTime(duration)}</span>
-                            </div>
-
-                            {/* Controls */}
-                            <div className="flex items-center justify-center gap-6">
-                                <button onClick={handleSkipBack} className="p-2 rounded-full hover:bg-muted transition-colors">
-                                    <SkipBack className="w-5 h-5" />
-                                </button>
-                                <button
-                                    onClick={isPlaying ? pause : play}
-                                    className="w-14 h-14 rounded-full bg-primary flex items-center justify-center hover:bg-primary/90 transition-colors"
-                                >
-                                    {isPlaying ? <Pause className="w-6 h-6 text-white" fill="white" /> : <Play className="w-6 h-6 text-white ml-0.5" fill="white" />}
-                                </button>
-                                <button onClick={handleSkipForward} className="p-2 rounded-full hover:bg-muted transition-colors">
-                                    <SkipForward className="w-5 h-5" />
-                                </button>
-                            </div>
-
-                            {/* Speed + quiz button */}
-                            <div className="flex items-center justify-between mt-4">
-                                <div className="flex items-center gap-1">
-                                    <Gauge className="w-3.5 h-3.5 text-muted-foreground" />
-                                    {SPEEDS.map(s => (
-                                        <button
-                                            key={s}
-                                            onClick={() => handleSpeedChange(s)}
-                                            className={`px-2 py-0.5 rounded text-xs font-mono ${activeSpeed === s ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted'
-                                                }`}
-                                        >{s}x</button>
-                                    ))}
+                            <div className="w-full max-w-xl mx-auto">
+                                {/* Seek bar */}
+                                <div className="flex items-center gap-4 mb-8">
+                                    <span className="text-[10px] text-[#9a9590] font-mono w-10 text-right">{formatTime(currentTime)}</span>
+                                    <div className="flex-1 relative group h-2 cursor-pointer flex items-center">
+                                        <input
+                                            type="range" min={0} max={duration || 1} value={currentTime}
+                                            onChange={handleSeek}
+                                            className="absolute inset-0 w-full h-full opacity-0 z-20 cursor-pointer"
+                                        />
+                                        <div className="w-full h-1 bg-[#1e1e1e] rounded-full overflow-hidden absolute">
+                                            <div 
+                                                className="h-full bg-[#c9a84c] rounded-full" 
+                                                style={{ width: `${(currentTime / (duration || 1)) * 100}%` }} 
+                                            />
+                                        </div>
+                                    </div>
+                                    <span className="text-[10px] text-[#5a5652] font-mono w-10">{formatTime(duration)}</span>
                                 </div>
-                                {episode.comprehension_questions?.length > 0 && (
-                                    <Button size="sm" variant="outline" onClick={() => setPhase('comprehension')} className="text-xs gap-1">
-                                        Quiz <ChevronRight className="w-3 h-3" />
-                                    </Button>
-                                )}
+
+                                {/* Controls */}
+                                <div className="flex items-center justify-center gap-8">
+                                    <button onClick={handleSkipBack} className="p-3 rounded-full hover:bg-[#141414] text-[#9a9590] transition-colors border border-transparent hover:border-[#1e1e1e]">
+                                        <SkipBack className="w-5 h-5" />
+                                    </button>
+                                    <button
+                                        onClick={isPlaying ? pause : play}
+                                        className="w-16 h-16 rounded-full bg-[#f0ece4] flex items-center justify-center hover:bg-[#c9a84c] hover:scale-105 transition-all shadow-lg"
+                                    >
+                                        {isPlaying ? <Pause className="w-6 h-6 text-[#080808]" fill="currentColor" /> : <Play className="w-6 h-6 text-[#080808] ml-1" fill="currentColor" />}
+                                    </button>
+                                    <button onClick={handleSkipForward} className="p-3 rounded-full hover:bg-[#141414] text-[#9a9590] transition-colors border border-transparent hover:border-[#1e1e1e]">
+                                        <SkipForward className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                {/* Speed + quiz button */}
+                                <div className="flex items-center justify-between mt-8">
+                                    <div className="flex items-center gap-3">
+                                        <Gauge className="w-4 h-4 text-[#5a5652]" />
+                                        <div className="flex gap-1">
+                                            {SPEEDS.map(s => (
+                                                <button
+                                                    key={s}
+                                                    onClick={() => handleSpeedChange(s)}
+                                                    className={`px-3 py-1 rounded-full text-[10px] font-mono tracking-widest uppercase transition-colors ${
+                                                        activeSpeed === s ? 'bg-[#141414] text-[#c9a84c] border border-[#2a2a2a]' : 'text-[#5a5652] border border-transparent hover:text-[#9a9590]'
+                                                    }`}
+                                                >{s}x</button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    {episode.comprehension_questions?.length > 0 && (
+                                        <Button size="sm" variant="outline" onClick={() => setPhase('comprehension')} className="text-[10px] uppercase tracking-widest gap-2 bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] rounded-full px-5 h-8">
+                                            Initiate Quiz <ChevronRight className="w-3 h-3 text-[#c9a84c]" />
+                                        </Button>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
                         {/* Transcript / description */}
-                        <div ref={transcriptRef} className="flex-1 overflow-y-auto px-4 py-3">
+                        <div ref={transcriptRef} className="flex-1 overflow-y-auto px-6 py-8 custom-scrollbar max-w-4xl mx-auto w-full">
                             {transcript.length > 0 ? (
-                                <div className="space-y-1">
+                                <div className="space-y-2">
                                     {transcript.map((seg, i) => (
                                         <div
                                             key={i}
-                                            className={`flex gap-3 px-2 py-1.5 rounded-lg cursor-pointer transition-all ${i === currentTranscriptIndex
-                                                ? 'bg-primary/5 border-l-2 border-primary'
-                                                : i < currentTranscriptIndex ? 'opacity-50' : 'hover:bg-muted/50'
+                                            className={`flex gap-5 px-4 py-3 rounded-xl cursor-pointer transition-all ${
+                                                i === currentTranscriptIndex
+                                                    ? 'bg-[#141414] border-l-[3px] border-l-[#c9a84c] shadow-lg'
+                                                    : i < currentTranscriptIndex 
+                                                        ? 'opacity-40 hover:opacity-70' 
+                                                        : 'text-[#9a9590] hover:bg-[#0f0f0f] border-l-[3px] border-transparent'
                                                 }`}
                                             onClick={() => seek(seg.start_time)}
                                         >
-                                            <span className="text-[10px] text-muted-foreground font-mono w-10 shrink-0 pt-0.5">
+                                            <span className={`text-xs font-mono w-12 shrink-0 pt-1 tracking-wider ${i === currentTranscriptIndex ? 'text-[#c9a84c]' : 'text-[#5a5652]'}`}>
                                                 {Math.floor(seg.start_time / 60)}:{String(Math.floor(seg.start_time % 60)).padStart(2, '0')}
                                             </span>
-                                            <p className="text-sm leading-relaxed">
+                                            <p className={`text-lg sm:text-xl font-serif leading-relaxed ${i === currentTranscriptIndex ? 'text-[#f0ece4]' : 'text-[#9a9590]'}`}>
                                                 {seg.text.split(/\s+/).map((w, j) => (
                                                     <span
                                                         key={j}
-                                                        className="cursor-pointer hover:text-primary hover:underline transition-colors"
+                                                        className="cursor-pointer hover:text-[#c9a84c] transition-colors"
                                                         onClick={e => { e.stopPropagation(); handleWordTap(w, seg.text); }}
                                                     >{w} </span>
                                                 ))}
@@ -222,23 +240,22 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                     ))}
                                 </div>
                             ) : transcriptText ? (
-                                <div>
-                                    <p className="text-xs text-muted-foreground mb-3 italic">Full interactive transcript not available for this episode.</p>
-                                    <div className="text-sm leading-relaxed whitespace-pre-wrap">
+                                <div className="bg-[#141414] p-8 rounded-2xl border border-[#1e1e1e]">
+                                    <p className="text-[10px] text-[#c9a84c] mb-6 uppercase tracking-[0.2em] font-mono">Full interactive protocol offline. Standard display active.</p>
+                                    <div className="text-lg font-serif text-[#f0ece4] leading-relaxed whitespace-pre-wrap">
                                         {transcriptText.split(/\s+/).map((w, i) => (
                                             <span
                                                 key={i}
-                                                className="cursor-pointer hover:text-primary hover:underline transition-colors"
+                                                className="cursor-pointer hover:text-[#c9a84c] transition-colors"
                                                 onClick={() => handleWordTap(w, transcriptText.slice(Math.max(0, transcriptText.indexOf(w) - 30), transcriptText.indexOf(w) + 50))}
                                             >{w} </span>
                                         ))}
                                     </div>
                                 </div>
                             ) : (
-                                <div className="text-center py-10">
-                                    <Volume2 className="w-8 h-8 mx-auto text-muted-foreground/50 mb-3" />
-                                    <p className="text-sm text-muted-foreground">No transcript available for this episode.</p>
-                                    <p className="text-xs text-muted-foreground mt-1">Listen and enjoy the audio!</p>
+                                <div className="text-center py-20">
+                                    <Volume2 className="w-10 h-10 mx-auto text-[#2a2a2a] mb-4" />
+                                    <p className="text-[#9a9590] font-serif text-lg">No transcript data available.</p>
                                 </div>
                             )}
                         </div>
@@ -246,48 +263,70 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                 )}
 
                 {phase === 'comprehension' && episode.comprehension_questions && (
-                    <motion.div key="quiz" className="flex-1 overflow-y-auto p-4 space-y-5" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}>
-                        <h3 className="font-bold text-lg">Comprehension Check</h3>
+                    <motion.div key="quiz" className="flex-1 overflow-y-auto p-6 md:p-12 space-y-8 max-w-3xl mx-auto w-full" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}>
+                        <div className="text-center mb-10">
+                            <h3 className="font-serif text-3xl text-[#f0ece4] mb-2">Comprehension Check</h3>
+                            <p className="text-xs font-mono uppercase tracking-widest text-[#5a5652]">Test your understanding</p>
+                        </div>
+                        
                         {episode.comprehension_questions.map((q: any, qi: number) => (
-                            <Card key={qi} className="p-4">
-                                <p className="font-medium text-sm mb-3">{qi + 1}. {q.question}</p>
-                                <div className="space-y-2">
+                            <Card key={qi} className="p-8 bg-[#141414] border-[#1e1e1e] rounded-2xl">
+                                <p className="font-serif text-xl text-[#f0ece4] mb-6"><span className="text-[#c9a84c] mr-2 text-sm font-mono">{qi + 1}.</span> {q.question}</p>
+                                <div className="space-y-3">
                                     {q.options.map((opt: string, oi: number) => (
                                         <button
                                             key={oi}
                                             onClick={() => handleAnswer(qi, oi)}
-                                            className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all border ${answers[qi] === oi
-                                                ? 'border-primary bg-primary/10 text-primary'
-                                                : 'border-border hover:border-primary/30'
+                                            className={`w-full text-left px-5 py-4 rounded-xl text-sm transition-all border ${
+                                                answers[qi] === oi
+                                                    ? 'border-[#c9a84c] bg-[#c9a84c]/10 text-[#f0ece4] shadow-[0_0_15px_rgba(201,168,76,0.1)]'
+                                                    : 'border-[#1e1e1e] bg-[#0f0f0f] text-[#9a9590] hover:border-[#2a2a2a] hover:bg-[#1e1e1e]'
                                                 }`}
                                         >{opt}</button>
                                     ))}
                                 </div>
                             </Card>
                         ))}
-                        <Button
-                            onClick={handleSubmit}
-                            disabled={Object.keys(answers).length < episode.comprehension_questions.length}
-                            className="w-full"
-                        >Submit Answers</Button>
+                        <div className="pt-6">
+                            <Button
+                                onClick={handleSubmit}
+                                disabled={Object.keys(answers).length < episode.comprehension_questions.length}
+                                className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] transition-colors disabled:opacity-50 disabled:bg-[#141414] disabled:text-[#5a5652]"
+                            >Submit Assessment</Button>
+                        </div>
                     </motion.div>
                 )}
 
                 {phase === 'results' && (
                     <motion.div key="results" className="flex-1 flex items-center justify-center p-6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-                        <Card className="p-6 max-w-sm w-full text-center">
-                            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                                <Trophy className="w-6 h-6 text-primary" />
+                        <Card className="p-10 max-w-md w-full text-center bg-[#141414] border-[#1e1e1e] rounded-3xl shadow-2xl">
+                            <div className="w-20 h-20 rounded-full bg-[#080808] border border-[#2a2a2a] flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(201,168,76,0.15)]">
+                                <Trophy className="w-8 h-8 text-[#c9a84c]" />
                             </div>
-                            <h3 className="text-xl font-bold mb-2">{comprehensionResult?.message || 'Episode Complete!'}</h3>
+                            <h3 className="text-3xl font-serif text-[#f0ece4] mb-4">{comprehensionResult?.message || 'Assessment Complete'}</h3>
+                            
                             {comprehensionResult?.score !== undefined && (
-                                <p className="text-3xl font-black text-primary mb-1">{comprehensionResult.score}%</p>
+                                <div className="my-8">
+                                    <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-2">Accuracy Rate</p>
+                                    <p className="text-6xl font-mono text-[#f0ece4]">{comprehensionResult.score}<span className="text-2xl text-[#c9a84c]">%</span></p>
+                                </div>
                             )}
-                            <p className="text-sm text-muted-foreground mb-4">
-                                {comprehensionResult?.correct}/{comprehensionResult?.total} correct
-                            </p>
-                            <p className="text-lg font-bold text-amber-400 mb-6">+{comprehensionResult?.xp_earned || 40} XP</p>
-                            <Button onClick={onClose} className="w-full">Done</Button>
+                            
+                            <div className="flex justify-center gap-12 mb-10 border-t border-b border-[#1e1e1e] py-6">
+                                <div>
+                                    <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-1">Score</p>
+                                    <p className="text-xl font-mono text-[#f0ece4]">{comprehensionResult?.correct} <span className="text-sm text-[#5a5652]">/ {comprehensionResult?.total}</span></p>
+                                </div>
+                                <div>
+                                    <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-1">XP Earned</p>
+                                    <p className="text-xl font-mono text-[#c9a84c]">+{comprehensionResult?.xp_earned || 40}</p>
+                                </div>
+                            </div>
+                            
+                            <Button 
+                                onClick={onClose} 
+                                className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#f0ece4] text-[#080808] hover:bg-[#c9a84c] transition-colors"
+                            >Return to Library</Button>
                         </Card>
                     </motion.div>
                 )}

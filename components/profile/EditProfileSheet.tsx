@@ -1,5 +1,9 @@
 "use client";
 
+// ============================================================
+// Parlova — Edit Profile Sheet (Redesigned)
+// ============================================================
+
 import React, { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -98,13 +102,13 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
 
     return (
         <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <SheetContent side="bottom" className="sm:max-w-md mx-auto rounded-t-3xl bg-card border-border px-6 py-8">
-                <SheetHeader className="mb-8">
-                    <SheetTitle className="text-2xl font-black text-foreground">Edit Profile</SheetTitle>
-                    <SheetDescription>Update your personal info and display picture.</SheetDescription>
+            <SheetContent side="bottom" className="sm:max-w-md mx-auto rounded-t-3xl bg-[#141414] border-[#1e1e1e] border-b-0 px-8 py-10 font-sans shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+                <SheetHeader className="mb-10">
+                    <SheetTitle className="text-3xl font-serif text-[#f0ece4]">Edit Profile</SheetTitle>
+                    <SheetDescription className="text-[#9a9590] text-sm">Modify your identification and linguistic baseline parameters.</SheetDescription>
                 </SheetHeader>
 
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-8">
                     {/* Avatar Upload */}
                     <div className="flex flex-col items-center gap-4">
                         <div className="relative group cursor-pointer">
@@ -116,7 +120,7 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
                                 onChange={handleFileChange}
                             />
                             <Label htmlFor="avatar-upload" className="cursor-pointer block">
-                                <div className={`w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 bg-secondary flex items-center justify-center relative transition-all group-hover:border-primary`}>
+                                <div className={`w-28 h-28 rounded-full overflow-hidden border-2 border-[#1e1e1e] bg-[#0f0f0f] flex items-center justify-center relative transition-all group-hover:border-[#c9a84c]`}>
                                     {previewUrl ? (
                                         <Image
                                             src={previewUrl}
@@ -125,39 +129,45 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
                                             className="object-cover"
                                         />
                                     ) : (
-                                        <span className="text-2xl font-bold text-secondary-foreground">
-                                            {(name || 'U').substring(0, 2).toUpperCase()}
+                                        <span className="text-4xl font-serif text-[#5a5652]">
+                                            {(name || 'U').substring(0, 1).toUpperCase()}
                                         </span>
                                     )}
 
-                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <Camera className="w-6 h-6 text-white" />
+                                    <div className="absolute inset-0 bg-[#080808]/70 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <Camera className="w-6 h-6 text-[#c9a84c]" />
                                     </div>
                                 </div>
                             </Label>
                         </div>
-                        <span className="text-xs text-muted-foreground">Tap to change (Max 2MB)</span>
+                        <span className="text-[10px] uppercase tracking-widest text-[#5a5652] font-mono">Select Avatar (Max 2MB)</span>
                     </div>
 
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Full Name</Label>
+                    <div className="space-y-6">
+                        <div className="space-y-3">
+                            <Label htmlFor="name" className="text-[10px] font-mono uppercase tracking-widest text-[#9a9590]">Nominal Identity</Label>
                             <Input
                                 id="name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="bg-background border-border"
-                                placeholder="Your full name"
+                                className="bg-[#080808] border-[#1e1e1e] text-[#f0ece4] h-12 rounded-lg px-4 focus-visible:ring-1 focus-visible:ring-[#c9a84c] focus-visible:border-[#c9a84c] transition-colors"
+                                placeholder="Enter full name"
                             />
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="native_lang" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Native Language</Label>
+                        <div className="space-y-3">
+                            <Label htmlFor="native_lang" className="text-[10px] font-mono uppercase tracking-widest text-[#9a9590]">Base Language</Label>
                             <select
                                 id="native_lang"
                                 value={nativeLang}
                                 onChange={(e) => setNativeLang(e.target.value)}
-                                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                className="flex h-12 w-full items-center justify-between rounded-lg border border-[#1e1e1e] bg-[#080808] text-[#f0ece4] px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#c9a84c] focus:border-[#c9a84c] transition-colors appearance-none cursor-pointer"
+                                style={{
+                                    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a5652' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'right 1rem center',
+                                    backgroundSize: '1em'
+                                }}
                             >
                                 <option value="en">English (US)</option>
                                 <option value="en-gb">English (UK)</option>
@@ -174,9 +184,13 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
                     </div>
                 </div>
 
-                <SheetFooter className="mt-8">
-                    <Button onClick={handleSave} disabled={isSaving} className="w-full font-bold">
-                        {isSaving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</> : 'Save Changes'}
+                <SheetFooter className="mt-12">
+                    <Button 
+                        onClick={handleSave} 
+                        disabled={isSaving} 
+                        className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] transition-colors"
+                    >
+                        {isSaving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Transmitting...</> : 'Save Profile Specs'}
                     </Button>
                 </SheetFooter>
             </SheetContent>

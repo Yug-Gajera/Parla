@@ -8,6 +8,7 @@ import { Search, Plus, LayoutGrid } from 'lucide-react';
 import { WordDetailSheet } from './WordDetailSheet';
 import { AddWordSheet } from './AddWordSheet';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ReadingFigure, DoodleArrow } from '@/components/illustrations';
 
 interface DeckViewerProps {
     languageId: string | null;
@@ -42,46 +43,45 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
     };
 
     return (
-        <div className="w-full h-full flex flex-col relative bg-transparent">
-
+        <div className="w-full h-full flex flex-col relative bg-transparent font-sans">
             {/* Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                <div className="p-4 rounded-xl bg-card border border-border flex flex-col">
-                    <span className="text-muted-foreground text-xs font-semibold uppercase tracking-wider mb-1">Total Words</span>
-                    <span className="text-2xl font-bold">{stats?.total ?? '-'}</span>
+                <div className="p-5 rounded-2xl bg-[#141414] border border-[#1e1e1e] flex flex-col shadow-inner">
+                    <span className="text-[#5a5652] text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Total Lexicon</span>
+                    <span className="text-3xl font-serif text-[#f0ece4]">{stats?.total ?? '-'}</span>
                 </div>
-                <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 flex flex-col">
-                    <span className="text-primary text-xs font-semibold uppercase tracking-wider mb-1">Due Today</span>
-                    <span className="text-2xl font-bold text-primary">{stats?.dueToday ?? '-'}</span>
+                <div className="p-5 rounded-2xl bg-[#c9a84c]/5 border border-[#c9a84c]/20 flex flex-col shadow-inner">
+                    <span className="text-[#c9a84c] text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Pending Review</span>
+                    <span className="text-3xl font-serif text-[#c9a84c]">{stats?.dueToday ?? '-'}</span>
                 </div>
-                <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex flex-col">
-                    <span className="text-amber-500 text-xs font-semibold uppercase tracking-wider mb-1">Learning</span>
-                    <span className="text-2xl font-bold text-amber-500">{stats?.learning ?? '-'}</span>
+                <div className="p-5 rounded-2xl bg-[#141414] border border-[#1e1e1e] flex flex-col shadow-inner">
+                    <span className="text-[#9a9590] text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Acquiring</span>
+                    <span className="text-3xl font-serif text-[#9a9590]">{stats?.learning ?? '-'}</span>
                 </div>
-                <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col">
-                    <span className="text-emerald-500 text-xs font-semibold uppercase tracking-wider mb-1">Mastered</span>
-                    <span className="text-2xl font-bold text-emerald-500">{stats?.mastered ?? '-'}</span>
+                <div className="p-5 rounded-2xl bg-[#141414] border border-[#1e1e1e] flex flex-col shadow-inner hover:border-[#2a2a2a] transition-colors">
+                    <span className="text-[#f0ece4] text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Mastered</span>
+                    <span className="text-3xl font-serif text-[#f0ece4]">{stats?.mastered ?? '-'}</span>
                 </div>
             </div>
 
             {/* Controls Row */}
-            <div className="flex flex-col sm:flex-row gap-3 w-full mb-6">
+            <div className="flex flex-col sm:flex-row gap-4 w-full mb-6">
                 <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5a5652]" />
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search your deck..."
-                        className="pl-9 h-11 bg-card/50"
+                        placeholder="Search your lexicon..."
+                        className="pl-11 h-12 bg-[#0f0f0f] border-[#2a2a2a] text-[#f0ece4] placeholder:text-[#5a5652] rounded-xl focus-visible:ring-1 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-0 font-sans"
                     />
                 </div>
                 <div className="flex overflow-x-auto hide-scrollbar gap-2 pb-1 sm:pb-0">
                     {filters.map(f => (
                         <Button
                             key={f.id}
-                            variant={filter === f.id ? "secondary" : "ghost"}
+                            variant="ghost"
                             size="sm"
-                            className={`whitespace-nowrap rounded-full h-11 px-5 ${filter === f.id ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
+                            className={`whitespace-nowrap rounded-lg h-12 px-5 text-[11px] font-mono uppercase tracking-widest transition-all ${filter === f.id ? 'bg-[#c9a84c] text-[#080808] font-bold hover:bg-[#b98e72]' : 'bg-[#141414] text-[#9a9590] border border-[#1e1e1e] hover:bg-[#1e1e1e] hover:text-[#f0ece4]'}`}
                             onClick={() => setFilter(f.id as any)}
                         >
                             {f.label}
@@ -92,45 +92,62 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
 
             {/* Deck List */}
             <div
-                className="flex-1 overflow-y-auto pb-32 hide-scrollbar rounded-xl border border-border/50 bg-card/30"
+                className="flex-1 overflow-y-auto pb-32 custom-scrollbar rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f]"
                 onScroll={handleScroll}
             >
                 {words.length === 0 && !isLoading ? (
-                    <div className="flex flex-col items-center justify-center p-12 h-full text-center">
-                        <LayoutGrid className="h-12 w-12 text-muted-foreground/30 mb-4" />
-                        <h3 className="text-xl font-semibold mb-2">Your vocabulary deck is empty</h3>
-                        <p className="text-muted-foreground max-w-sm mb-6">
-                            Words you learn in conversations will appear here. Add your first word to start building your deck.
+                    <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "16px",
+                        padding: "48px 24px",
+                    }}>
+                        <div style={{ display: "none" }} className="md:block">
+                            <ReadingFigure />
+                        </div>
+                        <p style={{
+                            fontFamily: "DM Sans, sans-serif",
+                            fontSize: "15px",
+                            color: "#9a9590",
+                            textAlign: "center",
+                            maxWidth: "240px",
+                            lineHeight: 1.6,
+                        }}>
+                            No words yet. Start reading to build your deck.
                         </p>
+                        <div style={{ display: "none" }} className="md:block">
+                            <DoodleArrow direction="down" />
+                        </div>
                         {!search && (
-                            <Button onClick={() => setIsAddOpen(true)} className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6">
-                                <Plus className="mr-2 h-4 w-4" /> Add your first word
+                            <Button onClick={() => setIsAddOpen(true)} className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-12 px-8 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all">
+                                <Plus className="mr-2 h-4 w-4" /> Index New Word
                             </Button>
                         )}
                     </div>
                 ) : (
-                    <div className="divide-y divide-border/40">
+                    <div className="divide-y divide-[#1e1e1e]">
                         {words.map((word) => (
                             <div
                                 key={word.id}
-                                className="flex items-center justify-between p-4 hover:bg-card/60 cursor-pointer transition-colors"
+                                className="flex items-center justify-between p-5 hover:bg-[#141414] cursor-pointer transition-colors group"
                                 onClick={() => {
                                     setSelectedWord(word);
                                     setIsDetailOpen(true);
                                 }}
                             >
-                                <div className="flex flex-col gap-1 items-start">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-lg font-semibold text-foreground tracking-tight">
+                                <div className="flex flex-col gap-1.5 items-start">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-xl font-serif text-[#f0ece4] group-hover:text-[#c9a84c] transition-colors leading-none tracking-tight">
                                             {word.vocabulary_words.word}
                                         </span>
                                         <StatusBadge status={word.status} />
                                     </div>
-                                    <span className="text-sm text-muted-foreground max-w-[200px] sm:max-w-xs truncate">
+                                    <span className="text-[13px] text-[#9a9590] font-sans max-w-[200px] sm:max-w-sm truncate opacity-80 group-hover:opacity-100 transition-opacity">
                                         {word.vocabulary_words.translation}
                                     </span>
                                 </div>
-                                <div className="text-xs text-muted-foreground font-medium pr-1 text-right">
+                                <div className="text-[10px] font-mono text-[#5a5652] uppercase tracking-widest pr-2 text-right">
                                     {word.next_review_date ? new Date(word.next_review_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : ''}
                                 </div>
                             </div>
@@ -139,12 +156,12 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                 )}
 
                 {isLoading && (
-                    <div className="flex flex-col divide-y divide-border/40">
+                    <div className="flex flex-col divide-y divide-[#1e1e1e]">
                         {[1, 2, 3, 4, 5].map(i => (
-                            <div key={i} className="p-4 flex justify-between items-center">
-                                <div className="flex flex-col gap-2 w-full">
-                                    <Skeleton className="h-5 w-32" />
-                                    <Skeleton className="h-4 w-48" />
+                            <div key={i} className="p-5 flex justify-between items-center">
+                                <div className="flex flex-col gap-3 w-full">
+                                    <Skeleton className="h-6 w-32 bg-[#1e1e1e] rounded" />
+                                    <Skeleton className="h-4 w-48 bg-[#1e1e1e] rounded" />
                                 </div>
                             </div>
                         ))}
@@ -156,10 +173,10 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
             <div className="absolute bottom-6 right-6">
                 <Button
                     size="icon"
-                    className="h-16 w-16 rounded-full bg-primary hover:bg-primary/90 shadow-[0_10px_30px_-10px_rgba(124,58,237,0.7)] z-10"
+                    className="h-14 w-14 rounded-full bg-[#c9a84c] hover:bg-[#b98e72] shadow-[0_0_30px_rgba(201,168,76,0.3)] hover:shadow-[0_0_40px_rgba(201,168,76,0.5)] transition-all z-10 border border-[#c9a84c]/50"
                     onClick={() => setIsAddOpen(true)}
                 >
-                    <Plus className="h-8 w-8 text-primary-foreground" />
+                    <Plus className="h-6 w-6 text-[#080808]" />
                 </Button>
             </div>
 
@@ -185,14 +202,14 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
 // Sub-component for badges
 function StatusBadge({ status }: { status: string }) {
     const statusColors = {
-        'new': 'bg-blue-500 text-white',
-        'learning': 'bg-amber-500 text-white',
-        'familiar': 'bg-emerald-500 text-white',
-        'mastered': 'bg-primary text-primary-foreground',
+        'new': 'bg-[#141414] border-[#2a2a2a] text-[#5a5652]',
+        'learning': 'bg-[#c9a84c]/10 border-[#c9a84c]/20 text-[#c9a84c]',
+        'familiar': 'bg-[#f0ece4]/10 border-[#f0ece4]/20 text-[#f0ece4]',
+        'mastered': 'bg-[#c9a84c] border-[#c9a84c] text-[#080808]',
     };
     const c = statusColors[status as keyof typeof statusColors] || statusColors.new;
     return (
-        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${c}`}>
+        <span className={`px-2 py-[2px] rounded border text-[9px] font-mono font-bold uppercase tracking-[0.1em] ${c}`}>
             {status}
         </span>
     );

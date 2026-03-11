@@ -1,13 +1,13 @@
 'use client';
 
 // ============================================================
-// Parlova — Recent Activity List
+// Parlova — Recent Activity List (Redesigned)
 // ============================================================
 
 import React from 'react';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
-import { Mic, Book, PlayCircle, FileCheck, ArrowRight } from 'lucide-react';
+import { Mic2, Book, PlayCircle, FileCheck, ArrowRight, Activity } from 'lucide-react';
 
 interface Session {
     id: string;
@@ -25,19 +25,19 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
 
     if (!sessions || sessions.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center p-8 bg-card border border-border border-dashed rounded-3xl text-center min-h-[250px]">
-                <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center text-muted-foreground mb-4">
-                    <Mic size={32} />
+            <div className="flex flex-col items-center justify-center p-10 bg-[#0f0f0f] border border-[#1e1e1e] border-dashed rounded-3xl text-center min-h-[250px] font-sans">
+                <div className="w-16 h-16 rounded-full bg-[#141414] border border-[#2a2a2a] flex items-center justify-center mb-6 shadow-inner">
+                    <Activity className="w-6 h-6 text-[#5a5652]" />
                 </div>
-                <h3 className="text-lg font-semibold tracking-tight mb-2">No activity yet</h3>
-                <p className="text-muted-foreground text-sm max-w-[250px] mb-6">
-                    Start your first session to begin earning XP and building your streak.
+                <h3 className="text-xl font-serif text-[#f0ece4] mb-3">No activity recorded</h3>
+                <p className="text-[#9a9590] text-sm max-w-[280px] mb-8 leading-relaxed">
+                    Initiate your first session to begin earning XP and establishing a baseline.
                 </p>
                 <Link
                     href="/practice"
-                    className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+                    className="px-8 py-3.5 rounded-full bg-[#c9a84c] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest hover:bg-[#b98e72] transition-colors shadow-[0_4px_20px_rgba(201,168,76,0.15)]"
                 >
-                    Start Practicing
+                    Deploy Session
                 </Link>
             </div>
         );
@@ -45,68 +45,68 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
 
     const getIconData = (type: string) => {
         switch (type) {
-            case 'conversation': return { Icon: Mic, color: 'text-violet-500', bg: 'bg-violet-500/10' };
-            case 'vocabulary': return { Icon: Book, color: 'text-blue-500', bg: 'bg-blue-500/10' };
-            case 'content': return { Icon: PlayCircle, color: 'text-emerald-500', bg: 'bg-emerald-500/10' };
-            case 'test': return { Icon: FileCheck, color: 'text-amber-500', bg: 'bg-amber-500/10' };
-            default: return { Icon: Book, color: 'text-foreground', bg: 'bg-secondary' };
+            case 'conversation': return { Icon: Mic2, color: 'text-[#c9a84c]', bg: 'bg-[#c9a84c]/10 border border-[#c9a84c]/20' };
+            case 'vocabulary': return { Icon: Book, color: 'text-[#e4c76b]', bg: 'bg-[#e4c76b]/10 border border-[#e4c76b]/20' };
+            case 'content': return { Icon: PlayCircle, color: 'text-[#f0ece4]', bg: 'bg-[#1e1e1e] border border-[#2a2a2a]' };
+            case 'test': return { Icon: FileCheck, color: 'text-[#9a9590]', bg: 'bg-[#141414] border border-[#1e1e1e]' };
+            default: return { Icon: Book, color: 'text-[#5a5652]', bg: 'bg-[#0f0f0f] border border-[#1e1e1e]' };
         }
     };
 
     const formatTitle = (type: string) => {
         switch (type) {
-            case 'conversation': return 'Conversation Practice';
-            case 'vocabulary': return 'Vocabulary Review';
-            case 'content': return 'Content Comprehension';
-            case 'test': return 'Level Test';
+            case 'conversation': return 'Simulated Dialogue';
+            case 'vocabulary': return 'Lexical Reinforcement';
+            case 'content': return 'Comprehension Analysis';
+            case 'test': return 'Diagnostic Evaluation';
             default: return 'Study Session';
         }
     }
 
     return (
-        <div className="flex flex-col w-full bg-card border border-border rounded-3xl overflow-hidden">
+        <div className="flex flex-col w-full bg-[#141414] border border-[#1e1e1e] rounded-3xl overflow-hidden font-sans">
 
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-border/50">
-                <h2 className="font-semibold text-lg flex items-center gap-2">
-                    Activity history
+            <div className="flex items-center justify-between px-6 py-5 border-b border-[#1e1e1e]">
+                <h2 className="font-serif text-[16px] text-[#f0ece4] flex items-center gap-2">
+                    Telemetry Stream
                 </h2>
-                <Link href="/profile" className="text-xs font-medium text-primary hover:underline flex items-center gap-1 group">
-                    View all
-                    <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                <Link href="/profile" className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#c9a84c] hover:text-[#e4c76b] flex items-center gap-1.5 group transition-colors">
+                    View Logs
+                    <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
             </div>
 
             {/* List */}
-            <div className="flex flex-col divide-y divide-border/30">
+            <div className="flex flex-col divide-y divide-[#1e1e1e]">
                 {sessions.slice(0, 5).map((session) => {
                     const { Icon, color, bg } = getIconData(session.session_type);
                     const timeAgo = formatDistanceToNow(new Date(session.created_at), { addSuffix: true });
 
                     return (
-                        <div key={session.id} className="flex items-center justify-between px-6 py-4 hover:bg-secondary/30 transition-colors">
+                        <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-4 hover:bg-[#171717] transition-colors group">
 
                             {/* Left: Icon & Details */}
                             <div className="flex items-center gap-4">
-                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${bg} ${color}`}>
-                                    <Icon size={24} />
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${bg} ${color}`}>
+                                    <Icon size={20} className="opacity-80 group-hover:opacity-100 transition-opacity" />
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="font-bold text-sm md:text-base leading-tight">
+                                    <span className="font-serif text-[15px] text-[#f0ece4] mb-0.5">
                                         {formatTitle(session.session_type)}
                                     </span>
-                                    <span className="text-xs text-muted-foreground mt-0.5 flex items-center gap-2">
+                                    <span className="text-[10px] font-mono text-[#5a5652] uppercase tracking-[0.1em] flex items-center gap-2">
                                         <span>{timeAgo}</span>
-                                        <span className="w-1 h-1 rounded-full bg-border" />
-                                        <span>{session.duration_minutes} min</span>
+                                        <span className="w-1 h-1 rounded-full bg-[#2a2a2a]" />
+                                        <span>{session.duration_minutes} MIN</span>
                                     </span>
                                 </div>
                             </div>
 
                             {/* Right: XP */}
-                            <div className="flex items-center gap-1">
-                                <span className="font-bold text-emerald-500">+{session.xp_earned}</span>
-                                <span className="text-xs font-bold text-emerald-500/70">XP</span>
+                            <div className="flex items-center gap-1 mt-3 sm:mt-0 ml-16 sm:ml-0 bg-[#0f0f0f] sm:bg-transparent px-3 py-1 sm:p-0 rounded-md sm:rounded-none w-fit">
+                                <span className="font-mono text-[13px] font-bold text-[#c9a84c] group-hover:text-[#e4c76b] transition-colors">+{session.xp_earned}</span>
+                                <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#c9a84c]/60">XP</span>
                             </div>
 
                         </div>
@@ -121,22 +121,22 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
 // ── SKELETON ──
 export function RecentActivitySkeleton() {
     return (
-        <div className="flex flex-col w-full bg-card border border-border rounded-3xl overflow-hidden animate-pulse">
-            <div className="px-6 py-5 border-b border-border/50 flex justify-between">
-                <div className="h-6 w-32 bg-muted rounded" />
-                <div className="h-4 w-16 bg-muted rounded" />
+        <div className="flex flex-col w-full bg-[#141414] border border-[#1e1e1e] rounded-3xl overflow-hidden animate-pulse">
+            <div className="px-6 py-5 border-b border-[#1e1e1e] flex justify-between items-center">
+                <div className="h-4 w-32 bg-[#1e1e1e] rounded" />
+                <div className="h-3 w-16 bg-[#1e1e1e] rounded" />
             </div>
-            <div className="flex flex-col divide-y divide-border/30">
+            <div className="flex flex-col divide-y divide-[#1e1e1e]">
                 {[1, 2, 3, 4, 5].map(i => (
-                    <div key={i} className="flex items-center justify-between px-6 py-4">
+                    <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-4 gap-3 sm:gap-0">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-muted" />
+                            <div className="w-12 h-12 rounded-xl bg-[#1e1e1e]" />
                             <div className="flex flex-col gap-2">
-                                <div className="h-5 w-40 bg-muted rounded" />
-                                <div className="h-3 w-24 bg-muted rounded" />
+                                <div className="h-4 w-40 bg-[#1e1e1e] rounded" />
+                                <div className="h-2.5 w-24 bg-[#1e1e1e] rounded" />
                             </div>
                         </div>
-                        <div className="h-6 w-12 bg-muted rounded" />
+                        <div className="h-5 w-12 bg-[#1e1e1e] rounded ml-16 sm:ml-0" />
                     </div>
                 ))}
             </div>

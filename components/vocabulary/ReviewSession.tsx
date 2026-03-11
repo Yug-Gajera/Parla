@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { VocabularyWord } from '@/hooks/useVocabulary';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, RotateCcw, Brain, Zap, X } from 'lucide-react';
+import { CheckCircle2, RotateCcw, Brain, Zap, X, Fingerprint } from 'lucide-react';
 import { calculateSM2 } from '@/lib/utils/vocabulary';
 
 type SessionState = 'idle' | 'reviewing' | 'complete';
@@ -119,22 +119,26 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
     // ── Render: IDLE ──
     if (state === 'idle') {
         return (
-            <div className="flex flex-col items-center justify-center p-8 w-full h-full min-h-[50vh] animation-fade-in bg-background">
-                <Brain className="w-16 h-16 text-primary mb-6" />
-                <h2 className="text-3xl font-bold mb-2">Review Session</h2>
-                <p className="text-muted-foreground mb-8 text-center max-w-sm">
+            <div className="flex flex-col items-center justify-center p-8 w-full h-full min-h-[50vh] animation-fade-in bg-[#080808] font-sans">
+                <div className="w-20 h-20 rounded-full border border-[#2a2a2a] bg-[#0f0f0f] shadow-inner flex items-center justify-center mb-8">
+                    <Brain className="w-8 h-8 text-[#c9a84c]" strokeWidth={1} />
+                </div>
+                <h2 className="text-4xl font-serif text-[#f0ece4] mb-4">Memory Sync</h2>
+                <p className="text-[#5a5652] text-sm mb-12 text-center max-w-sm font-mono uppercase tracking-widest leading-relaxed mt-2">
                     {totalWords === 0
-                        ? "You're all caught up! There are no words due right now."
-                        : `You have ${totalWords} word${totalWords !== 1 ? 's' : ''} to review today.`}
+                        ? "Lexicon index current. No operations pending."
+                        : `Initializing review protocol for ${totalWords} unit${totalWords !== 1 ? 's' : ''}.`}
                 </p>
-                <div className="flex gap-4">
-                    <Button variant="outline" onClick={onClose} className="px-8">Back</Button>
+                <div className="flex gap-4 w-full max-w-sm flex-col">
                     <Button
                         onClick={startSession}
                         disabled={totalWords === 0}
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8"
+                        className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-14 rounded-full w-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all"
                     >
-                        Start Review
+                        Engage Sync Protocol
+                    </Button>
+                    <Button variant="outline" onClick={onClose} className="h-14 rounded-full border-[#1e1e1e] bg-transparent text-[#9a9590] hover:bg-[#141414] hover:text-[#f0ece4] font-mono text-[10px] uppercase tracking-widest w-full">
+                        Abort
                     </Button>
                 </div>
             </div>
@@ -148,28 +152,48 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
         const xp = (totalWords * 10) + (accuracy === 100 ? 50 : 0);
 
         return (
-            <div className="flex flex-col items-center justify-center p-8 w-full h-full min-h-[50vh] animation-fade-in bg-background">
-                <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center mb-6">
-                    <CheckCircle2 className="w-12 h-12 text-primary" />
+            <div className="flex flex-col items-center justify-center p-8 w-full h-full min-h-[50vh] animation-fade-in bg-[#080808] font-sans relative overflow-hidden">
+                {/* Subtle Particles */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center z-0 opacity-40">
+                    {[...Array(12)].map((_, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, scale: 0, y: 0 }}
+                            animate={{
+                                opacity: [0, 1, 0],
+                                scale: [0, 1, 0.5],
+                                y: -150 - Math.random() * 100,
+                                x: (Math.random() - 0.5) * 200,
+                            }}
+                            transition={{ duration: 2 + Math.random(), delay: i * 0.1, ease: "easeOut" }}
+                            className="absolute bg-[#c9a84c] w-1 h-1 rounded-full shadow-[0_0_10px_rgba(201,168,76,0.8)]"
+                        />
+                    ))}
                 </div>
-                <h2 className="text-3xl font-bold mb-2">Session Complete!</h2>
-                <p className="text-muted-foreground mb-8 text-center max-w-sm">
-                    Great job! You reviewed {totalWords} words in {mins} minute{mins !== 1 ? 's' : ''}.
-                </p>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl mb-8">
-                    <StatCard label="Accuracy" value={`${accuracy}%`} />
-                    <StatCard label="XP Earned" value={`+${xp}`} highlight />
-                    <StatCard label="Perfect" value={stats.easy.toString()} icon={<Zap className="w-3 h-3" />} />
-                    <StatCard label="To Repeat" value={stats.again.toString()} icon={<RotateCcw className="w-3 h-3" />} isBad={stats.again > 0} />
+                <div className="relative z-10 w-full flex flex-col items-center">
+                    <div className="w-24 h-24 rounded-full bg-[#c9a84c]/5 border border-[#c9a84c]/20 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(201,168,76,0.1)]">
+                        <Fingerprint className="w-10 h-10 text-[#c9a84c]" strokeWidth={1} />
+                    </div>
+                    <h2 className="text-4xl font-serif text-[#f0ece4] mb-3">Sync Accomplished</h2>
+                    <p className="text-[#9a9590] text-sm mb-12 text-center max-w-sm font-sans leading-relaxed">
+                        Processed {totalWords} index units over {mins} minute{mins !== 1 ? 's' : ''} with optimal flow.
+                    </p>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl mb-12">
+                        <StatCard label="Accuracy" value={`${accuracy}%`} />
+                        <StatCard label="XP Yield" value={`+${xp}`} highlight />
+                        <StatCard label="Flawless" value={stats.easy.toString()} icon={<Zap className="w-3.5 h-3.5" />} />
+                        <StatCard label="Recalibrate" value={stats.again.toString()} icon={<RotateCcw className="w-3.5 h-3.5" />} isBad={stats.again > 0} />
+                    </div>
+
+                    <Button
+                        onClick={onClose}
+                        className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest px-12 h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all"
+                    >
+                        Conclude Phase
+                    </Button>
                 </div>
-
-                <Button
-                    onClick={onClose}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-12 py-6 text-lg rounded-xl"
-                >
-                    Continue
-                </Button>
             </div>
         );
     }
@@ -179,25 +203,30 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
     const baseWord = currentWord.vocabulary_words;
 
     return (
-        <div className="flex flex-col w-full h-full min-h-[80vh] bg-background fixed inset-0 z-50 pt-safe-top pb-safe-bottom">
+        <div className="flex flex-col w-full h-full min-h-[80vh] bg-[#080808] fixed inset-0 z-50 pt-safe-top pb-safe-bottom font-sans">
             {/* Header / Progress */}
-            <div className="flex flex-col px-6 py-4 w-full max-w-3xl mx-auto">
-                <div className="flex items-center justify-between mb-4">
-                    <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full text-muted-foreground hover:text-foreground">
-                        <X className="w-6 h-6" />
+            <div className="flex flex-col px-6 py-6 w-full max-w-3xl mx-auto">
+                <div className="flex items-center justify-between mb-6">
+                    <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full text-[#5a5652] hover:text-[#f0ece4] hover:bg-[#141414]">
+                        <X className="w-5 h-5" />
                     </Button>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-6">
                         {streak > 2 && (
-                            <span className="text-amber-500 font-bold text-sm animate-pulse flex items-center">
-                                {streak} <Zap className="w-4 h-4 ml-1 fill-amber-500" />
+                            <span className="text-[#c9a84c] font-mono text-[10px] uppercase tracking-widest font-bold animate-pulse flex items-center">
+                                Seq {streak} <Zap className="w-3 h-3 ml-1 fill-[#c9a84c]" />
                             </span>
                         )}
-                        <span className="text-sm font-medium text-muted-foreground tracking-widest uppercase">
-                            {currentIndex + 1} / {totalWords}
+                        <span className="text-[10px] font-mono font-bold text-[#5a5652] tracking-[0.2em] uppercase">
+                            {currentIndex + 1} <span className="text-[#2a2a2a] mx-1">/</span> {totalWords}
                         </span>
                     </div>
                 </div>
-                <Progress value={progressPercent} className="h-1.5 bg-secondary/50 [&>div]:bg-primary" />
+                <div className="h-1 bg-[#1e1e1e] rounded-full overflow-hidden w-full">
+                    <div 
+                        className="h-full bg-gradient-to-r from-[#8b7538] to-[#c9a84c] rounded-full transition-all duration-300"
+                        style={{ width: `${progressPercent}%` }}
+                    />
+                </div>
             </div>
 
             {/* Card Area */}
@@ -205,52 +234,56 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentWord.id + (isFlipped ? '-back' : '-front')}
-                        initial={{ rotateY: isFlipped ? -90 : 90, opacity: 0, scale: 0.9 }}
-                        animate={{ rotateY: 0, opacity: 1, scale: 1 }}
-                        exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0, scale: 0.9 }}
-                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        initial={{ rotateX: isFlipped ? -90 : 90, opacity: 0, scale: 0.95 }}
+                        animate={{ rotateX: 0, opacity: 1, scale: 1 }}
+                        exit={{ rotateX: isFlipped ? 90 : -90, opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
                         className="w-full flex-1 max-h-[500px] flex items-center justify-center cursor-pointer"
                         style={{ transformStyle: "preserve-3d" }}
                         onClick={() => !isFlipped && setIsFlipped(true)}
                     >
-                        <div className={`w-full h-full rounded-3xl bg-card border-2 flex flex-col items-center justify-center p-8 sm:p-12 text-center shadow-xl transition-colors ${!isFlipped ? 'hover:border-primary/50 border-border group' : 'border-primary/20 bg-card/50'}`}>
+                        <div className={`w-full h-full rounded-3xl flex flex-col items-center justify-center p-8 sm:p-12 text-center shadow-2xl transition-all duration-500 overflow-hidden relative ${!isFlipped ? 'bg-[#141414] border border-[#1e1e1e] hover:border-[#2a2a2a] group' : 'border border-[#c9a84c]/20 bg-[#0f0f0f]'}`}>
+                            
+                            {isFlipped && (
+                                <div className="absolute inset-0 bg-[#c9a84c]/5 opacity-50 pointer-events-none" />
+                            )}
 
                             {!isFlipped ? (
                                 // FRONT
                                 <div className="flex flex-col items-center justify-center h-full">
-                                    <span className="text-5xl sm:text-7xl font-bold tracking-tight text-foreground mb-4">
+                                    <span className="text-5xl sm:text-7xl font-serif text-[#f0ece4] mb-6 tracking-tight">
                                         {baseWord.word}
                                     </span>
-                                    <p className="text-sm font-semibold tracking-widest text-muted-foreground uppercase opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-8">
-                                        Tap to reveal
+                                    <p className="text-[10px] font-mono tracking-[0.2em] text-[#5a5652] uppercase opacity-70 group-hover:opacity-100 transition-opacity absolute bottom-10">
+                                        Initiate Reveal Sequence
                                     </p>
                                 </div>
                             ) : (
                                 // BACK
-                                <div className="flex flex-col items-center justify-center h-full w-full animation-fade-in">
-                                    <span className="text-3xl sm:text-4xl font-bold text-muted-foreground/70 mb-2">
+                                <div className="flex flex-col items-center justify-center h-full w-full animation-fade-in relative z-10">
+                                    <span className="text-3xl sm:text-4xl font-serif text-[#c9a84c] mb-3 opacity-90">
                                         {baseWord.word}
                                     </span>
-                                    <span className="text-4xl sm:text-6xl font-bold text-foreground mb-2 leading-tight">
+                                    <span className="text-4xl sm:text-6xl font-serif text-[#f0ece4] mb-6 leading-tight tracking-tight">
                                         {baseWord.translation}
                                     </span>
 
-                                    <div className="flex flex-wrap justify-center gap-2 mt-4 mb-8">
+                                    <div className="flex flex-wrap justify-center gap-3 mt-2 mb-10">
                                         {baseWord.pronunciation && (
-                                            <span className="bg-secondary/50 px-3 py-1 rounded-full text-sm font-mono text-muted-foreground">/{baseWord.pronunciation}/</span>
+                                            <span className="border border-[#2a2a2a] bg-[#080808] px-4 py-1.5 rounded-sm text-[11px] font-mono text-[#9a9590]">/{baseWord.pronunciation}/</span>
                                         )}
                                         {baseWord.part_of_speech && (
-                                            <span className="bg-secondary/50 px-3 py-1 rounded-full text-sm text-muted-foreground italic">{baseWord.part_of_speech}</span>
+                                            <span className="border border-[#2a2a2a] bg-[#080808] px-4 py-1.5 rounded-sm text-[11px] font-mono text-[#9a9590] italic">{baseWord.part_of_speech}</span>
                                         )}
                                         {baseWord.cefr_level && (
-                                            <span className="bg-primary/20 text-primary px-3 py-1 rounded-full text-sm font-bold uppercase">{baseWord.cefr_level}</span>
+                                            <span className="border border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#c9a84c] px-4 py-1.5 rounded-sm text-[11px] font-mono font-bold uppercase tracking-widest">{baseWord.cefr_level}</span>
                                         )}
                                     </div>
 
                                     {baseWord.example_sentence && (
-                                        <div className="w-full max-w-md bg-background/50 rounded-xl p-4 border border-border/30">
-                                            <p className="text-lg italic font-medium mb-1">{baseWord.example_sentence}</p>
-                                            <p className="text-sm text-muted-foreground">{baseWord.example_translation}</p>
+                                        <div className="w-full max-w-md bg-[#080808] rounded-xl p-5 border border-[#1e1e1e]">
+                                            <p className="text-lg font-serif italic text-[#f0ece4] mb-2">{baseWord.example_sentence}</p>
+                                            <p className="text-xs font-sans text-[#5a5652]">{baseWord.example_translation}</p>
                                         </div>
                                     )}
                                 </div>
@@ -261,46 +294,46 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
             </div>
 
             {/* Rating Buttons */}
-            <div className="w-full max-w-3xl mx-auto px-6 pb-8 pt-4">
+            <div className="w-full max-w-3xl mx-auto px-6 pb-8 pt-6">
                 <AnimatePresence>
                     {isFlipped && previews && (
                         <motion.div
-                            initial={{ y: 50, opacity: 0 }}
+                            initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.1, type: "spring", stiffness: 300, damping: 25 }}
-                            className="grid grid-cols-4 gap-2 sm:gap-4 w-full"
+                            transition={{ delay: 0.1, duration: 0.4, ease: "easeOut" }}
+                            className="grid grid-cols-4 gap-3 sm:gap-4 w-full"
                         >
                             <RatingButton
                                 onClick={() => handleRate(1)}
-                                label="Again"
+                                label="Recal"
                                 interval={formatDays(previews.again)}
-                                colorClass="bg-red-500/10 hover:bg-red-500/20 text-red-500 border-red-500/20"
+                                colorClass="bg-[#141414] hover:bg-[#1a1414] text-red-500 border-[#1e1e1e] hover:border-red-500/30"
                             />
                             <RatingButton
                                 onClick={() => handleRate(3)}
                                 label="Hard"
                                 interval={formatDays(previews.hard)}
-                                colorClass="bg-orange-500/10 hover:bg-orange-500/20 text-orange-500 border-orange-500/20"
+                                colorClass="bg-[#141414] hover:bg-[#1a1814] text-[#b98e72] border-[#1e1e1e] hover:border-[#b98e72]/30"
                             />
                             <RatingButton
                                 onClick={() => handleRate(4)}
                                 label="Good"
                                 interval={formatDays(previews.good)}
-                                colorClass="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 border-emerald-500/20"
+                                colorClass="bg-[#141414] hover:bg-[#141a14] text-emerald-500 border-[#1e1e1e] hover:border-emerald-500/30"
                             />
                             <RatingButton
                                 onClick={() => handleRate(5)}
-                                label="Easy"
+                                label="Perf"
                                 interval={formatDays(previews.easy)}
-                                colorClass="bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 border-blue-500/20"
+                                colorClass="bg-[#141414] hover:bg-[#14181a] text-[#c9a84c] border-[#1e1e1e] hover:border-[#c9a84c]/50 bg-gradient-to-t from-[#c9a84c]/5 to-transparent"
                             />
                         </motion.div>
                     )}
                 </AnimatePresence>
                 {!isFlipped && (
-                    <div className="h-[88px] flex items-center justify-center">
-                        <Button onClick={() => setIsFlipped(true)} variant="secondary" className="w-full max-w-xs h-14 rounded-xl text-lg font-semibold border-2 border-border/50">
-                            Show Answer
+                    <div className="h-[76px] flex items-center justify-center">
+                        <Button onClick={() => setIsFlipped(true)} variant="outline" className="w-full max-w-xs h-14 rounded-full border-[#1e1e1e] bg-[#141414] hover:bg-[#1e1e1e] text-[#f0ece4] font-mono text-[10px] uppercase tracking-widest font-bold">
+                            Authorize Reveal
                         </Button>
                     </div>
                 )}
@@ -315,21 +348,21 @@ function RatingButton({ onClick, label, interval, colorClass }: any) {
     return (
         <button
             onClick={onClick}
-            className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl border-2 transition-all active:scale-95 ${colorClass}`}
+            className={`flex flex-col items-center justify-center py-4 px-2 rounded-2xl border transition-all duration-300 active:scale-95 group shadow-inner ${colorClass}`}
         >
-            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider mb-1">{label}</span>
-            <span className="text-[10px] sm:text-xs opacity-80">{interval}</span>
+            <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest mb-1.5">{label}</span>
+            <span className="text-[9px] font-mono opacity-60 uppercase">{interval}</span>
         </button>
     );
 }
 
 function StatCard({ label, value, highlight, icon, isBad }: any) {
     return (
-        <div className={`flex flex-col items-center p-4 rounded-2xl border ${highlight ? 'bg-primary/10 border-primary/30' : 'bg-card border-border'}`}>
-            <span className={`text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1 ${highlight ? 'text-primary' : 'text-muted-foreground'}`}>
+        <div className={`flex flex-col items-center p-5 rounded-2xl border shadow-inner ${highlight ? 'bg-[#c9a84c]/5 border-[#c9a84c]/20' : 'bg-[#141414] border-[#1e1e1e]'}`}>
+            <span className={`text-[9px] font-mono font-bold uppercase tracking-widest mb-3 flex items-center gap-2 ${highlight ? 'text-[#c9a84c]' : 'text-[#5a5652]'}`}>
                 {icon} {label}
             </span>
-            <span className={`text-2xl font-bold ${highlight ? 'text-primary' : isBad ? 'text-red-500' : 'text-foreground'}`}>
+            <span className={`text-3xl font-serif ${highlight ? 'text-[#c9a84c]' : isBad ? 'text-red-400' : 'text-[#f0ece4]'}`}>
                 {value}
             </span>
         </div>

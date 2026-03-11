@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { MiniChallengeContent } from '@/types';
 import { Button } from '@/components/ui/button';
-import { XCircle, RotateCcw, ArrowRight, BookOpen, PartyPopper } from 'lucide-react';
+import { XCircle, RotateCcw, ArrowRight, BookOpen, Fingerprint } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface MiniChallengeProps {
@@ -49,29 +49,31 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
     if (phase === 'questions') {
         const q = challenge.questions[currentQ];
         const typeLabel: Record<string, string> = {
-            translate_to_spanish: 'Translate to Spanish',
-            translate_to_english: 'Translate to English',
-            fill_blank: 'Fill in the Blank',
-            choose_response: 'Choose the Right Response',
+            translate_to_spanish: 'Translation Protocol',
+            translate_to_english: 'Decryption Protocol',
+            fill_blank: 'Syntactical Insertion',
+            choose_response: 'Contextual Response',
         };
 
         return (
-            <div className="flex flex-col items-center w-full max-w-xl mx-auto pt-4">
+            <div className="flex flex-col items-center w-full max-w-2xl mx-auto pt-6 px-4 font-sans">
                 {/* Header */}
-                <div className="w-full mb-6">
-                    <h2 className="text-xl font-bold mb-1">Quick Readiness Check</h2>
-                    <p className="text-sm text-muted-foreground">{challenge.instructions}</p>
+                <div className="w-full mb-8 bg-[#141414] border border-[#1e1e1e] p-6 rounded-2xl flex items-center justify-between shadow-inner">
+                    <div>
+                        <h2 className="text-sm font-mono text-[#f0ece4] uppercase tracking-widest mb-1">Diagnostic System</h2>
+                        <p className="text-[10px] text-[#5a5652] uppercase tracking-[0.1em]">{challenge.instructions}</p>
+                    </div>
                 </div>
 
                 {/* Progress */}
-                <div className="w-full mb-8">
-                    <div className="flex justify-between text-sm font-medium text-muted-foreground mb-2">
-                        <span>{typeLabel[q.type] || 'Question'}</span>
-                        <span>Question {currentQ + 1} of {challenge.questions.length}</span>
+                <div className="w-full mb-10">
+                    <div className="flex justify-between text-[10px] font-mono uppercase tracking-widest text-[#5a5652] mb-3">
+                        <span>{typeLabel[q.type] || 'Verification'}</span>
+                        <span className="text-[#c9a84c]">Seq {currentQ + 1} / {challenge.questions.length}</span>
                     </div>
-                    <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                    <div className="h-1 bg-[#1e1e1e] rounded-full overflow-hidden">
                         <motion.div
-                            className="h-full bg-primary"
+                            className="h-full bg-gradient-to-r from-[#8b7538] to-[#c9a84c]"
                             animate={{ width: `${((currentQ) / challenge.questions.length) * 100}%` }}
                             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                         />
@@ -81,35 +83,38 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentQ}
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -30 }}
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 1.02 }}
+                        transition={{ duration: 0.3 }}
                         className="w-full"
                     >
-                        <h3 className="text-lg font-bold text-center mb-2">{q.prompt}</h3>
-                        {q.context && (
-                            <p className="text-sm text-muted-foreground text-center mb-6">{q.context}</p>
-                        )}
+                        <div className="text-center mb-10">
+                            <h3 className="text-2xl sm:text-3xl font-serif text-[#f0ece4] mb-3 leading-snug">{q.prompt}</h3>
+                            {q.context && (
+                                <p className="text-sm font-mono text-[#9a9590] uppercase tracking-wide opacity-80 border-b border-[#2a2a2a] inline-block pb-1">{q.context}</p>
+                            )}
+                        </div>
 
-                        <div className="flex flex-col gap-3 mt-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
                             {q.options.map((opt, idx) => {
-                                let cls = 'bg-card border-border hover:border-primary/50';
+                                let cls = 'bg-[#0f0f0f] border-[#2a2a2a] hover:border-[#c9a84c]/50 hover:bg-[#141414] text-[#9a9590] hover:text-[#f0ece4]';
                                 if (selected !== null) {
-                                    if (idx === q.correct) cls = 'bg-emerald-500/10 border-emerald-500 text-emerald-500';
-                                    else if (idx === selected) cls = 'bg-destructive/10 border-destructive text-destructive opacity-70';
-                                    else cls = 'opacity-30 border-border bg-card';
+                                    if (idx === q.correct) cls = 'bg-[#c9a84c]/10 border-[#c9a84c] text-[#c9a84c] shadow-[0_0_20px_rgba(201,168,76,0.1)]';
+                                    else if (idx === selected) cls = 'bg-red-500/5 border-red-500/50 text-red-500 opacity-90';
+                                    else cls = 'opacity-20 border-[#1e1e1e] bg-[#080808] text-[#5a5652]';
                                 }
                                 return (
                                     <button
                                         key={idx}
                                         onClick={() => handleAnswer(idx)}
                                         disabled={selected !== null}
-                                        className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${cls}`}
+                                        className={`flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300 text-left group ${cls}`}
                                     >
-                                        <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-secondary flex items-center justify-center font-bold text-sm">
-                                            {['A', 'B', 'C', 'D'][idx]}
-                                        </span>
-                                        <span className="flex-1">{opt}</span>
+                                        <div className={`flex-shrink-0 w-6 h-6 rounded-sm border flex items-center justify-center font-mono text-[9px] transition-colors ${selected === null ? 'border-[#5a5652] group-hover:border-[#c9a84c]' : 'border-transparent'}`}>
+                                            {['01', '02', '03', '04'][idx]}
+                                        </div>
+                                        <span className="flex-1 font-sans text-[15px]">{opt}</span>
                                     </button>
                                 );
                             })}
@@ -119,9 +124,9 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="mt-4 p-4 rounded-xl bg-card/80 border border-border"
+                                className="mt-8 p-6 rounded-2xl bg-[#141414] border border-[#1e1e1e]"
                             >
-                                <p className="text-sm text-muted-foreground">{q.explanation}</p>
+                                <p className="text-sm font-sans text-[#f0ece4] leading-relaxed"><span className="text-[#c9a84c] font-mono text-[10px] uppercase tracking-widest block mb-2">System Output</span>{q.explanation}</p>
                             </motion.div>
                         )}
                     </motion.div>
@@ -135,80 +140,90 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center justify-center text-center w-full max-w-md mx-auto pt-12"
+            className="flex flex-col items-center justify-center text-center w-full max-w-md mx-auto h-full px-6 font-sans"
         >
-            {/* Confetti-style dots for pass */}
+            {/* Subtle Luxury Particles for pass */}
             {passed && (
-                <div className="relative mb-4">
-                    {[...Array(8)].map((_, i) => (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center z-0 opacity-40">
+                    {[...Array(12)].map((_, i) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, scale: 0 }}
+                            initial={{ opacity: 0, scale: 0, y: 0 }}
                             animate={{
                                 opacity: [0, 1, 0],
                                 scale: [0, 1, 0.5],
-                                x: Math.cos(i * Math.PI / 4) * 60,
-                                y: Math.sin(i * Math.PI / 4) * 60,
+                                y: -150 - Math.random() * 100,
+                                x: (Math.random() - 0.5) * 200,
                             }}
-                            transition={{ duration: 1, delay: i * 0.1 }}
-                            className="absolute top-1/2 left-1/2 w-3 h-3 rounded-full"
-                            style={{ backgroundColor: ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#06b6d4', '#f97316'][i] }}
+                            transition={{ duration: 2 + Math.random(), delay: i * 0.1, ease: "easeOut" }}
+                            className="absolute bg-[#c9a84c] w-1 h-1 rounded-full shadow-[0_0_10px_rgba(201,168,76,0.8)]"
                         />
                     ))}
                 </div>
             )}
 
-            <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${passed ? 'bg-emerald-500/10' : 'bg-amber-500/10'
-                }`}>
+            <div className="relative z-10 w-full flex flex-col items-center">
+                <div className={`w-28 h-28 rounded-full flex items-center justify-center border transition-all duration-700 mb-8 ${passed ? 'bg-[#c9a84c]/5 border-[#c9a84c]/30 shadow-[0_0_60px_rgba(201,168,76,0.15)]' : 'bg-red-500/5 border-red-500/30'
+                    }`}>
+                    {passed ? (
+                        <Fingerprint className="w-12 h-12 text-[#c9a84c]" strokeWidth={1} />
+                    ) : (
+                        <XCircle className="w-12 h-12 text-red-500" strokeWidth={1} />
+                    )}
+                </div>
+
+                <h2 className="text-4xl font-serif text-[#f0ece4] mb-4">
+                    {passed ? 'Authorization Granted' : 'Diagnostics Failed'}
+                </h2>
+                
+                <div className="flex bg-[#141414] border border-[#1e1e1e] p-4 rounded-xl items-center gap-6 mb-8">
+                    <div className="text-left">
+                        <p className="text-[9px] font-mono text-[#5a5652] uppercase tracking-widest mb-1">Success Rate</p>
+                        <p className="text-xl font-mono text-[#f0ece4]">{correctCount} <span className="text-[#5a5652] text-sm">/ {challenge.questions.length}</span></p>
+                    </div>
+                    <div className="w-[1px] h-8 bg-[#2a2a2a]" />
+                    <div className="text-left">
+                        <p className="text-[9px] font-mono text-[#5a5652] uppercase tracking-widest mb-1">Index</p>
+                        <p className={`text-xl font-mono ${passed ? 'text-[#c9a84c]' : 'text-red-400'}`}>{scorePercent}%</p>
+                    </div>
+                </div>
+
                 {passed ? (
-                    <PartyPopper className="w-10 h-10 text-emerald-500" />
+                    <>
+                        <p className="text-sm text-[#9a9590] mb-12 max-w-sm leading-relaxed">
+                            Simulation module `<span className="text-[#c9a84c] font-mono">{scenarioName}</span>` is now accessible in the Practice sector.
+                        </p>
+                        <Button
+                            onClick={() => onComplete(scorePercent)}
+                            className="w-full max-w-xs h-14 text-[10px] font-mono tracking-widest uppercase font-bold rounded-full bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] shadow-[0_4_20px_rgba(201,168,76,0.2)]"
+                        >
+                            <ArrowRight className="w-4 h-4 mr-2" />
+                            Finalize Module
+                        </Button>
+                    </>
                 ) : (
-                    <XCircle className="w-10 h-10 text-amber-500" />
+                    <>
+                        <p className="text-sm text-[#9a9590] mb-12 max-w-sm leading-relaxed">
+                            Threshold criteria not met. Recommend revisiting phrase lexicon before re-attempting.
+                        </p>
+                        <div className="flex flex-col gap-4 w-full max-w-xs">
+                            <Button
+                                onClick={onReviewPhrases}
+                                variant="outline"
+                                className="w-full h-12 bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] font-mono text-[10px] uppercase tracking-widest rounded-full"
+                            >
+                                <BookOpen className="w-3.5 h-3.5 mr-2" /> Lexicon Review
+                            </Button>
+                            <Button
+                                onClick={handleRetry}
+                                className="w-full h-12 bg-[#141414] text-[#ef4444] border border-[#ef4444]/20 hover:bg-[#ef4444]/10 font-mono text-[10px] uppercase tracking-widest rounded-full transition-colors"
+                            >
+                                <RotateCcw className="w-3.5 h-3.5 mr-2" /> Re-execute Diagnostic
+                            </Button>
+                        </div>
+                    </>
                 )}
             </div>
-
-            <h2 className="text-2xl font-bold mb-2">
-                {passed ? 'Scenario Unlocked! 🎉' : 'Almost there!'}
-            </h2>
-            <p className="text-muted-foreground mb-2">
-                {correctCount} of {challenge.questions.length} correct ({scorePercent}%)
-            </p>
-
-            {passed ? (
-                <>
-                    <p className="text-sm text-emerald-500 mb-8">
-                        You&apos;re ready for the real {scenarioName} conversation!
-                    </p>
-                    <Button
-                        onClick={() => onComplete(scorePercent)}
-                        className="w-full h-12 text-base font-bold rounded-xl bg-primary shadow-lg shadow-primary/25"
-                    >
-                        <ArrowRight className="w-5 h-5 mr-2" />
-                        Complete Module
-                    </Button>
-                </>
-            ) : (
-                <>
-                    <p className="text-sm text-amber-500 mb-8">
-                        Review the phrases and try again. You need 70% to unlock the scenario.
-                    </p>
-                    <div className="flex flex-col gap-3 w-full">
-                        <Button
-                            onClick={onReviewPhrases}
-                            variant="outline"
-                            className="w-full h-11 font-semibold"
-                        >
-                            <BookOpen className="w-4 h-4 mr-2" /> Review Phrases
-                        </Button>
-                        <Button
-                            onClick={handleRetry}
-                            className="w-full h-11 font-semibold bg-amber-600 hover:bg-amber-700"
-                        >
-                            <RotateCcw className="w-4 h-4 mr-2" /> Try Challenge Again
-                        </Button>
-                    </div>
-                </>
-            )}
         </motion.div>
     );
 }

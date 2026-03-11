@@ -1,9 +1,13 @@
 "use client";
 
+// ============================================================
+// Parlova — Message Bubble (Redesigned)
+// ============================================================
+
 import React, { useState } from 'react';
 import { ChatMessage } from '@/hooks/useConversation';
 import { motion } from 'framer-motion';
-import { Mic, AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Mic2, AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -23,77 +27,78 @@ export function MessageBubble({ message, isAiStreaming }: MessageBubbleProps) {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            className={`flex w-full ${isAI ? 'justify-start' : 'justify-end'} mb-4`}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`flex flex-col w-full mb-[24px] ${isAI ? 'items-start' : 'items-end'}`}
         >
-            {/* AI Avatar */}
-            {isAI && (
-                <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm mr-2 mt-auto shrink-0 border border-primary/30">
-                    AI
-                </div>
-            )}
-
-            {/* Bubble */}
-            <div className={`flex flex-col max-w-[80%] ${isAI ? 'items-start' : 'items-end'}`}>
-                <div
-                    className={`px-4 py-3 rounded-2xl relative ${isAI
-                        ? 'bg-secondary text-secondary-foreground rounded-bl-sm border border-border/50'
-                        : 'bg-primary text-primary-foreground rounded-br-sm shadow-[0_5px_15px_-5px_rgba(124,58,237,0.4)]'
-                        }`}
-                >
-                    <span className="text-base leading-relaxed whitespace-pre-wrap">
-                        {message.content}
-                        {isAiStreaming && <span className="ml-1 inline-block w-1.5 h-4 bg-foreground/50 animate-pulse align-middle" />}
-                    </span>
-                </div>
-
-                {/* Metadata row: timestamp + voice indicator */}
-                <div className="flex items-center gap-1.5 mt-1 px-1">
-                    {hasVoiceData && (
-                        <Mic className="w-[10px] h-[10px] text-muted-foreground/50" />
-                    )}
-                    {timeString && (
-                        <span className="text-[10px] text-muted-foreground font-medium select-none">
-                            {timeString}
-                        </span>
-                    )}
-                </div>
-
-                {/* Low confidence indicator */}
-                {hasLowConfidence && (
-                    <button
-                        onClick={() => setShowClarityDetails(!showClarityDetails)}
-                        className="flex items-center gap-1 mt-1 px-2 py-0.5 rounded-lg hover:bg-secondary/50 transition-colors"
-                    >
-                        <AlertTriangle className="w-3 h-3 text-amber-500" />
-                        <span className="text-[10px] text-amber-500/80 font-medium">
-                            Some words were unclear
-                        </span>
-                        {showClarityDetails
-                            ? <ChevronUp className="w-3 h-3 text-amber-500/60" />
-                            : <ChevronDown className="w-3 h-3 text-amber-500/60" />
-                        }
-                    </button>
+            <div className={`flex items-end gap-[8px] max-w-[85%] sm:max-w-[75%] ${isAI ? 'flex-row' : 'flex-row-reverse'}`}>
+                
+                {/* AI Avatar */}
+                {isAI && (
+                    <div className="w-[32px] h-[32px] rounded-pill bg-[rgba(201,168,76,0.12)] text-[#c9a84c] flex items-center justify-center font-semibold text-[13px] border border-[rgba(201,168,76,0.2)] shrink-0 mb-[4px]">
+                        AI
+                    </div>
                 )}
 
-                {/* Expanded clarity details */}
-                {showClarityDetails && hasLowConfidence && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        className="flex flex-wrap gap-1 mt-1 px-1"
-                    >
-                        {message.voiceData!.lowConfidenceWords.map((word, i) => (
-                            <span
-                                key={i}
-                                className="text-[10px] px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                            >
-                                {word}
+                {/* Bubble */}
+                <div className={`flex flex-col ${isAI ? 'items-start' : 'items-end'}`}>
+                    <div className={isAI ? 'bubble-ai' : 'bubble-user'}>
+                        <span className="whitespace-pre-wrap">
+                            {message.content}
+                            {isAiStreaming && <span className="ml-[4px] inline-block w-[6px] h-[16px] bg-[#f0ece4] opacity-50 animate-pulse align-middle" />}
+                        </span>
+                    </div>
+
+                    {/* Metadata row: timestamp + voice indicator */}
+                    <div className={`flex items-center gap-[6px] mt-[6px] px-[4px] ${isAI ? 'flex-row' : 'flex-row-reverse'}`}>
+                        {hasVoiceData && (
+                            <Mic2 className="w-[12px] h-[12px] text-[#5a5652]" />
+                        )}
+                        {timeString && (
+                            <span className="bubble-timestamp">
+                                {timeString}
                             </span>
-                        ))}
-                    </motion.div>
-                )}
+                        )}
+                    </div>
+
+                    {/* Low confidence indicator */}
+                    {hasLowConfidence && (
+                        <div className="mt-[8px] flex flex-col items-end w-full">
+                            <button
+                                onClick={() => setShowClarityDetails(!showClarityDetails)}
+                                className="flex items-center gap-[4px] px-[8px] py-[4px] rounded-md hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                            >
+                                <AlertTriangle className="w-[12px] h-[12px] text-[#fb923c]" />
+                                <span className="text-[11px] text-[#fb923c] font-medium opacity-80">
+                                    Some words were unclear
+                                </span>
+                                {showClarityDetails
+                                    ? <ChevronUp className="w-[12px] h-[12px] text-[#fb923c] opacity-60" />
+                                    : <ChevronDown className="w-[12px] h-[12px] text-[#fb923c] opacity-60" />
+                                }
+                            </button>
+
+                            {/* Expanded clarity details */}
+                            {showClarityDetails && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    className="flex flex-wrap justify-end gap-[4px] mt-[4px] px-[4px]"
+                                >
+                                    {message.voiceData!.lowConfidenceWords.map((word, i) => (
+                                        <span
+                                            key={i}
+                                            className="text-[11px] px-[6px] py-[2px] rounded-md bg-[rgba(251,146,60,0.1)] text-[#fb923c] border border-[rgba(251,146,60,0.2)]"
+                                        >
+                                            {word}
+                                        </span>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </div>
+                    )}
+                </div>
+
             </div>
         </motion.div>
     );

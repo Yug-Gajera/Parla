@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// Parlova — Goal Progress Ring
+// Parlova — Goal Progress Ring (Redesigned)
 // ============================================================
 
 import React, { useEffect, useState } from 'react';
@@ -13,13 +13,11 @@ interface GoalProgressProps {
 }
 
 export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgressProps) {
-    // Prevent hydration mismatch by defaulting to 0 then animating up
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
 
     const safeGoal = Math.max(1, dailyGoal);
     const rawPercentage = (minutesStudied / safeGoal) * 100;
-    // Cap visual circle at 100%
     const percentage = Math.min(100, Math.max(0, rawPercentage));
 
     let message = 'Ready to start? Even 5 minutes helps.';
@@ -28,24 +26,22 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
     else if (percentage >= 34) message = "You're halfway there";
     else if (percentage > 0) message = 'Good start — keep going';
 
-    // Circle Math
-    const size = 220;
-    const strokeWidth = 16;
+    const size = 200;
+    const strokeWidth = 14;
     const center = size / 2;
     const radius = center - strokeWidth;
     const circumference = 2 * Math.PI * radius;
-    // Dash offset calculations
     const offset = circumference - ((mounted ? percentage : 0) / 100) * circumference;
 
     return (
-        <div className="flex flex-col items-center justify-center p-6 bg-card border border-border rounded-3xl shadow-sm relative overflow-hidden group">
+        <div className="parlova-card flex flex-col items-center justify-center relative overflow-hidden group h-full">
 
             {/* Subtle glow if complete */}
             {percentage >= 100 && (
-                <div className="absolute inset-0 bg-primary/5 opacity-50 transition-opacity duration-1000" />
+                <div className="absolute inset-0 bg-[rgba(201,168,76,0.03)] transition-opacity duration-1000 p-0 m-0" />
             )}
 
-            <div className="relative flex items-center justify-center mb-6 mt-2">
+            <div className="relative flex items-center justify-center mb-[24px] mt-[8px]">
                 <svg width={size} height={size} className="transform -rotate-90">
                     {/* Background Track */}
                     <circle
@@ -53,7 +49,7 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
                         cy={center}
                         r={radius}
                         fill="transparent"
-                        stroke="hsl(var(--secondary))"
+                        stroke="#1e1e1e"
                         strokeWidth={strokeWidth}
                         strokeLinecap="round"
                     />
@@ -63,7 +59,7 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
                         cy={center}
                         r={radius}
                         fill="transparent"
-                        stroke={percentage >= 100 ? '#34d399' : 'hsl(var(--primary))'}
+                        stroke={percentage >= 100 ? '#e4c76b' : '#c9a84c'}
                         strokeWidth={strokeWidth}
                         strokeLinecap="round"
                         strokeDasharray={circumference}
@@ -75,17 +71,17 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
 
                 {/* Center Content */}
                 <div className="absolute flex flex-col items-center justify-center text-center">
-                    <span className="text-4xl font-black tracking-tighter tabular-nums">
+                    <span className="font-mono-num text-[36px] font-medium tracking-tighter text-[#f0ece4]">
                         {Math.floor(rawPercentage)}%
                     </span>
-                    <span className="text-sm text-muted-foreground font-medium mt-1">
+                    <span className="text-[12px] text-[#9a9590] mt-[2px]">
                         {minutesStudied} / {dailyGoal} min
                     </span>
                 </div>
             </div>
 
-            <div className="text-center w-full px-4 mb-2">
-                <p className={`font-medium text-sm transition-colors duration-500 ${percentage >= 100 ? 'text-emerald-500' : 'text-foreground'}`}>
+            <div className="text-center w-full px-[16px]">
+                <p className={`text-[13px] font-medium transition-colors duration-500 ${percentage >= 100 ? 'text-[#e4c76b]' : 'text-[#f0ece4]'}`}>
                     {message}
                 </p>
             </div>
@@ -97,9 +93,9 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
 // ── SKELETON ──
 export function GoalProgressSkeleton() {
     return (
-        <div className="flex flex-col items-center justify-center p-6 bg-card border border-border rounded-3xl animate-pulse min-h-[320px]">
-            <div className="w-[188px] h-[188px] rounded-full border-[16px] border-muted mb-6" />
-            <div className="h-5 w-48 bg-muted rounded" />
+        <div className="parlova-card flex flex-col items-center justify-center min-h-[300px]">
+            <div className="skeleton w-[172px] h-[172px] rounded-pill mb-[24px]" />
+            <div className="skeleton h-[18px] w-[200px]" />
         </div>
     );
 }

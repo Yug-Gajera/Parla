@@ -1,7 +1,7 @@
 "use client";
 
 // ============================================================
-// Parlai — Listen Browser (Podcast shows + episodes)
+// Parlova — Listen Browser (Redesigned)
 // ============================================================
 
 import React from 'react';
@@ -15,12 +15,6 @@ interface ListenBrowserProps {
     languageId: string;
     onSelectEpisode: (episodeId: string) => void;
 }
-
-const LEVEL_COLORS: Record<string, string> = {
-    A1: 'bg-emerald-500/20 text-emerald-300', A2: 'bg-teal-500/20 text-teal-300',
-    B1: 'bg-blue-500/20 text-blue-300', B2: 'bg-violet-500/20 text-violet-300',
-    C1: 'bg-amber-500/20 text-amber-300', C2: 'bg-rose-500/20 text-rose-300',
-};
 
 function formatDuration(s: number): string {
     if (!s) return '';
@@ -40,51 +34,51 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
     const { shows, episodes, isLoading, hasMore, showFilter, setShowFilter, fetchMore } = useListen(languageId);
 
     return (
-        <div>
+        <div className="font-sans">
             {/* Shows row */}
             {shows.length > 0 && (
-                <div className="mb-6">
-                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Shows</h3>
-                    <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1">
+                <div className="mb-10">
+                    <h3 className="text-[10px] font-mono font-bold text-[#5a5652] uppercase tracking-[0.2em] mb-4">Current Series</h3>
+                    <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
                         {/* All shows chip */}
                         <button
                             onClick={() => setShowFilter('')}
-                            className={`shrink-0 transition-all ${!showFilter
-                                    ? 'ring-2 ring-primary ring-offset-2 ring-offset-background rounded-xl'
-                                    : ''
+                            className={`shrink-0 transition-all rounded-2xl border ${!showFilter
+                                    ? 'bg-[#141414] border-[#c9a84c]'
+                                    : 'bg-[#0f0f0f] border-[#1e1e1e] hover:border-[#2a2a2a]'
                                 }`}
                         >
-                            <Card className="p-3 w-28 h-28 flex flex-col items-center justify-center gap-2 bg-muted/50">
-                                <Radio className="w-5 h-5 text-muted-foreground" />
-                                <span className="text-xs font-medium text-center">All Shows</span>
-                            </Card>
+                            <div className="p-4 w-32 h-32 flex flex-col items-center justify-center gap-3">
+                                <Radio className={`w-6 h-6 ${!showFilter ? 'text-[#c9a84c]' : 'text-[#5a5652]'}`} />
+                                <span className={`text-[10px] font-mono tracking-widest uppercase ${!showFilter ? 'text-[#c9a84c]' : 'text-[#9a9590]'}`}>Master Feed</span>
+                            </div>
                         </button>
 
                         {shows.map((show: any) => (
                             <button
                                 key={show.id}
                                 onClick={() => setShowFilter(show.id === showFilter ? '' : show.id)}
-                                className={`shrink-0 transition-all ${showFilter === show.id
-                                        ? 'ring-2 ring-primary ring-offset-2 ring-offset-background rounded-xl'
-                                        : ''
+                                className={`shrink-0 transition-all rounded-2xl overflow-hidden border ${showFilter === show.id
+                                        ? 'border-[#c9a84c] ring-1 ring-[#c9a84c]/20'
+                                        : 'border-[#1e1e1e] hover:border-[#2a2a2a]'
                                     }`}
                             >
-                                <Card className="w-28 h-28 flex flex-col items-center justify-center gap-2 overflow-hidden relative">
+                                <div className="w-32 h-32 flex flex-col items-center justify-center gap-3 relative bg-[#141414]">
                                     <div
-                                        className="absolute inset-0 opacity-20"
-                                        style={{ backgroundColor: show.cover_color || '#666' }}
+                                        className="absolute inset-0 opacity-10"
+                                        style={{ backgroundColor: show.cover_color || '#c9a84c' }}
                                     />
-                                    <div className="relative z-10 flex flex-col items-center gap-1.5">
+                                    <div className="relative z-10 flex flex-col items-center">
                                         <div
-                                            className="w-8 h-8 rounded-lg flex items-center justify-center"
-                                            style={{ backgroundColor: show.cover_color || '#666' }}
+                                            className="w-10 h-10 rounded-full flex items-center justify-center border border-white/10 shadow-lg mb-2"
+                                            style={{ backgroundColor: show.cover_color || '#1e1e1e' }}
                                         >
-                                            <Headphones className="w-4 h-4 text-white" />
+                                            <Headphones className="w-4 h-4 text-white/90" />
                                         </div>
-                                        <span className="text-[10px] font-bold text-center line-clamp-2 px-1">{show.name}</span>
-                                        <span className="text-[9px] text-muted-foreground">{show.episode_count} ep</span>
+                                        <span className={`text-[10px] font-mono tracking-widest uppercase text-center line-clamp-2 px-2 ${showFilter === show.id ? 'text-[#c9a84c]' : 'text-[#f0ece4]'}`}>{show.name}</span>
+                                        <span className="text-[9px] text-[#5a5652] mt-1 font-mono tracking-wider">{show.episode_count} ep</span>
                                     </div>
-                                </Card>
+                                </div>
                             </button>
                         ))}
                     </div>
@@ -92,17 +86,17 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
             )}
 
             {/* Episodes */}
-            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Episodes</h3>
+            <h3 className="text-[10px] font-mono font-bold text-[#5a5652] uppercase tracking-[0.2em] mb-4">Episodes</h3>
 
             {isLoading && episodes.length === 0 ? (
-                <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+                <div className="flex justify-center py-24"><Loader2 className="w-8 h-8 animate-spin text-[#c9a84c]" /></div>
             ) : episodes.length === 0 ? (
-                <div className="text-center py-20">
-                    <Headphones className="w-10 h-10 mx-auto text-muted-foreground/50 mb-3" />
-                    <p className="text-muted-foreground">No episodes yet. Check back soon!</p>
+                <div className="text-center py-24 border border-[#1e1e1e] border-dashed rounded-2xl bg-[#0f0f0f]">
+                    <Headphones className="w-12 h-12 mx-auto text-[#5a5652] mb-4" />
+                    <p className="text-[#9a9590] font-serif text-lg">No episodes indexed for this selection.</p>
                 </div>
             ) : (
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {episodes.map((ep: any, i: number) => (
                         <motion.div
                             key={ep.id}
@@ -111,39 +105,42 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
                             transition={{ delay: i * 0.03 }}
                         >
                             <Card
-                                className="p-3 flex items-center gap-3 cursor-pointer hover:ring-1 hover:ring-primary/30 transition-all group"
+                                className="p-4 flex items-center gap-4 cursor-pointer bg-[#141414] border-[#1e1e1e] hover:border-[#c9a84c]/50 transition-all duration-300 group rounded-2xl h-full"
                                 onClick={() => onSelectEpisode(ep.id)}
                             >
                                 {/* Show color dot */}
                                 <div
-                                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform"
-                                    style={{ backgroundColor: ep.show?.cover_color || '#666' }}
+                                    className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 border border-white/10 group-hover:scale-105 transition-transform duration-500 shadow-md"
+                                    style={{ backgroundColor: ep.show?.cover_color || '#1e1e1e' }}
                                 >
-                                    <Play className="w-4 h-4 text-white ml-0.5" fill="white" />
+                                    <Play className="w-5 h-5 text-white/90 ml-1" fill="currentColor" />
                                 </div>
 
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-[10px] text-muted-foreground">{ep.show?.name}</p>
-                                    <h4 className="text-sm font-medium line-clamp-1">{ep.title}</h4>
-                                    <div className="flex items-center gap-2 mt-1">
+                                <div className="flex-1 min-w-0 flex flex-col">
+                                    <p className="text-[9px] font-mono uppercase tracking-widest text-[#9a9590] mb-0.5">{ep.show?.name}</p>
+                                    <h4 className="font-serif text-base text-[#f0ece4] line-clamp-1 mb-2 group-hover:text-[#c9a84c] transition-colors">{ep.title}</h4>
+                                    
+                                    <div className="flex items-center gap-3">
                                         {ep.cefr_level && (
-                                            <span className={`text-[9px] font-bold px-1 py-0.5 rounded ${LEVEL_COLORS[ep.cefr_level] || 'bg-muted text-muted-foreground'}`}>
+                                            <span className="text-[9px] font-mono tracking-widest uppercase border border-[#1e1e1e] px-1.5 py-0.5 rounded text-[#c9a84c] bg-[#c9a84c]/5">
                                                 {ep.cefr_level}
                                             </span>
                                         )}
                                         {ep.duration_seconds > 0 && (
-                                            <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                                                <Clock className="w-3 h-3" /> {formatDuration(ep.duration_seconds)}
+                                            <span className="text-[10px] font-mono text-[#5a5652] flex items-center gap-1 uppercase tracking-wider">
+                                                <Clock className="w-3 h-3 text-[#5a5652]" /> {formatDuration(ep.duration_seconds)}
                                             </span>
                                         )}
                                         {ep.published_at && (
-                                            <span className="text-[10px] text-muted-foreground">{formatDate(ep.published_at)}</span>
+                                            <span className="text-[10px] font-mono text-[#5a5652] uppercase tracking-wider">{formatDate(ep.published_at)}</span>
                                         )}
                                     </div>
                                 </div>
 
                                 {ep.user_progress?.completed && (
-                                    <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" fill="rgba(16,185,129,0.3)" />
+                                    <div className="shrink-0 bg-[#0f0f0f] border border-[#1e1e1e] rounded-full p-2">
+                                        <CheckCircle className="w-4 h-4 text-[#c9a84c]" />
+                                    </div>
                                 )}
                             </Card>
                         </motion.div>
@@ -152,10 +149,10 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
             )}
 
             {hasMore && (
-                <div className="flex justify-center mt-6">
-                    <Button variant="outline" onClick={fetchMore} disabled={isLoading} className="gap-2">
-                        {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                        Load More
+                <div className="flex justify-center mt-10 mb-6">
+                    <Button variant="outline" onClick={fetchMore} disabled={isLoading} className="gap-3 rounded-full bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] hover:border-[#2a2a2a] uppercase text-[10px] tracking-widest h-10 px-8">
+                        {isLoading && <Loader2 className="w-3 h-3 animate-spin text-[#c9a84c]" />}
+                        Access Archive
                     </Button>
                 </div>
             )}

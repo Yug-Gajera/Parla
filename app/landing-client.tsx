@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import './landing.css';
+import { SpeakingFigure } from '@/components/illustrations';
 
 interface LandingProps {
   isLoggedIn: boolean;
@@ -281,6 +282,25 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
                 </div>
                 <div className="phone-mic"><div className="mic-btn"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" fill="none" stroke="#080808" strokeWidth="2" strokeLinecap="round" /><line x1="12" y1="19" x2="12" y2="23" stroke="#080808" strokeWidth="2" /></svg></div><span>Tap to speak</span></div>
                 <div className="phone-score">&#11088; 91/100 · Great session!</div>
+              </div>
+              
+              <div style={{ display: "none" }} className="md:block absolute -right-20 -top-10">
+                <div style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "relative",
+                }}>
+                  <div style={{
+                    position: "absolute",
+                    width: "300px",
+                    height: "300px",
+                    borderRadius: "50%",
+                    background: "radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%)",
+                    pointerEvents: "none",
+                  }} />
+                  <SpeakingFigure />
+                </div>
               </div>
             </div>
           </div>

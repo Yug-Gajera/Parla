@@ -1,11 +1,15 @@
 "use client";
 
+// ============================================================
+// Parlova — Profile View (Redesigned)
+// ============================================================
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Edit2, Share, Brain, MessageSquare, Flame, Clock, Award, Download, ExternalLink, Settings, LogOut } from 'lucide-react';
+import { Edit2, Share, Brain, MessageSquare, Flame, Clock, Award, Download, ExternalLink, Settings2, LogOut } from 'lucide-react';
 import { EditProfileSheet } from './EditProfileSheet';
 import { toast } from 'sonner';
 import { useProfile } from '@/hooks/useProfile';
@@ -83,13 +87,13 @@ export function ProfileView({ initialData }: ProfileViewProps) {
     const currentLevelIndex = levelIndex >= 0 ? levelIndex : 0;
 
     return (
-        <div className="flex flex-col w-full max-w-5xl mx-auto gap-8 px-4 sm:px-6 py-8 pb-20">
+        <div className="flex flex-col w-full max-w-5xl mx-auto gap-12 px-6 sm:px-8 py-12 pb-24 font-sans bg-[#080808]">
 
             {/* Section 1: Profile Header */}
-            <div className="flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-6">
-                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 text-center sm:text-left">
-                    <div className="relative">
-                        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-secondary border-2 border-border flex items-center justify-center overflow-hidden">
+            <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between gap-8">
+                <div className="flex flex-col md:flex-row items-center md:items-center gap-8 text-center md:text-left">
+                    <div className="relative group">
+                        <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[#141414] border border-[#2a2a2a] flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:border-[#c9a84c]">
                             {profile?.avatar_url ? (
                                 <Image
                                     src={profile.avatar_url}
@@ -99,95 +103,107 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                                     className="object-cover"
                                 />
                             ) : (
-                                <span className="text-3xl font-black text-secondary-foreground">
-                                    {(profile?.full_name || 'U').trim().substring(0, 2).toUpperCase() || 'U'}
+                                <span className="text-4xl font-serif text-[#9a9590]">
+                                    {(profile?.full_name || 'U').trim().substring(0, 1).toUpperCase() || 'U'}
                                 </span>
                             )}
                         </div>
-                        <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground font-black text-xs px-2.5 py-1 rounded-full border-2 border-background shadow-lg shadow-primary/20">
+                        <div className="absolute -bottom-1 -right-1 bg-[#141414] text-[#c9a84c] border border-[#c9a84c]/50 font-mono text-xs px-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(201,168,76,0.15)] uppercase tracking-wider">
                             {levelProgress.currentLevel}
                         </div>
                     </div>
-                    <div className="flex flex-col gap-1.5">
-                        <h1 className="text-3xl font-black text-foreground tracking-tight">{profile?.full_name || 'Learner'}</h1>
-                        <p className="text-muted-foreground font-medium">
-                            Learning {languageName} since {startedAt ? new Date(startedAt).toLocaleDateString([], { month: 'long', year: 'numeric' }) : '—'}
+                    <div className="flex flex-col gap-2">
+                        <h1 className="text-4xl sm:text-5xl font-serif text-[#f0ece4] tracking-tight">{profile?.full_name || 'Learner'}</h1>
+                        <p className="text-[#9a9590] uppercase tracking-widest text-xs font-medium">
+                            Studying {languageName} <span className="mx-2 opacity-50">•</span> Since {startedAt ? new Date(startedAt).toLocaleDateString([], { month: 'long', year: 'numeric' }) : '—'}
                         </p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" className="rounded-full bg-card hover:bg-muted" onClick={() => setIsEditOpen(true)}>
-                        <Edit2 className="w-4 h-4 mr-2" /> Edit Profile
+                    <Button variant="outline" className="rounded-full bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] hover:border-[#2a2a2a] uppercase text-[10px] tracking-widest h-10 px-5" onClick={() => setIsEditOpen(true)}>
+                        <Edit2 className="w-3.5 h-3.5 mr-2" /> Edit Profile
                     </Button>
-                    <Button variant="outline" size="icon" className="rounded-full bg-card hover:bg-muted" onClick={handleShare}>
-                        <Share className="w-4 h-4 text-foreground" />
+                    <Button variant="outline" size="icon" className="rounded-full bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] hover:border-[#2a2a2a] h-10 w-10" onClick={handleShare}>
+                        <Share className="w-4 h-4" />
                     </Button>
                 </div>
             </div>
 
             {/* Section 2: Key Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Card className="p-5 flex flex-col justify-between border-border/50 bg-card/50">
-                    <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                        <Brain className="w-4 h-4" /> <span className="text-xs font-bold uppercase tracking-wider">Words Known</span>
+                <Card className="p-8 flex flex-col justify-between border-[#1e1e1e] bg-[#141414] rounded-2xl hover:border-[#2a2a2a] transition-all">
+                    <div className="flex items-center gap-3 text-[#5a5652] mb-6">
+                        <Brain className="w-4 h-4 text-[#c9a84c]" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Vocabulary</span>
                     </div>
-                    <span className="text-4xl font-black text-foreground">{stats.vocabKnown}</span>
+                    <span className="text-4xl font-mono text-[#f0ece4]">{stats.vocabKnown}</span>
                 </Card>
-                <Card className="p-5 flex flex-col justify-between border-border/50 bg-card/50">
-                    <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                        <MessageSquare className="w-4 h-4" /> <span className="text-xs font-bold uppercase tracking-wider">Conversations</span>
+                <Card className="p-8 flex flex-col justify-between border-[#1e1e1e] bg-[#141414] rounded-2xl hover:border-[#2a2a2a] transition-all">
+                    <div className="flex items-center gap-3 text-[#5a5652] mb-6">
+                        <MessageSquare className="w-4 h-4 text-[#c9a84c]" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Dialogues</span>
                     </div>
-                    <span className="text-4xl font-black text-foreground">{stats.conversations}</span>
+                    <span className="text-4xl font-mono text-[#f0ece4]">{stats.conversations}</span>
                 </Card>
-                <Card className="p-5 flex flex-col justify-between border-border/50 bg-card/50">
-                    <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                        <Flame className="w-4 h-4 text-orange-500" /> <span className="text-xs font-bold uppercase tracking-wider text-orange-500/80">Day Streak</span>
+                <Card className="p-8 flex flex-col justify-between border-[#1e1e1e] bg-[#141414] rounded-2xl hover:border-[#2a2a2a] transition-all">
+                    <div className="flex items-center gap-3 text-[#5a5652] mb-6">
+                        <Flame className="w-4 h-4 text-[#c9a84c]" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Day Streak</span>
                     </div>
-                    <span className="text-4xl font-black text-foreground">{stats.streak}</span>
+                    <span className="text-4xl font-mono text-[#f0ece4]">{stats.streak}</span>
                 </Card>
-                <Card className="p-5 flex flex-col justify-between border-border/50 bg-card/50">
-                    <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                        <Clock className="w-4 h-4" /> <span className="text-xs font-bold uppercase tracking-wider">Total Hours</span>
+                <Card className="p-8 flex flex-col justify-between border-[#1e1e1e] bg-[#141414] rounded-2xl hover:border-[#2a2a2a] transition-all">
+                    <div className="flex items-center gap-3 text-[#5a5652] mb-6">
+                        <Clock className="w-4 h-4 text-[#c9a84c]" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Focus Hours</span>
                     </div>
-                    <span className="text-4xl font-black text-foreground">{stats.totalHours}</span>
+                    <span className="text-4xl font-mono text-[#f0ece4]">{stats.totalHours}</span>
                 </Card>
             </div>
 
             {/* Section 3: Level Journey */}
-            <div className="flex flex-col gap-4">
-                <h3 className="font-bold text-lg">Level Journey</h3>
-                <Card className="p-8 border-border/50 bg-card flex flex-col gap-8">
-                    <div className="flex flex-col lg:flex-row items-stretch gap-8">
-                        <div className="flex-1 bg-secondary/50 rounded-2xl p-6 border border-border">
-                            <div className="flex justify-between items-end mb-4">
+            <div className="flex flex-col gap-6">
+                <h3 className="text-sm uppercase tracking-[0.2em] text-[#5a5652] font-medium">Acquisition Protocol</h3>
+                <Card className="p-8 md:p-10 border-[#1e1e1e] bg-[#141414] rounded-2xl flex flex-col gap-10">
+                    <div className="flex flex-col lg:flex-row items-stretch gap-10">
+                        <div className="flex-1 bg-[#0f0f0f] rounded-2xl p-8 border border-[#1e1e1e]">
+                            <div className="flex justify-between items-end mb-6">
                                 <div>
-                                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Current Level</h4>
-                                    <div className="text-4xl font-black">{levelProgress.currentLevel}</div>
+                                    <h4 className="text-[10px] font-mono uppercase tracking-widest text-[#5a5652] mb-2">Current Phase</h4>
+                                    <div className="text-5xl font-serif text-[#c9a84c] tracking-tight">{levelProgress.currentLevel}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Score</div>
-                                    <div className="text-xl font-bold">{levelProgress.levelScore} <span className="text-muted-foreground text-sm font-medium">/ {100}</span></div>
+                                    <div className="text-[10px] font-mono uppercase tracking-widest text-[#5a5652] mb-2">Continuum</div>
+                                    <div className="text-2xl font-mono text-[#f0ece4]">{levelProgress.levelScore} <span className="text-[#5a5652] text-sm">/ 100</span></div>
                                 </div>
                             </div>
-                            <Progress value={levelProgress.levelScore} className="h-4 bg-background border border-border" />
+                            <Progress value={levelProgress.levelScore} className="h-1 bg-[#1e1e1e] [&>div]:bg-[#c9a84c] rounded-full" />
                             {levelProgress.daysToNextLevel != null && levelProgress.daysToNextLevel > 0 && (
-                                <p className="text-xs text-muted-foreground text-center mt-4">
-                                    ~{levelProgress.daysToNextLevel} days to {CEFR_LEVELS[currentLevelIndex + 1] || 'next level'} at current pace
+                                <p className="text-xs font-mono text-[#9a9590] text-center mt-6 uppercase tracking-wider">
+                                    Est. {levelProgress.daysToNextLevel} days to {CEFR_LEVELS[currentLevelIndex + 1] || 'fluency'}
                                 </p>
                             )}
                         </div>
-                        <div className="flex-1 flex items-center gap-2 flex-wrap">
+                        
+                        {/* Level Nodes */}
+                        <div className="flex-1 flex items-center justify-between gap-2 overflow-x-auto hide-scrollbar px-2">
                             {CEFR_LEVELS.map((lvl, idx) => {
                                 const isPassed = idx < currentLevelIndex;
                                 const isCurrent = idx === currentLevelIndex;
                                 return (
-                                    <div key={lvl} className="flex flex-col items-center gap-2">
-                                        <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-colors
-                                            ${isPassed ? 'border-primary text-primary bg-primary/10' : isCurrent ? 'border-primary text-primary bg-primary/20 shadow-[0_0_20px_rgba(124,58,237,0.3)]' : 'border-muted text-muted-foreground bg-secondary'}
+                                    <div key={lvl} className="flex flex-col items-center gap-4 relative">
+                                        {/* Connector line */}
+                                        {idx < CEFR_LEVELS.length - 1 && (
+                                            <div className={`absolute top-6 left-[50%] w-full h-[1px] -z-10 ${
+                                                isPassed ? 'bg-[#c9a84c]/50' : 'bg-[#1e1e1e]'
+                                            }`} />
+                                        )}
+                                        <div className={`w-12 h-12 rounded-full border flex items-center justify-center font-mono text-xs transition-all duration-700
+                                            ${isPassed 
+                                                ? 'bg-[#141414] border-[#c9a84c] text-[#c9a84c]' 
+                                                : isCurrent 
+                                                    ? 'bg-[#c9a84c]/10 border-[#c9a84c] text-[#c9a84c] shadow-[0_0_20px_rgba(201,168,76,0.2)]' 
+                                                    : 'bg-[#0f0f0f] border-[#1e1e1e] text-[#5a5652]'}
                                         `}>
                                             {isPassed ? '✓' : lvl}
                                         </div>
-                                        <span className={`text-[10px] font-medium ${isPassed || isCurrent ? 'text-foreground' : 'text-muted-foreground'}`}>{lvl}</span>
+                                        <span className={`text-[10px] font-mono uppercase tracking-widest ${isPassed || isCurrent ? 'text-[#f0ece4]' : 'text-[#5a5652]'}`}>{lvl}</span>
                                     </div>
                                 );
                             })}
@@ -196,86 +212,47 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                 </Card>
             </div>
 
-            {/* Section 4: Account Actions */}
-            <Card className="border-border/40 shadow-sm bg-card/40 backdrop-blur-sm">
-                <CardHeader>
-                    <CardTitle className="text-xl flex items-center text-foreground">
-                        <Settings className="w-5 h-5 mr-2 text-primary" />
-                        Account Settings
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-background/50 rounded-lg border border-border/50">
-                        <div>
-                            <h4 className="font-medium text-foreground">Sign Out</h4>
-                            <p className="text-sm text-muted-foreground mt-1">
-                                Sign out of your account on this device.
-                            </p>
-                        </div>
-                        <Button
-                            variant="outline"
-                            className="mt-4 md:mt-0 font-medium"
-                            onClick={async () => {
-                                const { createClient } = await import('@/lib/supabase/client');
-                                const supabase = createClient();
-                                await supabase.auth.signOut();
-                                window.location.href = '/';
-                            }}
-                        >
-                            <LogOut className="w-4 h-4 mr-2" />
-                            Sign Out
-                        </Button>
-                    </div>
-
-                    <div className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-red-500/10 rounded-lg border border-red-500/20">
-                        <div>
-                            <h4 className="font-medium text-red-600 dark:text-red-400">Danger Zone</h4>
-                            <p className="text-sm text-red-600/80 dark:text-red-400/80 mt-1">
-                                Permanently delete your account and all learning data.
-                            </p>
-                        </div>
-                        <Button variant="destructive" className="mt-4 md:mt-0 font-medium bg-red-600 hover:bg-red-700">
-                            Delete Account
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
-
             {/* Section 4: Activity Chart */}
             <ActivityChart activityByDate={activityByDate} />
 
             {/* Section 5: Certificates */}
-            <div className="flex flex-col gap-4">
-                <h3 className="font-bold text-lg">Certificates</h3>
+            <div className="flex flex-col gap-6">
+                <h3 className="text-sm uppercase tracking-[0.2em] text-[#5a5652] font-medium">Credentials</h3>
                 {certificates.length === 0 ? (
-                    <Card className="p-8 border-border/50 bg-card flex flex-col items-center justify-center text-center min-h-[220px]">
-                        <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                            <Award className="w-8 h-8 text-muted-foreground" />
+                    <Card className="p-12 border border-[#1e1e1e] border-dashed bg-[#0f0f0f] flex flex-col items-center justify-center text-center min-h-[260px] rounded-2xl">
+                        <div className="w-16 h-16 bg-[#141414] border border-[#2a2a2a] rounded-full flex items-center justify-center mb-6">
+                            <Award className="w-6 h-6 text-[#5a5652]" />
                         </div>
-                        <h4 className="font-bold text-foreground mb-1">No Certificates Yet</h4>
-                        <p className="text-sm text-muted-foreground max-w-xs">
-                            Complete a level test and purchase your certificate to show it here.
+                        <h4 className="font-serif text-xl text-[#f0ece4] mb-3">No Certificates Recorded</h4>
+                        <p className="text-sm text-[#9a9590] max-w-sm mb-8 leading-relaxed">
+                            Undertake a verified tier examination to secure your linguistic certification.
                         </p>
                     </Card>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {certificates.map((cert) => (
-                            <Card key={cert.id} className="p-6 border-border/50 bg-card flex flex-col gap-4">
-                                <div className="flex items-center gap-3">
-                                    <span className="text-2xl">{(cert.languages as { flag_emoji?: string } | undefined)?.flag_emoji || '🏆'}</span>
+                            <Card key={cert.id} className="p-8 border-[#1e1e1e] bg-[#141414] hover:border-[#2a2a2a] transition-all flex flex-col gap-6 rounded-2xl relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-[#c9a84c]/5 rounded-bl-full -z-10 group-hover:bg-[#c9a84c]/10 transition-colors" />
+                                
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-full border border-[#1e1e1e] bg-[#0f0f0f] flex items-center justify-center text-xl">
+                                        {(cert.languages as { flag_emoji?: string } | undefined)?.flag_emoji || '🏆'}
+                                    </div>
                                     <div>
-                                        <div className="font-bold">{cert.level_achieved}</div>
-                                        <div className="text-xs text-muted-foreground">{new Date(cert.issued_at).toLocaleDateString()}</div>
+                                        <div className="font-serif text-2xl text-[#f0ece4]">{cert.level_achieved}</div>
+                                        <div className="text-[10px] font-mono text-[#5a5652] uppercase tracking-widest mt-1">{new Date(cert.issued_at).toLocaleDateString()}</div>
                                     </div>
                                 </div>
-                                <div className="text-xs font-mono text-muted-foreground">#{cert.verification_code}</div>
-                                <div className="flex gap-2">
-                                    <Button variant="outline" size="sm" onClick={() => toast.info('PDF generation coming soon')}>
-                                        <Download className="w-3 h-3 mr-1" /> Download
+                                <div className="text-[10px] font-mono text-[#9a9590] bg-[#0f0f0f] border border-[#1e1e1e] px-3 py-2 rounded-lg break-all">
+                                    ID: {cert.verification_code}
+                                </div>
+                                <div className="flex gap-3">
+                                    <Button variant="outline" size="sm" className="flex-1 bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#1e1e1e] text-[10px] uppercase tracking-widest h-8" onClick={() => toast.info('PDF generation coming soon')}>
+                                        <Download className="w-3 h-3 mr-2" /> PDF
                                     </Button>
-                                    <Button variant="outline" size="sm" asChild>
+                                    <Button variant="outline" size="sm" asChild className="flex-1 bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#1e1e1e] text-[10px] uppercase tracking-widest h-8">
                                         <a href="https://linkedin.com/in" target="_blank" rel="noopener noreferrer">
-                                            <ExternalLink className="w-3 h-3 mr-1" /> View on LinkedIn
+                                            <ExternalLink className="w-3 h-3 mr-2 text-[#c9a84c]" /> LinkedIn
                                         </a>
                                     </Button>
                                 </div>
@@ -286,34 +263,81 @@ export function ProfileView({ initialData }: ProfileViewProps) {
             </div>
 
             {/* Section 6: Badges */}
-            <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-end">
-                    <h3 className="font-bold text-lg">Achievements</h3>
-                    <span className="text-xs font-bold text-primary">
-                        {badges.filter((b) => b.earned).length} / {badges.length} UNLOCKED
+            <div className="flex flex-col gap-6">
+                <div className="flex justify-between items-end border-b border-[#1e1e1e] pb-4">
+                    <h3 className="text-sm uppercase tracking-[0.2em] text-[#5a5652] font-medium">Insignia</h3>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#c9a84c]">
+                        {badges.filter((b) => b.earned).length} / {badges.length} Unlocked
                     </span>
                 </div>
-                <Card className="p-6 border-border/50 bg-card">
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-5">
+                <Card className="p-8 md:p-10 border-[#1e1e1e] bg-[#141414] rounded-2xl">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-x-6 gap-y-10">
                         {badges.map((b) => {
                             const Icon = b.icon;
                             const earned = !!b.earned;
                             return (
                                 <div
                                     key={b.id}
-                                    className={`flex flex-col items-center text-center gap-2 transition-all ${earned ? 'cursor-pointer' : 'cursor-help opacity-60 grayscale hover:grayscale-0 hover:opacity-90'}`}
+                                    className={`flex flex-col items-center text-center gap-3 transition-all ${earned ? 'cursor-pointer hover:-translate-y-1' : 'cursor-help opacity-40 grayscale hover:grayscale-0 hover:opacity-100'}`}
                                     title={earned ? `Earned ${b.earned ? new Date(b.earned.earnedAt).toLocaleDateString() : ''}` : b.earnedCriteria}
                                 >
-                                    <div className={`w-14 h-14 rounded-full flex items-center justify-center border-2 transition-colors
-                                        ${earned ? 'bg-primary/20 text-primary border-primary/40' : 'bg-secondary text-muted-foreground border-border'}
+                                    <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center border transition-colors
+                                        ${earned ? 'bg-[#c9a84c]/10 text-[#c9a84c] border-[#c9a84c]/30 shadow-[0_0_15px_rgba(201,168,76,0.1)]' : 'bg-[#0f0f0f] text-[#5a5652] border-[#1e1e1e]'}
                                     `}>
-                                        <Icon className="w-6 h-6" />
+                                        <Icon className="w-6 h-6 sm:w-7 sm:h-7" />
                                     </div>
-                                    <span className="text-[10px] font-bold uppercase tracking-wider leading-tight text-foreground">{b.name}</span>
+                                    <span className="text-[9px] font-mono uppercase tracking-[0.1em] leading-tight text-[#9a9590]">{b.name}</span>
                                 </div>
                             );
                         })}
                     </div>
+                </Card>
+            </div>
+
+            {/* Section 7: Account Actions */}
+            <div className="flex flex-col gap-6 mt-8">
+                <h3 className="text-sm uppercase tracking-[0.2em] text-[#5a5652] font-medium">System Configuration</h3>
+                <Card className="border-[#1e1e1e] bg-[#141414] rounded-2xl overflow-hidden">
+                    <CardContent className="p-0">
+                        {/* Sign Out */}
+                        <div className="flex flex-col md:flex-row md:items-center justify-between p-6 sm:p-8 border-b border-[#1e1e1e] hover:bg-[#0f0f0f]/50 transition-colors">
+                            <div className="mb-4 md:mb-0">
+                                <h4 className="font-serif text-xl text-[#f0ece4] flex items-center gap-3">
+                                    <LogOut className="w-5 h-5 text-[#5a5652]" /> Sign Out Session
+                                </h4>
+                                <p className="text-sm text-[#9a9590] mt-2 max-w-md leading-relaxed">
+                                    Terminate your current session and return to the authorization portal.
+                                </p>
+                            </div>
+                            <Button
+                                variant="outline"
+                                className="bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#1e1e1e] uppercase tracking-widest text-[10px] h-10 px-6 rounded-full"
+                                onClick={async () => {
+                                    const { createClient } = await import('@/lib/supabase/client');
+                                    const supabase = createClient();
+                                    await supabase.auth.signOut();
+                                    window.location.href = '/';
+                                }}
+                            >
+                                Execute Sign Out
+                            </Button>
+                        </div>
+
+                        {/* Delete Account */}
+                        <div className="flex flex-col md:flex-row md:items-center justify-between p-6 sm:p-8 hover:bg-[#0f0f0f]/50 transition-colors">
+                            <div className="mb-4 md:mb-0">
+                                <h4 className="font-serif text-xl text-[#ef4444] opacity-90 flex items-center gap-3">
+                                    Termination Sequence
+                                </h4>
+                                <p className="text-sm text-[#ef4444]/60 mt-2 max-w-md leading-relaxed">
+                                    Permanently purge all user data, lexical progress, and account access. This action is irreversible.
+                                </p>
+                            </div>
+                            <Button variant="destructive" className="bg-[#ef4444]/10 text-[#ef4444] hover:bg-[#ef4444]/20 border border-[#ef4444]/20 uppercase tracking-widest text-[10px] h-10 px-6 rounded-full transition-colors">
+                                Purge Account
+                            </Button>
+                        </div>
+                    </CardContent>
                 </Card>
             </div>
 
@@ -329,7 +353,7 @@ export function ProfileView({ initialData }: ProfileViewProps) {
 
 function ActivityChart({ activityByDate }: { activityByDate: Record<string, number> }) {
     const cellSize = 12;
-    const gap = 2;
+    const gap = 3;
     const weeks = 52;
     const days = 7;
 
@@ -344,12 +368,14 @@ function ActivityChart({ activityByDate }: { activityByDate: Record<string, numb
         return d.toISOString().split('T')[0];
     };
 
+    // Gold luxury heat map theme
     const getColor = (mins: number) => {
-        if (mins === 0) return '#1a1a1a';
-        if (mins <= 10) return 'rgba(124, 58, 237, 0.15)';
-        if (mins <= 20) return 'rgba(124, 58, 237, 0.35)';
-        if (mins <= 30) return 'rgba(124, 58, 237, 0.55)';
-        return 'rgba(124, 58, 237, 0.9)';
+        if (mins === 0) return '#0f0f0f'; // empty state bg
+        if (mins <= 10) return 'rgba(201, 168, 76, 0.2)'; // faint gold
+        if (mins <= 20) return 'rgba(201, 168, 76, 0.4)';
+        if (mins <= 30) return 'rgba(201, 168, 76, 0.6)';
+        if (mins <= 45) return 'rgba(201, 168, 76, 0.8)';
+        return 'rgba(201, 168, 76, 1)'; // solid gold
     };
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -366,26 +392,26 @@ function ActivityChart({ activityByDate }: { activityByDate: Record<string, numb
     const height = days * (cellSize + gap) - gap;
 
     return (
-        <div className="flex flex-col gap-4">
-            <h3 className="font-bold text-lg">Activity (Last 365 days)</h3>
-            <Card className="p-6 border-border/50 bg-card overflow-x-auto relative">
+        <div className="flex flex-col gap-6">
+            <h3 className="text-sm uppercase tracking-[0.2em] text-[#5a5652] font-medium">Immersion Heatmap (365d)</h3>
+            <Card className="p-8 border-[#1e1e1e] bg-[#141414] rounded-2xl overflow-x-auto relative hide-scrollbar">
                 {Object.keys(activityByDate).length === 0 && (
-                    <div className="absolute inset-0 bg-background/50 backdrop-blur-[1px] z-10 flex items-center justify-center p-4">
-                        <div className="bg-card border border-border px-4 py-2 rounded-lg shadow-xl text-xs font-bold text-foreground">
-                            Start studying to see your activity chart fill up
+                    <div className="absolute inset-0 bg-[#080808]/80 backdrop-blur-sm z-10 flex items-center justify-center p-4 rounded-2xl">
+                        <div className="bg-[#141414] border border-[#2a2a2a] px-6 py-4 rounded-xl shadow-2xl text-xs uppercase tracking-widest text-[#c9a84c] font-mono">
+                            Initialize practice to populate heatmap
                         </div>
                     </div>
                 )}
-                <svg viewBox={`0 0 ${width + 60} ${height + 40}`} className="min-w-[600px]" style={{ maxWidth: '100%' }}>
+                <svg viewBox={`0 0 ${width + 60} ${height + 40}`} className="min-w-[700px] mx-auto" style={{ maxWidth: '100%' }}>
                     {/* Day labels - Sun, Mon, Tue... */}
                     {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((label, i) => (
-                        <text key={i} x={0} y={20 + i * (cellSize + gap) + cellSize / 2} fontSize={9} fill="currentColor" className="text-muted-foreground">
+                        <text key={i} x={0} y={24 + i * (cellSize + gap) + cellSize / 2} fontSize={9} fill="#5a5652" className="font-mono uppercase tracking-widest">
                             {label}
                         </text>
                     ))}
                     {/* Month labels at top */}
                     {monthPositions.map((m, i) => (
-                        <text key={i} x={45 + m.weekIndex * (cellSize + gap)} y={12} fontSize={9} fill="currentColor" className="text-muted-foreground">
+                        <text key={i} x={45 + m.weekIndex * (cellSize + gap)} y={10} fontSize={9} fill="#5a5652" className="font-mono uppercase tracking-widest">
                             {m.label}
                         </text>
                     ))}
@@ -406,7 +432,7 @@ function ActivityChart({ activityByDate }: { activityByDate: Record<string, numb
                                         height={cellSize}
                                         rx={2}
                                         fill={getColor(mins)}
-                                        className="transition-colors"
+                                        className="transition-all hover:opacity-80 cursor-crosshair stroke-[#1e1e1e] stroke-[0.5px]"
                                     >
                                         <title>{mins > 0 ? `${mins} minutes on ${dateStr}` : `No activity on ${dateStr}`}</title>
                                     </rect>

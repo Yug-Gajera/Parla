@@ -1,14 +1,14 @@
 "use client";
 
 // ============================================================
-// Parlova — Article Browser (Cost-Optimized, 3 feeds)
+// Parlova — Article Browser (Redesigned)
 // ============================================================
 
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { useArticles } from '@/hooks/useArticles';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Clock, CheckCircle2, Loader2, Newspaper, Search } from 'lucide-react';
+import { Clock, CheckCircle2, Loader2, Newspaper, Search, Terminal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
@@ -21,34 +21,22 @@ interface ArticleBrowserProps {
 
 const TOPIC_CHIPS = ['all', 'news', 'politics', 'culture', 'science', 'lifestyle', 'environment'];
 
-// Source badge colors matching the 3 launch feeds
+// Neutral, sophisticated source colors
 const SOURCE_COLORS: Record<string, string> = {
-    'BBC Mundo': 'bg-red-600',
-    'DW Español': 'bg-yellow-500',
-    '20 Minutos': 'bg-blue-500',
+    'BBC Mundo': 'bg-[#2a2a2a] text-[#f0ece4]',
+    'DW Español': 'bg-[#1e1e1e] text-[#e4c76b]',
+    '20 Minutos': 'bg-[#141414] text-[#c9a84c]',
 };
 
 function timeAgo(dateStr: string): string {
     const diff = Date.now() - new Date(dateStr).getTime();
     const mins = Math.floor(diff / 60000);
-    if (mins < 60) return `${mins}m ago`;
+    if (mins < 60) return `${mins}m`;
     const hours = Math.floor(mins / 60);
-    if (hours < 24) return `${hours}h ago`;
+    if (hours < 24) return `${hours}h`;
     const days = Math.floor(hours / 24);
-    if (days < 7) return `${days}d ago`;
-    return `${Math.floor(days / 7)}w ago`;
-}
-
-function levelColor(level: string): string {
-    const colors: Record<string, string> = {
-        A1: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-        A2: 'bg-green-500/10 text-green-400 border-green-500/30',
-        B1: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
-        B2: 'bg-violet-500/10 text-violet-400 border-violet-500/30',
-        C1: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-        C2: 'bg-red-500/10 text-red-400 border-red-500/30',
-    };
-    return colors[level] || 'bg-muted text-muted-foreground';
+    if (days < 7) return `${days}d`;
+    return `${Math.floor(days / 7)}w`;
 }
 
 export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowserProps) {
@@ -76,14 +64,14 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
     }, []);
 
     const levelTabs = [
-        { value: 'easier', label: 'Easier' },
-        { value: userLevel, label: userLevel },
-        { value: 'harder', label: 'Harder' },
-        { value: 'all', label: 'All' },
+        { value: 'easier', label: 'Simplified' },
+        { value: userLevel, label: `Target (${userLevel})` },
+        { value: 'harder', label: 'Advanced' },
+        { value: 'all', label: 'Unfiltered' },
     ];
 
     return (
-        <div className="flex flex-col gap-5 max-w-5xl mx-auto w-full">
+        <div className="flex flex-col gap-8 max-w-5xl mx-auto w-full font-sans">
             <AnimatePresence>
                 {activeArticleId && (
                     <ArticleReader
@@ -94,72 +82,87 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
             </AnimatePresence>
 
             {/* Header */}
-            <div>
-                <div className="flex items-center gap-3 mb-1">
-                    <div className="p-2 rounded-xl bg-primary/10">
-                        <Newspaper className="w-5 h-5 text-primary" />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-6 border-b border-[#1e1e1e]">
+                <div className="flex items-center gap-5">
+                    <div className="w-12 h-12 rounded-full border border-[#2a2a2a] bg-[#0f0f0f] flex items-center justify-center relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-[#c9a84c]/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Newspaper className="w-5 h-5 text-[#c9a84c] relative z-10" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold">Read</h2>
-                        <p className="text-sm text-muted-foreground">
-                            Real Spanish articles updated daily
+                        <h2 className="text-3xl font-serif text-[#f0ece4] tracking-tight mb-1">Immersion Library</h2>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#5a5652]">
+                            Authentic publications in <span className="text-[#9a9590]">real-time</span>
                         </p>
                     </div>
                 </div>
             </div>
 
-            {/* Level filter tabs */}
-            <div className="flex gap-2">
-                {levelTabs.map(tab => (
-                    <Button
-                        key={tab.value}
-                        size="sm"
-                        variant={levelFilter === tab.value ? 'default' : 'outline'}
-                        onClick={() => setLevelFilter(tab.value)}
-                        className={`text-xs font-bold rounded-full ${levelFilter === tab.value ? 'bg-primary' : 'bg-card border-border'}`}
-                    >
-                        {tab.label}
-                    </Button>
-                ))}
-            </div>
+            {/* Filters */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                
+                {/* Level Tabs */}
+                <div className="flex bg-[#0f0f0f] border border-[#1e1e1e] p-1 rounded-full w-full md:w-auto">
+                    {levelTabs.map(tab => {
+                        const active = levelFilter === tab.value;
+                        return (
+                            <Button
+                                key={tab.value}
+                                variant="ghost"
+                                onClick={() => setLevelFilter(tab.value)}
+                                className={`flex-1 md:flex-none text-[10px] font-mono tracking-widest uppercase rounded-full h-8 px-5 transition-all
+                                    ${active ? 'bg-[#141414] text-[#c9a84c] shadow-md border border-[#2a2a2a]' : 'text-[#5a5652] hover:text-[#9a9590]'}
+                                `}
+                            >
+                                {tab.label}
+                            </Button>
+                        );
+                    })}
+                </div>
 
-            {/* Topic filter chips */}
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-                {TOPIC_CHIPS.map(topic => (
-                    <button
-                        key={topic}
-                        onClick={() => setTopicFilter(topic)}
-                        className={`px-3 py-1 rounded-full text-xs font-medium capitalize whitespace-nowrap transition-all ${topicFilter === topic
-                            ? 'bg-primary/20 text-primary border border-primary/30'
-                            : 'bg-card border border-border text-muted-foreground hover:text-foreground'
-                            }`}
-                    >
-                        {topic === 'all' ? 'All Topics' : topic}
-                    </button>
-                ))}
+                {/* Topic Chips */}
+                <div className="flex gap-2 overflow-x-auto hide-scrollbar w-full md:w-auto mask-fade-right pr-4">
+                    {TOPIC_CHIPS.map(topic => {
+                        const active = topicFilter === topic;
+                        return (
+                            <button
+                                key={topic}
+                                onClick={() => setTopicFilter(topic)}
+                                className={`px-4 py-1.5 rounded-full text-[10px] font-mono uppercase tracking-widest whitespace-nowrap transition-all border
+                                    ${active
+                                        ? 'bg-[#c9a84c]/10 text-[#c9a84c] border-[#c9a84c]/30'
+                                        : 'bg-[#141414] border-[#1e1e1e] text-[#5a5652] hover:border-[#2a2a2a] hover:text-[#9a9590]'
+                                    }`}
+                            >
+                                {topic === 'all' ? 'All Channels' : topic}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
 
             {error && (
-                <Card className="p-6 text-center border-destructive/30">
-                    <p className="text-destructive font-medium">{error}</p>
-                </Card>
+                <div className="p-4 rounded-xl border border-[#ef4444]/20 bg-[#ef4444]/5 text-[#ef4444] text-sm text-center font-mono uppercase tracking-widest">
+                    <Terminal className="w-4 h-4 inline-block mr-2" /> Error: {error}
+                </div>
             )}
 
-            {/* Article cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Articles Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {isLoading && articles.length === 0 && (
                     Array.from({ length: 6 }).map((_, i) => (
-                        <Card key={`skeleton-${i}`} className="p-5 animate-pulse">
-                            <div className="flex items-center gap-2 mb-3">
-                                <div className="w-7 h-7 rounded-full bg-muted" />
-                                <div className="h-3 w-20 rounded bg-muted" />
+                        <Card key={`skeleton-${i}`} className="p-6 bg-[#0f0f0f] border-[#1e1e1e] animate-pulse rounded-2xl flex flex-col h-[280px]">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="w-8 h-8 rounded-full bg-[#141414] border border-[#2a2a2a]" />
+                                <div className="flex-1 flex justify-between">
+                                    <div className="h-3 w-20 rounded bg-[#1e1e1e]" />
+                                    <div className="h-3 w-10 rounded bg-[#141414]" />
+                                </div>
                             </div>
-                            <div className="h-5 w-3/4 rounded bg-muted mb-2" />
-                            <div className="h-3 w-full rounded bg-muted mb-1" />
-                            <div className="h-3 w-5/6 rounded bg-muted mb-4" />
-                            <div className="flex gap-2">
-                                <div className="h-5 w-10 rounded-full bg-muted" />
-                                <div className="h-5 w-16 rounded-full bg-muted" />
+                            <div className="h-6 w-3/4 rounded bg-[#1e1e1e] mb-3" />
+                            <div className="h-6 w-5/6 rounded bg-[#1e1e1e] mb-6" />
+                            <div className="mt-auto flex gap-2">
+                                <div className="h-5 w-12 rounded-full bg-[#141414]" />
+                                <div className="h-5 w-16 rounded-full bg-[#141414]" />
                             </div>
                         </Card>
                     ))
@@ -168,73 +171,87 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                 {articles.map((article, i) => {
                     const isCompleted = !!article.user_progress?.completed_at;
                     const isStarted = !!article.user_progress?.started_at && !isCompleted;
+                    const sourceStyle = SOURCE_COLORS[article.source_name] || 'bg-[#1e1e1e] text-[#5a5652]';
 
                     return (
                         <motion.div
                             key={article.id}
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.03 }}
+                            transition={{ delay: i * 0.04 }}
                         >
                             <Card
-                                className={`p-5 cursor-pointer transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 relative overflow-hidden ${isCompleted ? 'border-emerald-500/30 bg-emerald-500/5' : ''
-                                    }`}
+                                className={`p-6 sm:p-7 cursor-pointer transition-all duration-300 rounded-2xl flex flex-col h-[260px] md:h-[280px] group relative overflow-hidden border
+                                    ${isCompleted 
+                                        ? 'bg-[#0f0f0f] border-[#2a2a2a] opacity-80' 
+                                        : 'bg-[#141414] border-[#1e1e1e] hover:border-[#c9a84c]/50 hover:bg-[#171717] hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.4)]'
+                                    }
+                                `}
                                 onClick={() => handleArticleClick(article.id)}
                             >
+                                {/* Completion / Status indicator */}
                                 {isCompleted && (
-                                    <div className="absolute top-3 right-3 flex items-center gap-1.5">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                    <div className="absolute top-4 right-4 bg-[#080808] border border-[#c9a84c]/30 px-3 py-1 rounded-full flex items-center gap-2 shadow-inner">
+                                        <CheckCircle2 className="w-3 h-3 text-[#c9a84c]" />
                                         {article.user_progress?.comprehension_score !== null && (
-                                            <span className="text-[10px] font-bold text-emerald-500">
+                                            <span className="text-[10px] font-mono text-[#c9a84c]">
                                                 {article.user_progress?.comprehension_score}%
                                             </span>
                                         )}
                                     </div>
                                 )}
                                 {isStarted && (
-                                    <div className="absolute top-3 right-3">
-                                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-500">
-                                            In Progress
+                                    <div className="absolute top-4 right-4">
+                                        <span className="px-3 py-1 rounded-full text-[9px] font-mono uppercase tracking-widest bg-[#c9a84c]/10 text-[#c9a84c] border border-[#c9a84c]/20">
+                                            Active
                                         </span>
                                     </div>
                                 )}
 
-                                {/* Source badge */}
-                                <div className="flex items-center gap-2 mb-3">
-                                    <div className={`w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold ${SOURCE_COLORS[article.source_name] || 'bg-muted'}`}>
+                                {/* Source Header */}
+                                <div className="flex items-center gap-3 mb-5">
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-serif text-sm border border-[#2a2a2a] shadow-inner ${sourceStyle}`}>
                                         {article.source_name.charAt(0)}
                                     </div>
-                                    <span className="text-xs text-muted-foreground font-medium">
-                                        {article.source_name}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground/50">•</span>
-                                    <span className="text-xs text-muted-foreground/70">
-                                        {article.published_at ? timeAgo(article.published_at) : ''}
-                                    </span>
+                                    <div className="flex flex-col">
+                                        <span className="text-[11px] font-mono uppercase tracking-widest text-[#9a9590]">
+                                            {article.source_name}
+                                        </span>
+                                        <span className="text-[9px] font-mono text-[#5a5652] tracking-widest">
+                                            {article.published_at ? timeAgo(article.published_at) : '—'}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                <h3 className="font-bold text-foreground mb-2 line-clamp-2 leading-snug">
+                                {/* Content */}
+                                <h3 className={`font-serif text-lg leading-snug mb-3 line-clamp-2 ${isCompleted ? 'text-[#9a9590]' : 'text-[#f0ece4] group-hover:text-[#c9a84c] transition-colors'}`}>
                                     {article.title}
                                 </h3>
-                                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                                    {article.summary}
+                                <p className="text-[13px] text-[#5a5652] line-clamp-2 mb-6 font-sans">
+                                    {article.summary || "Select to initialize structural analysis and decode content."}
                                 </p>
 
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${levelColor(article.cefr_level)}`}>
+                                {/* Footer Tags */}
+                                <div className="mt-auto flex items-center gap-3 flex-wrap">
+                                    <span className={`px-2 py-1 rounded text-[9px] font-mono font-bold uppercase tracking-[0.2em] border 
+                                        ${article.cefr_level === userLevel 
+                                            ? 'bg-[#c9a84c]/10 text-[#c9a84c] border-[#c9a84c]/30' 
+                                            : 'bg-[#080808] text-[#9a9590] border-[#2a2a2a]'
+                                        }
+                                    `}>
                                         {article.cefr_level}
                                     </span>
-                                    <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                                        <Clock className="w-3 h-3" />
+                                    <span className="flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest text-[#5a5652]">
+                                        <Clock className="w-3 h-3 text-[#c9a84c]/50" />
                                         {article.estimated_read_minutes} min
                                     </span>
                                     {article.topics?.[0] && (
-                                        <span className="px-2 py-0.5 rounded-full text-[10px] bg-secondary text-muted-foreground capitalize">
+                                        <span className="px-2 py-1 rounded text-[9px] font-mono uppercase tracking-widest bg-[#0f0f0f] border border-[#1e1e1e] text-[#5a5652]">
                                             {article.topics[0]}
                                         </span>
                                     )}
-                                    <span className="text-[11px] text-muted-foreground/60 ml-auto">
-                                        {article.word_count} words
+                                    <span className="text-[9px] font-mono text-[#5a5652] uppercase tracking-[0.1em] ml-auto">
+                                        {article.word_count} W
                                     </span>
                                 </div>
                             </Card>
@@ -245,33 +262,33 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
 
             {/* Empty state */}
             {!isLoading && articles.length === 0 && !error && (
-                <Card className="p-12 flex flex-col items-center justify-center text-center bg-card/50 border-dashed border-2">
-                    <Search className="w-12 h-12 text-muted-foreground/30 mb-4" />
-                    <h3 className="text-lg font-bold mb-2">No articles at this level yet</h3>
-                    <p className="text-sm text-muted-foreground max-w-md mb-4">
-                        Check back tomorrow — new articles are added daily.
+                <Card className="p-16 flex flex-col items-center justify-center text-center bg-[#0f0f0f] border-dashed border-[#1e1e1e] rounded-3xl min-h-[300px]">
+                    <Search className="w-10 h-10 text-[#2a2a2a] mb-6" />
+                    <h3 className="text-xl font-serif text-[#f0ece4] mb-3">No Publications Found</h3>
+                    <p className="text-sm text-[#9a9590] max-w-sm mb-6 leading-relaxed">
+                        No articles match the current filter parameters. The intelligence feed updates at 00:00 GMT.
                     </p>
                     <Button
                         variant="outline"
                         onClick={() => setLevelFilter('all')}
-                        className="text-sm"
+                        className="rounded-full bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] hover:border-[#2a2a2a] font-mono text-[10px] uppercase tracking-widest px-8 h-10"
                     >
-                        Try All Levels
+                        Reset Filter
                     </Button>
                 </Card>
             )}
 
             {isLoading && articles.length > 0 && (
-                <div className="flex items-center justify-center py-6">
-                    <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                <div className="flex items-center justify-center py-8">
+                    <Loader2 className="w-6 h-6 text-[#c9a84c] animate-spin" />
                 </div>
             )}
 
-            {hasMore && <div ref={sentinelRef} className="h-4" />}
+            {hasMore && <div ref={sentinelRef} className="h-10 w-full" />}
 
             {!hasMore && articles.length > 0 && (
-                <p className="text-center text-xs text-muted-foreground py-4">
-                    You&apos;ve seen all available articles
+                <p className="text-center text-[10px] font-mono uppercase tracking-[0.2em] text-[#5a5652] py-8 border-t border-[#1e1e1e] mt-4">
+                    End of available feed
                 </p>
             )}
         </div>

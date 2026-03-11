@@ -56,24 +56,24 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
     // ── Reading Phase ──
     if (phase === 'reading') {
         return (
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full font-sans max-w-3xl mx-auto w-full px-4 sm:px-6 pt-6">
                 {/* Scene setter */}
-                <Card className="p-5 mb-6 bg-card/60 border-border/50">
-                    <p className="text-sm italic text-muted-foreground mb-3">{dialogue.setting}</p>
-                    <div className="flex items-center gap-6 text-sm">
-                        <span className="flex items-center gap-2">
-                            <span className="w-3 h-3 rounded-full bg-primary" />
+                <Card className="p-6 mb-8 bg-[#0f0f0f] border-[#1e1e1e] rounded-2xl">
+                    <p className="text-sm font-serif italic text-[#c9a84c] mb-4 text-center">{dialogue.setting}</p>
+                    <div className="flex items-center justify-center gap-8 text-[10px] font-mono tracking-widest uppercase">
+                        <span className="flex items-center gap-2 text-[#f0ece4]">
+                            <span className="w-2 h-2 rounded-full bg-[#c9a84c]" />
                             {dialogue.characters.a}
                         </span>
-                        <span className="flex items-center gap-2">
-                            <span className="w-3 h-3 rounded-full bg-blue-500" />
+                        <span className="flex items-center gap-2 text-[#f0ece4]">
+                            <span className="w-2 h-2 rounded-full bg-[#5a5652]" />
                             {dialogue.characters.b}
                         </span>
                     </div>
                 </Card>
 
                 {/* Dialogue lines */}
-                <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-4 pb-24">
+                <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-6 pb-32 custom-scrollbar pr-2">
                     {dialogue.lines.map((line, i) => {
                         const isA = line.speaker === 'a';
                         return (
@@ -82,23 +82,23 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.08 }}
-                                className={`flex flex-col ${isA ? 'items-start' : 'items-start pl-6 sm:pl-10'}`}
+                                className={`flex flex-col ${isA ? 'items-start' : 'items-end'}`}
                             >
-                                <div className="flex items-center gap-2 mb-1">
-                                    <span className={`w-2.5 h-2.5 rounded-full ${isA ? 'bg-primary' : 'bg-blue-500'}`} />
-                                    <span className="text-xs text-muted-foreground font-medium">
+                                <div className={`flex items-center gap-2 mb-2 ${isA ? 'self-start' : 'self-end flex-row-reverse'}`}>
+                                    <span className={`w-1.5 h-1.5 rounded-full ${isA ? 'bg-[#c9a84c]' : 'bg-[#5a5652]'}`} />
+                                    <span className="text-[10px] text-[#9a9590] font-mono uppercase tracking-widest">
                                         {isA ? dialogue.characters.a.split('—')[0].trim() : dialogue.characters.b.split('—')[0].trim()}
                                     </span>
                                 </div>
-                                <Card className={`p-4 max-w-[90%] ${isA ? 'border-l-2 border-l-primary' : 'border-l-2 border-l-blue-500'}`}>
-                                    <p className="text-lg font-medium text-foreground mb-1">{line.spanish}</p>
-                                    <p className="text-sm text-muted-foreground italic">{line.english}</p>
+                                <div className={`p-5 max-w-[85%] rounded-2xl relative ${isA ? 'bg-[#141414] border border-[#1e1e1e] rounded-tl-sm' : 'bg-[#0f0f0f] border border-[#2a2a2a] rounded-tr-sm'}`}>
+                                    <p className="text-lg font-serif text-[#f0ece4] mb-2 leading-relaxed">{line.spanish}</p>
+                                    <p className="text-sm text-[#9a9590] italic font-sans">{line.english}</p>
                                     {line.vocabulary.length > 0 && (
-                                        <div className="flex flex-wrap gap-1.5 mt-2">
+                                        <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-[#1e1e1e]">
                                             {line.vocabulary.map((v, vi) => (
                                                 <span
                                                     key={vi}
-                                                    className="px-2 py-0.5 text-xs rounded-full bg-primary/10 text-primary font-medium cursor-help"
+                                                    className="px-2.5 py-1 text-[10px] font-mono tracking-widest uppercase rounded border border-[#c9a84c]/30 text-[#c9a84c] cursor-help transition-colors hover:bg-[#c9a84c]/10"
                                                     title={`${v.translation}${v.note ? ` — ${v.note}` : ''}`}
                                                 >
                                                     {v.word}
@@ -106,28 +106,32 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                                             ))}
                                         </div>
                                     )}
-                                </Card>
+                                </div>
                             </motion.div>
                         );
                     })}
                 </div>
 
                 {/* Check Understanding button */}
-                <div className="sticky bottom-0 pt-4 pb-2 bg-gradient-to-t from-background via-background to-transparent">
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#080808] via-[#080808]/90 to-transparent">
                     <Button
                         onClick={() => setPhase('questions')}
                         disabled={!hasReadAll}
-                        className={`w-full h-12 text-base font-bold rounded-xl transition-all ${hasReadAll ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25' : 'opacity-50'
+                        className={`w-full max-w-md mx-auto h-14 text-[10px] font-mono tracking-widest uppercase font-bold rounded-full transition-all duration-500 shadow-[0_0_30px_rgba(0,0,0,0.8)] ${hasReadAll 
+                            ? 'bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] shadow-[0_4px_20px_rgba(201,168,76,0.2)]' 
+                            : 'bg-[#141414] text-[#5a5652] opacity-50 cursor-not-allowed border border-[#1e1e1e]'
                             }`}
                     >
-                        <BookOpen className="w-5 h-5 mr-2" />
-                        Check Understanding
+                        <BookOpen className="w-4 h-4 mr-2" />
+                        Commence Verification
                     </Button>
-                    {!hasReadAll && (
-                        <p className="text-xs text-center text-muted-foreground mt-2">
-                            Read through the entire dialogue to continue
-                        </p>
-                    )}
+                    <AnimatePresence>
+                        {!hasReadAll && (
+                            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[9px] font-mono text-center text-[#5a5652] mt-3 uppercase tracking-widest">
+                                Scroll to acknowledge complete dialogue sequence
+                            </motion.p>
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
         );
@@ -137,16 +141,16 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
     if (phase === 'questions') {
         const q = dialogue.questions[currentQ];
         return (
-            <div className="flex flex-col items-center w-full max-w-xl mx-auto pt-8">
+            <div className="flex flex-col items-center w-full max-w-xl mx-auto pt-10 px-6 font-sans">
                 {/* Progress */}
-                <div className="w-full mb-8">
-                    <div className="flex justify-between text-sm font-medium text-muted-foreground mb-2">
-                        <span>Comprehension Check</span>
-                        <span>{currentQ + 1} of {dialogue.questions.length}</span>
+                <div className="w-full mb-10">
+                    <div className="flex justify-between text-[10px] font-mono uppercase tracking-widest text-[#5a5652] mb-3">
+                        <span>Verification Phase</span>
+                        <span className="text-[#c9a84c]">{currentQ + 1} / {dialogue.questions.length}</span>
                     </div>
-                    <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                    <div className="h-1 bg-[#1e1e1e] rounded-full overflow-hidden">
                         <div
-                            className="h-full bg-primary transition-all duration-300"
+                            className="h-full bg-gradient-to-r from-[#8b7538] to-[#c9a84c] transition-all duration-500 ease-out"
                             style={{ width: `${((currentQ) / dialogue.questions.length) * 100}%` }}
                         />
                     </div>
@@ -155,31 +159,32 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentQ}
-                        initial={{ opacity: 0, x: 30 }}
+                        initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -30 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
                         className="w-full"
                     >
-                        <h2 className="text-xl font-bold text-center mb-8">{q.question}</h2>
-                        <div className="flex flex-col gap-3">
+                        <h2 className="text-2xl font-serif text-[#f0ece4] text-center mb-10 leading-snug">{q.question}</h2>
+                        <div className="flex flex-col gap-4">
                             {q.options.map((opt, idx) => {
-                                let cls = 'bg-card border-border hover:border-primary/50';
+                                let cls = 'bg-[#141414] border-[#1e1e1e] hover:border-[#c9a84c]/50 text-[#9a9590] hover:text-[#f0ece4]';
                                 if (selected !== null) {
-                                    if (idx === q.correct) cls = 'bg-emerald-500/10 border-emerald-500 text-emerald-500';
-                                    else if (idx === selected) cls = 'bg-destructive/10 border-destructive text-destructive opacity-70';
-                                    else cls = 'opacity-30 border-border bg-card';
+                                    if (idx === q.correct) cls = 'bg-[#c9a84c]/10 border-[#c9a84c] text-[#c9a84c] shadow-[0_0_15px_rgba(201,168,76,0.15)]';
+                                    else if (idx === selected) cls = 'bg-red-500/5 border-red-500/50 text-red-400 opacity-90';
+                                    else cls = 'opacity-30 border-[#1e1e1e] bg-[#0f0f0f] text-[#5a5652]';
                                 }
                                 return (
                                     <button
                                         key={idx}
                                         onClick={() => handleAnswer(idx)}
                                         disabled={selected !== null}
-                                        className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${cls}`}
+                                        className={`flex items-center gap-5 p-5 rounded-2xl border transition-all duration-300 text-left group ${cls}`}
                                     >
-                                        <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-secondary flex items-center justify-center font-bold text-sm">
+                                        <span className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center font-mono text-[10px] transition-colors ${selected === null ? 'border-[#2a2a2a] group-hover:border-[#c9a84c]' : 'border-transparent'}`}>
                                             {['A', 'B', 'C', 'D'][idx]}
                                         </span>
-                                        <span className="flex-1">{opt}</span>
+                                        <span className="flex-1 font-sans text-[15px]">{opt}</span>
                                     </button>
                                 );
                             })}
@@ -188,9 +193,9 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="mt-4 p-4 rounded-xl bg-card/80 border border-border"
+                                className="mt-8 p-6 rounded-2xl bg-[#080808] border border-[#2a2a2a] text-center"
                             >
-                                <p className="text-sm text-muted-foreground">{q.explanation}</p>
+                                <p className="text-sm font-sans text-[#f0ece4] leading-relaxed">{q.explanation}</p>
                             </motion.div>
                         )}
                     </motion.div>
@@ -204,31 +209,38 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center justify-center text-center w-full max-w-md mx-auto pt-12"
+            className="flex flex-col items-center justify-center text-center w-full max-w-md mx-auto h-full px-6 font-sans"
         >
-            <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${passed ? 'bg-emerald-500/10' : 'bg-amber-500/10'
-                }`}>
-                {passed ? (
-                    <CheckCircle2 className="w-10 h-10 text-emerald-500" />
-                ) : (
-                    <XCircle className="w-10 h-10 text-amber-500" />
-                )}
+            <div className="relative mb-8">
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center border transition-all duration-700 ${passed ? 'bg-[#c9a84c]/10 border-[#c9a84c]/30 shadow-[0_0_40px_rgba(201,168,76,0.2)]' : 'bg-red-500/10 border-red-500/30 shadow-[0_0_40px_rgba(239,68,68,0.1)]'
+                    }`}>
+                    {passed ? (
+                        <CheckCircle2 className="w-10 h-10 text-[#c9a84c]" />
+                    ) : (
+                        <XCircle className="w-10 h-10 text-red-500" />
+                    )}
+                </div>
             </div>
 
-            <h2 className="text-2xl font-bold mb-2">
-                {passed ? 'Great job! Step 1 complete' : "Let\u0027s review"}
+            <h2 className="text-3xl font-serif text-[#f0ece4] mb-3">
+                {passed ? 'Phase 1 Complete' : "Review Required"}
             </h2>
-            <p className="text-muted-foreground mb-2">
-                {correctCount} of {dialogue.questions.length} correct ({scorePercent}%)
-            </p>
+            <div className="flex items-center gap-3 mb-6">
+                <p className="font-mono text-xs text-[#5a5652] uppercase tracking-widest">
+                    Score metric
+                </p>
+                <p className="font-mono text-xl text-[#c9a84c]">
+                    {scorePercent}%
+                </p>
+            </div>
 
             {passed ? (
-                <p className="text-sm text-emerald-500 mb-8">
-                    You understood the dialogue well. Time to learn the key phrases!
+                <p className="text-sm text-[#9a9590] mb-12 max-w-xs leading-relaxed">
+                    Comprehension validated. Proceeding to lexical acquisition phase.
                 </p>
             ) : (
-                <p className="text-sm text-amber-500 mb-8">
-                    Review the dialogue and try again. You need 70% to continue.
+                <p className="text-sm text-[#9a9590] mb-12 max-w-xs leading-relaxed">
+                    Minimum threshold (70%) not met. Diagnostic recalibration required.
                 </p>
             )}
 
@@ -243,13 +255,13 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                         setCorrectCount(0);
                     }
                 }}
-                className={`w-full h-12 text-base font-bold rounded-xl ${passed ? 'bg-primary' : 'bg-amber-600 hover:bg-amber-700'
+                className={`w-full h-14 text-[10px] font-mono font-bold tracking-widest uppercase rounded-full transition-all duration-300 ${passed ? 'bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] shadow-[0_4px_20px_rgba(201,168,76,0.2)]' : 'bg-[#141414] text-[#f0ece4] border border-[#2a2a2a] hover:bg-[#1e1e1e]'
                     }`}
             >
                 {passed ? (
-                    <>Continue to Phrases <ChevronRight className="w-5 h-5 ml-1" /></>
+                    <>Proceed to Lexicon <ChevronRight className="w-4 h-4 ml-2" /></>
                 ) : (
-                    <>Review Dialogue</>
+                    <>Re-initialize Dialogue Review</>
                 )}
             </Button>
         </motion.div>
