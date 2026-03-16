@@ -7,7 +7,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Mic2, Layers, BookOpen, Trophy, ArrowRight } from 'lucide-react';
-import { TinySittingFigure } from '@/components/illustrations';
 
 type VariantName = 'gold' | 'success' | 'warning' | 'error' | 'neutral';
 
@@ -57,7 +56,7 @@ export default function QuickActions() {
                 const Icon = action.icon;
                 const v = VARIANT_STYLES[action.variant];
                 
-                const isConversation = action.href === '/practice';
+
 
                 const cardContent = (
                     <Link
@@ -103,24 +102,6 @@ export default function QuickActions() {
                     </Link>
                 );
 
-                if (isConversation) {
-                    return (
-                        <div key={i} style={{ position: "relative" }} className="w-full h-full">
-                            <div style={{ display: "none" }} className="md:block">
-                                <div style={{
-                                    position: "absolute",
-                                    top: "-35px", right: "16px",
-                                    opacity: 0.6,
-                                    pointerEvents: "none",
-                                    zIndex: 10
-                                }}>
-                                    <TinySittingFigure />
-                                </div>
-                            </div>
-                            {cardContent}
-                        </div>
-                    );
-                }
 
                 return (
                     <div key={i} className="w-full h-full">

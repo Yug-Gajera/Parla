@@ -11,6 +11,11 @@ interface OnboardingState {
     assessedLevel: string | null;
     levelScore: number | null;
     diagnosticAnswers: Record<string, number>; // questionId -> selectedOptionIndex
+    
+    // Vocab Import State
+    estimatedLevel: string | null;
+    highConfidence: boolean;
+    importMethod: string | null;
 
     // Actions
     nextStep: () => void;
@@ -21,6 +26,7 @@ interface OnboardingState {
     setSelfReportedLevel: (level: string) => void;
     setDiagnosticAnswer: (questionId: string, answerIndex: number) => void;
     setAssessmentResult: (level: string, score: number) => void;
+    setVocabularyImportResult: (level: string | null, confidence: boolean, method: string) => void;
     resetOnboarding: () => void;
 }
 
@@ -34,8 +40,11 @@ export const useOnboardingStore = create<OnboardingState>((set) => ({
     assessedLevel: null,
     levelScore: null,
     diagnosticAnswers: {},
+    estimatedLevel: null,
+    highConfidence: false,
+    importMethod: null,
 
-    nextStep: () => set((state) => ({ currentStep: Math.min(6, state.currentStep + 1) })),
+    nextStep: () => set((state) => ({ currentStep: Math.min(7, state.currentStep + 1) })),
     prevStep: () => set((state) => ({ currentStep: Math.max(1, state.currentStep - 1) })),
 
     setLanguage: (id, code) => set({ selectedLanguageId: id, selectedLanguageCode: code }),
@@ -52,6 +61,7 @@ export const useOnboardingStore = create<OnboardingState>((set) => ({
         })),
 
     setAssessmentResult: (level, score) => set({ assessedLevel: level, levelScore: score }),
+    setVocabularyImportResult: (level, confidence, method) => set({ estimatedLevel: level, highConfidence: confidence, importMethod: method }),
 
     resetOnboarding: () => set({
         currentStep: 1,
@@ -63,5 +73,8 @@ export const useOnboardingStore = create<OnboardingState>((set) => ({
         assessedLevel: null,
         levelScore: null,
         diagnosticAnswers: {},
+        estimatedLevel: null,
+        highConfidence: false,
+        importMethod: null,
     })
 }));

@@ -9,7 +9,7 @@ Your job is to generate ENGAGING, FUN diagnostic questions — NOT boring textbo
 
 You MUST return valid JSON and nothing else — no markdown fencing, no explanation text.
 
-Return a JSON array of 10 question objects. Each object:
+Return a JSON array of {QUESTION_COUNT} question objects. Each object:
 {
   "id": "q1",
   "question": "string — make questions fun! Use scenarios, pop culture, real-life situations. E.g. 'You're at a tapas bar and the waiter asks \"¿Qué van a tomar?\" — what's he asking?'",
@@ -21,7 +21,7 @@ Return a JSON array of 10 question objects. Each object:
 }
 
 Rules:
-- Generate exactly 10 questions.
+- Generate exactly {QUESTION_COUNT} questions.
 - "correct_answer" is a 0-based index (0–3).
 - "difficulty_level" must be one of: A1, A2, B1, B2, C1, C2.
 - Adapt difficulty based on the learner's self-reported level. Include a spread: some below, at, and above their level.
@@ -34,7 +34,7 @@ Rules:
 
 export async function POST(req: Request) {
     try {
-        const { selfReportedLevel, languageCode } = await req.json();
+        const { selfReportedLevel, languageCode, questionCount = 10 } = await req.json();
 
         if (!selfReportedLevel || !languageCode) {
             return NextResponse.json(
@@ -43,11 +43,13 @@ export async function POST(req: Request) {
             );
         }
 
-        const promptMessage = `The learner wants to learn language code "${languageCode}" and self-reports their level as ${selfReportedLevel} on the CEFR scale. Generate 10 engaging, scenario-based diagnostic questions that feel like a fun game, not a boring test.`;
+        const promptMessage = `The learner wants to learn language code "${languageCode}" and self-reports their level as ${selfReportedLevel} on the CEFR scale. Generate ${questionCount} engaging, scenario-based diagnostic questions that feel like a fun game, not a boring test.`;
+
+        const resolvedSystemPrompt = DIAGNOSTIC_SYSTEM_PROMPT.replace(/{QUESTION_COUNT}/g, questionCount.toString());
 
         const response = await callClaude(
             [{ role: 'user', content: promptMessage }],
-            DIAGNOSTIC_SYSTEM_PROMPT,
+            resolvedSystemPrompt,
             { temperature: 0.8, maxTokens: 3000, model: 'sonnet' }
         );
 
@@ -56,7 +58,7 @@ export async function POST(req: Request) {
             const cleanedContent = response.content.replace(/```json\n?|\n?```/g, '').trim();
             questions = JSON.parse(cleanedContent);
 
-            if (!Array.isArray(questions) || questions.length !== 10) {
+            if (!Array.isArray(questions) || questions.length !== questionCount) {
                 throw new Error('Invalid response format or length');
             }
         } catch (parseError) {

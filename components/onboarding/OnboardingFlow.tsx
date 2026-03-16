@@ -14,6 +14,7 @@ import StepTime from '@/components/onboarding/StepTime';
 import StepLevel from '@/components/onboarding/StepLevel';
 import StepDiagnostic from '@/components/onboarding/StepDiagnostic';
 import StepResult from '@/components/onboarding/StepResult';
+import StepVocabularyImport from '@/components/onboarding/StepVocabularyImport';
 
 export default function OnboardingFlow() {
     const currentStep = useOnboardingStore((state) => state.currentStep);
@@ -27,11 +28,13 @@ export default function OnboardingFlow() {
             case 3:
                 return <StepTime key="step3" />;
             case 4:
-                return <StepLevel key="step4" />;
+                return <StepVocabularyImport key="step4" />;
             case 5:
-                return <StepDiagnostic key="step5" />;
+                return <StepLevel key="step5" />;
             case 6:
-                return <StepResult key="step6" />;
+                return <StepDiagnostic key="step6" />;
+            case 7:
+                return <StepResult key="step7" />;
             default:
                 return null;
         }

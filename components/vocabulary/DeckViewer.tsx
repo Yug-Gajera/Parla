@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import { useVocabulary, VocabularyWord } from '@/hooks/useVocabulary';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Plus, LayoutGrid } from 'lucide-react';
+import { Search, Plus, LayoutGrid, Upload } from 'lucide-react';
 import { WordDetailSheet } from './WordDetailSheet';
 import { AddWordSheet } from './AddWordSheet';
+import { VocabularyImportModal } from './VocabularyImportModal';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ReadingFigure, DoodleArrow } from '@/components/illustrations';
 
 interface DeckViewerProps {
     languageId: string | null;
@@ -23,6 +23,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
     const [selectedWord, setSelectedWord] = useState<VocabularyWord | null>(null);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false);
+    const [isImportOpen, setIsImportOpen] = useState(false);
 
     // Filters array
     const filters = [
@@ -44,6 +45,19 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
 
     return (
         <div className="w-full h-full flex flex-col relative bg-transparent font-sans">
+            {/* Header Row */}
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-serif text-[#f0ece4]">Lexicon Inventory</h2>
+                <Button 
+                    variant="outline" 
+                    onClick={() => setIsImportOpen(true)}
+                    className="border-[#2a2a2a] bg-[#141414] text-[#f0ece4] hover:bg-[#1e1e1e] hover:border-[#c9a84c]/30 transition-colors h-10 px-4 rounded-xl flex items-center font-sans"
+                >
+                    <Upload className="w-4 h-4 mr-2 text-[#c9a84c]" />
+                    Import vocabulary
+                </Button>
+            </div>
+
             {/* Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
                 <div className="p-5 rounded-2xl bg-[#141414] border border-[#1e1e1e] flex flex-col shadow-inner">
@@ -103,9 +117,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                         gap: "16px",
                         padding: "48px 24px",
                     }}>
-                        <div style={{ display: "none" }} className="md:block">
-                            <ReadingFigure />
-                        </div>
+
                         <p style={{
                             fontFamily: "DM Sans, sans-serif",
                             fontSize: "15px",
@@ -116,14 +128,27 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                         }}>
                             No words yet. Start reading to build your deck.
                         </p>
-                        <div style={{ display: "none" }} className="md:block">
-                            <DoodleArrow direction="down" />
-                        </div>
+
                         {!search && (
                             <Button onClick={() => setIsAddOpen(true)} className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-12 px-8 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all">
                                 <Plus className="mr-2 h-4 w-4" /> Index New Word
                             </Button>
                         )}
+
+                        {/* Dashed Import Card for Empty State */}
+                        <div className="bg-[#c9a84c]/5 border border-dashed border-[#c9a84c]/30 rounded-[14px] p-6 text-center mt-6 w-full max-w-sm flex flex-col items-center">
+                            <Upload className="text-[#c9a84c] mb-3" size={32} />
+                            <h3 className="font-sans font-semibold text-[15px] text-[#f0ece4] mb-1">Already know some Spanish?</h3>
+                            <p className="font-sans text-[13px] text-[#9a9590] mb-5 leading-snug">
+                                Import your existing vocabulary instead of starting from scratch
+                            </p>
+                            <Button 
+                                onClick={() => setIsImportOpen(true)}
+                                className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-sans font-medium h-10 px-6 rounded-xl transition-colors"
+                            >
+                                Import vocabulary
+                            </Button>
+                        </div>
                     </div>
                 ) : (
                     <div className="divide-y divide-[#1e1e1e]">
@@ -194,6 +219,13 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                 onOpenChange={setIsAddOpen}
                 languageId={languageId}
                 refreshDeck={refreshStats}
+            />
+
+            <VocabularyImportModal 
+                isOpen={isImportOpen} 
+                onClose={() => setIsImportOpen(false)} 
+                currentLevel="A1" // ideally pass down from hook or props, but this serves as fallback
+                onSuccessAction={refreshStats}
             />
         </div>
     );

@@ -3,7 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import './landing.css';
-import { SpeakingFigure } from '@/components/illustrations';
+
+declare global {
+  interface Window {
+    toggleFaq: (el: HTMLElement) => void;
+    showWaitlist: (lang: string) => void;
+    submitWaitlist: (lang: string) => void;
+  }
+}
 
 interface LandingProps {
   isLoggedIn: boolean;
@@ -35,14 +42,14 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
         mobileMenu.classList.toggle('open');
       });
       // Close on link click
-      mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileMenu.querySelectorAll<HTMLElement>('a').forEach(a => a.addEventListener('click', () => {
         hamburger.classList.remove('open');
         mobileMenu.classList.remove('open');
       }));
     }
 
     // ── Scroll Reveal ────────────────────────────────
-    const reveals = document.querySelectorAll('.reveal');
+    const reveals = document.querySelectorAll<HTMLElement>('.reveal');
     const revealObs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) { e.target.classList.add('revealed'); revealObs.unobserve(e.target) }
@@ -51,7 +58,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
     reveals.forEach(el => revealObs.observe(el));
 
     // ── Hero word animation ──────────────────────────
-    const words = document.querySelectorAll('#hero-headline .word');
+    const words = document.querySelectorAll<HTMLElement>('#hero-headline .word');
     words.forEach((w, i) => {
       w.style.opacity = '0'; w.style.transform = 'translateY(12px)';
       w.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
@@ -61,18 +68,18 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
     });
 
     // ── Counter animation ────────────────────────────
-    const counters = document.querySelectorAll('.counter');
+    const counters = document.querySelectorAll<HTMLElement>('.counter');
     const counterObs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          const el = e.target;
-          const target = parseInt(el.dataset.target);
+          const el = e.target as HTMLElement;
+          const target = parseInt(el.dataset.target || '0');
           const dur = 1500;
           const start = performance.now();
-          const animate = (now) => {
+          const animate = (now: number) => {
             const p = Math.min((now - start) / dur, 1);
             const eased = 1 - Math.pow(1 - p, 3);
-            el.textContent = Math.round(eased * target);
+            el.textContent = Math.round(eased * target).toString();
             if (p < 1) requestAnimationFrame(animate);
           };
           requestAnimationFrame(animate);
@@ -83,11 +90,11 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
     counters.forEach(c => counterObs.observe(c));
 
     // ── Score bars animation ─────────────────────────
-    const scoreFills = document.querySelectorAll('.score-fill');
+    const scoreFills = document.querySelectorAll<HTMLElement>('.score-fill');
     const scoreObs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          const el = e.target;
+          const el = e.target as HTMLElement;
           el.style.width = el.dataset.width + '%';
           scoreObs.unobserve(el);
         }
@@ -98,15 +105,16 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
     // ── FAQ Accordion ────────────────────────────────
     window.toggleFaq = function (el) {
       const item = el.closest('.faq-item');
+      if (!item) return;
       const wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      document.querySelectorAll<HTMLElement>('.faq-item.open').forEach(i => i.classList.remove('open'));
       if (!wasOpen) item.classList.add('open');
     }
 
     // ── Pricing Toggle ───────────────────────────────
-    const toggle = document.getElementById('billing-toggle');
-    const togMonthly = document.getElementById('tog-monthly');
-    const togAnnual = document.getElementById('tog-annual');
+    const toggle = document.getElementById('billing-toggle') as HTMLElement;
+    const togMonthly = document.getElementById('tog-monthly') as HTMLElement;
+    const togAnnual = document.getElementById('tog-annual') as HTMLElement;
     let isAnnual = false;
 
     toggle.addEventListener('click', () => {
@@ -114,33 +122,33 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
       toggle.classList.toggle('annual', isAnnual);
       togMonthly.classList.toggle('active', !isAnnual);
       togAnnual.classList.toggle('active', isAnnual);
-      document.querySelectorAll('.price-switch').forEach(el => {
-        const amt = el.querySelector('.price-amount');
-        const period = el.querySelector('.price-period');
-        if (amt) amt.textContent = isAnnual ? el.dataset.annual : el.dataset.monthly;
-        if (period) period.textContent = isAnnual ? period.dataset.annual : period.dataset.monthly;
+      document.querySelectorAll<HTMLElement>('.price-switch').forEach(el => {
+        const amt = el.querySelector<HTMLElement>('.price-amount');
+        const period = el.querySelector<HTMLElement>('.price-period');
+        if (amt) amt.textContent = (isAnnual ? el.dataset.annual : el.dataset.monthly) || null;
+        if (period) period.textContent = (isAnnual ? period.dataset.annual : period.dataset.monthly) || null;
       });
-      document.querySelectorAll('.annual-note').forEach(el => {
+      document.querySelectorAll<HTMLElement>('.annual-note').forEach(el => {
         el.innerHTML = isAnnual ? (el.dataset.annual || '&nbsp;') : '&nbsp;';
       });
     });
     toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click() } });
 
     window.showWaitlist = function (lang) {
-      const card = document.getElementById('lang-' + lang);
-      card.querySelector('.waitlist-btn').style.display = 'none';
-      card.querySelector('.lang-form').style.display = 'flex';
-      card.querySelector('.lang-form input').focus();
+      const card = document.getElementById('lang-' + lang) as HTMLElement;
+      card.querySelector<HTMLElement>('.waitlist-btn')!.style.display = 'none';
+      card.querySelector<HTMLElement>('.lang-form')!.style.display = 'flex';
+      card.querySelector<HTMLInputElement>('.lang-form input')?.focus();
     }
     window.submitWaitlist = async function (lang) {
-      const card = document.getElementById('lang-' + lang);
-      const input = card.querySelector('.lang-form input');
-      const email = input.value;
+      const card = document.getElementById('lang-' + lang) as HTMLElement;
+      const input = card.querySelector<HTMLInputElement>('.lang-form input');
+      const email = input?.value || '';
       if (!email || !email.includes('@')) return;
 
-      const btn = card.querySelector('.lang-form button');
-      btn.textContent = '...';
-      btn.disabled = true;
+      const btn = card.querySelector<HTMLButtonElement>('.lang-form button');
+      if(btn) btn.textContent = '...';
+      if(btn) btn.disabled = true;
 
       try {
         const res = await fetch('/api/waitlist', {
@@ -149,16 +157,16 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
           body: JSON.stringify({ email, language: lang }),
         });
         if (res.ok) {
-          card.querySelector('.lang-form').style.display = 'none';
-          card.querySelector('.lang-success').style.display = 'block';
+          card.querySelector<HTMLElement>('.lang-form')!.style.display = 'none';
+          card.querySelector<HTMLElement>('.lang-success')!.style.display = 'block';
         } else {
-          btn.textContent = 'Submit';
-          btn.disabled = false;
+          if(btn) btn.textContent = 'Submit';
+          if(btn) btn.disabled = false;
           alert('Something went wrong. Please try again.');
         }
       } catch {
-        btn.textContent = 'Submit';
-        btn.disabled = false;
+        if(btn) btn.textContent = 'Submit';
+        if(btn) btn.disabled = false;
         alert('Network error. Please try again.');
       }
     }
@@ -172,29 +180,29 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
   const toggleFaq = (e: any) => {
     const item = e.currentTarget.closest('.faq-item');
     const wasOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    document.querySelectorAll<HTMLElement>('.faq-item.open').forEach(i => i.classList.remove('open'));
     if (!wasOpen) item.classList.add('open');
   };
 
   const showWaitlist = (lang: string) => {
-    const card = document.getElementById('lang-' + lang);
+    const card = document.getElementById('lang-' + lang) as HTMLElement;
     if (!card) return;
-    card.querySelector('.waitlist-btn')!.setAttribute('style', 'display:none');
-    card.querySelector('.lang-form')!.setAttribute('style', 'display:flex');
-    (card.querySelector('.lang-form input') as HTMLInputElement).focus();
+    card.querySelector<HTMLElement>('.waitlist-btn')!.setAttribute('style', 'display:none');
+    card.querySelector<HTMLElement>('.lang-form')!.setAttribute('style', 'display:flex');
+    (card.querySelector<HTMLElement>('.lang-form input') as HTMLInputElement).focus();
   };
 
   const submitWaitlist = async (lang: string) => {
-    const card = document.getElementById('lang-' + lang);
+    const card = document.getElementById('lang-' + lang) as HTMLElement;
     if (!card) return;
-    const input = card.querySelector('.lang-form input') as HTMLInputElement;
-    const email = input.value;
+    const input = card.querySelector<HTMLElement>('.lang-form input') as HTMLInputElement;
+    const email = input?.value || '';
     if (!email || !email.includes('@')) return;
 
     // Disable button while submitting
-    const btn = card.querySelector('.lang-form button') as HTMLButtonElement;
-    btn.textContent = '...';
-    btn.disabled = true;
+    const btn = card.querySelector<HTMLElement>('.lang-form button') as HTMLButtonElement;
+    if(btn) btn.textContent = '...';
+    if(btn) btn.disabled = true;
 
     try {
       const res = await fetch('/api/waitlist', {
@@ -204,16 +212,16 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
       });
 
       if (res.ok) {
-        card.querySelector('.lang-form')!.setAttribute('style', 'display:none');
-        card.querySelector('.lang-success')!.setAttribute('style', 'display:block');
+        card.querySelector<HTMLElement>('.lang-form')!.setAttribute('style', 'display:none');
+        card.querySelector<HTMLElement>('.lang-success')!.setAttribute('style', 'display:block');
       } else {
-        btn.textContent = 'Submit';
-        btn.disabled = false;
+        if(btn) btn.textContent = 'Submit';
+        if(btn) btn.disabled = false;
         alert('Something went wrong. Please try again.');
       }
     } catch {
-      btn.textContent = 'Submit';
-      btn.disabled = false;
+      if(btn) btn.textContent = 'Submit';
+      if(btn) btn.disabled = false;
       alert('Network error. Please try again.');
     }
   };
@@ -238,7 +246,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
                 <Link href="/login?signup=true" className="nav-cta">Start Free</Link>
               </>
             )}
-            <div className="hamburger" id="hamburger" role="button" aria-label="Toggle menu" tabIndex="0"><span></span><span></span><span></span></div>
+            <div className="hamburger" id="hamburger" role="button" aria-label="Toggle menu" tabIndex={0}><span></span><span></span><span></span></div>
           </div>
 
         </div>
@@ -282,25 +290,6 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
                 </div>
                 <div className="phone-mic"><div className="mic-btn"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" fill="none" stroke="#080808" strokeWidth="2" strokeLinecap="round" /><line x1="12" y1="19" x2="12" y2="23" stroke="#080808" strokeWidth="2" /></svg></div><span>Tap to speak</span></div>
                 <div className="phone-score">&#11088; 91/100 · Great session!</div>
-              </div>
-              
-              <div style={{ display: "none" }} className="md:block absolute -right-20 -top-10">
-                <div style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  position: "relative",
-                }}>
-                  <div style={{
-                    position: "absolute",
-                    width: "300px",
-                    height: "300px",
-                    borderRadius: "50%",
-                    background: "radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%)",
-                    pointerEvents: "none",
-                  }} />
-                  <SpeakingFigure />
-                </div>
               </div>
             </div>
           </div>
@@ -493,7 +482,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
           <h2 className="section-headline reveal">Start free. Upgrade when you’re ready.</h2>
           <div className="pricing-toggle reveal">
             <span id="tog-monthly" className="active">Monthly</span>
-            <div className="toggle-switch" id="billing-toggle" role="switch" aria-label="Toggle annual billing" tabIndex="0"></div>
+            <div className="toggle-switch" id="billing-toggle" role="switch" aria-label="Toggle annual billing" tabIndex={0}></div>
             <span id="tog-annual">Annual</span>
             <span className="save-badge">Save 45%</span>
           </div>
@@ -624,3 +613,5 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
     </>
   );
 }
+// Additional polyfills for local IDE TS server
+export {}

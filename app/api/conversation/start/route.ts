@@ -81,7 +81,7 @@ export async function POST(req: Request) {
 
         // ── Generate Opening Message via Claude Sonnet ──────────
         const response = await callClaude(
-            [{ role: 'user', content: 'START SCENARIO. Send your opening actual dialogue now.' }],
+            [{ role: 'user', content: 'START SCENARIO. You are the AI character. Send ONLY your very first opening line to start the interaction (e.g., a greeting or asking how you can help). Do not send the user\'s response or any out-of-character text.' }],
             systemPrompt,
             { temperature: 0.7, maxTokens: 150, model: 'sonnet' }
         );

@@ -15,16 +15,16 @@ export const SCENARIOS: Scenario[] = [
         character_name: 'Carlos',
         character_role: 'Friendly but busy barista',
         user_role: 'Customer',
-        goal: 'Successfully order food and drink and pay correctly.',
+        goal: 'Engage the customer, take their order step-by-step, and eventually process payment.',
         base_difficulty: CEFRLevel.A1,
         estimated_minutes: 3,
         icon: 'Coffee',
-        base_context: `You are Carlos, a barista at a small café in Madrid. You are friendly and helpful. A new customer (the user) has just stepped up to the counter. Welcome them and ask what they would like to order. Stay in character throughout.`,
+        base_context: `You are Carlos, a barista at a small café in Madrid. You are friendly and helpful. A new customer (the user) has just stepped up to the counter. Welcome them and ask what they would like to order. DO NOT jump to the end of the transaction; take it one step at at time. Stay in character throughout.`,
         situations: [
             {
                 id: 'busy_rush',
                 name: 'Monday Morning Rush',
-                modifier: 'The café is extremely busy. Carlos is stressed and moving fast. He accidentally brings the wrong order to the user — they must politely correct him.',
+                modifier: 'The café is extremely busy. Carlos is stressed and moving fast. He accidentally assumes the wrong order initially (e.g. "Un café con leche para llevar, ¿no?") — the user must politely correct him.',
                 twist: 'Wrong order delivered',
                 difficulty_modifier: 1,
                 teaser: 'Something goes slightly wrong with your order...'
@@ -48,7 +48,7 @@ export const SCENARIOS: Scenario[] = [
             {
                 id: 'wrong_bill',
                 name: 'Billing Problem',
-                modifier: 'After the user finishes their order and sits down, Carlos brings a bill that is €3 more than it should be. User must politely question the charge and get it corrected.',
+                modifier: 'The user has just sat down to order. Carlos knows there is a minimum €10 card charge today due to a broken machine. He should mention this early. Later, he will accidentally overcharge them by €3.',
                 twist: 'Incorrect bill to resolve',
                 difficulty_modifier: 1,
                 teaser: 'Check your bill carefully when it arrives...'
@@ -56,7 +56,7 @@ export const SCENARIOS: Scenario[] = [
             {
                 id: 'large_group',
                 name: 'Ordering for Everyone',
-                modifier: 'The user is ordering for a group of 4 friends who are outside. They have a list of different orders — 2 coffees, 1 tea, 1 juice, and 3 pastries. Carlos asks clarifying questions about each item.',
+                modifier: 'The user approaches the counter saying they are ordering for a group. Carlos should patiently ask what the first person wants, then the next, guiding the user through a large order (2 coffees, 1 tea, 1 juice, 3 pastries).',
                 twist: 'Complex multi-item order',
                 difficulty_modifier: 1,
                 teaser: 'You have a lot to order today...'

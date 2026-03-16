@@ -1,10 +1,10 @@
 'use client';
 
 // ============================================================
-// Parlova — Onboarding Step 5: Diagnostic Test
+// Parlova — Onboarding Step 6: Diagnostic Test
 // ============================================================
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useOnboardingStore } from '@/store/onboarding';
 import { DiagnosticQuestion, DiagnosticResult } from '@/types';
 import { Loader2, ArrowLeft } from 'lucide-react';
@@ -12,12 +12,14 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type ViewState = 'loading_questions' | 'testing' | 'analyzing' | 'error';
+type ViewState = 'confirm_level' | 'loading_questions' | 'testing' | 'analyzing' | 'error';
 
 export default function StepDiagnostic() {
     const {
         selectedLanguageCode,
         selfReportedLevel,
+        estimatedLevel,
+        highConfidence,
         diagnosticAnswers,
         setDiagnosticAnswer,
         setAssessmentResult,
@@ -27,40 +29,54 @@ export default function StepDiagnostic() {
 
     const [questions, setQuestions] = useState<DiagnosticQuestion[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [viewState, setViewState] = useState<ViewState>('loading_questions');
-
-    // State for the currently displayed question showing its result
+    
+    // If estimatedLevel exists from Vocab Import, we pause to confirm. Otherwise we load immediately.
+    const [viewState, setViewState] = useState<ViewState>(
+        estimatedLevel ? 'confirm_level' : 'loading_questions'
+    );
+    
+    const [targetLevel, setTargetLevel] = useState<string>(estimatedLevel || selfReportedLevel || 'A1');
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-    // Fetch questions on mount
+    // Track if we already started fetching so we don't double fetch in strict mode
+    const fetchStarted = useRef(false);
+
     useEffect(() => {
-        async function fetchQuestions() {
-            try {
-                setViewState('loading_questions');
-                // Add artificial delay for UI smoothness
-                await new Promise(resolve => setTimeout(resolve, 1500));
-
-                const res = await fetch('/api/ai/diagnostic', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ selfReportedLevel, languageCode: selectedLanguageCode })
-                });
-
-                const data = await res.json();
-                if (!res.ok || !data.success) {
-                    throw new Error(data.error || 'Failed to fetch questions');
-                }
-
-                setQuestions(data.data);
-                setViewState('testing');
-            } catch (err) {
-                toast.error(err instanceof Error ? err.message : 'System Error');
-                setViewState('error');
-            }
+        if (viewState === 'loading_questions' && !fetchStarted.current) {
+            fetchStarted.current = true;
+            fetchQuestions();
         }
+    }, [viewState]);
 
-        fetchQuestions();
-    }, [selfReportedLevel, selectedLanguageCode]);
+    async function fetchQuestions() {
+        try {
+            // Add artificial delay for UI smoothness
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            const questionCount = highConfidence ? 6 : 10;
+
+            const res = await fetch('/api/ai/diagnostic', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    selfReportedLevel: targetLevel, 
+                    languageCode: selectedLanguageCode,
+                    questionCount
+                })
+            });
+
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.error || 'Failed to fetch questions');
+            }
+
+            setQuestions(data.data);
+            setViewState('testing');
+        } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'System Error');
+            setViewState('error');
+        }
+    }
 
     const handleAnswer = async (index: number) => {
         if (selectedOption !== null) return; // Prevent double clicking
@@ -76,7 +92,7 @@ export default function StepDiagnostic() {
             setSelectedOption(null);
             setCurrentIndex(prev => prev + 1);
         } else {
-            // Finished all 10 questions -> Analyze
+            // Finished all questions -> Analyze
             submitForAssessment();
         }
     };
@@ -114,11 +130,49 @@ export default function StepDiagnostic() {
 
     // ── Render States ──
 
-    if (viewState === 'loading_questions') {
+    if (viewState === 'confirm_level') {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in relative pt-12 font-sans">
+            <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in relative pt-12 font-sans px-4 text-center">
                 <button
                     onClick={prevStep}
+                    className="absolute left-0 top-0 p-3 text-[#5a5652] hover:text-[#f0ece4] transition-colors rounded-full hover:bg-[#141414] border border-transparent hover:border-[#1e1e1e]"
+                >
+                    <ArrowLeft size={18} />
+                </button>
+                <h2 className="text-3xl font-serif text-[#f0ece4] mb-4">Starting Assessment</h2>
+                <p className="text-[#9a9590] mb-8 max-w-md">
+                    Based on your vocabulary we are starting your assessment at <strong>{estimatedLevel}</strong>. 
+                    <br/><br/>Tap to adjust if this feels wrong.
+                </p>
+                <div className="mb-10">
+                    <select 
+                        value={targetLevel} 
+                        onChange={(e) => setTargetLevel(e.target.value)}
+                        className="bg-[#141414] border border-[#2a2a2a] text-[#f0ece4] text-lg rounded-xl p-3 outline-none focus:border-[#c9a84c] transition-colors cursor-pointer"
+                    >
+                        <option value="A1">A1 - Beginner</option>
+                        <option value="A2">A2 - Elementary</option>
+                        <option value="B1">B1 - Intermediate</option>
+                        <option value="B2">B2 - Upper Intermediate</option>
+                        <option value="C1">C1 - Advanced</option>
+                        <option value="C2">C2 - Mastery</option>
+                    </select>
+                </div>
+                <Button
+                    onClick={() => setViewState('loading_questions')}
+                    className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[11px] uppercase tracking-widest font-bold px-10 h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all"
+                >
+                    Begin Test {highConfidence && '(Shortened)'}
+                </Button>
+            </div>
+        );
+    }
+
+    if (viewState === 'loading_questions') {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in relative pt-12 font-sans px-4">
+                <button
+                    onClick={estimatedLevel ? () => { fetchStarted.current = false; setViewState('confirm_level'); } : prevStep}
                     className="absolute left-0 top-0 p-3 text-[#5a5652] hover:text-[#f0ece4] transition-colors rounded-full hover:bg-[#141414] border border-transparent hover:border-[#1e1e1e]"
                 >
                     <ArrowLeft size={18} />
@@ -126,7 +180,7 @@ export default function StepDiagnostic() {
                 <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-[#c9a84c] mb-8" />
                 <h2 className="text-2xl font-serif text-[#f0ece4] mb-3">Initializing Diagnostic</h2>
                 <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#5a5652] text-center max-w-sm px-6 py-3 border border-[#1e1e1e] bg-[#0f0f0f] rounded-lg">
-                    Generating vectors for constraint level {selfReportedLevel}
+                    Generating vectors for constraint level {targetLevel}
                 </p>
             </div>
         );
@@ -134,7 +188,7 @@ export default function StepDiagnostic() {
 
     if (viewState === 'analyzing') {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans">
+            <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4">
                 <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-[#c9a84c] mb-8" />
                 <h2 className="text-2xl font-serif text-[#f0ece4] mb-3">Synthesizing Results</h2>
                 <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#5a5652] text-center px-6 py-3 border border-[#1e1e1e] bg-[#0f0f0f] rounded-lg">
@@ -146,7 +200,7 @@ export default function StepDiagnostic() {
 
     if (viewState === 'error') {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in pt-12 relative font-sans">
+            <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in pt-12 relative font-sans px-4">
                 <button
                     onClick={prevStep}
                     className="absolute left-0 top-0 p-3 text-[#5a5652] hover:text-[#f0ece4] transition-colors rounded-full hover:bg-[#141414] border border-transparent hover:border-[#1e1e1e]"
@@ -161,7 +215,7 @@ export default function StepDiagnostic() {
                     Connection to primary assessor failed. Please verify neural uplink.
                 </p>
                 <Button
-                    onClick={() => setViewState('loading_questions')}
+                    onClick={() => { fetchStarted.current = false; setViewState('loading_questions'); }}
                     className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] uppercase tracking-widest font-bold px-10 h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all"
                 >
                     Reinitialize
