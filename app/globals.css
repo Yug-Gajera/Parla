@@ -651,6 +651,7 @@
     background: #1e1e1e;
     border-radius: 9999px;
     overflow: hidden;
+    position: relative;
   }
   .progress-fill {
     height: 100%;
