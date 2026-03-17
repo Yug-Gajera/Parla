@@ -148,7 +148,7 @@ export default function StepDiagnostic() {
                     <select 
                         value={targetLevel} 
                         onChange={(e) => setTargetLevel(e.target.value)}
-                        className="bg-card border border-border-strong text-foreground text-lg rounded-xl p-3 outline-none focus:border-primary transition-colors cursor-pointer"
+                        className="bg-card border border-border text-text-primary text-lg rounded-xl p-3 outline-none focus:border-accent-border transition-colors cursor-pointer"
                     >
                         <option value="A1">A1 - Beginner</option>
                         <option value="A2">A2 - Elementary</option>
@@ -160,7 +160,7 @@ export default function StepDiagnostic() {
                 </div>
                 <Button
                     onClick={() => setViewState('loading_questions')}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[11px] uppercase tracking-widest font-bold px-10 h-14 rounded-full shadow-lg transition-all"
+                    className="btn-action px-10 h-14"
                 >
                     Begin Test {highConfidence && '(Shortened)'}
                 </Button>
@@ -177,9 +177,9 @@ export default function StepDiagnostic() {
                 >
                     <ArrowLeft size={18} />
                 </button>
-                <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-primary mb-8" />
-                <h2 className="text-2xl font-serif text-foreground mb-3">Initializing Diagnostic</h2>
-                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground text-center max-w-sm px-6 py-3 border border-border bg-card rounded-lg">
+                <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-accent mb-8" />
+                <h2 className="text-2xl font-serif text-text-primary mb-3">Initializing Diagnostic</h2>
+                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-text-muted text-center max-w-sm px-6 py-3 border border-border bg-card rounded-[18px] shadow-sm">
                     Generating vectors for constraint level {targetLevel}
                 </p>
             </div>
@@ -189,9 +189,9 @@ export default function StepDiagnostic() {
     if (viewState === 'analyzing') {
         return (
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4">
-                <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-primary mb-8" />
-                <h2 className="text-2xl font-serif text-foreground mb-3">Synthesizing Results</h2>
-                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground text-center px-6 py-3 border border-border bg-card rounded-lg">
+                <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-accent mb-8" />
+                <h2 className="text-2xl font-serif text-text-primary mb-3">Synthesizing Results</h2>
+                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-text-muted text-center px-6 py-3 border border-border bg-card rounded-[18px] shadow-sm">
                     Grading lexicon syntax and semantics
                 </p>
             </div>
@@ -216,7 +216,7 @@ export default function StepDiagnostic() {
                 </p>
                 <Button
                     onClick={() => { fetchStarted.current = false; setViewState('loading_questions'); }}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[10px] uppercase tracking-widest font-bold px-10 h-14 rounded-full shadow-lg transition-all"
+                    className="btn-action px-10 h-14"
                 >
                     Reinitialize
                 </Button>
@@ -231,13 +231,13 @@ export default function StepDiagnostic() {
         <div className="flex flex-col items-center w-full animation-fade-in relative pt-12 pb-16 font-sans">
             {/* ── Mini Progress ── */}
             <div className="w-full max-w-xl mx-auto mb-16 px-4">
-                <div className="flex justify-between items-center text-[10px] font-mono font-bold mb-3 text-muted-foreground uppercase tracking-[0.2em]">
+                <div className="flex justify-between items-center text-[10px] font-mono font-bold mb-3 text-text-muted uppercase tracking-[0.2em]">
                     <span>Diagnostic Scan</span>
                     <span>{currentIndex + 1} <span className="text-border-strong px-1">/</span> {questions.length}</span>
                 </div>
-                <div className="h-1.5 w-full bg-border rounded-full overflow-hidden shadow-inner">
+                <div className="h-1.5 w-full bg-border rounded-full overflow-hidden shadow-sm">
                     <div
-                        className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
+                        className="h-full bg-accent rounded-full transition-all duration-500 ease-out"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
@@ -295,7 +295,7 @@ export default function StepDiagnostic() {
                                     onClick={() => handleAnswer(idx)}
                                     disabled={selectedOption !== null}
                                     className={`
-                                        flex items-center gap-5 p-5 sm:p-6 rounded-2xl border transition-all duration-300 w-full text-left font-sans
+                                        flex items-center gap-5 p-5 sm:p-6 rounded-[18px] border transition-all duration-300 w-full text-left font-sans
                                         ${buttonClass}
                                     `}
                                 >

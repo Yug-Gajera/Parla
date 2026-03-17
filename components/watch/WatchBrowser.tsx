@@ -37,7 +37,7 @@ export default function WatchBrowser({ languageId, onSelectVideo }: WatchBrowser
     return (
         <div className="font-sans">
             {/* Filters Header */}
-            <div className="flex flex-col gap-4 mb-8 bg-card border border-border p-5 rounded-2xl">
+            <div className="flex flex-col gap-4 mb-8 bg-card border border-border p-5 rounded-[18px] shadow-sm">
                 {/* Level filter */}
                 <div className="flex items-center gap-3 overflow-x-auto pb-2 hide-scrollbar">
                     <span className="text-[10px] uppercase tracking-widest text-text-secondary font-mono-num shrink-0 mr-2">Proficiency</span>
@@ -75,7 +75,7 @@ export default function WatchBrowser({ languageId, onSelectVideo }: WatchBrowser
             {isLoading && videos.length === 0 ? (
                 <div className="flex justify-center py-24"><Loader2 className="w-8 h-8 animate-spin text-gold" /></div>
             ) : videos.length === 0 ? (
-                <div className="text-center py-24 border border-border border-dashed rounded-2xl bg-surface">
+                <div className="text-center py-24 border border-border border-dashed rounded-[18px] bg-card shadow-sm">
                     <Monitor className="w-12 h-12 mx-auto text-text-muted mb-4" />
                     <p className="text-text-muted font-display text-lg">No content found matching criteria.</p>
                 </div>
@@ -89,7 +89,7 @@ export default function WatchBrowser({ languageId, onSelectVideo }: WatchBrowser
                             transition={{ delay: i * 0.05 }}
                         >
                             <Card
-                                className="overflow-hidden cursor-pointer border-border bg-card hover:border-gold/50 transition-all duration-500 group rounded-2xl h-full flex flex-col"
+                                className="overflow-hidden cursor-pointer border-border bg-card hover:border-accent-border transition-all duration-500 group rounded-[18px] h-full flex flex-col shadow-sm"
                                 onClick={() => onSelectVideo(video.id)}
                             >
                                 {/* Thumbnail */}
@@ -150,8 +150,8 @@ export default function WatchBrowser({ languageId, onSelectVideo }: WatchBrowser
             {/* Load more */}
             {hasMore && (
                 <div className="flex justify-center mt-12 mb-8">
-                    <Button variant="outline" onClick={fetchMore} disabled={isLoading} className="gap-3 rounded-full bg-transparent border-border text-text-primary hover:bg-card hover:border-border-strong uppercase text-[10px] tracking-widest h-10 px-8">
-                        {isLoading && <Loader2 className="w-3 h-3 animate-spin text-gold" />}
+                    <Button onClick={fetchMore} disabled={isLoading} className="btn-action w-fit px-8 h-12">
+                        {isLoading && <Loader2 className="w-3 h-3 animate-spin mr-2" />}
                         Expand Library
                     </Button>
                 </div>

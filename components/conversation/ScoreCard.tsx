@@ -110,7 +110,7 @@ export function ScoreCard({
                             <motion.div variants={itemV} key={i} className="flex flex-col gap-2">
                                 <div className="flex justify-between items-end">
                                     <span className="label-upper">{metric.label}</span>
-                                    <span className="font-mono-num font-medium text-[15px]">{metric.score}</span>
+                                    <span className="pill-score">{metric.score}%</span>
                                 </div>
                                 <div className="progress-track">
                                     <div className="progress-fill" style={{ width: `${metric.score}%` }} />
@@ -123,7 +123,7 @@ export function ScoreCard({
                             <div className="flex justify-between items-end">
                                 <span className="label-upper">Pronunciation</span>
                                 {inputMode === 'voice' && scoring.pronunciation_score != null ? (
-                                    <span className="font-mono-num font-medium text-[15px]">{scoring.pronunciation_score}</span>
+                                    <span className="pill-score">{scoring.pronunciation_score}%</span>
                                 ) : (
                                     <span className="font-mono-num font-medium text-[13px] text-text-muted">N/A</span>
                                 )}
@@ -207,16 +207,16 @@ export function ScoreCard({
                     {/* Action Buttons */}
                     <motion.div variants={itemV} className="flex flex-col sm:flex-row gap-3 mt-8 w-full justify-center">
                         {onReplay && (
-                            <button className="btn-secondary h-12 px-6 flex items-center justify-center gap-2 rounded-xl text-sm font-bold uppercase tracking-widest" onClick={onReplay}>
+                            <button className="btn-action flex-1 h-12" onClick={onReplay}>
                                 <RefreshCcw size={18} /> Replay
                             </button>
                         )}
                         {onTryAnother && (
-                            <button className="btn-secondary h-12 px-6 flex items-center justify-center gap-2 rounded-xl text-sm font-bold uppercase tracking-widest" onClick={onTryAnother}>
+                            <button className="btn-action flex-1 h-12" onClick={onTryAnother}>
                                 <Shuffle size={18} /> Try Another Version
                             </button>
                         )}
-                        <button className="btn-primary h-12 px-6 flex items-center justify-center gap-2 rounded-xl text-sm font-bold uppercase tracking-widest" onClick={onClose}>
+                        <button className="btn-action flex-1 h-12" onClick={onClose}>
                             <LayoutGrid size={18} /> New Scenario
                         </button>
                     </motion.div>

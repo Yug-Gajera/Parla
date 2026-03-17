@@ -59,7 +59,7 @@ export default function QuickActions() {
                     <Link
                         key={i}
                         href={action.href}
-                        className="group flex flex-col p-4 rounded-xl bg-surface border border-border hover:border-border-strong transition-all duration-300 relative overflow-hidden w-full h-full"
+                        className="group flex flex-col p-4 rounded-[18px] bg-card border border-border hover:border-accent-border hover:shadow-md transition-all duration-300 relative overflow-hidden w-full h-full"
                     >
                         <div className="flex items-center justify-between mb-8 w-full">
                             <div className={`
@@ -95,10 +95,10 @@ export function QuickActionsSkeleton() {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[12px] w-full">
             {[1, 2, 3].map(i => (
-                <div key={i} className="flex flex-col p-4 rounded-xl bg-surface border border-border animate-pulse">
-                    <div className="w-[40px] h-[40px] rounded-[10px] bg-card mb-8" />
-                    <div className="h-[16px] w-[140px] bg-border rounded mb-[8px]" />
-                    <div className="h-[10px] w-[100px] bg-card rounded" />
+                <div key={i} className="flex flex-col p-4 rounded-[18px] bg-card border border-border animate-pulse">
+                    <div className="w-[40px] h-10 rounded-xl bg-surface mb-8" />
+                    <div className="h-4 w-[140px] bg-surface rounded mb-2" />
+                    <div className="h-2.5 w-[100px] bg-surface rounded" />
                 </div>
             ))}
         </div>

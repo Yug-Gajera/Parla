@@ -59,9 +59,9 @@ export function LeaderboardTab({
             <motion.div
                 variants={isPinned ? undefined : rowV}
                 key={isPinned ? 'pinned' : entry.id}
-                className={`flex items-center gap-5 p-5 rounded-2xl transition-all border
-                    ${isPinned ? 'bg-background/80 border-gold/30 shadow-lg sticky top-0 z-10 backdrop-blur-md' : 'bg-card border-border hover:border-border-strong'}
-                    ${entry.is_current_user && !isPinned ? 'ring-1 ring-gold/50' : ''}
+                className={`flex items-center gap-5 p-5 rounded-[18px] transition-all border
+                    ${isPinned ? 'bg-surface/90 border-accent-border shadow-lg sticky top-0 z-10 backdrop-blur-md' : 'bg-card border-border hover:border-accent-border'}
+                    ${entry.is_current_user && !isPinned ? 'border-accent-border shadow-sm' : ''}
                 `}
             >
                 {/* Rank / Trophy */}
@@ -75,27 +75,28 @@ export function LeaderboardTab({
                 {/* Avatar */}
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center font-mono-num text-sm shrink-0 border
                     ${entry.is_current_user 
-                        ? 'bg-gold-subtle text-gold border-gold-border' 
-                        : 'bg-surface text-text-muted border-border'}
+                        ? 'bg-gold-subtle text-gold border-accent-border' 
+                        : 'bg-card text-text-muted border-border'}
                 `}>
                     {entry.avatar}
                 </div>
 
                 {/* Name */}
                 <div className="flex-1 truncate">
-                    <div className={`font-medium text-base flex items-center gap-3 ${entry.is_current_user ? 'text-gold' : 'text-text-primary'}`}>
+                    <div className={`font-medium text-base flex items-center gap-3 ${entry.is_current_user ? 'text-accent' : 'text-text-primary'}`}>
                         {entry.name}
-                        {entry.is_current_user && <span className="text-[9px] px-2 py-0.5 rounded-full border border-gold/30 text-gold uppercase tracking-widest">You</span>}
+                        {entry.is_current_user && (
+                            <span className="pill-score py-0.5 px-3">You</span>
+                        )}
                     </div>
                     {isPinned && <div className="text-[10px] font-mono-num text-text-muted mt-1 uppercase tracking-widest">Current Position</div>}
                 </div>
 
                 {/* Score */}
-                <div className="text-right shrink-0">
-                    <div className={`font-mono-num text-xl tracking-tight leading-none mb-1 ${isTop3 || entry.is_current_user ? 'text-gold' : 'text-text-muted'}`}>
-                        {entry.weekly_score}
+                <div className="text-right shrink-0 flex flex-col items-end">
+                    <div className="pill-score w-fit mb-1">
+                        {entry.weekly_score} XP
                     </div>
-                    <div className="text-[9px] text-text-muted uppercase tracking-[0.2em]">XP</div>
                 </div>
             </motion.div>
         );
@@ -105,7 +106,7 @@ export function LeaderboardTab({
         <div className="flex flex-col w-full max-w-3xl mx-auto gap-8 pb-16 font-sans">
 
             {/* Controls */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-surface p-4 rounded-2xl border border-border">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-card p-4 rounded-[18px] border border-border shadow-sm">
                 <div className="flex items-center gap-3">
                     <Button variant="ghost" size="icon" className="rounded-full hover:bg-card text-text-muted" onClick={onPrevWeek}>
                         <ChevronLeft className="w-4 h-4" />
@@ -154,7 +155,7 @@ export function LeaderboardTab({
                     {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="h-24 w-full rounded-2xl bg-[#0f0f0f]" />)}
                 </div>
             ) : entries.length === 0 ? (
-                <Card className="p-16 flex flex-col items-center justify-center text-center border border-border border-dashed bg-surface/50">
+                <Card className="p-16 flex flex-col items-center justify-center text-center border border-border border-dashed bg-card rounded-[18px] shadow-sm">
                     <div className="w-16 h-16 bg-card border border-border rounded-full flex items-center justify-center mb-6">
                         <Trophy className="w-6 h-6 text-text-muted" />
                     </div>
@@ -162,7 +163,7 @@ export function LeaderboardTab({
                     <p className="text-text-secondary text-sm max-w-sm mb-8 leading-relaxed">
                         No activity recorded for this level in the selected week. Start practicing to claim the top spot.
                     </p>
-                    <Button asChild variant="outline" className="rounded-full px-8 uppercase text-xs tracking-widest font-mono-num">
+                    <Button asChild className="btn-action w-fit px-8 h-12">
                         <Link href="/practice">Begin Practice</Link>
                     </Button>
                 </Card>

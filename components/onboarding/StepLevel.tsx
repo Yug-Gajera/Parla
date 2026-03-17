@@ -47,23 +47,23 @@ export default function StepLevel() {
                             key={lvl.id}
                             onClick={() => setSelfReportedLevel(lvl.id)}
                             className={`
-                                flex items-center justify-between p-6 sm:p-7 rounded-2xl border transition-all duration-300 w-full text-left relative overflow-hidden group
-                                ${!isSelected ? 'hover:border-border hover:bg-muted border-border bg-card shadow-inner' : ''}
-                                ${isSelected ? 'border-primary bg-primary/5 shadow-sm scale-[1.02]' : ''}
+                                flex items-center justify-between p-6 sm:p-7 rounded-[18px] border transition-all duration-300 w-full text-left relative overflow-hidden group
+                                ${!isSelected ? 'hover:border-accent-border border-border bg-card shadow-sm' : ''}
+                                ${isSelected ? 'border-accent-border bg-card shadow-md scale-[1.02]' : ''}
                             `}
                         >
                             {isSelected && <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none" />}
                             
                             <div className="relative z-10 w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                 <div className="flex items-center gap-4">
-                                    <span className={`w-12 h-12 flex items-center justify-center rounded-lg border font-mono font-bold text-lg tracking-widest transition-colors ${isSelected ? 'border-primary/30 text-primary bg-primary/10' : 'border-border text-muted-foreground bg-background group-hover:text-muted-foreground'}`}>
+                                     <span className={`w-12 h-12 flex items-center justify-center rounded-lg border font-mono font-bold text-lg tracking-widest transition-colors ${isSelected ? 'border-accent-border text-accent bg-accent/10' : 'border-border text-text-muted bg-surface group-hover:text-text-muted'}`}>
                                         {lvl.id}
-                                    </span>
-                                    <div className={`font-serif text-2xl transition-colors ${isSelected ? 'text-primary' : 'text-foreground'}`}>
+                                     </span>
+                                     <div className={`font-serif text-2xl transition-colors ${isSelected ? 'text-accent' : 'text-text-primary'}`}>
                                         {lvl.label}
-                                    </div>
+                                     </div>
                                 </div>
-                                <div className={`text-[11px] font-mono tracking-wide uppercase leading-relaxed sm:text-right transition-colors ${isSelected ? 'text-primary/80' : 'text-muted-foreground'}`}>
+                                 <div className={`text-[11px] font-mono tracking-wide uppercase leading-relaxed sm:text-right transition-colors ${isSelected ? 'text-accent/80' : 'text-text-muted'}`}>
                                     {lvl.desc}
                                 </div>
                             </div>
@@ -77,7 +77,7 @@ export default function StepLevel() {
                 <Button
                     onClick={nextStep}
                     disabled={!selfReportedLevel}
-                    className="w-full max-w-sm bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[11px] uppercase tracking-widest font-bold h-14 rounded-full shadow-lg transition-all disabled:opacity-30 disabled:shadow-none"
+                    className="btn-action w-full max-w-sm h-14"
                 >
                     Initialize Verification
                 </Button>

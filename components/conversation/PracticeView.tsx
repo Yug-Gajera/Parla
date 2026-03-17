@@ -128,15 +128,15 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                     )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-lg mb-12">
-                        <div className="bg-surface border border-border rounded-xl p-5 text-center transition-all hover:border-border-strong">
+                        <div className="bg-card border border-border rounded-[18px] p-5 text-center transition-all hover:border-accent-border">
                             <span className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest block mb-2">Role</span>
                             <span className="font-sans font-medium text-text-primary">{preSession.userRole}</span>
                         </div>
-                        <div className="bg-surface border border-border rounded-xl p-5 text-center transition-all hover:border-border-strong">
+                        <div className="bg-card border border-border rounded-[18px] p-5 text-center transition-all hover:border-accent-border">
                             <span className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest block mb-2">Objective</span>
                             <span className="font-sans font-medium text-text-primary text-sm leading-tight">{preSession.goal.length > 40 ? preSession.goal.slice(0, 40) + '...' : preSession.goal}</span>
                         </div>
-                        <div className="bg-surface border border-border rounded-xl p-5 text-center transition-all hover:border-border-strong">
+                        <div className="bg-card border border-border rounded-[18px] p-5 text-center transition-all hover:border-accent-border">
                             <span className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest block mb-2">Duration</span>
                             <span className="font-mono-num text-lg text-text-primary">{preSession.estimatedMinutes} <span className="text-xs text-text-muted">MIN</span></span>
                         </div>
@@ -148,14 +148,13 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                 setActiveScenarioId(preSession.scenarioId);
                                 setPreSession(null);
                             }}
-                            className="btn-primary flex-1 h-12 rounded-full font-bold uppercase tracking-widest text-[10px]"
+                            className="btn-action flex-1"
                         >
-                            <Play className="w-4 h-4 mr-2 fill-current" /> Initialize
+                            <Play className="w-4 h-4 mr-2" /> Initialize
                         </Button>
                         <Button
-                            variant="outline"
                             onClick={() => showPreSession(preSession.scenarioId)}
-                            className="btn-secondary flex-1 h-12 rounded-full font-bold uppercase tracking-widest text-[10px]"
+                            className="btn-secondary h-12 flex-1 rounded-xl text-[10px] font-bold uppercase tracking-widest"
                         >
                             <RefreshCcw className="w-3.5 h-3.5 mr-2" /> Reroll
                         </Button>
@@ -211,9 +210,9 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                 <Button
                     variant="outline"
                     onClick={handleSurpriseMe}
-                    className="h-16 px-10 bg-transparent border-border text-text-primary hover:bg-surface hover:border-gold/30 font-mono-num text-[11px] font-bold uppercase tracking-widest rounded-[24px] transition-all shadow-sm"
+                    className="btn-action w-fit h-14 px-8 rounded-[18px]"
                 >
-                    <Shuffle className="w-4 h-4 mr-3 text-gold" /> Randomize Simulation
+                    <Shuffle className="w-4 h-4 mr-3" /> Randomize Simulation
                 </Button>
             </div>
 
@@ -227,16 +226,12 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                         {recentSessions.slice(0, 3).map((session, i) => {
                             const sc = SCENARIOS.find(s => s.id === session.scenario_type);
                             return (
-                                <Card key={i} className="min-w-[300px] sm:min-w-[360px] p-8 shrink-0 bg-card border-border hover:border-gold/30 rounded-[32px] transition-all flex flex-col relative overflow-hidden group shadow-sm hover:shadow-md">
+                                <Card key={i} className="min-w-[300px] sm:min-w-[360px] p-8 shrink-0 bg-card border-border hover:border-accent-border rounded-[18px] transition-all flex flex-col relative overflow-hidden group shadow-sm hover:shadow-md">
                                     <div className="absolute top-0 right-0 w-24 h-24 bg-gold-subtle rounded-bl-full -z-10 group-hover:bg-gold/10 transition-colors" />
                                     
                                     <div className="flex justify-between items-start mb-6">
                                         <div className="font-display text-xl text-text-primary pr-4">{sc?.name || 'Unknown Protocol'}</div>
-                                        <div className={`text-xs font-mono-num font-bold px-2.5 py-1 rounded-lg border ${
-                                            (session as any).overall_score >= 80 
-                                            ? 'bg-gold-subtle text-gold border-gold/30' 
-                                            : 'bg-surface text-text-secondary border-border'
-                                        }`}>
+                                        <div className="pill-score mr-2">
                                             {(session as any).overall_score}%
                                         </div>
                                     </div>
@@ -246,8 +241,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                         <span>{session.duration_minutes} MIN</span>
                                     </div>
                                     <Button
-                                        variant="outline"
-                                        className="btn-secondary w-full mt-auto h-11 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all"
+                                        className="btn-action"
                                         onClick={() => showPreSession(session.scenario_type)}
                                     >
                                         Re-engage
@@ -288,10 +282,10 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                     return (
                         <Card
                             key={scenario.id}
-                            className={`flex flex-col relative overflow-hidden transition-all duration-300 rounded-[32px] border 
+                            className={`flex flex-col relative overflow-hidden transition-all duration-300 rounded-[18px] border 
                                 ${isLocked 
                                   ? 'bg-background border-border opacity-70 grayscale-[80%]' 
-                                  : 'bg-card border-border hover:border-gold/30 hover:-translate-y-1 hover:shadow-xl'
+                                  : 'bg-card border-border hover:border-accent-border hover:-translate-y-1 hover:shadow-md'
                                 }`
                             }
                         >
@@ -355,7 +349,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                     {isLocked ? (
                                         <Button
                                             variant="secondary"
-                                            className="w-full bg-surface text-text-muted hover:bg-border hover:text-text-secondary font-mono-num text-[10px] font-bold uppercase tracking-widest h-14 rounded-2xl transition-all"
+                                            className="w-full bg-surface text-text-muted hover:bg-border hover:text-text-secondary font-mono-num text-[10px] font-bold uppercase tracking-widest h-11 rounded-xl transition-all border border-border"
                                             onClick={() => window.location.href = '/learn'}
                                         >
                                             <Lock className="w-3.5 h-3.5 mr-2" /> Locked
@@ -363,7 +357,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                     ) : (
                                         <Button
                                             onClick={() => showPreSession(scenario.id)}
-                                            className="btn-primary w-full h-14 rounded-2xl font-bold uppercase tracking-widest text-[11px] group"
+                                            className="btn-action group"
                                         >
                                             Engage <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-all" />
                                         </Button>

@@ -33,12 +33,14 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
                 <p className="text-text-secondary text-sm max-w-[280px] mb-8 leading-relaxed">
                     Initiate your first session to begin earning XP and establishing a baseline.
                 </p>
-                <Link
-                    href="/practice"
-                    className="px-8 py-3.5 rounded-full bg-gold text-bg font-mono-num text-[10px] font-bold uppercase tracking-widest hover:brightness-110 transition-colors shadow-[0_4px_20px_var(--color-gold)]"
-                >
-                    Deploy Session
-                </Link>
+                <div className="w-full max-w-[200px]">
+                    <Link
+                        href="/practice"
+                        className="btn-action"
+                    >
+                        Deploy Session
+                    </Link>
+                </div>
             </div>
         );
     }
@@ -64,7 +66,7 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
     }
 
     return (
-        <div className="flex flex-col w-full bg-card border border-border rounded-3xl overflow-hidden font-sans">
+        <div className="flex flex-col w-full bg-card border border-border rounded-[18px] shadow-sm overflow-hidden font-sans">
 
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-border">

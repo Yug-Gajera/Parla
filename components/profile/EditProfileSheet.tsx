@@ -102,9 +102,9 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
 
     return (
         <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <SheetContent side="bottom" className="sm:max-w-md mx-auto rounded-t-3xl bg-card border-border border-b-0 px-8 py-10 font-sans shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
+            <SheetContent side="bottom" className="sm:max-w-md mx-auto rounded-t-3xl bg-card border-border border-b-0 px-8 py-10 font-sans shadow-[0_-20px_50px_rgba(30,30,26,0.08)]">
                 <SheetHeader className="mb-10">
-                    <SheetTitle className="text-3xl font-display text-text-primary">Edit Profile</SheetTitle>
+                    <SheetTitle className="text-3xl font-serif text-text-primary tracking-tight">Edit Profile</SheetTitle>
                     <SheetDescription className="text-text-muted text-sm">Modify your identification and linguistic baseline parameters.</SheetDescription>
                 </SheetHeader>
 
@@ -120,7 +120,7 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
                                 onChange={handleFileChange}
                             />
                             <Label htmlFor="avatar-upload" className="cursor-pointer block">
-                                <div className={`w-28 h-28 rounded-full overflow-hidden border-2 border-border bg-surface flex items-center justify-center relative transition-all group-hover:border-gold`}>
+                                <div className={`w-28 h-28 rounded-full overflow-hidden border-2 border-border bg-surface flex items-center justify-center relative transition-all group-hover:border-accent-border`}>
                                     {previewUrl ? (
                                         <Image
                                             src={previewUrl}
@@ -129,41 +129,41 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
                                             className="object-cover"
                                         />
                                     ) : (
-                                        <span className="text-4xl font-display text-text-secondary">
+                                        <span className="text-4xl font-serif text-text-muted">
                                             {(name || 'U').substring(0, 1).toUpperCase()}
                                         </span>
                                     )}
 
                                     <div className="absolute inset-0 bg-background/70 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <Camera className="w-6 h-6 text-gold" />
+                                        <Camera className="w-6 h-6 text-accent" />
                                     </div>
                                 </div>
                             </Label>
                         </div>
-                        <span className="text-[10px] uppercase tracking-widest text-text-secondary font-mono-num">Select Avatar (Max 2MB)</span>
+                        <span className="text-[10px] uppercase tracking-widest text-text-muted font-mono font-medium">Select Avatar (Max 2MB)</span>
                     </div>
 
                     <div className="space-y-6">
                         <div className="space-y-3">
-                            <Label htmlFor="name" className="text-[10px] font-mono-num uppercase tracking-widest text-text-muted">Nominal Identity</Label>
+                            <Label htmlFor="name" className="text-[10px] font-mono uppercase tracking-widest text-text-muted font-bold">Nominal Identity</Label>
                             <Input
                                 id="name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="bg-background border-border text-text-primary h-12 rounded-lg px-4 focus-visible:ring-1 focus-visible:ring-gold focus-visible:border-gold transition-colors"
+                                className="bg-background border-border text-text-primary h-12 rounded-xl px-4 focus-visible:ring-1 focus-visible:ring-accent focus-visible:border-accent transition-colors shadow-sm"
                                 placeholder="Enter full name"
                             />
                         </div>
 
                         <div className="space-y-3">
-                            <Label htmlFor="native_lang" className="text-[10px] font-mono-num uppercase tracking-widest text-text-muted">Base Language</Label>
+                            <Label htmlFor="native_lang" className="text-[10px] font-mono uppercase tracking-widest text-text-muted font-bold">Base Language</Label>
                             <select
                                 id="native_lang"
                                 value={nativeLang}
                                 onChange={(e) => setNativeLang(e.target.value)}
-                                className="flex h-12 w-full items-center justify-between rounded-lg border border-border bg-background text-text-primary px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors appearance-none cursor-pointer"
+                                className="flex h-12 w-full items-center justify-between rounded-xl border border-border bg-background text-text-primary px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent transition-colors appearance-none cursor-pointer shadow-sm"
                                 style={{
-                                    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a5652' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+                                    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C77D22' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
                                     backgroundRepeat: 'no-repeat',
                                     backgroundPosition: 'right 1rem center',
                                     backgroundSize: '1em'
@@ -188,7 +188,7 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
                     <Button 
                         onClick={handleSave} 
                         disabled={isSaving} 
-                        className="w-full h-12 rounded-full font-mono-num uppercase tracking-widest text-xs font-bold bg-gold text-background hover:brightness-110 transition-colors"
+                        className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-accent text-white hover:bg-accent-hover transition-all shadow-lg shadow-accent/20"
                     >
                         {isSaving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Transmitting...</> : 'Save Profile Specs'}
                     </Button>

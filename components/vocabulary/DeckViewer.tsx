@@ -49,30 +49,29 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-serif text-text-primary">Lexicon Inventory</h2>
                 <Button 
-                    variant="outline" 
                     onClick={() => setIsImportOpen(true)}
-                    className="border-border-strong bg-card text-text-primary hover:bg-surface hover:border-gold/30 transition-colors h-10 px-4 rounded-xl flex items-center font-sans shadow-sm"
+                    className="btn-action px-6 h-10 w-fit"
                 >
-                    <Upload className="w-4 h-4 mr-2 text-gold" />
+                    <Upload className="w-4 h-4 mr-2" />
                     Import vocabulary
                 </Button>
             </div>
 
             {/* Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                <div className="p-5 rounded-2xl bg-card border border-border flex flex-col shadow-inner">
+                <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm">
                     <span className="text-text-muted text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Total Lexicon</span>
                     <span className="text-3xl font-serif text-text-primary">{stats?.total ?? '-'}</span>
                 </div>
-                <div className="p-5 rounded-2xl bg-gold/5 border border-gold/20 flex flex-col shadow-inner">
+                <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm">
                     <span className="text-gold text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Pending Review</span>
                     <span className="text-3xl font-serif text-gold">{stats?.dueToday ?? '-'}</span>
                 </div>
-                <div className="p-5 rounded-2xl bg-card border border-border flex flex-col shadow-inner">
+                <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm">
                     <span className="text-text-secondary text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Acquiring</span>
                     <span className="text-3xl font-serif text-text-secondary">{stats?.learning ?? '-'}</span>
                 </div>
-                <div className="p-5 rounded-2xl bg-card border border-border flex flex-col shadow-inner hover:border-border-strong transition-colors">
+                <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm hover:border-accent-border transition-colors">
                     <span className="text-text-primary text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Mastered</span>
                     <span className="text-3xl font-serif text-text-primary">{stats?.mastered ?? '-'}</span>
                 </div>
@@ -86,7 +85,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search your lexicon..."
-                        className="pl-11 h-12 bg-surface border-border-strong text-text-primary placeholder:text-text-muted rounded-xl focus-visible:ring-1 focus-visible:ring-gold focus-visible:ring-offset-0 font-sans shadow-inner"
+                        className="pl-11 h-12 bg-surface border-border text-text-primary placeholder:text-text-muted rounded-[18px] focus-visible:ring-1 focus-visible:ring-gold focus-visible:ring-offset-0 font-sans shadow-sm"
                     />
                 </div>
                 <div className="flex overflow-x-auto hide-scrollbar gap-2 pb-1 sm:pb-0">
@@ -95,7 +94,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                             key={f.id}
                             variant="ghost"
                             size="sm"
-                            className={`whitespace-nowrap rounded-lg h-12 px-5 text-[11px] font-mono uppercase tracking-widest transition-all ${filter === f.id ? 'bg-gold text-bg font-bold hover:brightness-110 shadow-md' : 'bg-card text-text-secondary border border-border hover:bg-surface hover:text-text-primary'}`}
+                            className={`whitespace-nowrap rounded-[12px] h-12 px-5 text-[11px] font-mono uppercase tracking-widest transition-all ${filter === f.id ? 'bg-gold text-bg font-bold shadow-md' : 'bg-card text-text-secondary border border-border hover:bg-surface hover:text-text-primary'}`}
                             onClick={() => setFilter(f.id as any)}
                         >
                             {f.label}
@@ -106,7 +105,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
 
             {/* Deck List */}
             <div
-                className="flex-1 overflow-y-auto pb-32 custom-scrollbar rounded-2xl border border-border bg-surface shadow-sm"
+                className="flex-1 overflow-y-auto pb-32 custom-scrollbar rounded-[18px] border border-border bg-surface shadow-sm"
                 onScroll={handleScroll}
             >
                 {words.length === 0 && !isLoading ? (
@@ -130,13 +129,13 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                         </p>
 
                         {!search && (
-                            <Button onClick={() => setIsAddOpen(true)} className="bg-gold hover:brightness-110 text-bg font-mono text-[10px] font-bold uppercase tracking-widest h-12 px-8 rounded-full shadow-md transition-all">
+                            <Button onClick={() => setIsAddOpen(true)} className="btn-action px-8">
                                 <Plus className="mr-2 h-4 w-4" /> Index New Word
                             </Button>
                         )}
 
                         {/* Dashed Import Card for Empty State */}
-                        <div className="bg-gold/5 border border-dashed border-gold/30 rounded-[14px] p-6 text-center mt-6 w-full max-w-sm flex flex-col items-center">
+                        <div className="bg-card border border-border rounded-[18px] p-8 text-center mt-6 w-full max-w-sm flex flex-col items-center shadow-sm">
                             <Upload className="text-gold mb-3" size={32} />
                             <h3 className="font-sans font-semibold text-[15px] text-text-primary mb-1">Already know some Spanish?</h3>
                             <p className="font-sans text-[13px] text-text-secondary mb-5 leading-snug">
@@ -144,7 +143,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                             </p>
                             <Button 
                                 onClick={() => setIsImportOpen(true)}
-                                className="bg-gold hover:brightness-110 text-bg font-sans font-medium h-10 px-6 rounded-xl transition-colors shadow-sm"
+                                className="btn-action px-8"
                             >
                                 Import vocabulary
                             </Button>

@@ -82,10 +82,10 @@ export function WeeklyStatsSkeleton() {
     return (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-[16px] w-full">
             {[1, 2, 3, 4].map(i => (
-                <div key={i} className="parlova-card flex flex-col gap-[8px]">
-                    <div className="skeleton w-[36px] h-[36px] rounded-md mb-[8px]" />
-                    <div className="skeleton h-[28px] w-[48px]" />
-                    <div className="skeleton h-[14px] w-[80px]" />
+                <div key={i} className="parlova-card flex flex-col gap-2">
+                    <div className="w-9 h-9 rounded-md bg-surface mb-2 animate-pulse" />
+                    <div className="h-7 w-12 bg-surface rounded mb-1 animate-pulse" />
+                    <div className="h-3.5 w-20 bg-surface rounded animate-pulse" />
                 </div>
             ))}
         </div>

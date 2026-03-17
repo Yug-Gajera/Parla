@@ -13,11 +13,11 @@
   :root, [data-theme="light"] {
     --color-bg: #FFFCF2;
     --color-surface: #F5F2E8;
-    --color-card: #EDEADF;
-    --color-card-hover: #E8E5D8;
+    --color-card: #FFFFFF;
+    --color-card-hover: #F9F8F0;
 
-    --color-border: #D8D4C8;
-    --color-border-strong: #C8C4B8;
+    --color-border: #E8E4D6;
+    --color-border-strong: #D8D4C8;
 
     --color-text-primary: #1E1E1A;
     --color-text-secondary: #5A5850;
@@ -26,7 +26,7 @@
 
     --color-accent: #E8521A;
     --color-accent-hover: #D94A15;
-    --color-accent-subtle: rgba(232,82,26,0.08);
+    --color-accent-subtle: rgba(232,82,26,0.06);
     --color-accent-border: rgba(232,82,26,0.2);
 
     --color-gold: #C9A84C;
@@ -40,12 +40,12 @@
     --color-warning-subtle: rgba(201,168,76,0.1);
 
     --color-error: #C93A1A;
-    --color-error-subtle: rgba(201,58,26,0.08);
+    --color-error-subtle: rgba(201,58,26,1);
 
-    --shadow-sm: 0 1px 3px rgba(30,30,26,0.08);
-    --shadow-md: 0 4px 16px rgba(30,30,26,0.1);
-    --shadow-lg: 0 8px 32px rgba(30,30,26,0.12);
-    --shadow-xl: 0 20px 60px rgba(30,30,26,0.15);
+    --shadow-sm: 0 1px 3px rgba(30,30,26,0.06);
+    --shadow-md: 0 4px 16px rgba(30,30,26,0.08);
+    --shadow-lg: 0 8px 32px rgba(30,30,26,0.1);
+    --shadow-xl: 0 20px 60px rgba(30,30,26,0.12);
 
     --transition-fast: 0.15s ease;
     --transition-normal: 0.25s ease;
@@ -237,6 +237,30 @@
   /* Sizes */
   .btn-sm { font-size: 12px; padding: 7px 14px; }
   .btn-lg { font-size: 15px; padding: 13px 26px; }
+
+  /* Action Outline (New) */
+  .btn-action {
+    display: block;
+    width: 100%;
+    background: transparent;
+    color: #E8521A;
+    border: 1.5px solid #E8521A;
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-family: var(--font-dm-sans), system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: center;
+  }
+  .btn-action:hover:not(:disabled) {
+    background: rgba(232,82,26,0.06);
+    border-color: #D94A15;
+    color: #D94A15;
+  }
 }
 
 /* ── Component: Cards ───────────────────────────────────── */
@@ -244,7 +268,7 @@
   .parlova-card {
     background: var(--color-card);
     border: 1px solid var(--color-border);
-    border-radius: 14px;
+    border-radius: 18px;
     padding: 24px;
     box-shadow: var(--shadow-sm);
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
@@ -304,6 +328,19 @@
     padding: 3px 8px;
     border-radius: 4px;
     white-space: nowrap;
+  }
+
+  .pill-score {
+    background: rgba(232,82,26,0.1);
+    color: #C93A1A;
+    border-radius: 9999px;
+    font-family: var(--font-dm-sans), system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .badge-accent {

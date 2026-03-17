@@ -41,7 +41,7 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
             </div>
 
             {/* Progress counter */}
-            <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 bg-card border border-border p-5 rounded-2xl shadow-inner">
+            <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 bg-card border border-border p-5 rounded-[18px] shadow-sm">
                 <div className="flex items-center gap-4 w-full sm:w-auto">
                     <div className="w-12 h-12 bg-background border border-border-strong rounded-full flex items-center justify-center shadow-inner">
                         <span className="text-xl font-mono-num text-gold">{learnedCount}</span>
@@ -82,9 +82,9 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                             >
                                 {/* Front */}
                                 <Card
-                                    className={`p-6 transition-all duration-300 rounded-2xl ${isLearned
-                                        ? 'border-gold/30 bg-gold/5 shadow-[0_0_20px_rgba(201,168,76,0.15)]'
-                                        : 'border-border bg-card hover:border-border-strong hover:bg-surface'
+                                    className={`p-6 transition-all duration-300 rounded-[18px] ${isLearned
+                                        ? 'border-accent-border bg-gold/5 shadow-sm'
+                                        : 'border-border bg-card hover:border-accent-border hover:bg-surface'
                                         }`}
                                     style={{
                                         backfaceVisibility: 'hidden',
@@ -115,7 +115,7 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
 
                                 {/* Back (immersion) */}
                                 <Card
-                                    className="p-10 border-gold/40 bg-card rounded-2xl flex flex-col items-center justify-center text-center relative overflow-hidden shadow-[0_0_40px_rgba(201,168,76,0.1)]"
+                                    className="p-10 border-accent-border bg-card rounded-[18px] flex flex-col items-center justify-center text-center relative overflow-hidden shadow-sm"
                                     style={{
                                         backfaceVisibility: 'hidden',
                                         transform: 'rotateX(180deg)',
@@ -126,7 +126,7 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                                     <div className="relative z-10 w-full flex flex-col items-center">
                                         <p className="text-3xl font-serif text-gold mb-4">{phrase.spanish}</p>
                                         <p className="text-lg text-text-primary font-mono-num mb-8 opacity-80">{phrase.phonetic}</p>
-                                        <Button className="rounded-full bg-gold text-background hover:brightness-110 font-mono-num text-[10px] uppercase font-bold tracking-widest px-8">
+                                        <Button className="btn-action px-8">
                                             Assimilate
                                         </Button>
                                     </div>
@@ -151,11 +151,7 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                             onComplete(learnedCount, learnedPhrases);
                         }}
                         disabled={!canContinue}
-                        className={`w-full max-md h-14 text-[10px] font-mono-num tracking-widest uppercase font-bold rounded-full transition-all duration-500 shadow-md ${
-                            canContinue 
-                            ? 'bg-gold text-background hover:brightness-110 shadow-[0_4px_20px_rgba(201,168,76,0.2)]' 
-                            : 'bg-card text-text-muted border border-border cursor-not-allowed'
-                            }`}
+                        className={`w-full max-md h-14 ${canContinue ? 'btn-action' : 'btn-secondary opacity-50 cursor-not-allowed'}`}
                     >
                         {canContinue ? (
                             <>Proceed to Verification <ChevronRight className="w-4 h-4 ml-2" /></>

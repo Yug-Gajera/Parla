@@ -58,7 +58,7 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
         return (
             <div className="flex flex-col items-center w-full max-w-2xl mx-auto pt-6 px-4 font-sans">
                 {/* Header */}
-                <div className="w-full mb-8 bg-card border border-border p-6 rounded-2xl flex items-center justify-between shadow-inner">
+                <div className="w-full mb-8 bg-card border border-border p-6 rounded-[18px] flex items-center justify-between shadow-sm">
                     <div>
                         <h2 className="text-sm font-mono-num text-text-primary uppercase tracking-widest mb-1">Diagnostic System</h2>
                         <p className="text-[10px] text-text-muted uppercase tracking-[0.1em]">{challenge.instructions}</p>
@@ -109,7 +109,7 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                                         key={idx}
                                         onClick={() => handleAnswer(idx)}
                                         disabled={selected !== null}
-                                        className={`flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300 text-left group ${cls}`}
+                                        className={`flex items-center gap-4 p-5 rounded-[18px] border transition-all duration-300 text-left group ${cls}`}
                                     >
                                         <div className={`flex-shrink-0 w-6 h-6 rounded-sm border flex items-center justify-center font-mono-num text-[9px] transition-colors ${selected === null ? 'border-text-muted group-hover:border-gold' : 'border-transparent'}`}>
                                             {['01', '02', '03', '04'][idx]}
@@ -124,7 +124,7 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="mt-8 p-6 rounded-2xl bg-card border border-border"
+                                className="mt-8 p-6 rounded-[18px] bg-card border border-border shadow-sm"
                             >
                                 <p className="text-sm font-sans text-text-primary leading-relaxed"><span className="text-gold font-mono-num text-[10px] uppercase tracking-widest block mb-2">System Output</span>{q.explanation}</p>
                             </motion.div>
@@ -176,15 +176,17 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                     {passed ? 'Authorization Granted' : 'Diagnostics Failed'}
                 </h2>
                 
-                <div className="flex bg-card border border-border p-4 rounded-xl items-center gap-6 mb-8">
+                <div className="flex bg-card border border-border p-4 rounded-[18px] items-center gap-6 mb-8 shadow-sm">
                     <div className="text-left">
                         <p className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest mb-1">Success Rate</p>
                         <p className="text-xl font-mono-num text-text-primary">{correctCount} <span className="text-text-muted text-sm">/ {challenge.questions.length}</span></p>
                     </div>
-                    <div className="w-[1px] h-8 bg-border-strong" />
+                    <div className="w-[1px] h-8 bg-border" />
                     <div className="text-left">
                         <p className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest mb-1">Index</p>
-                        <p className={`text-xl font-mono-num ${passed ? 'text-gold' : 'text-error'}`}>{scorePercent}%</p>
+                        <div className="pill-score">
+                            {scorePercent}%
+                        </div>
                     </div>
                 </div>
 
@@ -195,7 +197,7 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                         </p>
                         <Button
                             onClick={() => onComplete(scorePercent)}
-                            className="w-full max-w-xs h-14 text-[10px] font-mono-num tracking-widest uppercase font-bold rounded-full bg-gold text-background hover:brightness-110 shadow-[0_4px_20px_rgba(201,168,76,0.2)]"
+                            className="btn-action w-full max-w-xs h-14"
                         >
                             <ArrowRight className="w-4 h-4 mr-2" />
                             Finalize Module
@@ -209,14 +211,13 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                         <div className="flex flex-col gap-4 w-full max-w-xs">
                             <Button
                                 onClick={onReviewPhrases}
-                                variant="outline"
-                                className="w-full h-12 bg-transparent border-border text-text-primary hover:bg-card font-mono-num text-[10px] uppercase tracking-widest rounded-full"
+                                className="btn-secondary w-full max-w-xs h-12"
                             >
                                 <BookOpen className="w-3.5 h-3.5 mr-2" /> Lexicon Review
                             </Button>
                             <Button
                                 onClick={handleRetry}
-                                className="w-full h-12 bg-card text-error border border-error/20 hover:bg-error/10 font-mono-num text-[10px] uppercase tracking-widest rounded-full transition-colors"
+                                className="w-full h-12 bg-card text-accent border border-accent/20 hover:bg-surface font-mono-num text-[10px] uppercase tracking-widest rounded-full transition-colors"
                             >
                                 <RotateCcw className="w-3.5 h-3.5 mr-2" /> Re-execute Diagnostic
                             </Button>

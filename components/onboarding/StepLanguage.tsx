@@ -44,21 +44,21 @@ export default function StepLanguage() {
                             onClick={() => handleSelect(lang.id, lang.code, lang.available)}
                             disabled={!lang.available}
                             className={`
-                                relative flex flex-col items-center justify-center py-10 px-6 rounded-2xl border transition-all duration-300
-                                ${!lang.available ? 'opacity-30 cursor-not-allowed bg-background border-border grayscale' : ''}
-                                ${lang.available && !isSelected ? 'hover:border-border-strong bg-card border-border group shadow-inner' : ''}
-                                ${isSelected ? 'border-primary bg-primary/5 shadow-md scale-[1.02]' : ''}
+                                relative flex flex-col items-center justify-center py-10 px-6 rounded-[18px] border transition-all duration-300
+                                ${!lang.available ? 'opacity-30 cursor-not-allowed bg-card border-border grayscale px-0' : ''}
+                                ${lang.available && !isSelected ? 'hover:border-accent-border bg-card border-border group shadow-sm' : ''}
+                                ${isSelected ? 'border-accent-border bg-card shadow-md scale-[1.02]' : ''}
                             `}
                         >
                             <div className={`text-5xl mb-5 transition-transform duration-300 ${isSelected ? 'scale-110' : 'group-hover:scale-110'}`}>
                                 {lang.emoji}
                             </div>
-                            <div className={`font-serif text-xl tracking-wide ${isSelected ? 'text-primary' : 'text-foreground'}`}>
+                            <div className={`font-serif text-xl tracking-wide ${isSelected ? 'text-accent' : 'text-text-primary'}`}>
                                 {lang.name}
                             </div>
 
                             {/* Badge */}
-                            <div className={`absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1 text-[9px] font-mono tracking-[0.2em] font-bold uppercase rounded-sm border ${lang.available ? (isSelected ? 'bg-primary text-primary-foreground border-primary' : 'bg-surface text-muted-foreground border-border') : 'bg-transparent border-border text-muted-foreground'}`}>
+                            <div className={`absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1 text-[9px] font-mono tracking-[0.2em] font-bold uppercase rounded-sm border ${lang.available ? (isSelected ? 'bg-accent text-bg border-accent-border' : 'bg-surface text-text-muted border-border') : 'bg-transparent border-border text-text-muted'}`}>
                                 {lang.available ? 'Active' : 'Locked'}
                             </div>
                         </button>

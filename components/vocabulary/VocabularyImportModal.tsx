@@ -342,7 +342,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className={`absolute inset-0 bg-black/70 ${processState === 'processing' ? 'pointer-events-none' : ''}`} onClick={processState === 'processing' ? undefined : onClose} />
             
-            <div className="relative bg-card border border-gold/20 rounded-[20px] p-8 w-full max-w-[520px] flex flex-col items-center">
+            <div className="relative bg-card border border-border rounded-[18px] p-8 w-full max-w-[520px] flex flex-col items-center shadow-xl">
                 
                 {processState !== 'processing' && (
                     <button onClick={onClose} className="absolute top-6 right-6 text-text-secondary hover:text-text-primary transition-colors p-1 rounded-md hover:bg-surface">
@@ -399,10 +399,10 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                     Would you like to update your level?
                                 </p>
                                 <div className="flex gap-3 w-full">
-                                    <Button onClick={closeAndRefresh} className="flex-1 bg-transparent hover:bg-surface border border-border-strong text-text-primary font-sans">
+                                    <Button onClick={closeAndRefresh} className="btn-secondary flex-1 h-12 rounded-xl text-[11px] font-bold uppercase tracking-widest">
                                         Keep current
                                     </Button>
-                                    <Button onClick={acceptNewLevel} className="flex-1 bg-gold hover:brightness-110 text-bg font-sans font-medium">
+                                    <Button onClick={acceptNewLevel} className="btn-action flex-1">
                                         Update level
                                     </Button>
                                 </div>
@@ -410,7 +410,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                         )}
 
                         {!showsSuggestion && (
-                            <Button onClick={closeAndRefresh} className="bg-gold hover:brightness-110 text-bg font-sans font-medium w-full h-12 text-[15px] rounded-xl">
+                            <Button onClick={closeAndRefresh} className="btn-action w-full">
                                 View my deck
                             </Button>
                         )}
@@ -476,7 +476,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                                 <div className="text-center py-2 text-text-muted">... and {ankiParsedCount - 5} more</div>
                                             )}
                                         </div>
-                                        <Button onClick={submitAnki} className="w-full h-12 bg-gold hover:brightness-110 text-bg font-sans font-medium text-[15px] rounded-xl">
+                                        <Button onClick={submitAnki} className="btn-action w-full">
                                             Import {ankiParsedCount} words
                                         </Button>
                                     </div>
@@ -505,7 +505,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                 <Button 
                                     onClick={submitPaste} 
                                     disabled={pasteDetails.count === 0}
-                                    className="w-full h-12 bg-gold hover:brightness-110 text-bg font-sans font-medium text-[15px] rounded-xl disabled:opacity-30"
+                                    className="btn-action w-full disabled:opacity-30"
                                 >
                                     Import {pasteDetails.count} words
                                 </Button>
@@ -527,7 +527,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                             <div 
                                                 key={tier.id}
                                                 onClick={() => setSelectedTier(tier.id)}
-                                                className={`p-[14px] px-[16px] rounded-[10px] border transition-all duration-150 cursor-pointer flex justify-between items-center ${isSelected ? 'border-gold/40 bg-gold/5' : 'border-border bg-surface hover:bg-surface-hover hover:border-border-strong'}`}
+                                                className={`p-[14px] px-[16px] rounded-[18px] border transition-all duration-150 cursor-pointer flex justify-between items-center ${isSelected ? 'border-accent-border bg-gold/5' : 'border-border bg-surface hover:bg-surface-hover hover:border-border-strong'}`}
                                             >
                                                 <div className="flex flex-col">
                                                     <div className="flex items-center gap-2 mb-1">
@@ -551,7 +551,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                 <Button 
                                     onClick={submitTier} 
                                     disabled={!selectedTier}
-                                    className="w-full h-12 bg-gold hover:brightness-110 text-bg font-sans font-medium text-[15px] rounded-xl disabled:opacity-30"
+                                    className="btn-action w-full disabled:opacity-30"
                                 >
                                     Add {selectedTier && tierPreviews[selectedTier] ? tierPreviews[selectedTier] : 'words'} to my deck
                                 </Button>

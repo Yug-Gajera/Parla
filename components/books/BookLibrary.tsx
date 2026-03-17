@@ -67,7 +67,7 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
                                     onClick={() => onSelectBook(book.id)}
                                     className="flex-shrink-0 w-[260px] cursor-pointer snap-start group"
                                 >
-                                    <div className="rounded-2xl overflow-hidden border border-border bg-card shadow-xl group-hover:border-border-strong transition-colors">
+                                    <div className="rounded-[18px] overflow-hidden border border-border bg-card shadow-md group-hover:border-accent-border transition-colors">
                                         <div
                                             className="h-28 flex items-end p-4 relative overflow-hidden"
                                             style={{ backgroundColor: book.cover_color || 'var(--color-surface)' }}
@@ -138,7 +138,7 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
 
                 {/* ── Book Grid ── */}
                 {books.length === 0 ? (
-                    <div className="p-16 text-center border border-dashed border-border-strong rounded-3xl bg-surface">
+                    <div className="p-16 text-center border border-border border-dashed rounded-[18px] bg-card shadow-sm">
                         <BookOpen className="w-12 h-12 text-text-muted mx-auto mb-6 opacity-80" strokeWidth={1} />
                         <h3 className="text-xl font-display text-text-primary mb-2">Lexicon Empty</h3>
                         <p className="text-text-muted font-sans text-sm max-w-sm mx-auto leading-relaxed">
@@ -160,8 +160,8 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
 
                         {hasMore && (
                             <div className="flex justify-center mt-12">
-                                <Button variant="outline" onClick={fetchMore} className="bg-card border-border text-text-muted hover:bg-surface hover:text-text-primary font-mono-num text-[10px] uppercase font-bold tracking-widest px-8 h-12 rounded-full gap-2">
-                                    Expand Catalogue <ChevronRight className="w-3.5 h-3.5" />
+                                <Button onClick={fetchMore} className="btn-action w-fit px-8 h-12">
+                                    Expand Catalogue <ChevronRight className="w-4 h-4 ml-2" />
                                 </Button>
                             </div>
                         )}
@@ -189,7 +189,7 @@ function BookCard({ book, index, onSelect }: { book: any; index: number; onSelec
             className="cursor-pointer group flex flex-col h-full"
         >
             <div
-                className="rounded-xl aspect-[3/4.2] flex flex-col justify-end p-4 sm:p-5 relative overflow-hidden transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)] border border-border"
+                className="rounded-[18px] aspect-[3/4.2] flex flex-col justify-end p-4 sm:p-5 relative overflow-hidden transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-md border border-border bg-card"
                 style={{ backgroundColor: book.cover_color || 'var(--color-surface)' }}
             >
                 {/* Gradient overlay */}

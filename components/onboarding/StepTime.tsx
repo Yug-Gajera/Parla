@@ -46,22 +46,22 @@ export default function StepTime() {
                             key={t.min}
                             onClick={() => setDailyGoal(t.min)}
                             className={`
-                                flex flex-col md:flex-row items-start md:items-center p-6 sm:p-7 rounded-2xl border transition-all duration-300 w-full text-left relative overflow-hidden group
-                                ${!isSelected ? 'hover:border-border hover:bg-muted border-border bg-card shadow-inner' : ''}
-                                ${isSelected ? 'border-primary bg-primary/5 shadow-sm scale-[1.02]' : ''}
+                                flex flex-col md:flex-row items-start md:items-center p-6 sm:p-7 rounded-[18px] border transition-all duration-300 w-full text-left relative overflow-hidden group
+                                ${!isSelected ? 'hover:border-accent-border border-border bg-card shadow-sm' : ''}
+                                ${isSelected ? 'border-accent-border bg-card shadow-md scale-[1.02]' : ''}
                             `}
                         >
-                            {isSelected && <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none" />}
+                            {isSelected && <div className="absolute inset-0 bg-accent/5 pointer-events-none" />}
                             
                             <div className="flex items-center gap-5 w-full relative z-10">
-                                <div className={`p-4 rounded-xl border flex-shrink-0 transition-colors duration-300 ${isSelected ? 'bg-primary/10 text-primary border-primary/30' : 'bg-background text-muted-foreground border-border group-hover:text-muted-foreground'}`}>
+                                <div className={`p-4 rounded-xl border flex-shrink-0 transition-colors duration-300 ${isSelected ? 'bg-accent/10 text-accent border-accent-border' : 'bg-surface text-text-muted border-border group-hover:text-text-muted'}`}>
                                     <Clock size={20} strokeWidth={isSelected ? 2 : 1.5} />
                                 </div>
                                 <div className="flex flex-col md:flex-row md:items-center justify-between w-full gap-2">
-                                    <span className={`font-serif text-2xl tracking-wide transition-colors duration-300 ${isSelected ? 'text-primary' : 'text-foreground'}`}>
+                                    <span className={`font-serif text-2xl tracking-wide transition-colors duration-300 ${isSelected ? 'text-accent' : 'text-text-primary'}`}>
                                         {t.label}
                                     </span>
-                                    <span className={`text-[11px] font-mono tracking-wide uppercase leading-relaxed md:text-right ${isSelected ? 'text-primary/80' : 'text-muted-foreground'}`}>
+                                    <span className={`text-[11px] font-mono tracking-wide uppercase leading-relaxed md:text-right ${isSelected ? 'text-accent/80' : 'text-text-muted'}`}>
                                         {t.desc}
                                     </span>
                                 </div>

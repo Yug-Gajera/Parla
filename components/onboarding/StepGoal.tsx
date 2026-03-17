@@ -47,19 +47,19 @@ export default function StepGoal() {
                             key={g.id}
                             onClick={() => setGoal(g.id)}
                             className={`
-                                flex flex-col md:flex-row items-start md:items-center gap-5 p-7 rounded-2xl border transition-all duration-300 text-left relative overflow-hidden group
-                                ${!isSelected ? 'hover:border-border hover:bg-muted border-border bg-card shadow-inner' : ''}
-                                ${isSelected ? 'border-primary bg-primary/5 shadow-sm scale-[1.02]' : ''}
+                                flex flex-col md:flex-row items-start md:items-center gap-5 p-7 rounded-[18px] border transition-all duration-300 text-left relative overflow-hidden group
+                                ${!isSelected ? 'hover:border-accent-border border-border bg-card shadow-sm' : ''}
+                                ${isSelected ? 'border-accent-border bg-card shadow-md scale-[1.02]' : ''}
                             `}
                         >
                             {isSelected && <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />}
                             
-                            <div className={`p-4 rounded-xl border flex-shrink-0 transition-colors duration-300 relative z-10 ${isSelected ? 'bg-primary/10 text-primary border-primary/30' : 'bg-background text-muted-foreground border-border group-hover:text-muted-foreground'}`}>
+                            <div className={`p-4 rounded-[18px] border flex-shrink-0 transition-colors duration-300 relative z-10 ${isSelected ? 'bg-accent/10 text-accent border-accent-border' : 'bg-surface text-text-muted border-border group-hover:text-text-muted'}`}>
                                 <Icon size={24} strokeWidth={isSelected ? 2 : 1.5} />
                             </div>
                             
                             <div className="relative z-10">
-                                <div className={`font-serif text-2xl mb-2 transition-colors duration-300 ${isSelected ? 'text-primary' : 'text-foreground group-hover:text-foreground'}`}>
+                                <div className={`font-serif text-2xl mb-2 transition-colors duration-300 ${isSelected ? 'text-accent' : 'text-text-primary group-hover:text-text-primary'}`}>
                                     {g.label}
                                 </div>
                                 <div className="text-[12px] font-mono tracking-wide text-muted-foreground uppercase leading-relaxed">
@@ -76,7 +76,7 @@ export default function StepGoal() {
                 <Button
                     onClick={nextStep}
                     disabled={!goal}
-                    className="w-full max-w-sm bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[11px] uppercase tracking-widest font-bold h-14 rounded-full shadow-lg transition-all disabled:opacity-30 disabled:shadow-none"
+                    className="btn-action w-full max-w-sm h-14"
                 >
                     Confirm Parameter
                 </Button>

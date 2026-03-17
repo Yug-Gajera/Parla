@@ -101,12 +101,12 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 
                 {/* User Area */}
                 <div className="px-5 py-4 border-t border-border mt-4 flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-accent-subtle border border-accent-border text-accent font-display font-semibold flex items-center justify-center">
+                    <div className="w-9 h-9 rounded-full bg-accent/10 border border-accent-border text-accent font-serif font-semibold flex items-center justify-center">
                         FL
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-sm font-body font-medium text-text-primary tracking-wide">Learner</span>
-                        <span className="text-[10px] font-mono-num text-gold uppercase tracking-widest">Immersion Tier</span>
+                        <span className="text-sm font-medium text-text-primary tracking-wide">Learner</span>
+                        <span className="text-[10px] font-mono text-accent uppercase tracking-widest font-bold">Immersion Tier</span>
                     </div>
                 </div>
             </aside>
@@ -127,7 +127,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             </main>
 
             {/* ── Mobile Bottom Nav ── */}
-            <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[64px] bg-[rgba(255,252,242,0.95)] backdrop-blur-[20px] border-t border-border flex items-center justify-around px-2 pb-[env(safe-area-inset-bottom)] z-[100]">
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[64px] bg-background/90 backdrop-blur-xl border-t border-border flex items-center justify-around px-2 pb-[env(safe-area-inset-bottom)] z-[100]">
                 {NAV_ITEMS.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
