@@ -81,18 +81,18 @@ export default function ImmersionLibrary({ languageId, languageName, level }: Im
 
     // ── Main Library View ──
     return (
-        <div className="min-h-[calc(100vh-80px)] pb-24 font-sans bg-[#080808]">
+        <div className="min-h-[calc(100vh-80px)] pb-24 font-sans bg-background">
             {/* Header */}
-            <div className="px-6 sm:px-10 pt-10 pb-6 max-w-6xl mx-auto border-b border-[#1e1e1e]">
-                <h1 className="text-3xl sm:text-4xl font-serif text-[#f0ece4] tracking-tight">Acquisition Center</h1>
-                <p className="text-[10px] font-mono text-[#5a5652] uppercase tracking-[0.2em] mt-3 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#c9a84c] animate-pulse" />
-                    Target Parameter: <span className="text-[#9a9590]">{languageName}</span>
+            <div className="px-6 sm:px-10 pt-10 pb-6 max-w-6xl mx-auto border-b border-border">
+                <h1 className="text-3xl sm:text-4xl font-display text-text-primary tracking-tight">Acquisition Center</h1>
+                <p className="text-[10px] font-mono text-text-muted uppercase tracking-[0.2em] mt-3 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                    Target Parameter: <span className="text-text-secondary">{languageName}</span>
                 </p>
             </div>
 
             {/* Tab bar */}
-            <div className="bg-[#0f0f0f] border-b border-[#1e1e1e] sticky top-0 z-30">
+            <div className="bg-surface border-b border-border sticky top-0 z-30">
                 <div className="flex gap-2 px-6 sm:px-10 max-w-6xl mx-auto overflow-x-auto py-3 hide-scrollbar mask-fade-right">
                     {TABS.map(tab => {
                         const Icon = tab.icon;
@@ -102,8 +102,8 @@ export default function ImmersionLibrary({ languageId, languageName, level }: Im
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center gap-2.5 px-5 py-2.5 rounded-full text-[10px] font-mono uppercase tracking-widest font-bold whitespace-nowrap transition-all border ${isActive
-                                        ? 'bg-[#141414] text-[#c9a84c] border-[#2a2a2a] shadow-inner'
-                                        : 'bg-transparent border-transparent text-[#5a5652] hover:bg-[#141414] hover:text-[#9a9590] hover:border-[#1e1e1e]'
+                                        ? 'bg-card text-accent border-accent-border shadow-inner'
+                                        : 'bg-transparent border-transparent text-text-muted hover:bg-card hover:text-text-secondary hover:border-border'
                                     }`}
                             >
                                 <Icon className="w-3.5 h-3.5" />

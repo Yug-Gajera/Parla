@@ -62,12 +62,12 @@ export default function LearnView({ languageId, languageName, level }: LearnView
                         </p>
                     </div>
 
-                    <TabsList className="bg-surface border border-border p-1 rounded-xl shrink-0 hide-scrollbar overflow-x-auto justify-start self-start md:self-auto h-auto">
+                    <TabsList className="bg-surface border border-border p-1.5 rounded-2xl shrink-0 hide-scrollbar overflow-x-auto justify-start self-start md:self-auto h-auto gap-1">
                         {['learn', 'read', 'stories', 'vocabulary', 'lessons'].map(tab => (
                             <TabsTrigger 
                                 key={tab}
                                 value={tab} 
-                                className="capitalize font-mono-num text-xs tracking-widest px-6 py-2.5 rounded-lg data-[state=active]:bg-card data-[state=active]:text-gold data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-border-strong text-text-muted transition-all"
+                                className="capitalize font-mono-num text-[10px] tracking-widest px-6 py-2.5 rounded-xl data-[state=active]:bg-card data-[state=active]:text-accent data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-border-strong text-text-muted hover:text-text-secondary transition-all"
                             >
                                 {tab}
                             </TabsTrigger>
