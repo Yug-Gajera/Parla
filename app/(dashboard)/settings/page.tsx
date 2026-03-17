@@ -77,78 +77,78 @@ export default function SettingsPage() {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center min-h-[500px] bg-[#080808]">
-                <Loader2 className="w-8 h-8 animate-spin text-[#c9a84c]" />
+            <div className="flex items-center justify-center min-h-[500px] bg-background">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
         );
     }
 
     return (
-        <div className="w-full max-w-[1000px] mx-auto p-4 md:p-8 space-y-8 font-sans pb-32">
-            <div className="flex justify-between items-end mb-10">
+        <div className="w-full max-w-[1000px] mx-auto p-6 md:p-10 space-y-10 font-sans pb-32">
+            <div className="flex justify-between items-end mb-12">
                 <div>
-                    <h1 className="text-4xl text-[#f0ece4] font-serif tracking-tight mb-2">Systems & Preferences</h1>
-                    <p className="text-[11px] font-mono text-[#5a5652] uppercase tracking-[0.2em]">Configure Parlova operational parameters</p>
+                    <h1 className="text-4xl md:text-5xl text-foreground font-display tracking-tight mb-2">Systems & Preferences</h1>
+                    <p className="text-[11px] font-mono-num text-text-muted uppercase tracking-widest">Configure Parlova operational parameters</p>
                 </div>
                 {isSaving && (
-                    <div className="flex items-center text-[10px] font-mono font-bold text-[#c9a84c] uppercase tracking-widest animate-pulse border border-[#c9a84c]/30 bg-[#c9a84c]/5 px-3 py-1.5 rounded-sm">
+                    <div className="flex items-center text-[10px] font-mono-num font-bold text-gold uppercase tracking-widest animate-pulse border border-gold-border bg-gold-subtle px-3 py-1.5 rounded-lg">
                         Synchronizing...
                     </div>
                 )}
             </div>
 
-            <div className="space-y-12">
+            <div className="space-y-14">
                 {/* Account Section */}
                 <section>
-                    <div className="flex items-center gap-3 mb-6 border-b border-[#1e1e1e] pb-4">
-                        <Mail className="w-4 h-4 text-[#c9a84c]" />
-                        <h2 className="text-[12px] font-mono font-bold uppercase tracking-widest text-[#9a9590]">Identity & Security</h2>
+                    <div className="flex items-center gap-3 mb-6 border-b border-border pb-4">
+                        <Mail className="w-4 h-4 text-gold" />
+                        <h2 className="text-[12px] font-mono-num font-bold uppercase tracking-widest text-text-secondary">Identity & Security</h2>
                     </div>
-                    <Card className="p-8 bg-[#0f0f0f] border border-[#1e1e1e] shadow-inner rounded-3xl divide-y divide-[#1e1e1e]/50">
+                    <Card className="p-8 bg-card border border-border shadow-sm rounded-3xl divide-y divide-border/50">
                         <div className="pb-8">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-[#5a5652] mb-3 block">Primary Uplink</Label>
+                            <Label className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-text-muted mb-3 block">Primary Uplink</Label>
                             <div className="flex items-center justify-between">
-                                <span className="text-[#f0ece4] font-sans opacity-80 font-medium">{user?.email}</span>
-                                <span className="text-[9px] font-mono bg-[#141414] border border-[#2a2a2a] text-[#c9a84c] px-3 py-1 rounded-sm uppercase tracking-widest">Verified</span>
+                                <span className="text-text-primary font-medium">{user?.email}</span>
+                                <span className="text-[10px] font-mono-num bg-surface border border-border text-gold px-3 py-1 rounded-md uppercase tracking-widest">Verified</span>
                             </div>
                         </div>
                         <div className="py-8">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-[#5a5652] mb-3 block">Access Key</Label>
+                            <Label className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-text-muted mb-3 block">Access Key</Label>
                             <div className="flex items-center justify-between">
-                                <span className="text-[#5a5652] font-mono text-sm tracking-widest">••••••••••••</span>
-                                <Button variant="outline" size="sm" className="rounded-full bg-[#141414] border-[#2a2a2a] text-[#9a9590] hover:text-[#f0ece4] hover:bg-[#1e1e1e] font-mono text-[10px] uppercase tracking-widest" onClick={handlePasswordReset}>
+                                <span className="text-text-muted font-mono-num text-sm tracking-widest">••••••••••••</span>
+                                <Button variant="outline" size="sm" className="rounded-full bg-surface border-border text-text-secondary hover:text-text-primary hover:bg-border font-mono-num text-[10px] uppercase tracking-widest h-9" onClick={handlePasswordReset}>
                                     Cycle Key
                                 </Button>
                             </div>
                         </div>
                         <div className="pt-8">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-red-500/80 mb-3 block">Critical Operations</Label>
+                            <Label className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-error mb-3 block">Critical Operations</Label>
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <Button variant="outline" size="sm" className="rounded-full bg-red-500/5 border-red-500/20 text-red-500 hover:bg-red-500/10 hover:text-red-400 font-mono text-[10px] uppercase tracking-widest">
+                                    <Button variant="outline" size="sm" className="rounded-full bg-error-subtle border-error-border text-error hover:bg-error/10 hover:text-error font-mono-num text-[10px] uppercase tracking-widest h-9">
                                         Purge Identity
                                     </Button>
                                 </AlertDialogTrigger>
-                                <AlertDialogContent className="bg-[#080808] border-[#1e1e1e] max-w-md p-8 rounded-3xl shadow-2xl">
-                                    <AlertDialogHeader className="mb-6">
-                                        <AlertDialogTitle className="text-2xl font-serif text-[#f0ece4]">Confirm Annihilation</AlertDialogTitle>
-                                        <AlertDialogDescription className="text-[#9a9590] font-sans text-sm leading-relaxed mt-2">
+                                <AlertDialogContent className="bg-card border-border max-w-md p-10 rounded-[32px] shadow-2xl">
+                                    <AlertDialogHeader className="mb-8">
+                                        <AlertDialogTitle className="text-3xl font-display text-text-primary">Confirm Annihilation</AlertDialogTitle>
+                                        <AlertDialogDescription className="text-text-secondary text-sm leading-relaxed mt-4">
                                             This sequence is irreversible. All language nodes, XP, and neural mappings will be disintegrated.
-                                            Type <span className="font-mono text-red-400 bg-red-500/10 px-1 rounded">PURGE</span> to verify authorization.
+                                            Type <span className="font-mono-num text-error bg-error-subtle px-1.5 py-0.5 rounded border border-error-border">PURGE</span> to verify authorization.
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <Input
                                         value={deleteConfirm}
                                         onChange={(e) => setDeleteConfirm(e.target.value)}
-                                        className="bg-[#0f0f0f] border-[#2a2a2a] text-[#f0ece4] font-mono tracking-widest text-center text-lg h-14 mb-8 focus-visible:ring-red-500/50"
+                                        className="bg-surface border-border text-text-primary font-mono-num tracking-widest text-center text-xl h-16 mb-8 focus-visible:ring-error/20 rounded-2xl"
                                         placeholder="PURGE"
                                     />
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel className="rounded-full bg-[#141414] border-[#2a2a2a] text-[#9a9590] hover:text-[#f0ece4] hover:bg-[#1e1e1e] font-mono text-[10px] uppercase tracking-widest h-12 px-6">Abort</AlertDialogCancel>
+                                    <AlertDialogFooter className="gap-3">
+                                        <AlertDialogCancel className="rounded-2xl bg-surface border-border text-text-secondary hover:text-text-primary hover:bg-border font-mono-num text-[11px] uppercase tracking-widest h-14 px-8 mt-0">Abort</AlertDialogCancel>
                                         <AlertDialogAction
                                             onClick={handleDeleteAccount}
                                             disabled={deleteConfirm !== 'PURGE'}
-                                            className="rounded-full bg-red-500 hover:bg-red-400 text-white font-mono text-[10px] uppercase tracking-widest font-bold h-12 px-6 disabled:opacity-30 disabled:hover:bg-red-500"
+                                            className="rounded-2xl bg-error hover:bg-error-hover text-white font-mono-num text-[11px] uppercase tracking-widest font-bold h-14 px-8 disabled:opacity-30"
                                         >
                                             Execute Purge
                                         </AlertDialogAction>
@@ -161,13 +161,13 @@ export default function SettingsPage() {
 
                 {/* Learning Preferences */}
                 <section>
-                    <div className="flex items-center gap-3 mb-6 border-b border-[#1e1e1e] pb-4">
-                        <Brain className="w-4 h-4 text-[#c9a84c]" />
-                        <h2 className="text-[12px] font-mono font-bold uppercase tracking-widest text-[#9a9590]">Neural Calibration</h2>
+                    <div className="flex items-center gap-3 mb-6 border-b border-border pb-4">
+                        <Brain className="w-4 h-4 text-gold" />
+                        <h2 className="text-[12px] font-mono-num font-bold uppercase tracking-widest text-text-secondary">Neural Calibration</h2>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="space-y-5">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-[#5a5652] block">Immersion Horizon</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div className="space-y-6">
+                            <Label className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-text-muted block">Immersion Horizon</Label>
                             <RadioGroup
                                 defaultValue={settings?.daily_goal_minutes?.toString() || "20"}
                                 onValueChange={handleGoalChange}
@@ -178,30 +178,30 @@ export default function SettingsPage() {
                                         <RadioGroupItem value={mins.toString()} id={`goal-${mins}`} className="peer sr-only" />
                                         <Label
                                             htmlFor={`goal-${mins}`}
-                                            className="flex flex-col items-center justify-center rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f] p-6 hover:bg-[#141414] hover:border-[#2a2a2a] peer-data-[state=checked]:border-[#c9a84c] peer-data-[state=checked]:bg-[#c9a84c]/5 cursor-pointer transition-all duration-300 relative overflow-hidden group"
+                                            className="flex flex-col items-center justify-center rounded-[24px] border border-border bg-card p-8 hover:bg-surface hover:border-gold/30 peer-data-[state=checked]:border-gold peer-data-[state=checked]:bg-gold-subtle cursor-pointer transition-all duration-300 relative overflow-hidden group shadow-sm hover:shadow-md"
                                         >
-                                            <span className="text-3xl font-serif text-[#f0ece4] group-hover:text-[#c9a84c] peer-data-[state=checked]:text-[#c9a84c] transition-colors mb-2 z-10">{mins}</span>
-                                            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#5a5652] peer-data-[state=checked]:text-[#c9a84c]/80 z-10">MINUTES</span>
+                                            <span className="text-4xl font-display text-text-primary group-hover:text-gold peer-data-[state=checked]:text-gold transition-colors mb-2 z-10">{mins}</span>
+                                            <span className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-text-muted peer-data-[state=checked]:text-gold/80 z-10">MINUTES</span>
                                         </Label>
                                     </div>
                                 ))}
                             </RadioGroup>
                         </div>
 
-                        <div className="space-y-5">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-[#5a5652] block">Extraction Vectors</Label>
-                            <div className="grid grid-cols-2 gap-4 bg-[#0f0f0f] p-6 rounded-3xl border border-[#1e1e1e] shadow-inner">
+                        <div className="space-y-6">
+                            <Label className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-text-muted block">Extraction Vectors</Label>
+                            <div className="grid grid-cols-2 gap-4 bg-surface/50 p-8 rounded-[32px] border border-border shadow-inner">
                                 {CONTENT_TYPES.map((type) => (
-                                    <div key={type.id} className="flex items-center space-x-3 group cursor-pointer hover:bg-[#141414] p-2 rounded-lg transition-colors -m-2">
+                                    <div key={type.id} className="flex items-center space-x-3 group cursor-pointer hover:bg-surface p-2 rounded-xl transition-colors -m-2">
                                         <Checkbox
                                             id={type.id}
                                             checked={settings?.preferred_content_types?.includes(type.id)}
                                             onCheckedChange={(checked) => handleContentTypeToggle(type.id, !!checked)}
-                                            className="border-[#2a2a2a] data-[state=checked]:bg-[#c9a84c] data-[state=checked]:border-[#c9a84c] w-5 h-5"
+                                            className="border-border-strong data-[state=checked]:bg-gold data-[state=checked]:border-gold w-5 h-5 rounded-md"
                                         />
                                         <label
                                             htmlFor={type.id}
-                                            className="text-sm font-sans text-[#f0ece4]/80 group-hover:text-[#c9a84c] cursor-pointer transition-colors pt-0.5"
+                                            className="text-sm font-medium text-text-primary group-hover:text-gold cursor-pointer transition-colors pt-0.5"
                                         >
                                             {type.label}
                                         </label>
@@ -214,17 +214,17 @@ export default function SettingsPage() {
 
                 {/* Appearance */}
                 <section>
-                    <div className="flex items-center gap-3 mb-6 border-b border-[#1e1e1e] pb-4">
-                        <Palette className="w-4 h-4 text-[#c9a84c]" />
-                        <h2 className="text-[12px] font-mono font-bold uppercase tracking-widest text-[#9a9590]">Visual Interface</h2>
+                    <div className="flex items-center gap-3 mb-6 border-b border-border pb-4">
+                        <Palette className="w-4 h-4 text-gold" />
+                        <h2 className="text-[12px] font-mono-num font-bold uppercase tracking-widest text-text-secondary">Visual Interface</h2>
                     </div>
-                    <Card className="p-8 bg-[#0f0f0f] border border-[#1e1e1e] shadow-inner rounded-3xl">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <Card className="p-10 bg-card border border-border shadow-sm rounded-[32px]">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                             <div>
-                                <h4 className="font-serif text-xl text-[#f0ece4] mb-1">Obsidian Theme</h4>
-                                <p className="text-[#5a5652] font-sans text-sm">Engineered for deep focus and minimal optical strain.</p>
+                                <h4 className="font-display text-2xl text-text-primary mb-2">Parlova Premium Light</h4>
+                                <p className="text-text-secondary text-sm leading-relaxed max-w-md">The original artisanal experience. Deep focus through warm palettes and rich typography.</p>
                             </div>
-                            <span className="text-[9px] font-mono bg-[#c9a84c]/10 text-[#c9a84c] border border-[#c9a84c]/20 font-bold px-3 py-1.5 rounded-sm uppercase tracking-[0.2em] whitespace-nowrap text-center">
+                            <span className="text-[10px] font-mono-num bg-gold-subtle text-gold border border-gold-border font-bold px-4 py-2 rounded-lg uppercase tracking-widest whitespace-nowrap text-center">
                                 PRIMARY MODE ACTIVE
                             </span>
                         </div>
@@ -233,25 +233,25 @@ export default function SettingsPage() {
 
                 {/* Data Section */}
                 <section>
-                    <div className="flex items-center gap-3 mb-6 border-b border-[#1e1e1e] pb-4">
-                        <Database className="w-4 h-4 text-[#c9a84c]" />
-                        <h2 className="text-[12px] font-mono font-bold uppercase tracking-widest text-[#9a9590]">Data Telemetry</h2>
+                    <div className="flex items-center gap-3 mb-6 border-b border-border pb-4">
+                        <Database className="w-4 h-4 text-gold" />
+                        <h2 className="text-[12px] font-mono-num font-bold uppercase tracking-widest text-text-secondary">Data Telemetry</h2>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <Button
                             variant="outline"
-                            className="h-auto p-8 flex flex-col items-start gap-2 rounded-3xl border border-[#1e1e1e] bg-[#0f0f0f] hover:bg-[#141414] hover:border-[#2a2a2a] group"
+                            className="h-auto p-10 flex flex-col items-start gap-3 rounded-[32px] border border-border bg-card hover:bg-surface hover:border-gold/30 group transition-all hover:shadow-md"
                             onClick={() => toast.success("Extraction sequence initiated. Packet delivery in T-24H.")}
                         >
-                            <span className="font-serif text-xl text-[#f0ece4] group-hover:text-[#c9a84c] transition-colors">Export Logs</span>
-                            <span className="text-xs text-[#5a5652] font-sans text-left">Generate a cohesive package of all syntactic interactions.</span>
+                            <span className="font-display text-2xl text-text-primary group-hover:text-gold transition-colors">Export Logs</span>
+                            <span className="text-sm text-text-secondary text-left leading-relaxed">Generate a cohesive package of all syntactic interactions for offline archiving.</span>
                         </Button>
                         <Button
                             variant="outline"
-                            className="h-auto p-8 flex flex-col items-start gap-2 rounded-3xl border border-[#1e1e1e] bg-[#0f0f0f] hover:bg-[#141414] hover:border-[#2a2a2a] group"
+                            className="h-auto p-10 flex flex-col items-start gap-3 rounded-[32px] border border-border bg-card hover:bg-surface hover:border-gold/30 group transition-all hover:shadow-md"
                         >
-                            <span className="font-serif text-xl text-[#f0ece4] group-hover:text-[#c9a84c] transition-colors">Security Protocol</span>
-                            <span className="text-xs text-[#5a5652] font-sans text-left">Review cryptographic boundaries and data retention policies.</span>
+                            <span className="font-display text-2xl text-text-primary group-hover:text-gold transition-colors">Security Protocol</span>
+                            <span className="text-sm text-text-secondary text-left leading-relaxed">Review cryptographic boundaries, neural encryption, and data retention policies.</span>
                         </Button>
                     </div>
                 </section>

@@ -24,16 +24,16 @@ export default function StepGoal() {
             {/* ── Back Button ── */}
             <button
                 onClick={prevStep}
-                className="absolute left-0 top-6 p-3 text-[#5a5652] hover:text-[#f0ece4] transition-colors rounded-full hover:bg-[#141414] border border-transparent hover:border-[#1e1e1e]"
+                className="absolute left-0 top-6 p-3 text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-muted border border-transparent hover:border-border"
             >
                 <ArrowLeft size={18} />
             </button>
 
             {/* ── Header ── */}
-            <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4 text-center text-[#f0ece4] drop-shadow-sm">
+            <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4 text-center text-foreground drop-shadow-sm">
                 Define Objective
             </h1>
-            <p className="text-[#5a5652] text-sm md:text-base font-mono uppercase tracking-widest text-center mb-16">
+            <p className="text-muted-foreground text-sm md:text-base font-mono uppercase tracking-widest text-center mb-16">
                 Establish primary calibration target
             </p>
 
@@ -48,21 +48,21 @@ export default function StepGoal() {
                             onClick={() => setGoal(g.id)}
                             className={`
                                 flex flex-col md:flex-row items-start md:items-center gap-5 p-7 rounded-2xl border transition-all duration-300 text-left relative overflow-hidden group
-                                ${!isSelected ? 'hover:border-[#2a2a2a] hover:bg-[#141414] border-[#1e1e1e] bg-[#0f0f0f] shadow-inner' : ''}
-                                ${isSelected ? 'border-[#c9a84c] bg-[#c9a84c]/5 shadow-[0_0_20px_rgba(201,168,76,0.1)] scale-[1.02]' : ''}
+                                ${!isSelected ? 'hover:border-border hover:bg-muted border-border bg-card shadow-inner' : ''}
+                                ${isSelected ? 'border-primary bg-primary/5 shadow-sm scale-[1.02]' : ''}
                             `}
                         >
-                            {isSelected && <div className="absolute inset-0 bg-gradient-to-br from-[#c9a84c]/5 to-transparent pointer-events-none" />}
+                            {isSelected && <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />}
                             
-                            <div className={`p-4 rounded-xl border flex-shrink-0 transition-colors duration-300 relative z-10 ${isSelected ? 'bg-[#c9a84c]/10 text-[#c9a84c] border-[#c9a84c]/30' : 'bg-[#080808] text-[#5a5652] border-[#2a2a2a] group-hover:text-[#9a9590]'}`}>
+                            <div className={`p-4 rounded-xl border flex-shrink-0 transition-colors duration-300 relative z-10 ${isSelected ? 'bg-primary/10 text-primary border-primary/30' : 'bg-background text-muted-foreground border-border group-hover:text-muted-foreground'}`}>
                                 <Icon size={24} strokeWidth={isSelected ? 2 : 1.5} />
                             </div>
                             
                             <div className="relative z-10">
-                                <div className={`font-serif text-2xl mb-2 transition-colors duration-300 ${isSelected ? 'text-[#c9a84c]' : 'text-[#f0ece4] group-hover:text-[#f0ece4]'}`}>
+                                <div className={`font-serif text-2xl mb-2 transition-colors duration-300 ${isSelected ? 'text-primary' : 'text-foreground group-hover:text-foreground'}`}>
                                     {g.label}
                                 </div>
-                                <div className="text-[12px] font-mono tracking-wide text-[#9a9590] uppercase leading-relaxed">
+                                <div className="text-[12px] font-mono tracking-wide text-muted-foreground uppercase leading-relaxed">
                                     {g.desc}
                                 </div>
                             </div>
@@ -76,7 +76,7 @@ export default function StepGoal() {
                 <Button
                     onClick={nextStep}
                     disabled={!goal}
-                    className="w-full max-w-sm bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[11px] uppercase tracking-widest font-bold h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all disabled:opacity-30 disabled:shadow-none"
+                    className="w-full max-w-sm bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[11px] uppercase tracking-widest font-bold h-14 rounded-full shadow-lg transition-all disabled:opacity-30 disabled:shadow-none"
                 >
                     Confirm Parameter
                 </Button>

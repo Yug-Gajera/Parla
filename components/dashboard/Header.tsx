@@ -22,17 +22,17 @@ export default function Header({ userName, languageName, languageEmoji, level, s
     };
 
     return (
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-[16px] w-full pt-[32px] pb-[24px] px-[16px] md:px-[40px] border-b border-[#1e1e1e] animate-fade-up">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 w-full pt-8 pb-6 px-4 md:px-10 border-b border-border animate-fade-up">
 
             {/* ── Greeting & Context ── */}
-            <div className="flex flex-col gap-[4px]">
-                <h1 className="font-display text-heading-lg ls-display font-semibold text-[#f0ece4]">
+            <div className="flex flex-col gap-1">
+                <h1 className="font-display text-heading-lg ls-display font-semibold text-text-primary">
                     {getGreeting()}, {userName}
                 </h1>
-                <div className="flex items-center gap-[8px] text-[#9a9590] mt-[4px]">
+                <div className="flex items-center gap-2 text-text-muted mt-1">
                     <span className="text-[16px]" aria-hidden="true">{languageEmoji}</span>
                     <span className="text-caption font-medium">{languageName}</span>
-                    <span className="w-[3px] h-[3px] rounded-pill bg-[#2a2a2a]" />
+                    <span className="w-1 h-1 rounded-full bg-border-strong" />
                     <span className="badge-level">
                         {level}
                     </span>
@@ -41,17 +41,17 @@ export default function Header({ userName, languageName, languageEmoji, level, s
 
             {/* ── Streak ── */}
             <div className={`
-                flex items-center gap-[12px] px-[16px] py-[10px] rounded-lg border
+                flex items-center gap-3 px-4 py-2.5 rounded-xl border
                 ${streak >= 7
-                    ? 'bg-[#c9a84c]/10 border-[#c9a84c]/20 text-[#e4c76b] shadow-[0_0_15px_rgba(201,168,76,0.1)]'
-                    : 'bg-[#141414] border-[#1e1e1e] text-[#f0ece4]'}
+                    ? 'bg-gold-subtle border-gold-border text-gold shadow-[0_0_15px_rgba(201,168,76,0.15)]'
+                    : 'bg-card border-border text-text-primary'}
             `}>
-                <Flame size={18} className={streak > 0 ? 'text-[#c9a84c]' : 'text-[#5a5652]'} />
+                <Flame size={18} className={streak > 0 ? 'text-gold' : 'text-text-muted'} />
                 <div className="flex flex-col">
                     {streak === 0 ? (
-                        <span className="text-caption font-medium text-[#5a5652]">Start your streak today</span>
+                        <span className="text-caption font-medium text-text-muted">Start your streak today</span>
                     ) : (
-                        <span className="font-mono-num text-[20px] font-medium leading-none">{streak} <span className="text-caption font-sans font-normal text-[#9a9590]">day{streak !== 1 ? 's' : ''}</span></span>
+                        <span className="font-mono-num text-[20px] font-medium leading-none">{streak} <span className="text-caption font-sans font-normal text-text-muted">day{streak !== 1 ? 's' : ''}</span></span>
                     )}
                 </div>
             </div>
@@ -63,16 +63,16 @@ export default function Header({ userName, languageName, languageEmoji, level, s
 // ── SKELETON ──
 export function HeaderSkeleton() {
     return (
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-[16px] w-full pt-[32px] pb-[24px] px-[16px] md:px-[40px] border-b border-[#1e1e1e]">
-            <div className="flex flex-col gap-[8px]">
-                <div className="skeleton h-[32px] w-[260px]" />
-                <div className="flex gap-[8px] items-center">
-                    <div className="skeleton h-[20px] w-[20px] rounded-pill" />
-                    <div className="skeleton h-[18px] w-[100px]" />
-                    <div className="skeleton h-[18px] w-[48px]" />
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 w-full pt-8 pb-6 px-4 md:px-10 border-b border-border">
+            <div className="flex flex-col gap-2">
+                <div className="skeleton h-8 w-64" />
+                <div className="flex gap-2 items-center">
+                    <div className="skeleton h-5 w-5 rounded-full" />
+                    <div className="skeleton h-4.5 w-24" />
+                    <div className="skeleton h-4.5 w-12" />
                 </div>
             </div>
-            <div className="skeleton h-[44px] w-[120px] rounded-lg" />
+            <div className="skeleton h-11 w-32 rounded-xl" />
         </div>
     );
 }

@@ -119,12 +119,12 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
     // ── Render: IDLE ──
     if (state === 'idle') {
         return (
-            <div className="flex flex-col items-center justify-center p-8 w-full h-full min-h-[50vh] animation-fade-in bg-[#080808] font-sans">
-                <div className="w-20 h-20 rounded-full border border-[#2a2a2a] bg-[#0f0f0f] shadow-inner flex items-center justify-center mb-8">
-                    <Brain className="w-8 h-8 text-[#c9a84c]" strokeWidth={1} />
+            <div className="flex flex-col items-center justify-center p-8 w-full h-full min-h-[50vh] animation-fade-in bg-background font-sans">
+                <div className="w-20 h-20 rounded-full border border-border-strong bg-surface shadow-inner flex items-center justify-center mb-8">
+                    <Brain className="w-8 h-8 text-gold" strokeWidth={1} />
                 </div>
-                <h2 className="text-4xl font-serif text-[#f0ece4] mb-4">Memory Sync</h2>
-                <p className="text-[#5a5652] text-sm mb-12 text-center max-w-sm font-mono uppercase tracking-widest leading-relaxed mt-2">
+                <h2 className="text-4xl font-display text-text-primary mb-4">Memory Sync</h2>
+                <p className="text-text-muted text-sm mb-12 text-center max-w-sm font-mono-num uppercase tracking-widest leading-relaxed mt-2">
                     {totalWords === 0
                         ? "Lexicon index current. No operations pending."
                         : `Initializing review protocol for ${totalWords} unit${totalWords !== 1 ? 's' : ''}.`}
@@ -133,11 +133,11 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                     <Button
                         onClick={startSession}
                         disabled={totalWords === 0}
-                        className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-14 rounded-full w-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all"
+                        className="bg-gold hover:brightness-110 text-background font-mono-num text-[10px] font-bold uppercase tracking-widest h-14 rounded-full w-full shadow-[0_4px_20px_rgba(201,168,76,0.2)] transition-all"
                     >
                         Engage Sync Protocol
                     </Button>
-                    <Button variant="outline" onClick={onClose} className="h-14 rounded-full border-[#1e1e1e] bg-transparent text-[#9a9590] hover:bg-[#141414] hover:text-[#f0ece4] font-mono text-[10px] uppercase tracking-widest w-full">
+                    <Button variant="outline" onClick={onClose} className="h-14 rounded-full border-border bg-transparent text-text-secondary hover:bg-surface hover:text-text-primary font-mono-num text-[10px] uppercase tracking-widest w-full">
                         Abort
                     </Button>
                 </div>
@@ -152,7 +152,7 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
         const xp = (totalWords * 10) + (accuracy === 100 ? 50 : 0);
 
         return (
-            <div className="flex flex-col items-center justify-center p-8 w-full h-full min-h-[50vh] animation-fade-in bg-[#080808] font-sans relative overflow-hidden">
+            <div className="flex flex-col items-center justify-center p-8 w-full h-full min-h-[50vh] animation-fade-in bg-background font-sans relative overflow-hidden">
                 {/* Subtle Particles */}
                 <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center z-0 opacity-40">
                     {[...Array(12)].map((_, i) => (
@@ -166,17 +166,17 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                                 x: (Math.random() - 0.5) * 200,
                             }}
                             transition={{ duration: 2 + Math.random(), delay: i * 0.1, ease: "easeOut" }}
-                            className="absolute bg-[#c9a84c] w-1 h-1 rounded-full shadow-[0_0_10px_rgba(201,168,76,0.8)]"
+                            className="absolute bg-gold w-1 h-1 rounded-full shadow-md"
                         />
                     ))}
                 </div>
 
                 <div className="relative z-10 w-full flex flex-col items-center">
-                    <div className="w-24 h-24 rounded-full bg-[#c9a84c]/5 border border-[#c9a84c]/20 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(201,168,76,0.1)]">
-                        <Fingerprint className="w-10 h-10 text-[#c9a84c]" strokeWidth={1} />
+                    <div className="w-24 h-24 rounded-full bg-gold/5 border border-gold/20 flex items-center justify-center mb-8 shadow-xl">
+                        <Fingerprint className="w-10 h-10 text-gold" strokeWidth={1} />
                     </div>
-                    <h2 className="text-4xl font-serif text-[#f0ece4] mb-3">Sync Accomplished</h2>
-                    <p className="text-[#9a9590] text-sm mb-12 text-center max-w-sm font-sans leading-relaxed">
+                    <h2 className="text-4xl font-display text-text-primary mb-3">Sync Accomplished</h2>
+                    <p className="text-text-secondary text-sm mb-12 text-center max-w-sm font-sans leading-relaxed">
                         Processed {totalWords} index units over {mins} minute{mins !== 1 ? 's' : ''} with optimal flow.
                     </p>
 
@@ -189,7 +189,7 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
 
                     <Button
                         onClick={onClose}
-                        className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest px-12 h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all"
+                        className="bg-gold hover:brightness-110 text-background font-mono-num text-[10px] font-bold uppercase tracking-widest px-12 h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.25)] transition-all"
                     >
                         Conclude Phase
                     </Button>
@@ -203,27 +203,27 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
     const baseWord = currentWord.vocabulary_words;
 
     return (
-        <div className="flex flex-col w-full h-full min-h-[80vh] bg-[#080808] fixed inset-0 z-50 pt-safe-top pb-safe-bottom font-sans">
+        <div className="flex flex-col w-full h-full min-h-[80vh] bg-background fixed inset-0 z-50 pt-safe-top pb-safe-bottom font-sans">
             {/* Header / Progress */}
             <div className="flex flex-col px-6 py-6 w-full max-w-3xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
-                    <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full text-[#5a5652] hover:text-[#f0ece4] hover:bg-[#141414]">
+                    <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full text-text-muted hover:text-text-primary hover:bg-surface">
                         <X className="w-5 h-5" />
                     </Button>
                     <div className="flex items-center gap-6">
                         {streak > 2 && (
-                            <span className="text-[#c9a84c] font-mono text-[10px] uppercase tracking-widest font-bold animate-pulse flex items-center">
-                                Seq {streak} <Zap className="w-3 h-3 ml-1 fill-[#c9a84c]" />
+                            <span className="text-gold font-mono-num text-[10px] uppercase tracking-widest font-bold animate-pulse flex items-center">
+                                Seq {streak} <Zap className="w-3 h-3 ml-1 fill-gold" />
                             </span>
                         )}
-                        <span className="text-[10px] font-mono font-bold text-[#5a5652] tracking-[0.2em] uppercase">
-                            {currentIndex + 1} <span className="text-[#2a2a2a] mx-1">/</span> {totalWords}
+                        <span className="text-[10px] font-mono-num font-bold text-text-muted tracking-[0.2em] uppercase">
+                            {currentIndex + 1} <span className="text-border-strong mx-1">/</span> {totalWords}
                         </span>
                     </div>
                 </div>
-                <div className="h-1 bg-[#1e1e1e] rounded-full overflow-hidden w-full">
+                <div className="h-1 bg-border rounded-full overflow-hidden w-full">
                     <div 
-                        className="h-full bg-gradient-to-r from-[#8b7538] to-[#c9a84c] rounded-full transition-all duration-300"
+                        className="h-full bg-gradient-to-r from-gold/80 to-gold rounded-full transition-all duration-300"
                         style={{ width: `${progressPercent}%` }}
                     />
                 </div>
@@ -242,48 +242,48 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                         style={{ transformStyle: "preserve-3d" }}
                         onClick={() => !isFlipped && setIsFlipped(true)}
                     >
-                        <div className={`w-full h-full rounded-3xl flex flex-col items-center justify-center p-8 sm:p-12 text-center shadow-2xl transition-all duration-500 overflow-hidden relative ${!isFlipped ? 'bg-[#141414] border border-[#1e1e1e] hover:border-[#2a2a2a] group' : 'border border-[#c9a84c]/20 bg-[#0f0f0f]'}`}>
+                        <div className={`w-full h-full rounded-3xl flex flex-col items-center justify-center p-8 sm:p-12 text-center shadow-2xl transition-all duration-500 overflow-hidden relative ${!isFlipped ? 'bg-card border border-border hover:border-border-strong group' : 'border border-gold/20 bg-surface'}`}>
                             
                             {isFlipped && (
-                                <div className="absolute inset-0 bg-[#c9a84c]/5 opacity-50 pointer-events-none" />
+                                <div className="absolute inset-0 bg-gold/5 opacity-50 pointer-events-none" />
                             )}
 
                             {!isFlipped ? (
                                 // FRONT
                                 <div className="flex flex-col items-center justify-center h-full">
-                                    <span className="text-5xl sm:text-7xl font-serif text-[#f0ece4] mb-6 tracking-tight">
+                                    <span className="text-5xl sm:text-7xl font-display text-text-primary mb-6 tracking-tight">
                                         {baseWord.word}
                                     </span>
-                                    <p className="text-[10px] font-mono tracking-[0.2em] text-[#5a5652] uppercase opacity-70 group-hover:opacity-100 transition-opacity absolute bottom-10">
+                                    <p className="text-[10px] font-mono-num tracking-[0.2em] text-text-muted uppercase opacity-70 group-hover:opacity-100 transition-opacity absolute bottom-10">
                                         Initiate Reveal Sequence
                                     </p>
                                 </div>
                             ) : (
                                 // BACK
                                 <div className="flex flex-col items-center justify-center h-full w-full animation-fade-in relative z-10">
-                                    <span className="text-3xl sm:text-4xl font-serif text-[#c9a84c] mb-3 opacity-90">
+                                    <span className="text-3xl sm:text-4xl font-display text-gold mb-3 opacity-90">
                                         {baseWord.word}
                                     </span>
-                                    <span className="text-4xl sm:text-6xl font-serif text-[#f0ece4] mb-6 leading-tight tracking-tight">
+                                    <span className="text-4xl sm:text-6xl font-display text-text-primary mb-6 leading-tight tracking-tight">
                                         {baseWord.translation}
                                     </span>
 
                                     <div className="flex flex-wrap justify-center gap-3 mt-2 mb-10">
                                         {baseWord.pronunciation && (
-                                            <span className="border border-[#2a2a2a] bg-[#080808] px-4 py-1.5 rounded-sm text-[11px] font-mono text-[#9a9590]">/{baseWord.pronunciation}/</span>
+                                            <span className="border border-border-strong bg-surface px-4 py-1.5 rounded-sm text-[11px] font-mono-num text-text-secondary">/{baseWord.pronunciation}/</span>
                                         )}
                                         {baseWord.part_of_speech && (
-                                            <span className="border border-[#2a2a2a] bg-[#080808] px-4 py-1.5 rounded-sm text-[11px] font-mono text-[#9a9590] italic">{baseWord.part_of_speech}</span>
+                                            <span className="border border-border-strong bg-surface px-4 py-1.5 rounded-sm text-[11px] font-mono-num text-text-secondary italic">{baseWord.part_of_speech}</span>
                                         )}
                                         {baseWord.cefr_level && (
-                                            <span className="border border-[#c9a84c]/30 bg-[#c9a84c]/10 text-[#c9a84c] px-4 py-1.5 rounded-sm text-[11px] font-mono font-bold uppercase tracking-widest">{baseWord.cefr_level}</span>
+                                            <span className="border border-gold/30 bg-gold/10 text-gold px-4 py-1.5 rounded-sm text-[11px] font-mono-num font-bold uppercase tracking-widest">{baseWord.cefr_level}</span>
                                         )}
                                     </div>
 
                                     {baseWord.example_sentence && (
-                                        <div className="w-full max-w-md bg-[#080808] rounded-xl p-5 border border-[#1e1e1e]">
-                                            <p className="text-lg font-serif italic text-[#f0ece4] mb-2">{baseWord.example_sentence}</p>
-                                            <p className="text-xs font-sans text-[#5a5652]">{baseWord.example_translation}</p>
+                                        <div className="w-full max-w-md bg-surface rounded-xl p-5 border border-border">
+                                            <p className="text-lg font-display italic text-text-primary mb-2">{baseWord.example_sentence}</p>
+                                            <p className="text-xs font-sans text-text-muted">{baseWord.example_translation}</p>
                                         </div>
                                     )}
                                 </div>
@@ -307,32 +307,32 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                                 onClick={() => handleRate(1)}
                                 label="Recal"
                                 interval={formatDays(previews.again)}
-                                colorClass="bg-[#141414] hover:bg-[#1a1414] text-red-500 border-[#1e1e1e] hover:border-red-500/30"
+                                colorClass="bg-card hover:bg-red-500/10 text-error border-border hover:border-error/30"
                             />
                             <RatingButton
                                 onClick={() => handleRate(3)}
                                 label="Hard"
                                 interval={formatDays(previews.hard)}
-                                colorClass="bg-[#141414] hover:bg-[#1a1814] text-[#b98e72] border-[#1e1e1e] hover:border-[#b98e72]/30"
+                                colorClass="bg-card hover:bg-orange-500/10 text-orange-500 border-border hover:border-orange-500/30"
                             />
                             <RatingButton
                                 onClick={() => handleRate(4)}
                                 label="Good"
                                 interval={formatDays(previews.good)}
-                                colorClass="bg-[#141414] hover:bg-[#141a14] text-emerald-500 border-[#1e1e1e] hover:border-emerald-500/30"
+                                colorClass="bg-card hover:bg-green-500/10 text-green-600 border-border hover:border-green-500/30"
                             />
                             <RatingButton
                                 onClick={() => handleRate(5)}
                                 label="Perf"
                                 interval={formatDays(previews.easy)}
-                                colorClass="bg-[#141414] hover:bg-[#14181a] text-[#c9a84c] border-[#1e1e1e] hover:border-[#c9a84c]/50 bg-gradient-to-t from-[#c9a84c]/5 to-transparent"
+                                colorClass="bg-card hover:bg-gold/10 text-gold border-border hover:border-gold/50 bg-gradient-to-t from-gold/5 to-transparent"
                             />
                         </motion.div>
                     )}
                 </AnimatePresence>
                 {!isFlipped && (
                     <div className="h-[76px] flex items-center justify-center">
-                        <Button onClick={() => setIsFlipped(true)} variant="outline" className="w-full max-w-xs h-14 rounded-full border-[#1e1e1e] bg-[#141414] hover:bg-[#1e1e1e] text-[#f0ece4] font-mono text-[10px] uppercase tracking-widest font-bold">
+                        <Button onClick={() => setIsFlipped(true)} variant="outline" className="w-full max-w-xs h-14 rounded-full border-border bg-card hover:bg-surface text-text-primary font-mono-num text-[10px] uppercase tracking-widest font-bold">
                             Authorize Reveal
                         </Button>
                     </div>
@@ -350,19 +350,19 @@ function RatingButton({ onClick, label, interval, colorClass }: any) {
             onClick={onClick}
             className={`flex flex-col items-center justify-center py-4 px-2 rounded-2xl border transition-all duration-300 active:scale-95 group shadow-inner ${colorClass}`}
         >
-            <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest mb-1.5">{label}</span>
-            <span className="text-[9px] font-mono opacity-60 uppercase">{interval}</span>
+            <span className="text-[10px] sm:text-xs font-mono-num font-bold uppercase tracking-widest mb-1.5">{label}</span>
+            <span className="text-[9px] font-mono-num opacity-60 uppercase">{interval}</span>
         </button>
     );
 }
 
 function StatCard({ label, value, highlight, icon, isBad }: any) {
     return (
-        <div className={`flex flex-col items-center p-5 rounded-2xl border shadow-inner ${highlight ? 'bg-[#c9a84c]/5 border-[#c9a84c]/20' : 'bg-[#141414] border-[#1e1e1e]'}`}>
-            <span className={`text-[9px] font-mono font-bold uppercase tracking-widest mb-3 flex items-center gap-2 ${highlight ? 'text-[#c9a84c]' : 'text-[#5a5652]'}`}>
+        <div className={`flex flex-col items-center p-5 rounded-2xl border shadow-inner ${highlight ? 'bg-gold/5 border-gold/20' : 'bg-card border-border'}`}>
+            <span className={`text-[9px] font-mono-num font-bold uppercase tracking-widest mb-3 flex items-center gap-2 ${highlight ? 'text-gold' : 'text-text-muted'}`}>
                 {icon} {label}
             </span>
-            <span className={`text-3xl font-serif ${highlight ? 'text-[#c9a84c]' : isBad ? 'text-red-400' : 'text-[#f0ece4]'}`}>
+            <span className={`text-3xl font-display ${highlight ? 'text-gold' : isBad ? 'text-error' : 'text-text-primary'}`}>
                 {value}
             </span>
         </div>

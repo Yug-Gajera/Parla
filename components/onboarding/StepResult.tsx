@@ -95,14 +95,14 @@ export default function StepResult() {
                                 scale: Math.random() * 2 + 0.5,
                             }}
                             transition={{ duration: 2.5, ease: 'easeOut', delay: i * 0.1 }}
-                            className="absolute w-1.5 h-1.5 rounded-full bg-[#c9a84c] shadow-[0_0_15px_rgba(201,168,76,0.8)]"
+                            className="absolute w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_15px_rgba(var(--primary),0.8)]"
                         />
                     ))}
                 </div>
             )}
 
             {/* ── Header ── */}
-            <h1 className="text-[10px] md:text-sm font-mono uppercase tracking-[0.3em] font-bold mb-10 text-center text-[#9a9590] z-10">
+            <h1 className="text-[10px] md:text-sm font-mono uppercase tracking-[0.3em] font-bold mb-10 text-center text-muted-foreground z-10">
                 Diagnostic Conclusion
             </h1>
 
@@ -113,13 +113,13 @@ export default function StepResult() {
                 transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
                 className="relative flex items-center justify-center mb-8 z-10"
             >
-                <div className="absolute inset-0 bg-[#c9a84c]/5 rounded-full blur-2xl" />
-                <div className="w-48 h-48 rounded-full border border-[#c9a84c]/30 bg-[#141414] shadow-[0_0_50px_rgba(201,168,76,0.1)] flex flex-col items-center justify-center ring-1 ring-[#c9a84c]/10 ring-offset-8 ring-offset-[#080808]">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#c9a84c] mb-2 font-bold">Class</span>
-                    <span className="text-7xl font-serif text-[#f0ece4] tracking-tight drop-shadow-md">
+                <div className="absolute inset-0 bg-primary/5 rounded-full blur-2xl" />
+                <div className="w-48 h-48 rounded-full border border-primary/30 bg-card shadow-lg flex flex-col items-center justify-center ring-1 ring-primary/10 ring-offset-8 ring-offset-background">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-primary mb-2 font-bold">Class</span>
+                    <span className="text-7xl font-serif text-foreground tracking-tight drop-shadow-sm">
                         {assessedLevel || 'A1'}
                     </span>
-                    <span className="text-[10px] font-mono text-[#5a5652] uppercase tracking-[0.2em] mt-3 border border-[#2a2a2a] bg-[#0f0f0f] px-3 py-1 rounded-sm">
+                    <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mt-3 border border-border bg-muted px-3 py-1 rounded-sm">
                         Score: {levelScore || 0}%
                     </span>
                 </div>
@@ -131,8 +131,8 @@ export default function StepResult() {
                 transition={{ delay: 0.3 }}
                 className="flex flex-col items-center z-10 mb-14 px-4"
             >
-                <h2 className="text-3xl font-serif mb-4 text-[#f0ece4] tracking-wide">{getLevelName(assessedLevel || 'A1')}</h2>
-                <p className="text-[#9a9590] font-sans text-center max-w-sm leading-relaxed">
+                <h2 className="text-3xl font-serif mb-4 text-foreground tracking-wide">{getLevelName(assessedLevel || 'A1')}</h2>
+                <p className="text-muted-foreground font-sans text-center max-w-sm leading-relaxed">
                     System calibrated. Your unique neural mapping has been defined. We will proceed to integrate missing grammar nodes.
                 </p>
             </motion.div>
@@ -144,44 +144,44 @@ export default function StepResult() {
                 transition={{ delay: 0.4 }}
                 className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-6 z-10 mb-16 px-4"
             >
-                <div className="p-8 rounded-2xl bg-[#0f0f0f] border border-[#1e1e1e] shadow-inner">
-                    <h3 className="font-mono text-[11px] font-bold tracking-widest uppercase text-[#5a5652] mb-6 flex items-center gap-3 border-b border-[#1e1e1e] pb-4">
-                        <Target className="text-[#c9a84c] w-4 h-4" /> Current Matrix
+                <div className="p-8 rounded-2xl bg-muted/50 border border-border shadow-inner">
+                    <h3 className="font-mono text-[11px] font-bold tracking-widest uppercase text-muted-foreground mb-6 flex items-center gap-3 border-b border-border-strong pb-4">
+                        <Target className="text-primary w-4 h-4" /> Current Matrix
                     </h3>
-                    <ul className="space-y-4 text-sm font-sans text-[#f0ece4]/80">
+                    <ul className="space-y-4 text-sm font-sans text-foreground/80">
                         <li className="flex items-start gap-4 group">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]/50 mt-1.5 flex-shrink-0 group-hover:bg-[#c9a84c] transition-colors" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary/50 mt-1.5 flex-shrink-0 group-hover:bg-primary transition-colors" />
                             <span className="leading-relaxed">Process primary standard input within familiar domains</span>
                         </li>
                         <li className="flex items-start gap-4 group">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]/50 mt-1.5 flex-shrink-0 group-hover:bg-[#c9a84c] transition-colors" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary/50 mt-1.5 flex-shrink-0 group-hover:bg-primary transition-colors" />
                             <span className="leading-relaxed">Navigate standard global transit scenarios</span>
                         </li>
                         <li className="flex items-start gap-4 group">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]/50 mt-1.5 flex-shrink-0 group-hover:bg-[#c9a84c] transition-colors" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary/50 mt-1.5 flex-shrink-0 group-hover:bg-primary transition-colors" />
                             <span className="leading-relaxed">Generate basic connected syntax streams</span>
                         </li>
                     </ul>
                 </div>
 
-                <div className="p-8 rounded-2xl bg-[#141414] border border-[#c9a84c]/20 shadow-inner relative overflow-hidden">
+                <div className="p-8 rounded-2xl bg-card border border-primary/20 shadow-inner relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                        <Brain className="w-32 h-32 text-[#c9a84c]" />
+                        <Brain className="w-32 h-32 text-primary" />
                     </div>
-                    <h3 className="font-mono text-[11px] font-bold tracking-widest uppercase text-[#c9a84c] mb-6 flex items-center gap-3 border-b border-[#2a2a2a] pb-4">
-                        <Settings2 className="text-[#c9a84c] w-4 h-4" /> Trajectory Targets
+                    <h3 className="font-mono text-[11px] font-bold tracking-widest uppercase text-primary mb-6 flex items-center gap-3 border-b border-border pb-4">
+                        <Settings2 className="text-primary w-4 h-4" /> Trajectory Targets
                     </h3>
-                    <ul className="space-y-4 text-sm font-sans text-[#f0ece4]/90 relative z-10">
+                    <ul className="space-y-4 text-sm font-sans text-foreground/90 relative z-10">
                         <li className="flex items-start gap-4 group">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c] mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(201,168,76,0.8)]" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0 shadow-sm" />
                             <span className="leading-relaxed">Decode complex abstractions and profound semantics</span>
                         </li>
                         <li className="flex items-start gap-4 group">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c] mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(201,168,76,0.8)]" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0 shadow-sm" />
                             <span className="leading-relaxed">Engage with zero latency and absolute fluidity</span>
                         </li>
                         <li className="flex items-start gap-4 group">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c] mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(201,168,76,0.8)]" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0 shadow-sm" />
                             <span className="leading-relaxed">Synthesize articulate logic structures dynamically</span>
                         </li>
                     </ul>
@@ -198,7 +198,7 @@ export default function StepResult() {
                 <Button
                     onClick={handleStartLearning}
                     disabled={isSaving}
-                    className="w-full bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[12px] font-bold uppercase tracking-widest h-16 rounded-full shadow-[0_4px_30px_rgba(201,168,76,0.25)] transition-all flex items-center justify-center gap-3 border border-[#c9a84c]/50"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[12px] font-bold uppercase tracking-widest h-16 rounded-full shadow-lg transition-all flex items-center justify-center gap-3 border border-primary/50"
                 >
                     {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
                     Initialize Interface

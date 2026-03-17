@@ -25,17 +25,17 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
 
     if (!sessions || sessions.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center p-10 bg-[#0f0f0f] border border-[#1e1e1e] border-dashed rounded-3xl text-center min-h-[250px] font-sans">
-                <div className="w-16 h-16 rounded-full bg-[#141414] border border-[#2a2a2a] flex items-center justify-center mb-6 shadow-inner">
-                    <Activity className="w-6 h-6 text-[#5a5652]" />
+            <div className="flex flex-col items-center justify-center p-10 bg-surface border border-border border-dashed rounded-3xl text-center min-h-[250px] font-sans">
+                <div className="w-16 h-16 rounded-full bg-card border border-border-strong flex items-center justify-center mb-6 shadow-inner">
+                    <Activity className="w-6 h-6 text-text-muted" />
                 </div>
-                <h3 className="text-xl font-serif text-[#f0ece4] mb-3">No activity recorded</h3>
-                <p className="text-[#9a9590] text-sm max-w-[280px] mb-8 leading-relaxed">
+                <h3 className="text-xl font-display text-text-primary mb-3">No activity recorded</h3>
+                <p className="text-text-secondary text-sm max-w-[280px] mb-8 leading-relaxed">
                     Initiate your first session to begin earning XP and establishing a baseline.
                 </p>
                 <Link
                     href="/practice"
-                    className="px-8 py-3.5 rounded-full bg-[#c9a84c] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest hover:bg-[#b98e72] transition-colors shadow-[0_4px_20px_rgba(201,168,76,0.15)]"
+                    className="px-8 py-3.5 rounded-full bg-gold text-bg font-mono-num text-[10px] font-bold uppercase tracking-widest hover:brightness-110 transition-colors shadow-[0_4px_20px_var(--color-gold)]"
                 >
                     Deploy Session
                 </Link>
@@ -45,11 +45,11 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
 
     const getIconData = (type: string) => {
         switch (type) {
-            case 'conversation': return { Icon: Mic2, color: 'text-[#c9a84c]', bg: 'bg-[#c9a84c]/10 border border-[#c9a84c]/20' };
-            case 'vocabulary': return { Icon: Book, color: 'text-[#e4c76b]', bg: 'bg-[#e4c76b]/10 border border-[#e4c76b]/20' };
-            case 'content': return { Icon: PlayCircle, color: 'text-[#f0ece4]', bg: 'bg-[#1e1e1e] border border-[#2a2a2a]' };
-            case 'test': return { Icon: FileCheck, color: 'text-[#9a9590]', bg: 'bg-[#141414] border border-[#1e1e1e]' };
-            default: return { Icon: Book, color: 'text-[#5a5652]', bg: 'bg-[#0f0f0f] border border-[#1e1e1e]' };
+            case 'conversation': return { Icon: Mic2, color: 'text-gold', bg: 'bg-gold/10 border border-gold/20' };
+            case 'vocabulary': return { Icon: Book, color: 'text-gold', bg: 'bg-gold/10 border border-gold/20' };
+            case 'content': return { Icon: PlayCircle, color: 'text-text-primary', bg: 'bg-border border border-border-strong' };
+            case 'test': return { Icon: FileCheck, color: 'text-text-secondary', bg: 'bg-card border border-border' };
+            default: return { Icon: Book, color: 'text-text-muted', bg: 'bg-surface border border-border' };
         }
     };
 
@@ -64,27 +64,27 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
     }
 
     return (
-        <div className="flex flex-col w-full bg-[#141414] border border-[#1e1e1e] rounded-3xl overflow-hidden font-sans">
+        <div className="flex flex-col w-full bg-card border border-border rounded-3xl overflow-hidden font-sans">
 
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-[#1e1e1e]">
-                <h2 className="font-serif text-[16px] text-[#f0ece4] flex items-center gap-2">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-border">
+                <h2 className="font-display font-medium text-[16px] text-text-primary flex items-center gap-2">
                     Telemetry Stream
                 </h2>
-                <Link href="/profile" className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#c9a84c] hover:text-[#e4c76b] flex items-center gap-1.5 group transition-colors">
+                <Link href="/profile" className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-gold hover:text-accent-hover flex items-center gap-1.5 group transition-colors">
                     View Logs
                     <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
             </div>
 
             {/* List */}
-            <div className="flex flex-col divide-y divide-[#1e1e1e]">
+            <div className="flex flex-col divide-y divide-border">
                 {sessions.slice(0, 5).map((session) => {
                     const { Icon, color, bg } = getIconData(session.session_type);
                     const timeAgo = formatDistanceToNow(new Date(session.created_at), { addSuffix: true });
 
                     return (
-                        <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-4 hover:bg-[#171717] transition-colors group">
+                        <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-4 hover:bg-card-hover transition-colors group">
 
                             {/* Left: Icon & Details */}
                             <div className="flex items-center gap-4">
@@ -92,21 +92,21 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
                                     <Icon size={20} className="opacity-80 group-hover:opacity-100 transition-opacity" />
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="font-serif text-[15px] text-[#f0ece4] mb-0.5">
+                                    <span className="font-display font-medium text-[15px] text-text-primary mb-0.5">
                                         {formatTitle(session.session_type)}
                                     </span>
-                                    <span className="text-[10px] font-mono text-[#5a5652] uppercase tracking-[0.1em] flex items-center gap-2">
+                                    <span className="text-[10px] font-mono-num text-text-muted uppercase tracking-[0.1em] flex items-center gap-2">
                                         <span>{timeAgo}</span>
-                                        <span className="w-1 h-1 rounded-full bg-[#2a2a2a]" />
+                                        <span className="w-1 h-1 rounded-full bg-border-strong" />
                                         <span>{session.duration_minutes} MIN</span>
                                     </span>
                                 </div>
                             </div>
 
                             {/* Right: XP */}
-                            <div className="flex items-center gap-1 mt-3 sm:mt-0 ml-16 sm:ml-0 bg-[#0f0f0f] sm:bg-transparent px-3 py-1 sm:p-0 rounded-md sm:rounded-none w-fit">
-                                <span className="font-mono text-[13px] font-bold text-[#c9a84c] group-hover:text-[#e4c76b] transition-colors">+{session.xp_earned}</span>
-                                <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#c9a84c]/60">XP</span>
+                            <div className="flex items-center gap-1 mt-3 sm:mt-0 ml-16 sm:ml-0 bg-surface sm:bg-transparent px-3 py-1 sm:p-0 rounded-md sm:rounded-none w-fit">
+                                <span className="font-mono-num text-[13px] font-bold text-gold group-hover:text-accent-hover transition-colors">+{session.xp_earned}</span>
+                                <span className="text-[9px] font-mono-num font-bold uppercase tracking-widest text-gold/60">XP</span>
                             </div>
 
                         </div>
@@ -121,22 +121,22 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
 // ── SKELETON ──
 export function RecentActivitySkeleton() {
     return (
-        <div className="flex flex-col w-full bg-[#141414] border border-[#1e1e1e] rounded-3xl overflow-hidden animate-pulse">
-            <div className="px-6 py-5 border-b border-[#1e1e1e] flex justify-between items-center">
-                <div className="h-4 w-32 bg-[#1e1e1e] rounded" />
-                <div className="h-3 w-16 bg-[#1e1e1e] rounded" />
+        <div className="flex flex-col w-full bg-card border border-border rounded-3xl overflow-hidden animate-pulse">
+            <div className="px-6 py-5 border-b border-border flex justify-between items-center">
+                <div className="h-4 w-32 bg-border rounded" />
+                <div className="h-3 w-16 bg-border rounded" />
             </div>
-            <div className="flex flex-col divide-y divide-[#1e1e1e]">
+            <div className="flex flex-col divide-y divide-border">
                 {[1, 2, 3, 4, 5].map(i => (
                     <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-4 gap-3 sm:gap-0">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-[#1e1e1e]" />
+                            <div className="w-12 h-12 rounded-xl bg-border" />
                             <div className="flex flex-col gap-2">
-                                <div className="h-4 w-40 bg-[#1e1e1e] rounded" />
-                                <div className="h-2.5 w-24 bg-[#1e1e1e] rounded" />
+                                <div className="h-4 w-40 bg-border rounded" />
+                                <div className="h-2.5 w-24 bg-border rounded" />
                             </div>
                         </div>
-                        <div className="h-5 w-12 bg-[#1e1e1e] rounded ml-16 sm:ml-0" />
+                        <div className="h-5 w-12 bg-border rounded ml-16 sm:ml-0" />
                     </div>
                 ))}
             </div>

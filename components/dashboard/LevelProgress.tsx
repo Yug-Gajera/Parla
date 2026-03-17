@@ -32,7 +32,7 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
             <div className="flex items-center gap-[16px] w-full mb-[24px]">
                 {/* Current */}
                 <div className="flex flex-col items-center flex-shrink-0">
-                    <div className="w-[44px] h-[44px] rounded-pill bg-[rgba(201,168,76,0.12)] text-[#c9a84c] flex items-center justify-center font-mono-num font-medium text-[16px] border border-[rgba(201,168,76,0.2)] shadow-[0_4px_16px_rgba(201,168,76,0.1)]">
+                    <div className="w-[44px] h-[44px] rounded-pill bg-gold-subtle text-gold flex items-center justify-center font-mono-num font-medium text-[16px] border border-gold-border shadow-md shadow-gold/10">
                         {currentLevel}
                     </div>
                 </div>
@@ -41,7 +41,7 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
                 <div className="flex-1 flex flex-col justify-center">
                     <div className="progress-track w-full">
                         <motion.div
-                            className={`progress-fill left-0 top-0 absolute ${isTestAvailable ? 'shadow-[0_0_10px_rgba(201,168,76,0.5)]' : ''}`}
+                            className={`progress-fill left-0 top-0 absolute ${isTestAvailable ? 'shadow-[0_0_10px_var(--color-gold)]' : ''}`}
                             initial={{ width: '0%' }}
                             animate={{ width: mounted ? `${isMaxLevel ? 100 : score}%` : '0%' }}
                             transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
@@ -53,8 +53,8 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
                 <div className="flex flex-col items-center flex-shrink-0 relative">
                     <div className={`w-[44px] h-[44px] rounded-pill flex items-center justify-center font-mono-num font-medium text-[16px] border transition-colors ${
                         isTestAvailable 
-                        ? 'bg-[rgba(201,168,76,0.1)] text-[#e4c76b] border-[rgba(201,168,76,0.3)] shadow-[0_4px_16px_rgba(201,168,76,0.2)]' 
-                        : 'bg-transparent text-[#5a5652] border-[#2a2a2a]'
+                        ? 'bg-gold-subtle/80 text-gold border-gold-border shadow-md shadow-gold/20' 
+                        : 'bg-transparent text-text-muted border-border-strong'
                     }`}>
                         {nextLevel}
                     </div>
@@ -63,22 +63,22 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
 
             {/* ── Status Info ── */}
             <div className="flex flex-col text-center w-full">
-                <span className="font-mono-num font-medium text-[16px] text-[#f0ece4]">
+                <span className="font-mono-num font-medium text-[16px] text-text-primary">
                     {isMaxLevel ? 'Mastery Achieved' : `${score} / 100 XP`}
                 </span>
 
                 {!isMaxLevel && (
                     <div className="text-[13px] mt-[4px]">
                         {isTestAvailable ? (
-                            <Link href="/learn?tab=test" className="text-[#c9a84c] hover:text-[#e4c76b] flex items-center justify-center gap-[6px] group-hover:underline transition-colors mt-[4px]">
+                            <Link href="/learn?tab=test" className="text-gold hover:text-accent-hover flex items-center justify-center gap-[6px] group-hover:underline transition-colors mt-[4px]">
                                 <span className="relative flex h-[8px] w-[8px]">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-pill bg-[#c9a84c] opacity-75"></span>
-                                    <span className="relative inline-flex rounded-pill h-[8px] w-[8px] bg-[#c9a84c]"></span>
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-pill bg-gold opacity-75"></span>
+                                    <span className="relative inline-flex rounded-pill h-[8px] w-[8px] bg-gold"></span>
                                 </span>
                                 Diagnostic ready
                             </Link>
                         ) : (
-                            <span className="text-[#9a9590]">
+                            <span className="text-text-secondary">
                                 Next test in about {daysUntilTest} days
                             </span>
                         )}

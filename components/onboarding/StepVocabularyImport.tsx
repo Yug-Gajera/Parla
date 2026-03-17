@@ -259,12 +259,12 @@ export default function StepVocabularyImport() {
     if (processState === 'processing') {
         return (
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4">
-                <Loader2 size={56} strokeWidth={1.5} className="animate-spin text-[#c9a84c] mb-8" />
-                <h2 className="text-2xl text-center font-serif text-[#f0ece4] mb-4">{processText}</h2>
+                <Loader2 size={56} strokeWidth={1.5} className="animate-spin text-primary mb-8" />
+                <h2 className="text-2xl text-center font-serif text-foreground mb-4">{processText}</h2>
                 {progressStats.total > 0 && (
-                    <div className="w-full max-w-xs bg-[#1e1e1e] h-1.5 rounded-full overflow-hidden mt-2">
+                    <div className="w-full max-w-xs bg-border h-1.5 rounded-full overflow-hidden mt-2">
                         <div 
-                            className="h-full bg-gradient-to-r from-[#8b7538] to-[#c9a84c] transition-all duration-300"
+                            className="h-full bg-primary transition-all duration-300"
                             style={{ width: `${(progressStats.current / progressStats.total) * 100}%` }}
                         />
                     </div>
@@ -276,15 +276,15 @@ export default function StepVocabularyImport() {
     if (processState === 'success') {
         return (
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4 text-center">
-                <CheckCircle size={72} strokeWidth={1} className="text-[#c9a84c] mb-6" />
-                <h1 className="text-4xl text-[#f0ece4] font-serif mb-2">Your deck is ready</h1>
-                <p className="text-[#9a9590] mb-8 text-lg">
+                <CheckCircle size={72} strokeWidth={1} className="text-primary mb-6" />
+                <h1 className="text-4xl text-foreground font-serif mb-2">Your deck is ready</h1>
+                <p className="text-muted-foreground mb-8 text-lg">
                     {finalStats.count} words imported<br/>
-                    Estimated level: <span className="text-[#c9a84c] font-mono">{finalStats.level}</span>
+                    Estimated level: <span className="text-primary font-mono">{finalStats.level}</span>
                 </p>
                 <Button 
                     onClick={nextStep}
-                    className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono uppercase tracking-widest text-[11px] font-bold h-14 px-8 rounded-full"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-mono uppercase tracking-widest text-[11px] font-bold h-14 px-8 rounded-full shadow-md"
                 >
                     Continue to assessment
                 </Button>
@@ -296,8 +296,8 @@ export default function StepVocabularyImport() {
         return (
              <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4 text-center">
                 <AlertTriangle size={56} className="text-red-400 mb-6" />
-                <h2 className="text-2xl text-[#f0ece4] font-serif mb-4">Import Interrupted</h2>
-                <Button onClick={() => setProcessState('idle')} variant="outline" className="border-[#2a2a2a] text-[#f0ece4]">
+                <h2 className="text-2xl text-foreground font-serif mb-4">Import Interrupted</h2>
+                <Button onClick={() => setProcessState('idle')} variant="outline" className="border-border-strong text-foreground">
                     Try Again
                 </Button>
             </div>
@@ -309,14 +309,14 @@ export default function StepVocabularyImport() {
 
     return (
         <div className="flex flex-col items-center w-full animation-fade-in relative pt-12 pb-16 font-sans">
-            <button onClick={prevStep} className="absolute left-0 top-0 p-3 text-[#5a5652] hover:text-[#f0ece4] transition-colors rounded-full hover:bg-[#141414]">
+            <button onClick={prevStep} className="absolute left-0 top-0 p-3 text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-muted">
                 <ArrowLeft size={18} />
             </button>
 
-            <h1 className="text-3xl md:text-5xl font-serif text-center text-[#f0ece4] tracking-tight mb-3">
+            <h1 className="text-3xl md:text-5xl font-serif text-center text-foreground tracking-tight mb-3">
                 Do you have existing vocabulary?
             </h1>
-            <p className="text-[#9a9590] text-sm md:text-base mb-12 text-center max-w-lg px-4">
+            <p className="text-muted-foreground text-sm md:text-base mb-12 text-center max-w-lg px-4">
                 We'll personalise your deck and assessment to match where you actually are.
             </p>
 
@@ -324,37 +324,37 @@ export default function StepVocabularyImport() {
                 
                 {/* 1. Anki Card */}
                 <div 
-                    className={`border rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer ${activeMethod === 'anki' ? 'border-[#c9a84c] bg-[#c9a84c]/5' : 'border-[#1e1e1e] bg-[#0f0f0f] hover:border-[#2a2a2a]'} ${(activeMethod && activeMethod !== 'anki') ? 'opacity-50' : ''}`}
+                    className={`border rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer ${activeMethod === 'anki' ? 'border-primary bg-primary/5' : 'border-border bg-card hover:border-border-strong'} ${(activeMethod && activeMethod !== 'anki') ? 'opacity-50' : ''}`}
                 >
                     <div className="p-5 flex items-center gap-4" onClick={() => setActiveMethod('anki')}>
-                        <div className={`p-3 rounded-xl border ${activeMethod === 'anki' ? 'border-[#c9a84c]/50 bg-[#c9a84c]/10 text-[#c9a84c]' : 'border-[#2a2a2a] bg-[#141414] text-[#9a9590]'}`}>
+                        <div className={`p-3 rounded-xl border ${activeMethod === 'anki' ? 'border-primary/50 bg-primary/10 text-primary' : 'border-border-strong bg-muted text-muted-foreground'}`}>
                             <Upload size={20} />
                         </div>
                         <div>
-                            <h3 className={`font-serif text-xl ${activeMethod === 'anki' ? 'text-[#c9a84c]' : 'text-[#f0ece4]'}`}>Import from Anki</h3>
-                            <p className="text-xs text-[#5a5652] mt-1">Upload your existing Spanish deck as a CSV file</p>
+                            <h3 className={`font-serif text-xl ${activeMethod === 'anki' ? 'text-primary' : 'text-foreground'}`}>Import from Anki</h3>
+                            <p className="text-xs text-muted-foreground mt-1">Upload your existing Spanish deck as a CSV file</p>
                         </div>
                     </div>
                     {activeMethod === 'anki' && (
                         <div className="px-5 pb-5 pt-2 animation-fade-in">
                             <input type="file" accept=".csv,.txt" className="hidden" ref={fileInputRef} onChange={handleFileUpload} />
                             {!ankiFileData ? (
-                                <div className="text-center p-6 border border-dashed border-[#2a2a2a] rounded-xl hover:border-[#c9a84c]/50 transition-colors" onClick={() => fileInputRef.current?.click()}>
-                                    <p className="text-sm text-[#9a9590]">Click to select .csv or .txt file</p>
-                                    <p className="text-[10px] text-[#5a5652] mt-2">Export from Anki: File → Export → Notes as Plain Text</p>
+                                <div className="text-center p-6 border border-dashed border-border-strong rounded-xl hover:border-primary/50 transition-colors" onClick={() => fileInputRef.current?.click()}>
+                                    <p className="text-sm text-muted-foreground">Click to select .csv or .txt file</p>
+                                    <p className="text-[10px] text-muted-foreground mt-2">Export from Anki: File → Export → Notes as Plain Text</p>
                                 </div>
                             ) : (
                                 <div>
-                                    <div className="bg-[#141414] border border-[#2a2a2a] rounded-lg p-3 max-h-40 overflow-y-auto mb-4 text-xs font-mono">
+                                    <div className="bg-muted border border-border-strong rounded-lg p-3 max-h-40 overflow-y-auto mb-4 text-xs font-mono">
                                         {ankiPreview.map((w, i) => (
-                                            <div key={i} className="flex gap-4 border-b border-[#1e1e1e] last:border-0 py-1.5">
-                                                <span className="flex-1 text-[#c9a84c] truncate">{w.spanish}</span>
-                                                <span className="flex-1 text-[#9a9590] truncate">{w.english}</span>
-                                                <span className="w-12 text-[#5a5652] text-right">{w.interval || '-'}d</span>
+                                            <div key={i} className="flex gap-4 border-b border-border last:border-0 py-1.5">
+                                                <span className="flex-1 text-primary truncate">{w.spanish}</span>
+                                                <span className="flex-1 text-muted-foreground truncate">{w.english}</span>
+                                                <span className="w-12 text-muted-foreground text-right">{w.interval || '-'}d</span>
                                             </div>
                                         ))}
                                     </div>
-                                    <Button onClick={submitAnki} className="w-full bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] h-12 rounded-xl font-mono text-xs uppercase tracking-widest font-bold">
+                                    <Button onClick={submitAnki} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-12 rounded-xl font-mono text-xs uppercase tracking-widest font-bold shadow-sm">
                                         Import {parseAnkiCSV(ankiFileData).length} words
                                     </Button>
                                 </div>
@@ -365,27 +365,27 @@ export default function StepVocabularyImport() {
 
                 {/* 2. Paste Card */}
                 <div 
-                    className={`border rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer ${activeMethod === 'paste' ? 'border-[#c9a84c] bg-[#c9a84c]/5' : 'border-[#1e1e1e] bg-[#0f0f0f] hover:border-[#2a2a2a]'} ${(activeMethod && activeMethod !== 'paste') ? 'opacity-50' : ''}`}
+                    className={`border rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer ${activeMethod === 'paste' ? 'border-primary bg-primary/5' : 'border-border bg-card hover:border-border-strong'} ${(activeMethod && activeMethod !== 'paste') ? 'opacity-50' : ''}`}
                 >
                     <div className="p-5 flex items-center gap-4" onClick={() => setActiveMethod('paste')}>
-                        <div className={`p-3 rounded-xl border ${activeMethod === 'paste' ? 'border-[#c9a84c]/50 bg-[#c9a84c]/10 text-[#c9a84c]' : 'border-[#2a2a2a] bg-[#141414] text-[#9a9590]'}`}>
+                        <div className={`p-3 rounded-xl border ${activeMethod === 'paste' ? 'border-primary/50 bg-primary/10 text-primary' : 'border-border-strong bg-muted text-muted-foreground'}`}>
                             <Clipboard size={20} />
                         </div>
                         <div>
-                            <h3 className={`font-serif text-xl ${activeMethod === 'paste' ? 'text-[#c9a84c]' : 'text-[#f0ece4]'}`}>Paste a word list</h3>
-                            <p className="text-xs text-[#5a5652] mt-1">Paste words from notes, spreadsheets, or anywhere else</p>
+                            <h3 className={`font-serif text-xl ${activeMethod === 'paste' ? 'text-primary' : 'text-foreground'}`}>Paste a word list</h3>
+                            <p className="text-xs text-muted-foreground mt-1">Paste words from notes, spreadsheets, or anywhere else</p>
                         </div>
                     </div>
                     {activeMethod === 'paste' && (
                         <div className="px-5 pb-5 pt-2 animation-fade-in">
-                            <p className="text-[10px] text-[#5a5652] mb-3">Separate words with commas, spaces, or new lines. Translations optional.</p>
+                            <p className="text-[10px] text-muted-foreground mb-3">Separate words with commas, spaces, or new lines. Translations optional.</p>
                             <textarea 
                                 value={pasteText}
                                 onChange={(e) => setPasteText(e.target.value)}
                                 placeholder="hablar, comer, vivir, casa, tiempo..."
-                                className="w-full bg-[#141414] border border-[#2a2a2a] rounded-xl p-4 text-sm text-[#f0ece4] focus:outline-none focus:border-[#c9a84c]/50 min-h-[120px] mb-4 placeholder:text-[#3a3632] resize-none"
+                                className="w-full bg-muted border border-border-strong rounded-xl p-4 text-sm text-foreground focus:outline-none focus:border-primary/50 min-h-[120px] mb-4 placeholder:text-muted-foreground resize-none"
                             />
-                            <Button onClick={submitPaste} disabled={pasteWordCount === 0} className="w-full bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] h-12 rounded-xl font-mono text-xs uppercase tracking-widest font-bold disabled:opacity-50">
+                            <Button onClick={submitPaste} disabled={pasteWordCount === 0} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-12 rounded-xl font-mono text-xs uppercase tracking-widest font-bold disabled:opacity-50 shadow-sm">
                                 Import {pasteWordCount} words
                             </Button>
                         </div>
@@ -394,15 +394,15 @@ export default function StepVocabularyImport() {
 
                 {/* 3. Tier Select Card */}
                 <div 
-                    className={`border rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer ${activeMethod === 'tier' ? 'border-[#c9a84c] bg-[#c9a84c]/5' : 'border-[#1e1e1e] bg-[#0f0f0f] hover:border-[#2a2a2a]'} ${(activeMethod && activeMethod !== 'tier') ? 'opacity-50' : ''}`}
+                    className={`border rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer ${activeMethod === 'tier' ? 'border-primary bg-primary/5' : 'border-border bg-card hover:border-border-strong'} ${(activeMethod && activeMethod !== 'tier') ? 'opacity-50' : ''}`}
                 >
                     <div className="p-5 flex items-center gap-4" onClick={() => setActiveMethod('tier')}>
-                        <div className={`p-3 rounded-xl border ${activeMethod === 'tier' ? 'border-[#c9a84c]/50 bg-[#c9a84c]/10 text-[#c9a84c]' : 'border-[#2a2a2a] bg-[#141414] text-[#9a9590]'}`}>
+                        <div className={`p-3 rounded-xl border ${activeMethod === 'tier' ? 'border-primary/50 bg-primary/10 text-primary' : 'border-border-strong bg-muted text-muted-foreground'}`}>
                             <BarChart size={20} />
                         </div>
                         <div>
-                            <h3 className={`font-serif text-xl ${activeMethod === 'tier' ? 'text-[#c9a84c]' : 'text-[#f0ece4]'}`}>Tell us your approximate level</h3>
-                            <p className="text-xs text-[#5a5652] mt-1">We'll seed your deck with the most common words at your level</p>
+                            <h3 className={`font-serif text-xl ${activeMethod === 'tier' ? 'text-primary' : 'text-foreground'}`}>Tell us your approximate level</h3>
+                            <p className="text-xs text-muted-foreground mt-1">We'll seed your deck with the most common words at your level</p>
                         </div>
                     </div>
                     {activeMethod === 'tier' && (
@@ -411,13 +411,13 @@ export default function StepVocabularyImport() {
                                 <button 
                                     key={tier.id} 
                                     onClick={() => submitTier(tier.id)}
-                                    className="flex items-center justify-between p-4 rounded-xl border border-[#2a2a2a] bg-[#141414] hover:border-[#c9a84c]/50 hover:bg-[#1a1a1a] transition-all group text-left"
+                                    className="flex items-center justify-between p-4 rounded-xl border border-border-strong bg-muted hover:border-primary/50 hover:bg-muted/80 transition-all group text-left"
                                 >
                                     <div>
-                                        <div className="text-[#f0ece4] text-sm group-hover:text-[#c9a84c] transition-colors">{tier.label}</div>
-                                        <div className="text-[10px] text-[#5a5652] font-mono mt-1">{tier.id}</div>
+                                        <div className="text-foreground text-sm group-hover:text-primary transition-colors">{tier.label}</div>
+                                        <div className="text-[10px] text-muted-foreground font-mono mt-1">{tier.id}</div>
                                     </div>
-                                    <span className="text-xs text-[#9a9590]">{tier.desc}</span>
+                                    <span className="text-xs text-muted-foreground">{tier.desc}</span>
                                 </button>
                             ))}
                         </div>
@@ -426,16 +426,16 @@ export default function StepVocabularyImport() {
 
                 {/* 4. Start from Scratch */}
                 <div 
-                    className={`border rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer opacity-70 ${activeMethod === 'skip' ? 'border-[#c9a84c] bg-[#c9a84c]/5' : 'border-[#1e1e1e] bg-[#080808] hover:border-[#2a2a2a] hover:opacity-100'} ${(activeMethod && activeMethod !== 'skip') ? 'opacity-30' : ''}`}
+                    className={`border rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer opacity-70 ${activeMethod === 'skip' ? 'border-primary bg-primary/5' : 'border-border bg-background hover:border-border-strong hover:opacity-100'} ${(activeMethod && activeMethod !== 'skip') ? 'opacity-30' : ''}`}
                     onClick={submitSkip}
                 >
                     <div className="p-5 flex items-center gap-4">
-                        <div className="p-3 bg-[#0f0f0f] border border-[#2a2a2a] rounded-xl text-[#5a5652]">
+                        <div className="p-3 bg-card border border-border-strong rounded-xl text-muted-foreground">
                             <Sparkles size={20} />
                         </div>
                         <div>
-                            <h3 className="font-serif text-lg text-[#9a9590]">Start from scratch</h3>
-                            <p className="text-xs text-[#5a5652] mt-0.5">Words will build up naturally as you read</p>
+                            <h3 className="font-serif text-lg text-muted-foreground">Start from scratch</h3>
+                            <p className="text-xs text-muted-foreground mt-0.5">Words will build up naturally as you read</p>
                         </div>
                     </div>
                 </div>

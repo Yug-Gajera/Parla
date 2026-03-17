@@ -33,34 +33,34 @@ export function MyStatsTab({ stats }: MyStatsTabProps) {
 
             {/* Top Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Card className="p-8 flex flex-col items-center justify-center text-center border-[#1e1e1e] bg-[#141414] hover:border-[#2a2a2a] transition-colors rounded-2xl">
-                    <Trophy className="w-5 h-5 text-[#c9a84c] mb-4" />
-                    <span className="text-4xl font-mono text-[#f0ece4] mb-2">{safeStats.total_xp}</span>
-                    <span className="text-[10px] text-[#5a5652] uppercase tracking-[0.2em]">Total XP</span>
+                <Card className="p-8 flex flex-col items-center justify-center text-center border-border bg-card hover:border-border-strong transition-colors rounded-2xl">
+                    <Trophy className="w-5 h-5 text-gold mb-4" />
+                    <span className="text-4xl font-mono-num text-text-primary mb-2">{safeStats.total_xp}</span>
+                    <span className="text-[10px] text-text-muted uppercase tracking-[0.2em]">Total XP</span>
                 </Card>
-                <Card className="p-8 flex flex-col items-center justify-center text-center border-[#1e1e1e] bg-[#141414] hover:border-[#2a2a2a] transition-colors rounded-2xl">
-                    <Flame className="w-5 h-5 text-[#c9a84c] mb-4" />
-                    <span className="text-4xl font-mono text-[#f0ece4] mb-2">{safeStats.streak}</span>
-                    <span className="text-[10px] text-[#5a5652] uppercase tracking-[0.2em]">Day Streak</span>
+                <Card className="p-8 flex flex-col items-center justify-center text-center border-border bg-card hover:border-border-strong transition-colors rounded-2xl">
+                    <Flame className="w-5 h-5 text-gold mb-4" />
+                    <span className="text-4xl font-mono-num text-text-primary mb-2">{safeStats.streak}</span>
+                    <span className="text-[10px] text-text-muted uppercase tracking-[0.2em]">Day Streak</span>
                 </Card>
-                <Card className="p-8 flex flex-col items-center justify-center text-center border-[#1e1e1e] bg-[#141414] hover:border-[#2a2a2a] transition-colors rounded-2xl">
-                    <MessageSquare className="w-5 h-5 text-[#c9a84c] mb-4" />
-                    <span className="text-4xl font-mono text-[#f0ece4] mb-2">{safeStats.conversations}</span>
-                    <span className="text-[10px] text-[#5a5652] uppercase tracking-[0.2em]">Chats</span>
+                <Card className="p-8 flex flex-col items-center justify-center text-center border-border bg-card hover:border-border-strong transition-colors rounded-2xl">
+                    <MessageSquare className="w-5 h-5 text-gold mb-4" />
+                    <span className="text-4xl font-mono-num text-text-primary mb-2">{safeStats.conversations}</span>
+                    <span className="text-[10px] text-text-muted uppercase tracking-[0.2em]">Chats</span>
                 </Card>
-                <Card className="p-8 flex flex-col items-center justify-center text-center border-[#1e1e1e] bg-[#141414] hover:border-[#2a2a2a] transition-colors rounded-2xl">
-                    <Brain className="w-5 h-5 text-[#c9a84c] mb-4" />
-                    <span className="text-4xl font-mono text-[#f0ece4] mb-2">{safeStats.vocab}</span>
-                    <span className="text-[10px] text-[#5a5652] uppercase tracking-[0.2em]">Words</span>
+                <Card className="p-8 flex flex-col items-center justify-center text-center border-border bg-card hover:border-border-strong transition-colors rounded-2xl">
+                    <Brain className="w-5 h-5 text-gold mb-4" />
+                    <span className="text-4xl font-mono-num text-text-primary mb-2">{safeStats.vocab}</span>
+                    <span className="text-[10px] text-text-muted uppercase tracking-[0.2em]">Words</span>
                 </Card>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* 8-Week XP Chart */}
-                <Card className="p-8 border-[#1e1e1e] bg-[#141414] rounded-2xl flex flex-col h-80">
+                <Card className="p-8 border-border bg-card rounded-2xl flex flex-col h-80">
                     <div className="flex items-center justify-between mb-8 shrink-0">
-                        <h3 className="text-sm uppercase tracking-[0.2em] text-[#9a9590] flex items-center gap-3">
-                            <BarChart3 className="w-4 h-4 text-[#c9a84c]" /> Weekly Activity
+                        <h3 className="text-sm uppercase tracking-[0.2em] text-text-muted flex items-center gap-3">
+                            <BarChart3 className="w-4 h-4 text-gold" /> Weekly Activity
                         </h3>
                     </div>
 
@@ -72,12 +72,12 @@ export function MyStatsTab({ stats }: MyStatsTabProps) {
 
                             return (
                                 <div key={i} className="flex flex-col items-center w-full h-full justify-end group pl-1 pr-1">
-                                    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-mono text-[#9a9590] mb-3 absolute -mt-8">
+                                    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-mono-num text-text-muted mb-3 absolute -mt-8">
                                         {val}
                                     </span>
                                     <div
                                         className={`w-full rounded-sm transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                                            isCurrent ? 'bg-[#c9a84c]' : 'bg-[#1e1e1e] group-hover:bg-[#2a2a2a]'
+                                            isCurrent ? 'bg-gold' : 'bg-border group-hover:bg-border-strong'
                                         }`}
                                         style={{ height: `${heightPct}%` }}
                                     ></div>
@@ -88,9 +88,9 @@ export function MyStatsTab({ stats }: MyStatsTabProps) {
                 </Card>
 
                 {/* Additional Stats & Badges */}
-                <Card className="p-8 border-[#1e1e1e] bg-[#141414] rounded-2xl flex flex-col h-80">
-                    <h3 className="text-sm uppercase tracking-[0.2em] text-[#9a9590] flex items-center gap-3 mb-8">
-                        <Trophy className="w-4 h-4 text-[#c9a84c]" /> Achievements
+                <Card className="p-8 border-border bg-card rounded-2xl flex flex-col h-80">
+                    <h3 className="text-sm uppercase tracking-[0.2em] text-text-muted flex items-center gap-3 mb-8">
+                        <Trophy className="w-4 h-4 text-gold" /> Achievements
                     </h3>
 
                     <div className="grid grid-cols-3 gap-5 auto-rows-max overflow-y-auto pr-2 custom-scrollbar">
@@ -100,18 +100,18 @@ export function MyStatsTab({ stats }: MyStatsTabProps) {
                             return (
                                 <div key={i} className={`flex flex-col items-center gap-3 text-center p-4 rounded-xl border transition-colors ${
                                     earned 
-                                        ? 'bg-[#0f0f0f] border-[#2a2a2a] hover:border-[#c9a84c]/50' 
-                                        : 'bg-[#080808] border-[#1e1e1e] opacity-40 grayscale'
+                                        ? 'bg-surface border-border-strong hover:border-gold/30' 
+                                        : 'bg-background border-border-muted opacity-40 grayscale'
                                 }`}>
                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${
                                         earned 
-                                            ? 'bg-[#c9a84c]/10 text-[#c9a84c] border-[#c9a84c]/30' 
-                                            : 'bg-[#141414] text-[#5a5652] border-[#1e1e1e]'
+                                            ? 'bg-gold-subtle text-gold border-gold-border' 
+                                            : 'bg-card text-text-muted border-border'
                                     }`}>
                                         <Trophy className="w-4 h-4" />
                                     </div>
-                                    <span className={`text-[9px] font-mono uppercase tracking-[0.1em] leading-tight ${
-                                        earned ? 'text-[#f0ece4]' : 'text-[#5a5652]'
+                                    <span className={`text-[9px] font-mono-num uppercase tracking-[0.1em] leading-tight ${
+                                        earned ? 'text-text-primary' : 'text-text-muted'
                                     }`}>
                                         {badge}
                                     </span>

@@ -117,18 +117,18 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
 
     if (isLoading) {
         return (
-            <div className="fixed inset-0 z-50 bg-[#080808] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-[#c9a84c]" />
+            <div className="fixed inset-0 z-50 bg-background flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-gold" />
             </div>
         );
     }
 
     if (!video) {
         return (
-            <div className="fixed inset-0 z-50 bg-[#080808] flex items-center justify-center font-sans">
+            <div className="fixed inset-0 z-50 bg-background flex items-center justify-center font-sans">
                 <div className="text-center">
-                    <p className="text-[#9a9590] mb-6 uppercase tracking-widest text-xs">Video content unavailable</p>
-                    <Button variant="outline" onClick={onClose} className="rounded-full bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] px-8 text-xs uppercase tracking-widest">Return to Library</Button>
+                    <p className="text-text-muted mb-6 uppercase tracking-widest text-xs">Video content unavailable</p>
+                    <Button variant="outline" onClick={onClose} className="rounded-full bg-transparent border-border text-text-primary hover:bg-card px-8 text-xs uppercase tracking-widest">Return to Library</Button>
                 </div>
             </div>
         );
@@ -136,16 +136,16 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
 
     return (
         <motion.div
-            className="fixed inset-0 z-50 bg-[#080808] flex flex-col font-sans"
+            className="fixed inset-0 z-50 bg-background flex flex-col font-sans"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
         >
             {/* Top bar */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#1e1e1e] bg-[#141414] shrink-0">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-card shrink-0">
                 <div className="truncate flex-1 mr-4">
-                    <p className="text-[10px] text-[#5a5652] uppercase tracking-[0.2em] mb-1">{video.channel_name}</p>
-                    <h2 className="font-serif text-lg text-[#f0ece4] truncate">{video.title}</h2>
+                    <p className="text-[10px] text-text-secondary uppercase tracking-[0.2em] mb-1">{video.channel_name}</p>
+                    <h2 className="font-display text-lg text-text-primary truncate">{video.title}</h2>
                 </div>
-                <Button variant="ghost" size="icon" onClick={onClose} className="hover:bg-[#1e1e1e] text-[#9a9590] rounded-full">
+                <Button variant="ghost" size="icon" onClick={onClose} className="hover:bg-surface text-text-muted rounded-full">
                     <X className="w-5 h-5" />
                 </Button>
             </div>
@@ -161,12 +161,12 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                             {/* Subtitle overlay */}
                             {currentSubtitleIndex >= 0 && transcript[currentSubtitleIndex] && (
                                 <div className="absolute bottom-6 left-6 right-6 text-center pointer-events-none">
-                                    <div className="inline-block bg-[#080808]/80 backdrop-blur-md rounded-xl px-6 py-3 max-w-2xl mx-auto border border-[#1e1e1e] pointer-events-auto shadow-2xl">
-                                        <p className="text-[#f0ece4] text-lg sm:text-xl md:text-2xl font-serif leading-relaxed" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
+                                    <div className="inline-block bg-background/80 backdrop-blur-md rounded-xl px-6 py-3 max-w-2xl mx-auto border border-border pointer-events-auto shadow-2xl">
+                                        <p className="text-text-primary text-lg sm:text-xl md:text-2xl font-display leading-relaxed" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
                                             {transcript[currentSubtitleIndex].text.split(/\s+/).map((w, i) => (
                                                 <span
                                                     key={i}
-                                                    className="cursor-pointer hover:text-[#c9a84c] transition-colors"
+                                                    className="cursor-pointer hover:text-gold transition-colors"
                                                     onClick={() => handleWordTap(w, transcript[currentSubtitleIndex].text)}
                                                 >{w} </span>
                                             ))}
@@ -177,50 +177,50 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                         </div>
 
                         {/* Controls */}
-                        <div className="flex items-center justify-between px-6 py-3 border-y border-[#1e1e1e] bg-[#0f0f0f] shrink-0">
+                        <div className="flex items-center justify-between px-6 py-3 border-y border-border bg-surface shrink-0">
                             <div className="flex items-center gap-3">
-                                <Gauge className="w-4 h-4 text-[#5a5652]" />
+                                <Gauge className="w-4 h-4 text-text-secondary" />
                                 <div className="flex gap-1">
                                     {SPEEDS.map(s => (
                                         <button
                                             key={s}
                                             onClick={() => handleSpeedChange(s)}
-                                            className={`px-3 py-1 rounded-full text-[10px] font-mono tracking-widest uppercase transition-colors ${
-                                                activeSpeed === s ? 'bg-[#141414] text-[#c9a84c] border border-[#2a2a2a]' : 'text-[#5a5652] border border-transparent hover:text-[#9a9590]'
+                                            className={`px-3 py-1 rounded-full text-[10px] font-mono-num tracking-widest uppercase transition-colors ${
+                                                activeSpeed === s ? 'bg-card text-gold border border-border-strong' : 'text-text-secondary border border-transparent hover:text-text-muted'
                                             }`}
                                         >{s}x</button>
                                     ))}
                                 </div>
                             </div>
                             {video.comprehension_questions?.length > 0 && (
-                                <Button size="sm" variant="outline" onClick={() => setPhase('comprehension')} className="text-[10px] uppercase tracking-widest gap-2 bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] rounded-full px-5 h-8">
-                                    Initiate Quiz <ChevronRight className="w-3 h-3 text-[#c9a84c]" />
+                                <Button size="sm" variant="outline" onClick={() => setPhase('comprehension')} className="text-[10px] uppercase tracking-widest gap-2 bg-transparent border-border text-text-primary hover:bg-card rounded-full px-5 h-8">
+                                    Initiate Quiz <ChevronRight className="w-3 h-3 text-gold" />
                                 </Button>
                             )}
                         </div>
 
                         {/* Transcript panel */}
-                        <div ref={transcriptRef} className="flex-1 overflow-y-auto px-6 py-6 space-y-2 bg-[#080808] custom-scrollbar max-w-5xl mx-auto w-full">
+                        <div ref={transcriptRef} className="flex-1 overflow-y-auto px-6 py-6 space-y-2 bg-background custom-scrollbar max-w-5xl mx-auto w-full">
                             {transcript.length > 0 ? transcript.map((seg, i) => (
                                 <div
                                     key={i}
                                     className={`flex gap-5 px-4 py-3 rounded-xl cursor-pointer transition-all ${
                                         i === currentSubtitleIndex
-                                            ? 'bg-[#141414] border-l-[3px] border-l-[#c9a84c] shadow-lg'
+                                            ? 'bg-card border-l-[3px] border-l-gold shadow-lg'
                                             : i < currentSubtitleIndex
                                                 ? 'opacity-40 hover:opacity-70'
-                                                : 'text-[#9a9590] hover:bg-[#0f0f0f] border-l-[3px] border-transparent'
+                                                : 'text-text-muted hover:bg-surface border-l-[3px] border-transparent'
                                         }`}
                                     onClick={() => seekTo(seg.start_time)}
                                 >
-                                    <span className={`text-xs font-mono w-12 shrink-0 pt-1 tracking-wider ${i === currentSubtitleIndex ? 'text-[#c9a84c]' : 'text-[#5a5652]'}`}>
+                                    <span className={`text-xs font-mono-num w-12 shrink-0 pt-1 tracking-wider ${i === currentSubtitleIndex ? 'text-gold' : 'text-text-secondary'}`}>
                                         {Math.floor(seg.start_time / 60)}:{String(Math.floor(seg.start_time % 60)).padStart(2, '0')}
                                     </span>
-                                    <p className={`text-base sm:text-lg leading-relaxed ${i === currentSubtitleIndex ? 'text-[#f0ece4]' : 'text-[#9a9590]'}`}>
+                                    <p className={`text-base sm:text-lg leading-relaxed ${i === currentSubtitleIndex ? 'text-text-primary' : 'text-text-muted'}`}>
                                         {seg.text.split(/\s+/).map((w, j) => (
                                             <span
                                                 key={j}
-                                                className="cursor-pointer hover:text-[#c9a84c] transition-colors"
+                                                className="cursor-pointer hover:text-gold transition-colors"
                                                 onClick={e => { e.stopPropagation(); handleWordTap(w, seg.text); }}
                                             >{w} </span>
                                         ))}
@@ -228,7 +228,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                                 </div>
                             )) : (
                                 <div className="text-center py-20">
-                                    <p className="text-[10px] uppercase tracking-widest text-[#5a5652] font-mono">No transcript available</p>
+                                    <p className="text-[10px] uppercase tracking-widest text-text-secondary font-mono-num">No transcript available</p>
                                 </div>
                             )}
                         </div>
@@ -238,13 +238,13 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                 {phase === 'comprehension' && video.comprehension_questions && (
                     <motion.div key="quiz" className="flex-1 overflow-y-auto p-6 md:p-12 space-y-8 max-w-3xl mx-auto w-full" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}>
                         <div className="text-center mb-10">
-                            <h3 className="font-serif text-3xl text-[#f0ece4] mb-2">Comprehension Check</h3>
-                            <p className="text-xs font-mono uppercase tracking-widest text-[#5a5652]">Test your understanding</p>
+                            <h3 className="font-display text-3xl text-text-primary mb-2">Comprehension Check</h3>
+                            <p className="text-xs font-mono-num uppercase tracking-widest text-text-secondary">Test your understanding</p>
                         </div>
                         
                         {video.comprehension_questions.map((q: any, qi: number) => (
-                            <Card key={qi} className="p-8 bg-[#141414] border-[#1e1e1e] rounded-2xl">
-                                <p className="font-serif text-xl text-[#f0ece4] mb-6"><span className="text-[#c9a84c] mr-2 text-sm font-mono">{qi + 1}.</span> {q.question}</p>
+                            <Card key={qi} className="p-8 bg-card border-border rounded-2xl">
+                                <p className="font-display text-xl text-text-primary mb-6"><span className="text-gold mr-2 text-sm font-mono-num">{qi + 1}.</span> {q.question}</p>
                                 <div className="space-y-3">
                                     {q.options.map((opt: string, oi: number) => (
                                         <button
@@ -252,8 +252,8 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                                             onClick={() => handleAnswer(qi, oi)}
                                             className={`w-full text-left px-5 py-4 rounded-xl text-sm transition-all border ${
                                                 answers[qi] === oi
-                                                    ? 'border-[#c9a84c] bg-[#c9a84c]/10 text-[#f0ece4] shadow-[0_0_15px_rgba(201,168,76,0.1)]'
-                                                    : 'border-[#1e1e1e] bg-[#0f0f0f] text-[#9a9590] hover:border-[#2a2a2a] hover:bg-[#1e1e1e]'
+                                                    ? 'border-gold bg-gold-subtle text-text-primary shadow-[0_0_15px_rgba(201,168,76,0.1)]'
+                                                    : 'border-border bg-surface text-text-muted hover:border-border-strong hover:bg-card'
                                                 }`}
                                         >{opt}</button>
                                     ))}
@@ -264,7 +264,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={Object.keys(answers).length < video.comprehension_questions.length}
-                                className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] transition-colors disabled:opacity-50 disabled:bg-[#141414] disabled:text-[#5a5652]"
+                                className="w-full h-12 rounded-full font-mono-num uppercase tracking-widest text-xs font-bold bg-gold text-background hover:brightness-110 transition-colors disabled:opacity-50 disabled:bg-surface disabled:text-text-muted"
                             >Submit Assessment</Button>
                         </div>
                     </motion.div>
@@ -272,33 +272,33 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
 
                 {phase === 'results' && (
                     <motion.div key="results" className="flex-1 flex items-center justify-center p-6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-                        <Card className="p-10 max-w-md w-full text-center bg-[#141414] border-[#1e1e1e] rounded-3xl shadow-2xl">
-                            <div className="w-20 h-20 rounded-full bg-[#080808] border border-[#2a2a2a] flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(201,168,76,0.15)]">
-                                <Trophy className="w-8 h-8 text-[#c9a84c]" />
+                        <Card className="p-10 max-w-md w-full text-center bg-card border-border rounded-3xl shadow-2xl">
+                            <div className="w-20 h-20 rounded-full bg-background border border-border-strong flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(201,168,76,0.15)]">
+                                <Trophy className="w-8 h-8 text-gold" />
                             </div>
-                            <h3 className="text-3xl font-serif text-[#f0ece4] mb-4">{comprehensionResult?.message || 'Assessment Complete'}</h3>
+                            <h3 className="text-3xl font-display text-text-primary mb-4">{comprehensionResult?.message || 'Assessment Complete'}</h3>
                             
                             {comprehensionResult?.score !== undefined && (
                                 <div className="my-8">
-                                    <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-2">Accuracy Rate</p>
-                                    <p className="text-6xl font-mono text-[#f0ece4]">{comprehensionResult.score}<span className="text-2xl text-[#c9a84c]">%</span></p>
+                                    <p className="text-text-secondary text-[10px] uppercase font-mono-num tracking-widest mb-2">Accuracy Rate</p>
+                                    <p className="text-6xl font-mono-num text-text-primary">{comprehensionResult.score}<span className="text-2xl text-gold">%</span></p>
                                 </div>
                             )}
                             
-                            <div className="flex justify-center gap-12 mb-10 border-t border-b border-[#1e1e1e] py-6">
+                            <div className="flex justify-center gap-12 mb-10 border-t border-b border-border py-6">
                                 <div>
-                                    <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-1">Score</p>
-                                    <p className="text-xl font-mono text-[#f0ece4]">{comprehensionResult?.correct} <span className="text-sm text-[#5a5652]">/ {comprehensionResult?.total}</span></p>
+                                    <p className="text-text-secondary text-[10px] uppercase font-mono-num tracking-widest mb-1">Score</p>
+                                    <p className="text-xl font-mono-num text-text-primary">{comprehensionResult?.correct} <span className="text-sm text-text-secondary">/ {comprehensionResult?.total}</span></p>
                                 </div>
                                 <div>
-                                    <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-1">XP Earned</p>
-                                    <p className="text-xl font-mono text-[#c9a84c]">+{comprehensionResult?.xp_earned || 40}</p>
+                                    <p className="text-text-secondary text-[10px] uppercase font-mono-num tracking-widest mb-1">XP Earned</p>
+                                    <p className="text-xl font-mono-num text-gold">+{comprehensionResult?.xp_earned || 40}</p>
                                 </div>
                             </div>
                             
                             <Button 
                                 onClick={onClose} 
-                                className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#f0ece4] text-[#080808] hover:bg-[#c9a84c] transition-colors"
+                                className="w-full h-12 rounded-full font-mono-num uppercase tracking-widest text-xs font-bold bg-text-primary text-background hover:bg-gold transition-colors"
                             >Return to Library</Button>
                         </Card>
                     </motion.div>

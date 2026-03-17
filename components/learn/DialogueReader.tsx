@@ -58,15 +58,15 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
         return (
             <div className="flex flex-col h-full font-sans max-w-3xl mx-auto w-full px-4 sm:px-6 pt-6">
                 {/* Scene setter */}
-                <Card className="p-6 mb-8 bg-[#0f0f0f] border-[#1e1e1e] rounded-2xl">
-                    <p className="text-sm font-serif italic text-[#c9a84c] mb-4 text-center">{dialogue.setting}</p>
-                    <div className="flex items-center justify-center gap-8 text-[10px] font-mono tracking-widest uppercase">
-                        <span className="flex items-center gap-2 text-[#f0ece4]">
-                            <span className="w-2 h-2 rounded-full bg-[#c9a84c]" />
+                <Card className="p-6 mb-8 bg-surface border-border rounded-2xl">
+                    <p className="text-sm font-serif italic text-gold mb-4 text-center">{dialogue.setting}</p>
+                    <div className="flex items-center justify-center gap-8 text-[10px] font-mono-num tracking-widest uppercase">
+                        <span className="flex items-center gap-2 text-text-primary">
+                            <span className="w-2 h-2 rounded-full bg-gold" />
                             {dialogue.characters.a}
                         </span>
-                        <span className="flex items-center gap-2 text-[#f0ece4]">
-                            <span className="w-2 h-2 rounded-full bg-[#5a5652]" />
+                        <span className="flex items-center gap-2 text-text-primary">
+                            <span className="w-2 h-2 rounded-full bg-text-muted" />
                             {dialogue.characters.b}
                         </span>
                     </div>
@@ -85,20 +85,20 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                                 className={`flex flex-col ${isA ? 'items-start' : 'items-end'}`}
                             >
                                 <div className={`flex items-center gap-2 mb-2 ${isA ? 'self-start' : 'self-end flex-row-reverse'}`}>
-                                    <span className={`w-1.5 h-1.5 rounded-full ${isA ? 'bg-[#c9a84c]' : 'bg-[#5a5652]'}`} />
-                                    <span className="text-[10px] text-[#9a9590] font-mono uppercase tracking-widest">
+                                    <span className={`w-1.5 h-1.5 rounded-full ${isA ? 'bg-gold' : 'bg-text-muted'}`} />
+                                    <span className="text-[10px] text-text-secondary font-mono-num uppercase tracking-widest">
                                         {isA ? dialogue.characters.a.split('—')[0].trim() : dialogue.characters.b.split('—')[0].trim()}
                                     </span>
                                 </div>
-                                <div className={`p-5 max-w-[85%] rounded-2xl relative ${isA ? 'bg-[#141414] border border-[#1e1e1e] rounded-tl-sm' : 'bg-[#0f0f0f] border border-[#2a2a2a] rounded-tr-sm'}`}>
-                                    <p className="text-lg font-serif text-[#f0ece4] mb-2 leading-relaxed">{line.spanish}</p>
-                                    <p className="text-sm text-[#9a9590] italic font-sans">{line.english}</p>
+                                <div className={`p-5 max-w-[85%] rounded-2xl relative ${isA ? 'bg-card border border-border rounded-tl-sm' : 'bg-surface border border-border-strong rounded-tr-sm'}`}>
+                                    <p className="text-lg font-serif text-text-primary mb-2 leading-relaxed">{line.spanish}</p>
+                                    <p className="text-sm text-text-secondary italic font-sans">{line.english}</p>
                                     {line.vocabulary.length > 0 && (
-                                        <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-[#1e1e1e]">
+                                        <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-border">
                                             {line.vocabulary.map((v, vi) => (
                                                 <span
                                                     key={vi}
-                                                    className="px-2.5 py-1 text-[10px] font-mono tracking-widest uppercase rounded border border-[#c9a84c]/30 text-[#c9a84c] cursor-help transition-colors hover:bg-[#c9a84c]/10"
+                                                    className="px-2.5 py-1 text-[10px] font-mono-num tracking-widest uppercase rounded border border-gold/30 text-gold cursor-help transition-colors hover:bg-gold/10"
                                                     title={`${v.translation}${v.note ? ` — ${v.note}` : ''}`}
                                                 >
                                                     {v.word}
@@ -113,13 +113,13 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                 </div>
 
                 {/* Check Understanding button */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#080808] via-[#080808]/90 to-transparent">
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background/90 to-transparent">
                     <Button
                         onClick={() => setPhase('questions')}
                         disabled={!hasReadAll}
-                        className={`w-full max-w-md mx-auto h-14 text-[10px] font-mono tracking-widest uppercase font-bold rounded-full transition-all duration-500 shadow-[0_0_30px_rgba(0,0,0,0.8)] ${hasReadAll 
-                            ? 'bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] shadow-[0_4px_20px_rgba(201,168,76,0.2)]' 
-                            : 'bg-[#141414] text-[#5a5652] opacity-50 cursor-not-allowed border border-[#1e1e1e]'
+                        className={`w-full max-w-md mx-auto h-14 text-[10px] font-mono-num tracking-widest uppercase font-bold rounded-full transition-all duration-500 shadow-md ${hasReadAll 
+                            ? 'bg-gold text-background hover:brightness-110 shadow-[0_4px_20px_rgba(201,168,76,0.2)]' 
+                            : 'bg-card text-text-muted opacity-50 cursor-not-allowed border border-border'
                             }`}
                     >
                         <BookOpen className="w-4 h-4 mr-2" />
@@ -127,7 +127,7 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                     </Button>
                     <AnimatePresence>
                         {!hasReadAll && (
-                            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[9px] font-mono text-center text-[#5a5652] mt-3 uppercase tracking-widest">
+                            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[9px] font-mono-num text-center text-text-muted mt-3 uppercase tracking-widest">
                                 Scroll to acknowledge complete dialogue sequence
                             </motion.p>
                         )}
@@ -144,13 +144,13 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
             <div className="flex flex-col items-center w-full max-w-xl mx-auto pt-10 px-6 font-sans">
                 {/* Progress */}
                 <div className="w-full mb-10">
-                    <div className="flex justify-between text-[10px] font-mono uppercase tracking-widest text-[#5a5652] mb-3">
+                    <div className="flex justify-between text-[10px] font-mono-num uppercase tracking-widest text-text-muted mb-3">
                         <span>Verification Phase</span>
-                        <span className="text-[#c9a84c]">{currentQ + 1} / {dialogue.questions.length}</span>
+                        <span className="text-gold">{currentQ + 1} / {dialogue.questions.length}</span>
                     </div>
-                    <div className="h-1 bg-[#1e1e1e] rounded-full overflow-hidden">
+                    <div className="h-1 bg-border rounded-full overflow-hidden">
                         <div
-                            className="h-full bg-gradient-to-r from-[#8b7538] to-[#c9a84c] transition-all duration-500 ease-out"
+                            className="h-full bg-gradient-to-r from-gold/50 to-gold transition-all duration-500 ease-out"
                             style={{ width: `${((currentQ) / dialogue.questions.length) * 100}%` }}
                         />
                     </div>
@@ -165,14 +165,14 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                         transition={{ duration: 0.4, ease: "easeInOut" }}
                         className="w-full"
                     >
-                        <h2 className="text-2xl font-serif text-[#f0ece4] text-center mb-10 leading-snug">{q.question}</h2>
+                        <h2 className="text-2xl font-serif text-text-primary text-center mb-10 leading-snug">{q.question}</h2>
                         <div className="flex flex-col gap-4">
                             {q.options.map((opt, idx) => {
-                                let cls = 'bg-[#141414] border-[#1e1e1e] hover:border-[#c9a84c]/50 text-[#9a9590] hover:text-[#f0ece4]';
+                                let cls = 'bg-card border-border hover:border-gold/50 text-text-secondary hover:text-text-primary';
                                 if (selected !== null) {
-                                    if (idx === q.correct) cls = 'bg-[#c9a84c]/10 border-[#c9a84c] text-[#c9a84c] shadow-[0_0_15px_rgba(201,168,76,0.15)]';
-                                    else if (idx === selected) cls = 'bg-red-500/5 border-red-500/50 text-red-400 opacity-90';
-                                    else cls = 'opacity-30 border-[#1e1e1e] bg-[#0f0f0f] text-[#5a5652]';
+                                    if (idx === q.correct) cls = 'bg-gold/10 border-gold text-gold shadow-[0_0_15px_rgba(201,168,76,0.2)]';
+                                    else if (idx === selected) cls = 'bg-error/10 border-error/50 text-error opacity-90';
+                                    else cls = 'opacity-30 border-border bg-surface text-text-muted';
                                 }
                                 return (
                                     <button
@@ -181,7 +181,7 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                                         disabled={selected !== null}
                                         className={`flex items-center gap-5 p-5 rounded-2xl border transition-all duration-300 text-left group ${cls}`}
                                     >
-                                        <span className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center font-mono text-[10px] transition-colors ${selected === null ? 'border-[#2a2a2a] group-hover:border-[#c9a84c]' : 'border-transparent'}`}>
+                                        <span className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center font-mono-num text-[10px] transition-colors ${selected === null ? 'border-border-strong group-hover:border-gold' : 'border-transparent'}`}>
                                             {['A', 'B', 'C', 'D'][idx]}
                                         </span>
                                         <span className="flex-1 font-sans text-[15px]">{opt}</span>
@@ -193,9 +193,9 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="mt-8 p-6 rounded-2xl bg-[#080808] border border-[#2a2a2a] text-center"
+                                className="mt-8 p-6 rounded-2xl bg-background border border-border-strong text-center"
                             >
-                                <p className="text-sm font-sans text-[#f0ece4] leading-relaxed">{q.explanation}</p>
+                                <p className="text-sm font-sans text-text-primary leading-relaxed">{q.explanation}</p>
                             </motion.div>
                         )}
                     </motion.div>
@@ -212,34 +212,34 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
             className="flex flex-col items-center justify-center text-center w-full max-w-md mx-auto h-full px-6 font-sans"
         >
             <div className="relative mb-8">
-                <div className={`w-24 h-24 rounded-full flex items-center justify-center border transition-all duration-700 ${passed ? 'bg-[#c9a84c]/10 border-[#c9a84c]/30 shadow-[0_0_40px_rgba(201,168,76,0.2)]' : 'bg-red-500/10 border-red-500/30 shadow-[0_0_40px_rgba(239,68,68,0.1)]'
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center border transition-all duration-700 ${passed ? 'bg-gold/10 border-gold/30 shadow-[0_0_40px_rgba(201,168,76,0.15)]' : 'bg-error/10 border-error/30 shadow-[0_0_40px_rgba(255,0,0,0.05)]'
                     }`}>
                     {passed ? (
-                        <CheckCircle2 className="w-10 h-10 text-[#c9a84c]" />
+                        <CheckCircle2 className="w-10 h-10 text-gold" />
                     ) : (
-                        <XCircle className="w-10 h-10 text-red-500" />
+                        <XCircle className="w-10 h-10 text-error" />
                     )}
                 </div>
             </div>
 
-            <h2 className="text-3xl font-serif text-[#f0ece4] mb-3">
+            <h2 className="text-3xl font-serif text-text-primary mb-3">
                 {passed ? 'Phase 1 Complete' : "Review Required"}
             </h2>
             <div className="flex items-center gap-3 mb-6">
-                <p className="font-mono text-xs text-[#5a5652] uppercase tracking-widest">
+                <p className="font-mono-num text-xs text-text-muted uppercase tracking-widest">
                     Score metric
                 </p>
-                <p className="font-mono text-xl text-[#c9a84c]">
+                <p className="font-mono-num text-xl text-gold">
                     {scorePercent}%
                 </p>
             </div>
 
             {passed ? (
-                <p className="text-sm text-[#9a9590] mb-12 max-w-xs leading-relaxed">
+                <p className="text-sm text-text-secondary mb-12 max-w-xs leading-relaxed">
                     Comprehension validated. Proceeding to lexical acquisition phase.
                 </p>
             ) : (
-                <p className="text-sm text-[#9a9590] mb-12 max-w-xs leading-relaxed">
+                <p className="text-sm text-text-secondary mb-12 max-w-xs leading-relaxed">
                     Minimum threshold (70%) not met. Diagnostic recalibration required.
                 </p>
             )}
@@ -255,7 +255,7 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                         setCorrectCount(0);
                     }
                 }}
-                className={`w-full h-14 text-[10px] font-mono font-bold tracking-widest uppercase rounded-full transition-all duration-300 ${passed ? 'bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] shadow-[0_4px_20px_rgba(201,168,76,0.2)]' : 'bg-[#141414] text-[#f0ece4] border border-[#2a2a2a] hover:bg-[#1e1e1e]'
+                className={`w-full h-14 text-[10px] font-mono-num font-bold tracking-widest uppercase rounded-full transition-all duration-300 ${passed ? 'bg-gold text-background hover:brightness-110 shadow-[0_4px_20px_rgba(201,168,76,0.2)]' : 'bg-card text-text-primary border border-border-strong hover:bg-surface'
                     }`}
             >
                 {passed ? (

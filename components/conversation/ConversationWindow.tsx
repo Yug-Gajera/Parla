@@ -130,38 +130,38 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
     }
 
     return (
-        <div className="fixed inset-0 z-50 bg-[#080808] flex flex-col pt-safe-top pb-safe-bottom">
+        <div className="fixed inset-0 z-50 bg-background flex flex-col pt-safe-top pb-safe-bottom">
             {/* Top Bar */}
-            <header className="top-bar">
-                <div className="flex items-center gap-[16px]">
+            <header className="top-bar h-16 px-4">
+                <div className="flex items-center gap-4">
                     <button onClick={() => {
                         if (messages.length > 1) {
                             if (window.confirm("End this conversation? Your progress will be scored.")) handleEnd();
                         } else {
                             onClose();
                         }
-                    }} className="w-[40px] h-[40px] rounded-pill flex items-center justify-center hover:bg-[rgba(255,255,255,0.05)] transition-colors">
-                        <ArrowLeft className="w-[20px] h-[20px] text-[#f0ece4]" />
+                    }} className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-card-hover transition-colors">
+                        <ArrowLeft className="w-5 h-5 text-text-primary" />
                     </button>
                     <div className="flex flex-col">
-                        <span className="font-display text-[18px] font-semibold leading-tight text-[#f0ece4]">
+                        <span className="font-display text-lg font-semibold leading-tight text-text-primary">
                             {scenario?.name || 'Practice Session'}
                         </span>
-                        <div className="flex items-center gap-[6px]">
-                            <span className="w-[6px] h-[6px] rounded-pill bg-[#4ade80] animate-pulse" />
-                            <span className="font-mono-num text-[12px] text-[#9a9590]">{timerStr}</span>
+                        <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                            <span className="font-mono-num text-xs text-text-secondary">{timerStr}</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-[8px]">
+                <div className="flex items-center gap-2">
                     {inputMode === 'voice' && (
-                        <button onClick={() => setShowTextSwitch(true)} className="btn btn-ghost btn-sm px-[12px]">
-                            <Keyboard className="w-[14px] h-[14px]" /> Type
+                        <button onClick={() => setShowTextSwitch(true)} className="btn-ghost btn-sm px-3 flex items-center gap-2 h-9 rounded-full text-xs font-bold uppercase tracking-widest">
+                            <Keyboard className="w-4 h-4" /> Type
                         </button>
                     )}
-                    <button onClick={handleEnd} disabled={isLoading || messages.length < 2} className="btn btn-primary btn-sm px-[16px]">
-                        <StopCircle className="w-[14px] h-[14px]" /> Finish
+                    <button onClick={handleEnd} disabled={isLoading || messages.length < 2} className="btn-primary btn-sm px-4 flex items-center gap-2 h-9 rounded-full text-xs font-bold uppercase tracking-widest">
+                        <StopCircle className="w-4 h-4" /> Finish
                     </button>
                 </div>
             </header>
@@ -173,18 +173,18 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute top-[56px] left-0 right-0 z-20 bg-[#141414] border-b border-[#1e1e1e] p-[16px] shadow-2xl"
+                        className="absolute top-16 left-0 right-0 z-20 bg-surface border-b border-border p-4 shadow-2xl"
                     >
-                        <p className="text-[14px] text-center mb-[16px] text-[#f0ece4]">
+                        <p className="text-sm text-center mb-4 text-text-primary">
                             Switch to text for this session?<br />
-                            <span className="text-[#9a9590] text-[12px]">You can speak again next time.</span>
+                            <span className="text-text-secondary text-xs">You can speak again next time.</span>
                         </p>
-                        <div className="flex gap-[12px] justify-center">
-                            <button onClick={handleTextSwitchConfirm} className="btn btn-secondary px-[16px]">
-                                <Keyboard className="w-[14px] h-[14px]" /> Switch to Text
+                        <div className="flex gap-3 justify-center">
+                            <button onClick={handleTextSwitchConfirm} className="btn-secondary px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+                                <Keyboard className="w-4 h-4" /> Switch to Text
                             </button>
-                            <button onClick={() => setShowTextSwitch(false)} className="btn btn-primary px-[16px]">
-                                <Mic2 className="w-[14px] h-[14px]" /> Keep Speaking
+                            <button onClick={() => setShowTextSwitch(false)} className="btn-primary px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+                                <Mic2 className="w-4 h-4" /> Keep Speaking
                             </button>
                         </div>
                     </motion.div>
@@ -192,16 +192,16 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
             </AnimatePresence>
 
             {/* Messages Area */}
-            <div ref={scrollRef} className="flex-1 w-full max-w-[760px] mx-auto overflow-y-auto px-[16px] py-[32px] scroll-smooth">
+            <div ref={scrollRef} className="flex-1 w-full max-w-[760px] mx-auto overflow-y-auto px-4 py-8 scroll-smooth">
                 {isLoading && messages.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-[#9a9590]">
-                        <Loader2 className="w-[32px] h-[32px] animate-spin text-[#c9a84c] mb-[16px]" />
-                        <p className="text-[14px]">Connecting securely with {scenario?.character_name}...</p>
+                    <div className="h-full flex flex-col items-center justify-center text-text-secondary">
+                        <Loader2 className="w-8 h-8 animate-spin text-gold mb-4" />
+                        <p className="text-sm">Connecting securely with {scenario?.character_name}...</p>
                     </div>
                 ) : (
-                    <div className="flex flex-col w-full pb-[40px]">
+                    <div className="flex flex-col w-full pb-10">
                         {/* Scenario Context Pill */}
-                        <div className="w-full text-center my-[24px]">
+                        <div className="w-full text-center my-6">
                             <span className="scenario-pill">
                                 {scenario?.setting || 'Connecting...'}
                             </span>
@@ -219,14 +219,14 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
 
                         {/* AI Typing Indicator */}
                         {isLoading && messages.length > 0 && !isStreaming && (
-                            <div className="flex w-full justify-start mb-[16px] animate-fade-up">
-                                <div className="w-[32px] h-[32px] rounded-pill bg-[rgba(201,168,76,0.12)] text-[#c9a84c] flex items-center justify-center border border-[rgba(201,168,76,0.2)] shrink-0 mt-auto mr-[8px]">
+                            <div className="flex w-full justify-start mb-4 animate-fade-up">
+                                <div className="w-8 h-8 rounded-full bg-gold-subtle text-gold flex items-center justify-center border border-gold-border shrink-0 mt-auto mr-2 font-mono-num text-[10px] font-bold tracking-widest">
                                     AI
                                 </div>
-                                <div className="px-[16px] py-[14px] rounded-[16px] bg-[#141414] rounded-bl-sm border border-[#1e1e1e] flex items-center gap-[4px] h-[48px]">
-                                    <div className="w-[6px] h-[6px] bg-[#5a5652] rounded-pill animate-[bounce_1s_infinite]" />
-                                    <div className="w-[6px] h-[6px] bg-[#5a5652] rounded-pill animate-[bounce_1s_infinite_0.15s]" />
-                                    <div className="w-[6px] h-[6px] bg-[#5a5652] rounded-pill animate-[bounce_1s_infinite_0.3s]" />
+                                <div className="px-4 py-3 rounded-2xl bg-surface rounded-bl-sm border border-border flex items-center gap-1 h-12">
+                                    <div className="w-1.5 h-1.5 bg-text-muted rounded-full animate-[bounce_1s_infinite]" />
+                                    <div className="w-1.5 h-1.5 bg-text-muted rounded-full animate-[bounce_1s_infinite_0.15s]" />
+                                    <div className="w-1.5 h-1.5 bg-text-muted rounded-full animate-[bounce_1s_infinite_0.3s]" />
                                 </div>
                             </div>
                         )}
@@ -235,13 +235,13 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
             </div>
 
             {/* Input Area */}
-            <div className="w-full border-t border-[#1e1e1e] bg-[rgba(15,15,15,0.9)] backdrop-blur-xl p-[16px] pb-[calc(env(safe-area-inset-bottom)+16px)] shrink-0">
+            <div className="w-full border-t border-border bg-surface/90 backdrop-blur-xl p-4 pb-[calc(env(safe-area-inset-bottom)+16px)] shrink-0">
                 <div className="max-w-[760px] mx-auto">
                     {inputMode === 'voice' ? (
                         <div className="flex flex-col items-center">
                             {lastAiMessage && !isStreaming && (
-                                <div className="w-full max-w-[400px] mb-[12px] px-[16px] py-[12px] rounded-lg bg-[rgba(255,255,255,0.02)] border border-[#1e1e1e]">
-                                    <p className="text-[13px] text-[#9a9590] line-clamp-2 leading-relaxed">
+                                <div className="w-full max-w-[400px] mb-3 px-4 py-3 rounded-xl bg-surface-hover border border-border">
+                                    <p className="text-[13px] text-text-secondary line-clamp-2 leading-relaxed">
                                         "{lastAiMessage.content}"
                                     </p>
                                 </div>
@@ -256,7 +256,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
                         <>
                             <div className="relative flex items-end w-full max-w-[600px] mx-auto">
                                 <textarea
-                                    className="parlova-input min-h-[52px] max-h-[140px] resize-none pr-[56px] rounded-[26px]"
+                                    className="parlova-input min-h-[52px] max-h-[140px] resize-none pr-14 rounded-[26px] scrollbar-none"
                                     placeholder="Escribe en español..."
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
@@ -270,15 +270,15 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
                                     rows={1}
                                 />
                                 <button
-                                    className={`absolute right-[6px] bottom-[6px] w-[40px] h-[40px] rounded-pill flex items-center justify-center transition-colors
-                                        ${(!input.trim() || isLoading || isStreaming) ? 'bg-[#2a2a2a] text-[#5a5652]' : 'bg-[#c9a84c] text-[#080808] hover:brightness-110'}`}
+                                    className={`absolute right-1.5 bottom-1.5 w-10 h-10 rounded-full flex items-center justify-center transition-colors
+                                        ${(!input.trim() || isLoading || isStreaming) ? 'bg-border-strong text-text-muted' : 'bg-gold text-background hover:brightness-110'}`}
                                     onClick={handleSend}
                                     disabled={!input.trim() || isLoading || isStreaming}
                                 >
-                                    <Send className="w-[18px] h-[18px] ml-[2px]" />
+                                    <Send className="w-[18px] h-[18px] ml-0.5" />
                                 </button>
                             </div>
-                            <p className="text-center mt-[12px] text-[11px] font-medium text-[#5a5652] uppercase tracking-widest select-none">
+                            <p className="text-center mt-3 text-[10px] font-bold text-text-muted uppercase tracking-widest select-none font-mono-num">
                                 Text mode — no pronunciation score
                             </p>
                         </>

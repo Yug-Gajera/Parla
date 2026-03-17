@@ -34,23 +34,23 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
         <div className="flex flex-col h-full font-sans max-w-4xl mx-auto w-full px-4 sm:px-6 pt-6">
             {/* Header */}
             <div className="mb-8 text-center sm:text-left">
-                <h2 className="text-3xl font-serif text-[#f0ece4] mb-2 tracking-tight">Core Lexicon</h2>
-                <p className="text-sm font-mono text-[#5a5652] uppercase tracking-[0.1em]">
+                <h2 className="text-3xl font-serif text-text-primary mb-2 tracking-tight">Core Lexicon</h2>
+                <p className="text-sm font-mono-num text-text-muted uppercase tracking-[0.1em]">
                     Phase 2 &nbsp;&bull;&nbsp; Tap to isolate. Tap again to assimilate.
                 </p>
             </div>
 
             {/* Progress counter */}
-            <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 bg-[#141414] border border-[#1e1e1e] p-5 rounded-2xl shadow-inner">
+            <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 bg-card border border-border p-5 rounded-2xl shadow-inner">
                 <div className="flex items-center gap-4 w-full sm:w-auto">
-                    <div className="w-12 h-12 bg-[#080808] border border-[#2a2a2a] rounded-full flex items-center justify-center shadow-inner">
-                        <span className="text-xl font-mono text-[#c9a84c]">{learnedCount}</span>
+                    <div className="w-12 h-12 bg-background border border-border-strong rounded-full flex items-center justify-center shadow-inner">
+                        <span className="text-xl font-mono-num text-gold">{learnedCount}</span>
                     </div>
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#5a5652]">/ 10 Acquired</span>
+                    <span className="text-[10px] font-mono-num uppercase tracking-widest text-text-muted">/ 10 Acquired</span>
                 </div>
-                <div className="h-1.5 flex-1 max-w-full sm:max-w-xs w-full bg-[#080808] border border-[#1e1e1e] rounded-full overflow-hidden">
+                <div className="h-1.5 flex-1 max-w-full sm:max-w-xs w-full bg-background border border-border rounded-full overflow-hidden">
                     <motion.div
-                        className="h-full bg-gradient-to-r from-[#8b7538] to-[#c9a84c] rounded-full shadow-[0_0_10px_rgba(201,168,76,0.6)]"
+                        className="h-full bg-gradient-to-r from-gold/50 to-gold rounded-full shadow-[0_0_10px_rgba(201,168,76,0.2)]"
                         animate={{ width: `${(learnedCount / 10) * 100}%` }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                     />
@@ -83,8 +83,8 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                                 {/* Front */}
                                 <Card
                                     className={`p-6 transition-all duration-300 rounded-2xl ${isLearned
-                                        ? 'border-[#c9a84c]/30 bg-[#c9a84c]/5 shadow-[0_0_20px_rgba(201,168,76,0.05)]'
-                                        : 'border-[#1e1e1e] bg-[#141414] hover:border-[#2a2a2a] hover:bg-[#171717]'
+                                        ? 'border-gold/30 bg-gold/5 shadow-[0_0_20px_rgba(201,168,76,0.15)]'
+                                        : 'border-border bg-card hover:border-border-strong hover:bg-surface'
                                         }`}
                                     style={{
                                         backfaceVisibility: 'hidden',
@@ -92,41 +92,41 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                                     }}
                                 >
                                     <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-4">
-                                        <p className={`text-xl font-serif leading-tight ${isLearned ? 'text-[#c9a84c]' : 'text-[#f0ece4]'}`}>{phrase.spanish}</p>
+                                        <p className={`text-xl font-serif leading-tight ${isLearned ? 'text-gold' : 'text-text-primary'}`}>{phrase.spanish}</p>
                                         <div className="flex items-center gap-3 shrink-0">
-                                            <span className="px-3 py-1 rounded bg-[#080808] border border-[#2a2a2a] text-[9px] font-mono tracking-widest uppercase text-[#5a5652]">
+                                            <span className="px-3 py-1 rounded bg-background border border-border-strong text-[9px] font-mono-num tracking-widest uppercase text-text-muted">
                                                 {phrase.category}
                                             </span>
                                             {isLearned ? (
-                                                <CheckCircle2 className="w-5 h-5 text-[#c9a84c]" />
+                                                <CheckCircle2 className="w-5 h-5 text-gold" />
                                             ) : (
-                                                <div className="w-5 h-5 rounded-full border border-[#2a2a2a] group-hover:bg-[#1e1e1e]" />
+                                                <div className="w-5 h-5 rounded-full border border-border-strong group-hover:bg-border" />
                                             )}
                                         </div>
                                     </div>
                                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 mb-4">
-                                        <p className="text-sm text-[#c9a84c] font-mono opacity-80">{phrase.phonetic}</p>
-                                        <p className="text-sm text-[#9a9590]">{phrase.english}</p>
+                                        <p className="text-sm text-gold font-mono-num opacity-80">{phrase.phonetic}</p>
+                                        <p className="text-sm text-text-secondary">{phrase.english}</p>
                                     </div>
-                                    <div className="bg-[#080808] border border-[#1e1e1e] rounded-xl px-4 py-3">
-                                        <p className="text-xs font-sans text-[#5a5652] leading-relaxed"><span className="font-bold text-[#9a9590] uppercase text-[9px] tracking-widest mr-2">Context</span> {phrase.usage}</p>
+                                    <div className="bg-background border border-border rounded-xl px-4 py-3">
+                                        <p className="text-xs font-sans text-text-muted leading-relaxed"><span className="font-bold text-text-secondary uppercase text-[9px] tracking-widest mr-2">Context</span> {phrase.usage}</p>
                                     </div>
                                 </Card>
 
                                 {/* Back (immersion) */}
                                 <Card
-                                    className="p-10 border-[#c9a84c]/40 bg-[#141414] rounded-2xl flex flex-col items-center justify-center text-center relative overflow-hidden shadow-[0_0_40px_rgba(201,168,76,0.1)]"
+                                    className="p-10 border-gold/40 bg-card rounded-2xl flex flex-col items-center justify-center text-center relative overflow-hidden shadow-[0_0_40px_rgba(201,168,76,0.1)]"
                                     style={{
                                         backfaceVisibility: 'hidden',
                                         transform: 'rotateX(180deg)',
                                         display: isFlipped ? 'flex' : 'none',
                                     }}
                                 >
-                                    <div className="absolute inset-0 bg-[#c9a84c]/5" />
+                                    <div className="absolute inset-0 bg-gold/5" />
                                     <div className="relative z-10 w-full flex flex-col items-center">
-                                        <p className="text-3xl font-serif text-[#c9a84c] mb-4">{phrase.spanish}</p>
-                                        <p className="text-lg text-[#f0ece4] font-mono mb-8 opacity-80">{phrase.phonetic}</p>
-                                        <Button className="rounded-full bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] font-mono text-[10px] uppercase font-bold tracking-widest px-8">
+                                        <p className="text-3xl font-serif text-gold mb-4">{phrase.spanish}</p>
+                                        <p className="text-lg text-text-primary font-mono-num mb-8 opacity-80">{phrase.phonetic}</p>
+                                        <Button className="rounded-full bg-gold text-background hover:brightness-110 font-mono-num text-[10px] uppercase font-bold tracking-widest px-8">
                                             Assimilate
                                         </Button>
                                     </div>
@@ -138,10 +138,10 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
             </div>
 
             {/* Tip + Continue */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#080808] via-[#080808]/90 to-transparent">
+            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background via-background/90 to-transparent">
                 <div className="max-w-4xl mx-auto flex flex-col items-center">
                     {!canContinue && (
-                        <p className="text-[10px] font-mono uppercase tracking-widest text-center text-[#5a5652] mb-4">
+                        <p className="text-[10px] font-mono-num uppercase tracking-widest text-center text-text-muted mb-4">
                             Acquire minimum 8 phrases to proceed
                         </p>
                     )}
@@ -151,10 +151,10 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                             onComplete(learnedCount, learnedPhrases);
                         }}
                         disabled={!canContinue}
-                        className={`w-full max-w-md h-14 text-[10px] font-mono tracking-widest uppercase font-bold rounded-full transition-all duration-500 shadow-[0_0_30px_rgba(0,0,0,0.8)] ${
+                        className={`w-full max-md h-14 text-[10px] font-mono-num tracking-widest uppercase font-bold rounded-full transition-all duration-500 shadow-md ${
                             canContinue 
-                            ? 'bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] shadow-[0_4px_20px_rgba(201,168,76,0.2)]' 
-                            : 'bg-[#141414] text-[#5a5652] border border-[#1e1e1e] cursor-not-allowed'
+                            ? 'bg-gold text-background hover:brightness-110 shadow-[0_4px_20px_rgba(201,168,76,0.2)]' 
+                            : 'bg-card text-text-muted border border-border cursor-not-allowed'
                             }`}
                     >
                         {canContinue ? (

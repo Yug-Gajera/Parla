@@ -83,9 +83,9 @@ export default function DashboardView({
                         <div className="w-full lg:w-[30%] flex flex-col gap-[16px]">
                             <LevelProgress currentLevel={currentLevel} score={levelScore} />
 
-                            <div className="hidden lg:flex flex-1 rounded-[14px] border border-[#1e1e1e] bg-[rgba(255,255,255,0.02)] items-center justify-center p-[24px] text-center">
-                                <p className="text-[13px] text-[#5a5652] leading-relaxed">
-                                    Keep practicing entirely in <span className="text-[#f0ece4] opacity-80">{langName}</span> to level up faster.
+                            <div className="hidden lg:flex flex-1 rounded-[14px] border border-border bg-surface items-center justify-center p-[24px] text-center">
+                                <p className="text-[13px] text-text-muted leading-relaxed">
+                                    Keep practicing entirely in <span className="text-text-primary font-medium">{langName}</span> to level up faster.
                                 </p>
                             </div>
                         </div>

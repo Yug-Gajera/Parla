@@ -38,7 +38,7 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
 
             {/* Subtle glow if complete */}
             {percentage >= 100 && (
-                <div className="absolute inset-0 bg-[rgba(201,168,76,0.03)] transition-opacity duration-1000 p-0 m-0" />
+                <div className="absolute inset-0 bg-gold-subtle/50 transition-opacity duration-1000 p-0 m-0" />
             )}
 
             <div className="relative flex items-center justify-center mb-[24px] mt-[8px]">
@@ -49,7 +49,7 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
                         cy={center}
                         r={radius}
                         fill="transparent"
-                        stroke="#1e1e1e"
+                        stroke="var(--color-border-strong)"
                         strokeWidth={strokeWidth}
                         strokeLinecap="round"
                     />
@@ -59,7 +59,7 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
                         cy={center}
                         r={radius}
                         fill="transparent"
-                        stroke={percentage >= 100 ? '#e4c76b' : '#c9a84c'}
+                        stroke="var(--color-gold)"
                         strokeWidth={strokeWidth}
                         strokeLinecap="round"
                         strokeDasharray={circumference}
@@ -71,17 +71,17 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
 
                 {/* Center Content */}
                 <div className="absolute flex flex-col items-center justify-center text-center">
-                    <span className="font-mono-num text-[36px] font-medium tracking-tighter text-[#f0ece4]">
+                    <span className="font-mono-num text-[36px] font-medium tracking-tighter text-text-primary">
                         {Math.floor(rawPercentage)}%
                     </span>
-                    <span className="text-[12px] text-[#9a9590] mt-[2px]">
+                    <span className="text-[12px] text-text-muted mt-[2px]">
                         {minutesStudied} / {dailyGoal} min
                     </span>
                 </div>
             </div>
 
             <div className="text-center w-full px-[16px]">
-                <p className={`text-[13px] font-medium transition-colors duration-500 ${percentage >= 100 ? 'text-[#e4c76b]' : 'text-[#f0ece4]'}`}>
+                <p className={`text-[13px] font-medium transition-colors duration-500 ${percentage >= 100 ? 'text-gold' : 'text-text-primary'}`}>
                     {message}
                 </p>
             </div>

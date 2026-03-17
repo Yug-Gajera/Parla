@@ -288,7 +288,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
                   <div className="chat-msg chat-ai">¡Perfecto! ¿Grande o pequeño?</div>
                   <div className="typing"><span></span><span></span><span></span></div>
                 </div>
-                <div className="phone-mic"><div className="mic-btn"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" fill="none" stroke="#080808" strokeWidth="2" strokeLinecap="round" /><line x1="12" y1="19" x2="12" y2="23" stroke="#080808" strokeWidth="2" /></svg></div><span>Tap to speak</span></div>
+                <div className="phone-mic"><div className="mic-btn"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" strokeWidth="2" /></svg></div><span>Tap to speak</span></div>
                 <div className="phone-score">&#11088; 91/100 · Great session!</div>
               </div>
             </div>
@@ -450,9 +450,9 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
               <div className="library-visual">
                 <div className="book-spines">
                   <div className="book-spine" style={{ height: '90px', background: 'var(--accent-gold)', opacity: '0.8' }}></div>
-                  <div className="book-spine" style={{ height: '100px', background: 'var(--accent-gold-light)', opacity: '0.6' }}></div>
+                  <div className="book-spine" style={{ height: '100px', background: 'var(--accent-gold-hover)', opacity: '0.6' }}></div>
                   <div className="book-spine" style={{ height: '75px', background: 'var(--accent-gold)', opacity: '0.5' }}></div>
-                  <div className="book-spine" style={{ height: '85px', background: 'var(--accent-gold-light)', opacity: '0.7' }}></div>
+                  <div className="book-spine" style={{ height: '85px', background: 'var(--accent-gold-hover)', opacity: '0.7' }}></div>
                   <div className="book-spine" style={{ height: '95px', background: 'var(--accent-gold)', opacity: '0.4' }}></div>
                 </div>
               </div>
@@ -580,7 +580,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
             <a href="#pricing" className="btn-primary" style={{ fontSize: '17px', padding: '16px 36px' }}>Start Speaking Free</a>
             <a href="#pricing" className="btn-secondary">See Pricing</a>
           </div>
-          <p className="small-note reveal"><span style={{ color: 'var(--accent-gold)' }}>&#9670;</span> No credit card · Cancel anytime · Free forever plan</p>
+          <p className="small-note reveal"><span style={{ color: 'var(--accent-primary)' }}>&#9670;</span> No credit card · Cancel anytime · Free forever plan</p>
         </div>
       </section>
 

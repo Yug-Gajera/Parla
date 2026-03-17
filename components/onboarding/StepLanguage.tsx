@@ -29,8 +29,8 @@ export default function StepLanguage() {
     return (
         <div className="flex flex-col items-center w-full animation-fade-in font-sans pb-16">
             {/* ── Header ── */}
-            <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4 text-center text-[#f0ece4] drop-shadow-sm">Select Archive</h1>
-            <p className="text-[#5a5652] text-sm md:text-base font-mono uppercase tracking-widest text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4 text-center text-foreground drop-shadow-sm">Select Archive</h1>
+            <p className="text-muted-foreground text-sm md:text-base font-mono uppercase tracking-widest text-center mb-16">
                 Choose the lexicon to initialize
             </p>
 
@@ -45,20 +45,20 @@ export default function StepLanguage() {
                             disabled={!lang.available}
                             className={`
                                 relative flex flex-col items-center justify-center py-10 px-6 rounded-2xl border transition-all duration-300
-                                ${!lang.available ? 'opacity-30 cursor-not-allowed bg-[#080808] border-[#1e1e1e] grayscale' : ''}
-                                ${lang.available && !isSelected ? 'hover:border-[#2a2a2a] bg-[#0f0f0f] border-[#1e1e1e] group shadow-inner' : ''}
-                                ${isSelected ? 'border-[#c9a84c] bg-[#c9a84c]/5 shadow-[0_0_20px_rgba(201,168,76,0.15)] scale-[1.02]' : ''}
+                                ${!lang.available ? 'opacity-30 cursor-not-allowed bg-background border-border grayscale' : ''}
+                                ${lang.available && !isSelected ? 'hover:border-border-strong bg-card border-border group shadow-inner' : ''}
+                                ${isSelected ? 'border-primary bg-primary/5 shadow-md scale-[1.02]' : ''}
                             `}
                         >
                             <div className={`text-5xl mb-5 transition-transform duration-300 ${isSelected ? 'scale-110' : 'group-hover:scale-110'}`}>
                                 {lang.emoji}
                             </div>
-                            <div className={`font-serif text-xl tracking-wide ${isSelected ? 'text-[#c9a84c]' : 'text-[#f0ece4]'}`}>
+                            <div className={`font-serif text-xl tracking-wide ${isSelected ? 'text-primary' : 'text-foreground'}`}>
                                 {lang.name}
                             </div>
 
                             {/* Badge */}
-                            <div className={`absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1 text-[9px] font-mono tracking-[0.2em] font-bold uppercase rounded-sm border ${lang.available ? (isSelected ? 'bg-[#c9a84c] text-[#080808] border-[#c9a84c]' : 'bg-[#1e1e1e] text-[#9a9590] border-[#2a2a2a]') : 'bg-transparent border-[#1e1e1e] text-[#5a5652]'}`}>
+                            <div className={`absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1 text-[9px] font-mono tracking-[0.2em] font-bold uppercase rounded-sm border ${lang.available ? (isSelected ? 'bg-primary text-primary-foreground border-primary' : 'bg-surface text-muted-foreground border-border') : 'bg-transparent border-border text-muted-foreground'}`}>
                                 {lang.available ? 'Active' : 'Locked'}
                             </div>
                         </button>
@@ -71,7 +71,7 @@ export default function StepLanguage() {
                 <Button
                     onClick={nextStep}
                     disabled={!selectedLanguageId}
-                    className="w-full max-w-sm bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[11px] uppercase tracking-widest font-bold h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all disabled:opacity-30 disabled:shadow-none"
+                    className="w-full max-w-sm bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[11px] uppercase tracking-widest font-bold h-14 rounded-full shadow-lg transition-all disabled:opacity-30 disabled:shadow-none"
                 >
                     Proceed with Selection
                 </Button>

@@ -47,46 +47,46 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
         <div className="w-full h-full flex flex-col relative bg-transparent font-sans">
             {/* Header Row */}
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-serif text-[#f0ece4]">Lexicon Inventory</h2>
+                <h2 className="text-2xl font-serif text-text-primary">Lexicon Inventory</h2>
                 <Button 
                     variant="outline" 
                     onClick={() => setIsImportOpen(true)}
-                    className="border-[#2a2a2a] bg-[#141414] text-[#f0ece4] hover:bg-[#1e1e1e] hover:border-[#c9a84c]/30 transition-colors h-10 px-4 rounded-xl flex items-center font-sans"
+                    className="border-border-strong bg-card text-text-primary hover:bg-surface hover:border-gold/30 transition-colors h-10 px-4 rounded-xl flex items-center font-sans shadow-sm"
                 >
-                    <Upload className="w-4 h-4 mr-2 text-[#c9a84c]" />
+                    <Upload className="w-4 h-4 mr-2 text-gold" />
                     Import vocabulary
                 </Button>
             </div>
 
             {/* Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                <div className="p-5 rounded-2xl bg-[#141414] border border-[#1e1e1e] flex flex-col shadow-inner">
-                    <span className="text-[#5a5652] text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Total Lexicon</span>
-                    <span className="text-3xl font-serif text-[#f0ece4]">{stats?.total ?? '-'}</span>
+                <div className="p-5 rounded-2xl bg-card border border-border flex flex-col shadow-inner">
+                    <span className="text-text-muted text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Total Lexicon</span>
+                    <span className="text-3xl font-serif text-text-primary">{stats?.total ?? '-'}</span>
                 </div>
-                <div className="p-5 rounded-2xl bg-[#c9a84c]/5 border border-[#c9a84c]/20 flex flex-col shadow-inner">
-                    <span className="text-[#c9a84c] text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Pending Review</span>
-                    <span className="text-3xl font-serif text-[#c9a84c]">{stats?.dueToday ?? '-'}</span>
+                <div className="p-5 rounded-2xl bg-gold/5 border border-gold/20 flex flex-col shadow-inner">
+                    <span className="text-gold text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Pending Review</span>
+                    <span className="text-3xl font-serif text-gold">{stats?.dueToday ?? '-'}</span>
                 </div>
-                <div className="p-5 rounded-2xl bg-[#141414] border border-[#1e1e1e] flex flex-col shadow-inner">
-                    <span className="text-[#9a9590] text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Acquiring</span>
-                    <span className="text-3xl font-serif text-[#9a9590]">{stats?.learning ?? '-'}</span>
+                <div className="p-5 rounded-2xl bg-card border border-border flex flex-col shadow-inner">
+                    <span className="text-text-secondary text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Acquiring</span>
+                    <span className="text-3xl font-serif text-text-secondary">{stats?.learning ?? '-'}</span>
                 </div>
-                <div className="p-5 rounded-2xl bg-[#141414] border border-[#1e1e1e] flex flex-col shadow-inner hover:border-[#2a2a2a] transition-colors">
-                    <span className="text-[#f0ece4] text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Mastered</span>
-                    <span className="text-3xl font-serif text-[#f0ece4]">{stats?.mastered ?? '-'}</span>
+                <div className="p-5 rounded-2xl bg-card border border-border flex flex-col shadow-inner hover:border-border-strong transition-colors">
+                    <span className="text-text-primary text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Mastered</span>
+                    <span className="text-3xl font-serif text-text-primary">{stats?.mastered ?? '-'}</span>
                 </div>
             </div>
 
             {/* Controls Row */}
             <div className="flex flex-col sm:flex-row gap-4 w-full mb-6">
                 <div className="relative flex-1">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5a5652]" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search your lexicon..."
-                        className="pl-11 h-12 bg-[#0f0f0f] border-[#2a2a2a] text-[#f0ece4] placeholder:text-[#5a5652] rounded-xl focus-visible:ring-1 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-0 font-sans"
+                        className="pl-11 h-12 bg-surface border-border-strong text-text-primary placeholder:text-text-muted rounded-xl focus-visible:ring-1 focus-visible:ring-gold focus-visible:ring-offset-0 font-sans shadow-inner"
                     />
                 </div>
                 <div className="flex overflow-x-auto hide-scrollbar gap-2 pb-1 sm:pb-0">
@@ -95,7 +95,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                             key={f.id}
                             variant="ghost"
                             size="sm"
-                            className={`whitespace-nowrap rounded-lg h-12 px-5 text-[11px] font-mono uppercase tracking-widest transition-all ${filter === f.id ? 'bg-[#c9a84c] text-[#080808] font-bold hover:bg-[#b98e72]' : 'bg-[#141414] text-[#9a9590] border border-[#1e1e1e] hover:bg-[#1e1e1e] hover:text-[#f0ece4]'}`}
+                            className={`whitespace-nowrap rounded-lg h-12 px-5 text-[11px] font-mono uppercase tracking-widest transition-all ${filter === f.id ? 'bg-gold text-bg font-bold hover:brightness-110 shadow-md' : 'bg-card text-text-secondary border border-border hover:bg-surface hover:text-text-primary'}`}
                             onClick={() => setFilter(f.id as any)}
                         >
                             {f.label}
@@ -106,7 +106,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
 
             {/* Deck List */}
             <div
-                className="flex-1 overflow-y-auto pb-32 custom-scrollbar rounded-2xl border border-[#1e1e1e] bg-[#0f0f0f]"
+                className="flex-1 overflow-y-auto pb-32 custom-scrollbar rounded-2xl border border-border bg-surface shadow-sm"
                 onScroll={handleScroll}
             >
                 {words.length === 0 && !isLoading ? (
@@ -119,9 +119,9 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                     }}>
 
                         <p style={{
-                            fontFamily: "DM Sans, sans-serif",
+                            fontFamily: "var(--font-sans), sans-serif",
                             fontSize: "15px",
-                            color: "#9a9590",
+                            color: "var(--color-text-secondary)",
                             textAlign: "center",
                             maxWidth: "240px",
                             lineHeight: 1.6,
@@ -130,32 +130,32 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                         </p>
 
                         {!search && (
-                            <Button onClick={() => setIsAddOpen(true)} className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-12 px-8 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all">
+                            <Button onClick={() => setIsAddOpen(true)} className="bg-gold hover:brightness-110 text-bg font-mono text-[10px] font-bold uppercase tracking-widest h-12 px-8 rounded-full shadow-md transition-all">
                                 <Plus className="mr-2 h-4 w-4" /> Index New Word
                             </Button>
                         )}
 
                         {/* Dashed Import Card for Empty State */}
-                        <div className="bg-[#c9a84c]/5 border border-dashed border-[#c9a84c]/30 rounded-[14px] p-6 text-center mt-6 w-full max-w-sm flex flex-col items-center">
-                            <Upload className="text-[#c9a84c] mb-3" size={32} />
-                            <h3 className="font-sans font-semibold text-[15px] text-[#f0ece4] mb-1">Already know some Spanish?</h3>
-                            <p className="font-sans text-[13px] text-[#9a9590] mb-5 leading-snug">
+                        <div className="bg-gold/5 border border-dashed border-gold/30 rounded-[14px] p-6 text-center mt-6 w-full max-w-sm flex flex-col items-center">
+                            <Upload className="text-gold mb-3" size={32} />
+                            <h3 className="font-sans font-semibold text-[15px] text-text-primary mb-1">Already know some Spanish?</h3>
+                            <p className="font-sans text-[13px] text-text-secondary mb-5 leading-snug">
                                 Import your existing vocabulary instead of starting from scratch
                             </p>
                             <Button 
                                 onClick={() => setIsImportOpen(true)}
-                                className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-sans font-medium h-10 px-6 rounded-xl transition-colors"
+                                className="bg-gold hover:brightness-110 text-bg font-sans font-medium h-10 px-6 rounded-xl transition-colors shadow-sm"
                             >
                                 Import vocabulary
                             </Button>
                         </div>
                     </div>
                 ) : (
-                    <div className="divide-y divide-[#1e1e1e]">
+                    <div className="divide-y divide-border">
                         {words.map((word) => (
                             <div
                                 key={word.id}
-                                className="flex items-center justify-between p-5 hover:bg-[#141414] cursor-pointer transition-colors group"
+                                className="flex items-center justify-between p-5 hover:bg-card cursor-pointer transition-colors group"
                                 onClick={() => {
                                     setSelectedWord(word);
                                     setIsDetailOpen(true);
@@ -163,16 +163,16 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                             >
                                 <div className="flex flex-col gap-1.5 items-start">
                                     <div className="flex items-center gap-3">
-                                        <span className="text-xl font-serif text-[#f0ece4] group-hover:text-[#c9a84c] transition-colors leading-none tracking-tight">
+                                        <span className="text-xl font-serif text-text-primary group-hover:text-gold transition-colors leading-none tracking-tight">
                                             {word.vocabulary_words.word}
                                         </span>
                                         <StatusBadge status={word.status} />
                                     </div>
-                                    <span className="text-[13px] text-[#9a9590] font-sans max-w-[200px] sm:max-w-sm truncate opacity-80 group-hover:opacity-100 transition-opacity">
+                                    <span className="text-[13px] text-text-secondary font-sans max-w-[200px] sm:max-w-sm truncate opacity-80 group-hover:opacity-100 transition-opacity">
                                         {word.vocabulary_words.translation}
                                     </span>
                                 </div>
-                                <div className="text-[10px] font-mono text-[#5a5652] uppercase tracking-widest pr-2 text-right">
+                                <div className="text-[10px] font-mono text-text-muted uppercase tracking-widest pr-2 text-right">
                                     {word.next_review_date ? new Date(word.next_review_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : ''}
                                 </div>
                             </div>
@@ -181,12 +181,12 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                 )}
 
                 {isLoading && (
-                    <div className="flex flex-col divide-y divide-[#1e1e1e]">
+                    <div className="flex flex-col divide-y divide-border">
                         {[1, 2, 3, 4, 5].map(i => (
                             <div key={i} className="p-5 flex justify-between items-center">
                                 <div className="flex flex-col gap-3 w-full">
-                                    <Skeleton className="h-6 w-32 bg-[#1e1e1e] rounded" />
-                                    <Skeleton className="h-4 w-48 bg-[#1e1e1e] rounded" />
+                                    <Skeleton className="h-6 w-32 bg-border rounded" />
+                                    <Skeleton className="h-4 w-48 bg-border rounded" />
                                 </div>
                             </div>
                         ))}
@@ -198,10 +198,10 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
             <div className="absolute bottom-6 right-6">
                 <Button
                     size="icon"
-                    className="h-14 w-14 rounded-full bg-[#c9a84c] hover:bg-[#b98e72] shadow-[0_0_30px_rgba(201,168,76,0.3)] hover:shadow-[0_0_40px_rgba(201,168,76,0.5)] transition-all z-10 border border-[#c9a84c]/50"
+                    className="h-14 w-14 rounded-full bg-gold hover:brightness-110 shadow-lg transition-all z-10 border border-gold/50"
                     onClick={() => setIsAddOpen(true)}
                 >
-                    <Plus className="h-6 w-6 text-[#080808]" />
+                    <Plus className="h-6 w-6 text-bg" />
                 </Button>
             </div>
 
@@ -234,10 +234,10 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
 // Sub-component for badges
 function StatusBadge({ status }: { status: string }) {
     const statusColors = {
-        'new': 'bg-[#141414] border-[#2a2a2a] text-[#5a5652]',
-        'learning': 'bg-[#c9a84c]/10 border-[#c9a84c]/20 text-[#c9a84c]',
-        'familiar': 'bg-[#f0ece4]/10 border-[#f0ece4]/20 text-[#f0ece4]',
-        'mastered': 'bg-[#c9a84c] border-[#c9a84c] text-[#080808]',
+        'new': 'bg-surface border-border-strong text-text-muted',
+        'learning': 'bg-gold/10 border-gold/20 text-gold shadow-sm',
+        'familiar': 'bg-green-600/10 border-green-600/20 text-green-700 shadow-sm',
+        'mastered': 'bg-gold border-gold text-bg shadow-sm',
     };
     const c = statusColors[status as keyof typeof statusColors] || statusColors.new;
     return (

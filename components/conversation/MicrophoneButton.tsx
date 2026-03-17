@@ -79,7 +79,7 @@ export function MicrophoneButton({
     const timerStr = `${Math.floor(recordingSeconds / 60)}:${(recordingSeconds % 60).toString().padStart(2, '0')}`;
 
     return (
-        <div className="flex flex-col items-center gap-[16px] w-full mt-[16px]">
+        <div className="flex flex-col items-center gap-4 w-full mt-4">
             {/* Mic UI */}
             <div className="relative flex flex-col items-center justify-center">
 
@@ -92,23 +92,23 @@ export function MicrophoneButton({
                     style={micState === 'idle' && !isDisabled ? { animation: 'pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite' } : undefined}
                 >
                     {micState === 'recording' ? (
-                        <Square className="w-[24px] h-[24px] text-[#080808] fill-[#080808]" />
+                        <Square className="w-6 h-6 text-background fill-current" />
                     ) : micState === 'processing' ? (
-                        <Loader2 className="w-[24px] h-[24px] text-[#c9a84c] animate-spin" />
+                        <Loader2 className="w-6 h-6 text-gold animate-spin" />
                     ) : micState === 'error' ? (
-                        <AlertCircle className="w-[24px] h-[24px] text-[#f87171]" />
+                        <AlertCircle className="w-6 h-6 text-error" />
                     ) : (
-                        <Mic2 className={`w-[24px] h-[24px] ${isDisabled ? 'text-[#3a3835]' : 'text-[#f0ece4]'}`} />
+                        <Mic2 className={`w-6 h-6 ${isDisabled ? 'text-text-muted' : 'text-text-primary'}`} />
                     )}
                 </motion.button>
 
                 {/* Recording UI Rings */}
                 {micState === 'recording' && (
-                    <svg className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[88px] h-[88px] -rotate-90 pointer-events-none" viewBox="0 0 88 88">
+                    <svg className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 -rotate-90 pointer-events-none" viewBox="0 0 88 88">
                         <circle
                             cx="44" cy="44" r="42"
                             fill="none"
-                            stroke="rgba(201,168,76,0.2)"
+                            stroke="var(--color-gold-subtle)"
                             strokeWidth="2"
                             strokeDasharray={`${(recordingSeconds / 30) * 263.89} 263.89`}
                             strokeLinecap="round"
@@ -119,7 +119,7 @@ export function MicrophoneButton({
             </div>
 
             {/* Status Messages */}
-            <div className="text-center min-h-[48px] flex flex-col items-center justify-start">
+            <div className="text-center min-h-[3rem] flex flex-col items-center justify-start">
                 {micState === 'idle' && !isDisabled && (
                     <p className="mic-btn-label animate-fade-up">Tap to speak</p>
                 )}
@@ -128,24 +128,24 @@ export function MicrophoneButton({
                 )}
                 {micState === 'recording' && (
                     <div className="flex flex-col items-center animate-fade-up">
-                        <p className="text-[14px] text-[#c9a84c] font-semibold">Listening...</p>
-                        <p className="text-[12px] text-[#9a9590] font-mono-num">{timerStr}</p>
+                        <p className="text-sm text-gold font-semibold">Listening...</p>
+                        <p className="text-xs text-text-secondary font-mono-num">{timerStr}</p>
                     </div>
                 )}
                 {micState === 'processing' && (
-                    <p className="text-[14px] text-[#e4c76b] font-medium animate-fade-up">
+                    <p className="text-sm text-gold-hover font-medium animate-fade-up">
                         Understanding...
                     </p>
                 )}
                 {micState === 'error' && (
-                    <p className="text-[13px] text-[#f87171] text-center max-w-[280px]">
+                    <p className="text-[13px] text-error text-center max-w-[280px]">
                         {error?.code === 'not-allowed' ? 'Microphone access denied.' : 'Connection issue. Try again.'}
                     </p>
                 )}
                 
                 {/* Interim Text */}
                 {interimText && micState === 'recording' && (
-                    <p className="text-[13px] text-[#9a9590] italic mt-[8px] max-w-[280px] line-clamp-2">
+                    <p className="text-[13px] text-text-secondary italic mt-2 max-w-[280px] line-clamp-2">
                         {interimText}
                     </p>
                 )}
@@ -158,7 +158,7 @@ export function MicrophoneButton({
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="text-[12px] text-[#5a5652] text-center max-w-[240px] mt-[8px]"
+                            className="text-xs text-text-muted text-center max-w-[240px] mt-2"
                         >
                             {TIPS[tipIndex]}
                         </motion.p>
@@ -173,18 +173,18 @@ export function MicrophoneButton({
                         initial={{ opacity: 0, y: 16, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 16, scale: 0.96 }}
-                        className="w-full max-w-[340px] parlova-card"
+                        className="w-full max-w-[340px] parlova-card p-6"
                     >
-                        <p className="text-[11px] font-semibold tracking-widest text-[#5a5652] uppercase mb-[8px]">You said</p>
-                        <p className="text-[15px] text-[#f0ece4] leading-relaxed mb-[16px]">
+                        <p className="text-[11px] font-semibold tracking-widest text-text-muted uppercase mb-2 font-mono-num">You said</p>
+                        <p className="text-[15px] text-text-primary leading-relaxed mb-4">
                             &ldquo;{currentTranscription.transcript}&rdquo;
                         </p>
 
-                        <div className="flex flex-col gap-[8px]">
-                            <button onClick={handleConfirm} className="btn btn-primary w-full">
+                        <div className="flex flex-col gap-2">
+                            <button onClick={handleConfirm} className="btn-primary w-full h-11 flex items-center justify-center gap-2 rounded-xl text-sm font-bold uppercase tracking-widest">
                                 <Check size={16} /> Send
                             </button>
-                            <button onClick={handleRetry} className="btn btn-secondary w-full">
+                            <button onClick={handleRetry} className="btn-secondary w-full h-11 flex items-center justify-center gap-2 rounded-xl text-sm font-bold uppercase tracking-widest">
                                 <RefreshCcw size={16} /> Try Again
                             </button>
                         </div>

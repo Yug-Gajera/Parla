@@ -135,12 +135,12 @@ export default function StepDiagnostic() {
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in relative pt-12 font-sans px-4 text-center">
                 <button
                     onClick={prevStep}
-                    className="absolute left-0 top-0 p-3 text-[#5a5652] hover:text-[#f0ece4] transition-colors rounded-full hover:bg-[#141414] border border-transparent hover:border-[#1e1e1e]"
+                    className="absolute left-0 top-0 p-3 text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-muted border border-transparent hover:border-border"
                 >
                     <ArrowLeft size={18} />
                 </button>
-                <h2 className="text-3xl font-serif text-[#f0ece4] mb-4">Starting Assessment</h2>
-                <p className="text-[#9a9590] mb-8 max-w-md">
+                <h2 className="text-3xl font-serif text-foreground mb-4">Starting Assessment</h2>
+                <p className="text-muted-foreground mb-8 max-w-md">
                     Based on your vocabulary we are starting your assessment at <strong>{estimatedLevel}</strong>. 
                     <br/><br/>Tap to adjust if this feels wrong.
                 </p>
@@ -148,7 +148,7 @@ export default function StepDiagnostic() {
                     <select 
                         value={targetLevel} 
                         onChange={(e) => setTargetLevel(e.target.value)}
-                        className="bg-[#141414] border border-[#2a2a2a] text-[#f0ece4] text-lg rounded-xl p-3 outline-none focus:border-[#c9a84c] transition-colors cursor-pointer"
+                        className="bg-card border border-border-strong text-foreground text-lg rounded-xl p-3 outline-none focus:border-primary transition-colors cursor-pointer"
                     >
                         <option value="A1">A1 - Beginner</option>
                         <option value="A2">A2 - Elementary</option>
@@ -160,7 +160,7 @@ export default function StepDiagnostic() {
                 </div>
                 <Button
                     onClick={() => setViewState('loading_questions')}
-                    className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[11px] uppercase tracking-widest font-bold px-10 h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[11px] uppercase tracking-widest font-bold px-10 h-14 rounded-full shadow-lg transition-all"
                 >
                     Begin Test {highConfidence && '(Shortened)'}
                 </Button>
@@ -173,13 +173,13 @@ export default function StepDiagnostic() {
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in relative pt-12 font-sans px-4">
                 <button
                     onClick={estimatedLevel ? () => { fetchStarted.current = false; setViewState('confirm_level'); } : prevStep}
-                    className="absolute left-0 top-0 p-3 text-[#5a5652] hover:text-[#f0ece4] transition-colors rounded-full hover:bg-[#141414] border border-transparent hover:border-[#1e1e1e]"
+                    className="absolute left-0 top-0 p-3 text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-muted border border-transparent hover:border-border"
                 >
                     <ArrowLeft size={18} />
                 </button>
-                <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-[#c9a84c] mb-8" />
-                <h2 className="text-2xl font-serif text-[#f0ece4] mb-3">Initializing Diagnostic</h2>
-                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#5a5652] text-center max-w-sm px-6 py-3 border border-[#1e1e1e] bg-[#0f0f0f] rounded-lg">
+                <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-primary mb-8" />
+                <h2 className="text-2xl font-serif text-foreground mb-3">Initializing Diagnostic</h2>
+                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground text-center max-w-sm px-6 py-3 border border-border bg-card rounded-lg">
                     Generating vectors for constraint level {targetLevel}
                 </p>
             </div>
@@ -189,9 +189,9 @@ export default function StepDiagnostic() {
     if (viewState === 'analyzing') {
         return (
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4">
-                <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-[#c9a84c] mb-8" />
-                <h2 className="text-2xl font-serif text-[#f0ece4] mb-3">Synthesizing Results</h2>
-                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#5a5652] text-center px-6 py-3 border border-[#1e1e1e] bg-[#0f0f0f] rounded-lg">
+                <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-primary mb-8" />
+                <h2 className="text-2xl font-serif text-foreground mb-3">Synthesizing Results</h2>
+                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground text-center px-6 py-3 border border-border bg-card rounded-lg">
                     Grading lexicon syntax and semantics
                 </p>
             </div>
@@ -203,20 +203,20 @@ export default function StepDiagnostic() {
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in pt-12 relative font-sans px-4">
                 <button
                     onClick={prevStep}
-                    className="absolute left-0 top-0 p-3 text-[#5a5652] hover:text-[#f0ece4] transition-colors rounded-full hover:bg-[#141414] border border-transparent hover:border-[#1e1e1e]"
+                    className="absolute left-0 top-0 p-3 text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-muted border border-transparent hover:border-border"
                 >
                     <ArrowLeft size={18} />
                 </button>
                 <div className="p-5 border border-red-500/20 bg-red-500/5 text-red-400 rounded-full mb-6">
                     <AlertTriangle size={32} />
                 </div>
-                <h2 className="text-2xl font-serif text-[#f0ece4] mb-3">Diagnostic Interrupted</h2>
-                <p className="text-[11px] font-sans text-[#9a9590] text-center max-w-sm mb-10 leading-relaxed">
+                <h2 className="text-2xl font-serif text-foreground mb-3">Diagnostic Interrupted</h2>
+                <p className="text-[11px] font-sans text-muted-foreground text-center max-w-sm mb-10 leading-relaxed">
                     Connection to primary assessor failed. Please verify neural uplink.
                 </p>
                 <Button
                     onClick={() => { fetchStarted.current = false; setViewState('loading_questions'); }}
-                    className="bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] uppercase tracking-widest font-bold px-10 h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[10px] uppercase tracking-widest font-bold px-10 h-14 rounded-full shadow-lg transition-all"
                 >
                     Reinitialize
                 </Button>
@@ -231,13 +231,13 @@ export default function StepDiagnostic() {
         <div className="flex flex-col items-center w-full animation-fade-in relative pt-12 pb-16 font-sans">
             {/* ── Mini Progress ── */}
             <div className="w-full max-w-xl mx-auto mb-16 px-4">
-                <div className="flex justify-between items-center text-[10px] font-mono font-bold mb-3 text-[#5a5652] uppercase tracking-[0.2em]">
+                <div className="flex justify-between items-center text-[10px] font-mono font-bold mb-3 text-muted-foreground uppercase tracking-[0.2em]">
                     <span>Diagnostic Scan</span>
-                    <span>{currentIndex + 1} <span className="text-[#2a2a2a] px-1">/</span> {questions.length}</span>
+                    <span>{currentIndex + 1} <span className="text-border-strong px-1">/</span> {questions.length}</span>
                 </div>
-                <div className="h-1.5 w-full bg-[#1e1e1e] rounded-full overflow-hidden shadow-inner">
+                <div className="h-1.5 w-full bg-border rounded-full overflow-hidden shadow-inner">
                     <div
-                        className="h-full bg-gradient-to-r from-[#8b7538] to-[#c9a84c] rounded-full transition-all duration-500 ease-out"
+                        className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
@@ -257,7 +257,7 @@ export default function StepDiagnostic() {
                         {(q as any).emoji && (
                             <span className="text-4xl mb-6 block">{(q as any).emoji}</span>
                         )}
-                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif text-[#f0ece4] tracking-tight text-balance leading-snug drop-shadow-sm">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif text-foreground tracking-tight text-balance leading-snug drop-shadow-sm">
                             {q.question}
                         </h1>
                     </div>
@@ -268,22 +268,22 @@ export default function StepDiagnostic() {
                             const isSelected = selectedOption === idx;
                             const isCorrectAnswer = idx === Number(q.correct_answer);
 
-                            let buttonClass = 'hover:bg-[#141414] hover:border-[#2a2a2a] bg-[#0f0f0f] border-[#1e1e1e] text-[#f0ece4]';
-                            let badgeClass = 'bg-[#141414] border-[#2a2a2a] text-[#5a5652]';
+                            let buttonClass = 'hover:bg-muted hover:border-border-strong bg-card border-border text-foreground';
+                            let badgeClass = 'bg-muted border-border-strong text-muted-foreground';
 
                             if (selectedOption !== null) {
                                 // State: Answer shown
                                 if (isSelected && isCorrectAnswer) {
-                                    buttonClass = 'bg-[#c9a84c]/5 border-[#c9a84c]/50 text-[#c9a84c] shadow-[0_0_15px_rgba(201,168,76,0.1)]';
-                                    badgeClass = 'bg-[#c9a84c] border-[#c9a84c] text-[#080808]';
+                                    buttonClass = 'bg-primary/5 border-primary/50 text-primary shadow-sm';
+                                    badgeClass = 'bg-primary border-primary text-primary-foreground';
                                 } else if (isSelected && !isCorrectAnswer) {
                                     buttonClass = 'bg-red-500/5 border-red-500/30 text-red-500';
                                     badgeClass = 'bg-red-500/20 border-red-500/30 text-red-400';
                                 } else if (isCorrectAnswer) {
-                                    buttonClass = 'bg-[#c9a84c]/5 border-[#c9a84c]/50 text-[#c9a84c]';
-                                    badgeClass = 'bg-[#c9a84c] border-[#c9a84c] text-[#080808]';
+                                    buttonClass = 'bg-primary/5 border-primary/50 text-primary';
+                                    badgeClass = 'bg-primary border-primary text-primary-foreground';
                                 } else {
-                                    buttonClass = 'opacity-30 border-[#1e1e1e] bg-[#080808] text-[#5a5652]';
+                                    buttonClass = 'opacity-30 border-border bg-background text-muted-foreground';
                                 }
                             }
 

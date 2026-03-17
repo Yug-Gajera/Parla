@@ -39,7 +39,7 @@ function highlightWord(sentence: string, word: string): React.ReactNode {
     const parts = sentence.split(regex);
     return parts.map((part, i) =>
         regex.test(part)
-            ? <strong key={i} className="text-[#f0ece4] font-semibold">{part}</strong>
+            ? <strong key={i} className="text-text-primary font-semibold">{part}</strong>
             : part
     );
 }
@@ -60,25 +60,25 @@ export default function WordPopover({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ type: 'spring', damping: 25, stiffness: 400 }}
-            className="fixed bottom-[24px] left-0 right-0 z-[70] px-[16px] pointer-events-none flex justify-center"
+            className="fixed bottom-6 left-0 right-0 z-[70] px-4 pointer-events-none flex justify-center"
         >
             <div
-                className="pointer-events-auto w-full max-w-[340px] bg-[#141414] border border-[#1e1e1e] rounded-[14px] p-[20px] shadow-2xl relative"
+                className="pointer-events-auto w-full max-w-[340px] bg-card border border-border rounded-xl p-5 shadow-2xl relative"
             >
                 {/* Close Button */}
                 <button
                     onClick={onDismiss}
-                    className="absolute top-[16px] right-[16px] w-[28px] h-[28px] rounded-full flex items-center justify-center bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.1)] transition-colors text-[#9a9590]"
+                    className="absolute top-4 right-4 w-7 h-7 rounded-full flex items-center justify-center bg-surface hover:bg-border transition-colors text-text-secondary"
                 >
-                    <X className="w-[14px] h-[14px]" />
+                    <X className="w-3.5 h-3.5" />
                 </button>
 
                 {/* Loading State */}
                 {isLoading && (
-                    <div className="flex flex-col items-center py-[24px] gap-[12px]">
-                        <Loader2 className="w-[20px] h-[20px] text-[#c9a84c] animate-spin" />
-                        <p className="text-[14px] text-[#9a9590]">
-                            Looking up <span className="text-[#f0ece4] font-medium">{wordData?.word || 'word'}</span>...
+                    <div className="flex flex-col items-center py-6 gap-3">
+                        <Loader2 className="w-5 h-5 text-gold animate-spin" />
+                        <p className="text-sm text-text-muted">
+                            Looking up <span className="text-text-primary font-medium">{wordData?.word || 'word'}</span>...
                         </p>
                     </div>
                 )}
@@ -87,25 +87,25 @@ export default function WordPopover({
                 {!isLoading && wordData && (
                     <div className="flex flex-col">
                         {/* Header */}
-                        <div className="mb-[20px] pr-[32px]">
-                            <h3 className="font-display text-[26px] font-semibold text-[#f0ece4] leading-none mb-[8px]">
+                        <div className="mb-5 pr-8">
+                            <h3 className="font-display text-2xl font-semibold text-text-primary leading-none mb-2">
                                 {wordData.word}
                             </h3>
                             {wordData.part_of_speech && (
-                                <span className="inline-block px-[8px] py-[2px] rounded-md bg-[rgba(255,255,255,0.05)] border border-[#2a2a2a] text-[#9a9590] text-[11px] font-medium uppercase tracking-wider">
+                                <span className="inline-block px-2 py-0.5 rounded-md bg-surface border border-border-strong text-text-muted text-[11px] font-medium uppercase tracking-wider font-mono-num">
                                     {wordData.part_of_speech}
                                 </span>
                             )}
                         </div>
 
                          {/* Definitions */}
-                         <div className="flex flex-col gap-[12px] mb-[20px]">
+                         <div className="flex flex-col gap-3 mb-5">
                             {/* English */}
                             {wordData.translation && (
                                 <div className="flex flex-col">
-                                    <span className="text-[11px] font-medium text-[#5a5652] uppercase tracking-widest mb-[4px]">English</span>
-                                    <div className="bg-[#0f0f0f] border border-[#1e1e1e] rounded-lg px-[12px] py-[10px]">
-                                        <p className="text-[15px] text-[#f0ece4]">{wordData.translation}</p>
+                                    <span className="text-[11px] font-medium text-text-muted uppercase tracking-widest mb-1 font-mono-num">English</span>
+                                    <div className="bg-surface border border-border rounded-lg px-3 py-2.5">
+                                        <p className="text-[15px] text-text-primary">{wordData.translation}</p>
                                     </div>
                                 </div>
                             )}
@@ -113,18 +113,18 @@ export default function WordPopover({
                             {/* Spanish Context */}
                             {wordData.spanish_explanation && (
                                 <div className="flex flex-col">
-                                    <span className="text-[11px] font-medium text-[#5a5652] uppercase tracking-widest mb-[4px]">Español</span>
-                                    <div className="bg-[rgba(201,168,76,0.05)] border border-[rgba(201,168,76,0.15)] rounded-lg px-[12px] py-[10px]">
-                                        <p className="text-[14px] text-[#e4c76b] italic">{wordData.spanish_explanation}</p>
+                                    <span className="text-[11px] font-medium text-text-muted uppercase tracking-widest mb-1 font-mono-num">Español</span>
+                                    <div className="bg-gold-subtle border border-gold-border rounded-lg px-3 py-2.5">
+                                        <p className="text-sm text-gold italic">{wordData.spanish_explanation}</p>
                                     </div>
                                 </div>
                             )}
 
                              {/* Given Context */}
                              {wordData.in_context && (
-                                <div className="flex flex-col mt-[4px]">
-                                    <span className="text-[11px] font-medium text-[#5a5652] uppercase tracking-widest mb-[4px]">In Context</span>
-                                    <p className="text-[14px] text-[#9a9590] leading-[1.6]">
+                                <div className="flex flex-col mt-1">
+                                    <span className="text-[11px] font-medium text-text-muted uppercase tracking-widest mb-1 font-mono-num">In Context</span>
+                                    <p className="text-sm text-text-secondary leading-relaxed">
                                         "{highlightWord(wordData.in_context, wordData.word)}"
                                     </p>
                                 </div>
@@ -133,35 +133,35 @@ export default function WordPopover({
 
                          {/* Limit Notice */}
                          {wordData.note === 'Daily lookup limit reached' && (
-                            <p className="text-[12px] text-[#fb923c] mb-[16px] text-center px-[8px] bg-[rgba(251,146,60,0.1)] py-[8px] rounded-lg border border-[rgba(251,146,60,0.2)]">
+                            <p className="text-xs text-error mb-4 text-center px-2 bg-error-subtle py-2 rounded-lg border border-error-border">
                                 Daily word lookup limit reached. Try again tomorrow.
                             </p>
                         )}
 
                         {/* Actions */}
-                        <div className="flex flex-col gap-[8px] mt-auto">
+                        <div className="flex flex-col gap-2 mt-auto">
                             {wordData.in_deck ? (
-                                <div className="flex items-center justify-center gap-[6px] py-[8px] bg-[rgba(74,222,128,0.05)] border border-[rgba(74,222,128,0.15)] rounded-lg">
-                                    <Check className="w-[14px] h-[14px] text-[#4ade80]" />
-                                    <span className="text-[#4ade80] text-[13px] font-medium">
+                                <div className="flex items-center justify-center gap-1.5 py-2 bg-success-subtle border border-success/20 rounded-lg">
+                                    <Check className="w-3.5 h-3.5 text-success" />
+                                    <span className="text-success text-[13px] font-medium font-mono-num">
                                         Saved {wordData.deck_status ? ` · ${wordData.deck_status}` : ''}
                                     </span>
                                 </div>
                             ) : onAddToDeck && (
                                 <button
                                     onClick={() => onAddToDeck(wordData.word)}
-                                    className="btn btn-primary w-full h-[40px]"
+                                    className="btn-primary w-full h-10 flex items-center justify-center gap-2 rounded-xl text-sm font-bold uppercase tracking-widest"
                                 >
-                                    <Plus className="w-[16px] h-[16px]" /> Add to Deck
+                                    <Plus className="w-4 h-4" /> Add to Deck
                                 </button>
                             )}
 
                             {showUseInReply && onUseInReply && (
                                 <button
                                     onClick={() => onUseInReply(wordData.word)}
-                                    className="btn btn-secondary w-full h-[40px]"
+                                    className="btn-secondary w-full h-10 flex items-center justify-center gap-2 rounded-xl text-sm font-bold uppercase tracking-widest"
                                 >
-                                    <BookOpen className="w-[16px] h-[16px]" /> Use in Reply
+                                    <BookOpen className="w-4 h-4" /> Use in Reply
                                 </button>
                             )}
                         </div>
