@@ -11,6 +11,7 @@ import {
     LayoutDashboard, Layers, BookOpen, Mic2, Trophy, User, 
     AudioLines, Settings2, GraduationCap, Sparkles, BarChart3, LogOut 
 } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 const NAV_ITEMS = [
     { icon: LayoutDashboard, label: 'Home', href: '/home' },
@@ -104,17 +105,25 @@ export default function DashboardShell({ children }: { children: React.ReactNode
                     <div className="w-9 h-9 rounded-full bg-accent/10 border border-accent-border text-accent font-serif font-semibold flex items-center justify-center">
                         FL
                     </div>
-                    <div className="flex flex-col">
-                        <span className="text-sm font-medium text-text-primary tracking-wide">Learner</span>
+                    <div className="flex flex-col flex-1 overflow-hidden">
+                        <span className="text-sm font-medium text-text-primary tracking-wide truncate">Learner</span>
                         <span className="text-[10px] font-mono text-accent uppercase tracking-widest font-bold">Immersion Tier</span>
                     </div>
                 </div>
             </aside>
 
+            {/* ── Top Bar (Desktop) ── */}
+            <header className="hidden md:flex fixed top-0 right-0 left-[240px] h-[64px] bg-background/80 backdrop-blur-md border-b border-border items-center justify-end px-8 z-40">
+                <div className="flex items-center gap-4">
+                    <ThemeToggle />
+                </div>
+            </header>
+
             {/* ── Main Content Area ── */}
-            <main className="flex-1 flex flex-col w-full pb-[80px] md:pb-0 min-h-screen max-w-[900px] mx-auto overflow-x-hidden relative">
-                {/* Mobile header with settings gear */}
-                <div className="md:hidden absolute top-0 right-[16px] pt-[24px] z-30">
+            <main className="flex-1 flex flex-col w-full pb-[80px] md:pb-0 md:pt-[64px] min-h-screen max-w-[900px] mx-auto overflow-x-hidden relative">
+                {/* Mobile header with settings & theme toggle */}
+                <div className="md:hidden absolute top-0 right-[16px] pt-[24px] z-30 flex items-center gap-2">
+                    <ThemeToggle />
                     <Link
                         href="/settings"
                         className="p-[8px] rounded-full text-text-secondary hover:text-text-primary hover:bg-accent-subtle transition-colors"

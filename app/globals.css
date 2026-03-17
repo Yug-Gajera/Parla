@@ -52,16 +52,14 @@
     --transition-slow: 0.4s ease;
   }
 
-  /* DARK THEME (Toggle Backup) */
+  /* DARK THEME */
   [data-theme="dark"] {
     --color-bg: #080808;
     --color-surface: #0f0f0f;
     --color-card: #141414;
-    --color-card-hover: #171717;
-
-    --color-border: #1e1e1e;
-    --color-border-strong: #2a2a2a;
-
+    --color-card-hover: #1a1a1a;
+    --color-border: #242424;
+    --color-border-strong: #2e2e2e;
     --color-text-primary: #f0ece4;
     --color-text-secondary: #9a9590;
     --color-text-muted: #5a5652;
@@ -78,17 +76,19 @@
 
     --color-success: #4ade80;
     --color-success-subtle: rgba(74,222,128,0.1);
+    --color-success-border: rgba(74,222,128,0.2);
 
     --color-warning: #C9A84C;
     --color-warning-subtle: rgba(201,168,76,0.1);
 
     --color-error: #f87171;
     --color-error-subtle: rgba(248,113,113,0.1);
+    --color-error-border: rgba(248,113,113,0.2);
 
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
-    --shadow-xl: 0 20px 60px rgba(0,0,0,0.6);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.6);
+    --shadow-xl: 0 20px 60px rgba(0,0,0,0.7);
   }
 }
 
@@ -96,6 +96,20 @@
 @layer base {
   * {
     @apply border-border;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: 
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.15s ease;
+  }
+
+  .no-transition,
+  .no-transition * {
+    transition: none !important;
   }
 
   body {
@@ -1008,4 +1022,273 @@
     color: #9a9590;
     margin-top: 3px;
   }
+}
+
+/* ────────────────────────────────────────────────────────────
+   DARK THEME EXPLICIT OVERRIDES
+   ──────────────────────────────────────────────────────────── */
+
+/* Cards */
+[data-theme="dark"] .card,
+[data-theme="dark"] [class*="card"],
+[data-theme="dark"] .parlova-card {
+  background: #141414 !important;
+  border-color: #242424 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4) !important;
+}
+
+[data-theme="dark"] .card:hover,
+[data-theme="dark"] [class*="card"]:hover,
+[data-theme="dark"] .parlova-card:hover {
+  background: #1a1a1a !important;
+  border-color: #2e2e2e !important;
+}
+
+/* Page background */
+[data-theme="dark"] body,
+[data-theme="dark"] main,
+[data-theme="dark"] .page-wrapper {
+  background: #080808 !important;
+}
+
+/* Surface elements */
+[data-theme="dark"] nav,
+[data-theme="dark"] aside,
+[data-theme="dark"] .sidebar,
+[data-theme="dark"] .surface,
+[data-theme="dark"] .nav-sidebar {
+  background: #0f0f0f !important;
+  border-color: #242424 !important;
+}
+
+/* Top navigation bar backdrop */
+[data-theme="dark"] header,
+[data-theme="dark"] .navbar,
+[data-theme="dark"] .topnav,
+[data-theme="dark"] .top-bar {
+  background: rgba(8,8,8,0.85) !important;
+  border-bottom-color: #242424 !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* Inputs */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] .parlova-input {
+  background: #141414 !important;
+  border-color: #2e2e2e !important;
+  color: #f0ece4 !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #5a5652 !important;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] .parlova-input:focus {
+  border-color: rgba(232,82,26,0.4) !important;
+  box-shadow: 0 0 0 3px rgba(232,82,26,0.1) !important;
+}
+
+/* Buttons — secondary */
+[data-theme="dark"] .btn-secondary {
+  background: #141414 !important;
+  border-color: #2e2e2e !important;
+  color: #f0ece4 !important;
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+  background: #1a1a1a !important;
+  border-color: rgba(232,82,26,0.25) !important;
+}
+
+/* Buttons — ghost */
+[data-theme="dark"] .btn-ghost {
+  color: #9a9590 !important;
+}
+
+[data-theme="dark"] .btn-ghost:hover {
+  background: rgba(255,255,255,0.05) !important;
+  color: #f0ece4 !important;
+}
+
+/* Conversation Screen Overrides */
+[data-theme="dark"] .messages-area {
+  background: #080808 !important;
+}
+
+[data-theme="dark"] .bubble-ai {
+  background: #141414 !important;
+  border-color: #242424 !important;
+  color: #f0ece4 !important;
+}
+
+/* Mic button idle */
+[data-theme="dark"] .mic-button,
+[data-theme="dark"] .mic-btn {
+  background: #141414 !important;
+  border-color: #2e2e2e !important;
+}
+
+[data-theme="dark"] .mic-button:hover,
+[data-theme="dark"] .mic-btn:hover {
+  border-color: rgba(232,82,26,0.3) !important;
+  box-shadow: 0 4px 24px rgba(232,82,26,0.1) !important;
+}
+
+/* Article Reader Overrides */
+[data-theme="dark"] .article-content,
+[data-theme="dark"] .reader-body {
+  background: #080808 !important;
+  color: #e0dcd4 !important;
+}
+
+[data-theme="dark"] .article-title,
+[data-theme="dark"] .reader-title {
+  color: #f0ece4 !important;
+}
+
+[data-theme="dark"] .word-interactive:hover,
+[data-theme="dark"] .reader-word:hover {
+  background: rgba(232,82,26,0.15) !important;
+  color: #F05E24 !important;
+}
+
+[data-theme="dark"] .word-popup {
+  background: #1a1a1a !important;
+  border-color: #2e2e2e !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7) !important;
+}
+
+[data-theme="dark"] .word-popup-english {
+  background: #222222 !important;
+}
+
+[data-theme="dark"] .word-popup-spanish {
+  background: rgba(232,82,26,0.08) !important;
+  border-color: rgba(232,82,26,0.2) !important;
+}
+
+/* Score Card Overrides */
+[data-theme="dark"] .score-card {
+  background: linear-gradient(
+    135deg,
+    #141414 0%,
+    rgba(201,168,76,0.05) 100%
+  ) !important;
+  border-color: rgba(201,168,76,0.2) !important;
+}
+
+/* Vocabulary Deck Overrides */
+[data-theme="dark"] .flashcard {
+  background: #141414 !important;
+  border-color: #242424 !important;
+}
+
+[data-theme="dark"] .flashcard-word {
+  color: #f0ece4 !important;
+}
+
+[data-theme="dark"] .flashcard-translation {
+  color: #9a9590 !important;
+}
+
+/* Difficulty buttons */
+[data-theme="dark"] .btn-again,
+[data-theme="dark"] .diff-again {
+  background: rgba(248,113,113,0.1) !important;
+  color: #f87171 !important;
+  border-color: rgba(248,113,113,0.2) !important;
+}
+
+[data-theme="dark"] .btn-hard,
+[data-theme="dark"] .diff-hard {
+  background: rgba(201,168,76,0.1) !important;
+  color: #C9A84C !important;
+  border-color: rgba(201,168,76,0.2) !important;
+}
+
+[data-theme="dark"] .btn-good,
+[data-theme="dark"] .diff-good {
+  background: rgba(255,255,255,0.05) !important;
+  color: #9a9590 !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+
+[data-theme="dark"] .btn-easy,
+[data-theme="dark"] .diff-easy {
+  background: rgba(74,222,128,0.1) !important;
+  color: #4ade80 !important;
+  border-color: rgba(74,222,128,0.2) !important;
+}
+
+/* Leaderboard Overrides */
+[data-theme="dark"] .leaderboard-item,
+[data-theme="dark"] .lb-item {
+  background: #141414 !important;
+  border-color: #242424 !important;
+}
+
+[data-theme="dark"] .leaderboard-item-me,
+[data-theme="dark"] .lb-item-self {
+  background: rgba(232,82,26,0.06) !important;
+  border-color: rgba(232,82,26,0.2) !important;
+}
+
+/* Level Test Overrides */
+[data-theme="dark"] .answer-option {
+  background: #141414 !important;
+  border-color: #2e2e2e !important;
+  color: #f0ece4 !important;
+}
+
+[data-theme="dark"] .answer-option:hover {
+  background: rgba(232,82,26,0.08) !important;
+  border-color: rgba(232,82,26,0.25) !important;
+}
+
+[data-theme="dark"] .answer-option.selected,
+[data-theme="dark"] .answer-option-selected {
+  background: rgba(232,82,26,0.08) !important;
+  border-color: rgba(232,82,26,0.4) !important;
+}
+
+[data-theme="dark"] .answer-option.correct,
+[data-theme="dark"] .answer-option-correct {
+  background: rgba(74,222,128,0.08) !important;
+  border-color: rgba(74,222,128,0.3) !important;
+  color: #4ade80 !important;
+}
+
+[data-theme="dark"] .answer-option.incorrect,
+[data-theme="dark"] .answer-option-incorrect {
+  background: rgba(248,113,113,0.08) !important;
+  border-color: rgba(248,113,113,0.3) !important;
+  color: #f87171 !important;
+}
+
+/* Onboarding Overrides */
+[data-theme="dark"] .onboarding-card {
+  background: #141414 !important;
+  border-color: #242424 !important;
+}
+
+[data-theme="dark"] .onboarding-card.selected {
+  background: rgba(232,82,26,0.08) !important;
+  border-color: rgba(232,82,26,0.3) !important;
+}
+
+/* Skeleton Overrides */
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    #141414 25%,
+    #1e1e1e 50%,
+    #141414 75%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer 1.5s infinite !important;
 }
