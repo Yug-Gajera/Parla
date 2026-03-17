@@ -83,7 +83,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 className="fixed inset-0 z-[60] bg-background/90 backdrop-blur-sm flex items-center justify-center">
                 <div className="flex flex-col items-center">
-                    <Loader2 className="w-[32px] h-[32px] text-gold animate-spin mb-[16px]" />
+                    <Loader2 className="w-[32px] h-[32px] text-[#E8521A] animate-spin mb-[16px]" />
                     <p className="text-text-secondary text-[15px]">Loading story...</p>
                 </div>
             </motion.div>
@@ -115,10 +115,10 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                 className="fixed inset-0 z-[60] bg-background/90 backdrop-blur-sm flex items-center justify-center p-[24px]">
                 <motion.div initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 0.2 }} className="max-w-[400px] w-full">
-                    <div className="bg-surface border-2 border-gold/30 shadow-xl rounded-2xl text-center p-[40px]">
+                    <div className="bg-surface border-2 border-[#E8521A]/30 shadow-xl rounded-2xl text-center p-[40px]">
                         <motion.div initial={{ scale: 0 }} animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
                             transition={{ delay: 0.3, type: 'spring' }}
-                            className="mx-auto mb-[24px] w-[64px] h-[64px] rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold">
+                            className="mx-auto mb-[24px] w-[64px] h-[64px] rounded-full bg-[#E8521A]/10 border border-[#E8521A]/20 flex items-center justify-center text-[#E8521A]">
                             <Award className="w-[32px] h-[32px]" />
                         </motion.div>
 
@@ -126,7 +126,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                         <p className="text-[15px] text-text-secondary mb-[32px]">{comprehensionResult.message}</p>
 
                         <div className="mb-[32px]">
-                            <div className="font-mono-num text-[48px] font-semibold leading-none mb-[8px] text-gold">
+                            <div className="font-mono-num text-[48px] font-semibold leading-none mb-[8px] text-[#E8521A]">
                                 {comprehensionResult.correct}<span className="text-[24px] text-text-muted">/{comprehensionResult.total}</span>
                             </div>
                             <p className="text-[13px] text-text-muted uppercase tracking-widest font-medium">
@@ -145,7 +145,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                             </div>
                         </div>
 
-                        <button onClick={onClose} className="w-full py-3 rounded-xl bg-gold text-bg font-semibold hover:brightness-110 transition-all font-mono-num uppercase tracking-wider text-sm shadow-md">
+                        <button onClick={onClose} className="w-full py-3 rounded-xl bg-[#E8521A] text-bg font-semibold hover:brightness-110 transition-all font-mono-num uppercase tracking-wider text-sm shadow-md">
                             Back to Stories
                         </button>
                     </div>
@@ -168,8 +168,8 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                     <div className="flex gap-[6px]">
                         {story.comprehension_questions.map((_: unknown, i: number) => (
                             <div key={i} className={`h-[4px] rounded-full transition-all duration-300 ${
-                                i === currentQuestion ? 'w-[24px] bg-gold' :
-                                i < currentQuestion ? 'w-[12px] bg-gold opacity-50' : 'w-[12px] bg-border-strong'
+                                i === currentQuestion ? 'w-[24px] bg-[#E8521A]' :
+                                i < currentQuestion ? 'w-[12px] bg-[#E8521A] opacity-50' : 'w-[12px] bg-border-strong'
                             }`} />
                         ))}
                     </div>
@@ -190,7 +190,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                                     if (optIdx === q.correct) optClass = 'border-green-500/30 bg-green-500/10 text-green-700';
                                     else if (optIdx === selected && !isCorrect) optClass = 'border-error/30 bg-error/10 text-error';
                                 } else if (selected === optIdx) {
-                                    optClass = 'border-gold bg-gold/10 text-text-primary shadow-md';
+                                    optClass = 'border-[#E8521A] bg-[#E8521A]/10 text-text-primary shadow-md';
                                 }
                                 return (
                                     <button key={optIdx}
@@ -216,9 +216,9 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                             )}
                         </AnimatePresence>
                         {!showExplanation ? (
-                            <button className="w-full h-[56px] text-[16px] rounded-xl bg-gold text-bg font-semibold hover:brightness-110 tracking-widest font-mono-num uppercase disabled:opacity-50 disabled:cursor-not-allowed shadow-md transition-all" disabled={selected === null} onClick={handleCheckAnswer}>Check Answer</button>
+                            <button className="w-full h-[56px] text-[16px] rounded-xl bg-[#E8521A] text-bg font-semibold hover:brightness-110 tracking-widest font-mono-num uppercase disabled:opacity-50 disabled:cursor-not-allowed shadow-md transition-all" disabled={selected === null} onClick={handleCheckAnswer}>Check Answer</button>
                         ) : (
-                            <button className="w-full h-[56px] text-[16px] rounded-xl bg-gold text-bg font-semibold hover:brightness-110 tracking-widest font-mono-num uppercase shadow-md transition-all" onClick={handleNextQuestion}>
+                            <button className="w-full h-[56px] text-[16px] rounded-xl bg-[#E8521A] text-bg font-semibold hover:brightness-110 tracking-widest font-mono-num uppercase shadow-md transition-all" onClick={handleNextQuestion}>
                                 {currentQuestion < story.comprehension_questions.length - 1 ? 'Next Question' : 'See Results'}
                             </button>
                         )}
@@ -235,7 +235,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
             
             {/* Progress bar */}
             <div className="absolute top-0 left-0 right-0 h-[3px] bg-surface z-10">
-                <motion.div className="h-full bg-gold"
+                <motion.div className="h-full bg-[#E8521A]"
                     animate={{ width: `${readingProgress}%` }} transition={{ ease: 'easeOut' }} />
             </div>
 
@@ -252,7 +252,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                 <button onClick={toggleVocabPanel} className="w-[40px] h-[40px] rounded-full flex items-center justify-center hover:bg-black/5 transition-colors text-text-primary relative">
                     <BookOpen className="w-[18px] h-[18px]" />
                     {story.vocabulary_items?.length > 0 && (
-                        <span className="absolute top-[8px] right-[8px] w-[8px] h-[8px] bg-gold rounded-full" />
+                        <span className="absolute top-[8px] right-[8px] w-[8px] h-[8px] bg-[#E8521A] rounded-full" />
                     )}
                 </button>
             </header>
@@ -263,7 +263,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                     
                     {/* Meta Tags */}
                     <div className="flex items-center gap-[8px] flex-wrap mb-[24px]">
-                        <span className="px-3 py-1 rounded-full text-[11px] font-mono-num font-bold uppercase tracking-widest bg-gold/10 text-gold border border-gold/20 flex shadow-md">
+                        <span className="px-3 py-1 rounded-full text-[11px] font-mono-num font-bold uppercase tracking-widest bg-[#E8521A]/10 text-[#E8521A] border border-[#E8521A]/20 flex shadow-md">
                             Level {story.cefr_level}
                         </span>
                         {cat && (
@@ -297,7 +297,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                     <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }}
                         className="absolute bottom-[40px] left-0 right-0 z-[40] flex justify-center pointer-events-none px-[24px]">
                         <button onClick={handleStartComprehension}
-                            className="h-[56px] px-[32px] rounded-xl bg-gold text-bg font-semibold hover:brightness-110 tracking-widest font-mono-num uppercase pointer-events-auto flex items-center shadow-lg transition-all">
+                            className="h-[56px] px-[32px] rounded-xl bg-[#E8521A] text-bg font-semibold hover:brightness-110 tracking-widest font-mono-num uppercase pointer-events-auto flex items-center shadow-lg transition-all">
                             <Sparkles className="w-[18px] h-[18px] mr-[8px]" /> Check Understanding
                         </button>
                     </motion.div>
@@ -345,7 +345,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                                             </div>
                                             <p className="text-[15px] text-text-secondary truncate">{v.translation}</p>
                                         </div>
-                                        <button className="w-[36px] h-[36px] shrink-0 rounded-full flex items-center justify-center border border-border-strong text-gold bg-transparent hover:bg-gold/10 hover:border-gold/30 transition-all">
+                                        <button className="w-[36px] h-[36px] shrink-0 rounded-full flex items-center justify-center border border-border-strong text-[#E8521A] bg-transparent hover:bg-[#E8521A]/10 hover:border-[#E8521A]/30 transition-all">
                                             <Plus className="w-[16px] h-[16px]" />
                                         </button>
                                     </div>
@@ -377,7 +377,7 @@ function InteractiveText({ content, onTapWord }: { content: string; onTapWord: (
 function DialogueContent({ content, onTapWord }: { content: string; onTapWord: (word: string, ctx: string) => void }) {
     const lines = content.split('\n').filter(Boolean);
     const speakers: string[] = [];
-    const speakerColors = ['border-gold', 'border-emerald-500'];
+    const speakerColors = ['border-[#E8521A]', 'border-emerald-500'];
 
     return (
         <div className="space-y-[16px]">
@@ -416,7 +416,7 @@ function DialogueContent({ content, onTapWord }: { content: string; onTapWord: (
 function LetterContent({ content, onTapWord }: { content: string; onTapWord: (word: string, ctx: string) => void }) {
     const paragraphs = content.split('\n\n').filter(Boolean);
     return (
-        <div className="space-y-[24px] pl-[20px] border-l-[3px] border-gold/30">
+        <div className="space-y-[24px] pl-[20px] border-l-[3px] border-[#E8521A]/30">
             {paragraphs.map((p, i) => {
                 const isFirst = i === 0;
                 const isLast = i === paragraphs.length - 1;
@@ -456,7 +456,7 @@ function WordTokens({ text, onTapWord }: { text: string; onTapWord: (word: strin
                 return (
                     <span key={i}
                         onClick={() => onTapWord(cleanWord, text)}
-                        className="cursor-pointer transition-colors duration-200 hover:text-gold rounded-[2px]">
+                        className="cursor-pointer transition-colors duration-200 hover:text-[#E8521A] rounded-[2px]">
                         {token}
                     </span>
                 );

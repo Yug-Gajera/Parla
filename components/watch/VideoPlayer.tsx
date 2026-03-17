@@ -118,7 +118,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
     if (isLoading) {
         return (
             <div className="fixed inset-0 z-50 bg-background flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-gold" />
+                <Loader2 className="w-8 h-8 animate-spin text-[#E8521A]" />
             </div>
         );
     }
@@ -166,7 +166,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                                             {transcript[currentSubtitleIndex].text.split(/\s+/).map((w, i) => (
                                                 <span
                                                     key={i}
-                                                    className="cursor-pointer hover:text-gold transition-colors"
+                                                    className="cursor-pointer hover:text-[#E8521A] transition-colors"
                                                     onClick={() => handleWordTap(w, transcript[currentSubtitleIndex].text)}
                                                 >{w} </span>
                                             ))}
@@ -186,7 +186,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                                             key={s}
                                             onClick={() => handleSpeedChange(s)}
                                             className={`px-3 py-1 rounded-full text-[10px] font-mono-num tracking-widest uppercase transition-colors ${
-                                                activeSpeed === s ? 'bg-card text-gold border border-border-strong' : 'text-text-secondary border border-transparent hover:text-text-muted'
+                                                activeSpeed === s ? 'bg-card text-[#E8521A] border border-border-strong' : 'text-text-secondary border border-transparent hover:text-text-muted'
                                             }`}
                                         >{s}x</button>
                                     ))}
@@ -194,7 +194,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                             </div>
                             {video.comprehension_questions?.length > 0 && (
                                 <Button size="sm" variant="outline" onClick={() => setPhase('comprehension')} className="text-[10px] uppercase tracking-widest gap-2 bg-transparent border-border text-text-primary hover:bg-card rounded-full px-5 h-8">
-                                    Initiate Quiz <ChevronRight className="w-3 h-3 text-gold" />
+                                    Initiate Quiz <ChevronRight className="w-3 h-3 text-[#E8521A]" />
                                 </Button>
                             )}
                         </div>
@@ -206,21 +206,21 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                                     key={i}
                                     className={`flex gap-5 px-4 py-3 rounded-xl cursor-pointer transition-all ${
                                         i === currentSubtitleIndex
-                                            ? 'bg-card border-l-[3px] border-l-gold shadow-lg'
+                                            ? 'bg-card border-l-[3px] border-l-[#E8521A] shadow-lg'
                                             : i < currentSubtitleIndex
                                                 ? 'opacity-40 hover:opacity-70'
                                                 : 'text-text-muted hover:bg-surface border-l-[3px] border-transparent'
                                         }`}
                                     onClick={() => seekTo(seg.start_time)}
                                 >
-                                    <span className={`text-xs font-mono-num w-12 shrink-0 pt-1 tracking-wider ${i === currentSubtitleIndex ? 'text-gold' : 'text-text-secondary'}`}>
+                                    <span className={`text-xs font-mono-num w-12 shrink-0 pt-1 tracking-wider ${i === currentSubtitleIndex ? 'text-[#E8521A]' : 'text-text-secondary'}`}>
                                         {Math.floor(seg.start_time / 60)}:{String(Math.floor(seg.start_time % 60)).padStart(2, '0')}
                                     </span>
                                     <p className={`text-base sm:text-lg leading-relaxed ${i === currentSubtitleIndex ? 'text-text-primary' : 'text-text-muted'}`}>
                                         {seg.text.split(/\s+/).map((w, j) => (
                                             <span
                                                 key={j}
-                                                className="cursor-pointer hover:text-gold transition-colors"
+                                                className="cursor-pointer hover:text-[#E8521A] transition-colors"
                                                 onClick={e => { e.stopPropagation(); handleWordTap(w, seg.text); }}
                                             >{w} </span>
                                         ))}
@@ -244,7 +244,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                         
                         {video.comprehension_questions.map((q: any, qi: number) => (
                             <Card key={qi} className="p-8 bg-card border-border rounded-2xl">
-                                <p className="font-display text-xl text-text-primary mb-6"><span className="text-gold mr-2 text-sm font-mono-num">{qi + 1}.</span> {q.question}</p>
+                                <p className="font-display text-xl text-text-primary mb-6"><span className="text-[#E8521A] mr-2 text-sm font-mono-num">{qi + 1}.</span> {q.question}</p>
                                 <div className="space-y-3">
                                     {q.options.map((opt: string, oi: number) => (
                                         <button
@@ -252,7 +252,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                                             onClick={() => handleAnswer(qi, oi)}
                                             className={`w-full text-left px-5 py-4 rounded-xl text-sm transition-all border ${
                                                 answers[qi] === oi
-                                                    ? 'border-gold bg-gold-subtle text-text-primary shadow-[0_0_15px_rgba(201,168,76,0.1)]'
+                                                    ? 'border-[#E8521A] bg-[#E8521A]/5 text-text-primary shadow-[0_0_15px_rgba(232,82,26,0.1)]'
                                                     : 'border-border bg-surface text-text-muted hover:border-border-strong hover:bg-card'
                                                 }`}
                                         >{opt}</button>
@@ -273,15 +273,15 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                 {phase === 'results' && (
                     <motion.div key="results" className="flex-1 flex items-center justify-center p-6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
                         <Card className="p-10 max-w-md w-full text-center bg-card border-border rounded-3xl shadow-2xl">
-                            <div className="w-20 h-20 rounded-full bg-background border border-border-strong flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(201,168,76,0.15)]">
-                                <Trophy className="w-8 h-8 text-gold" />
+                            <div className="w-20 h-20 rounded-full bg-background border border-border-strong flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(232,82,26,0.15)]">
+                                <Trophy className="w-8 h-8 text-[#E8521A]" />
                             </div>
                             <h3 className="text-3xl font-display text-text-primary mb-4">{comprehensionResult?.message || 'Assessment Complete'}</h3>
                             
                             {comprehensionResult?.score !== undefined && (
                                 <div className="my-8">
                                     <p className="text-text-secondary text-[10px] uppercase font-mono-num tracking-widest mb-2">Accuracy Rate</p>
-                                    <p className="text-6xl font-mono-num text-text-primary">{comprehensionResult.score}<span className="text-2xl text-gold">%</span></p>
+                                    <p className="text-6xl font-mono-num text-text-primary">{comprehensionResult.score}<span className="text-2xl text-[#E8521A]">%</span></p>
                                 </div>
                             )}
                             
@@ -292,7 +292,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                                 </div>
                                 <div>
                                     <p className="text-text-secondary text-[10px] uppercase font-mono-num tracking-widest mb-1">XP Earned</p>
-                                    <p className="text-xl font-mono-num text-gold">+{comprehensionResult?.xp_earned || 40}</p>
+                                    <p className="text-xl font-mono-num text-[#E8521A]">+{comprehensionResult?.xp_earned || 40}</p>
                                 </div>
                             </div>
                             

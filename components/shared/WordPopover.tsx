@@ -76,7 +76,7 @@ export default function WordPopover({
                 {/* Loading State */}
                 {isLoading && (
                     <div className="flex flex-col items-center py-6 gap-3">
-                        <Loader2 className="w-5 h-5 text-gold animate-spin" />
+                        <Loader2 className="w-5 h-5 text-[#E8521A] animate-spin" />
                         <p className="text-sm text-text-muted">
                             Looking up <span className="text-text-primary font-medium">{wordData?.word || 'word'}</span>...
                         </p>
@@ -114,8 +114,8 @@ export default function WordPopover({
                             {wordData.spanish_explanation && (
                                 <div className="flex flex-col">
                                     <span className="text-[11px] font-medium text-text-muted uppercase tracking-widest mb-1 font-mono-num">Español</span>
-                                    <div className="bg-gold-subtle border border-gold-border rounded-lg px-3 py-2.5">
-                                        <p className="text-sm text-gold italic">{wordData.spanish_explanation}</p>
+                                    <div className="bg-[#E8521A]/8 border border-[#E8521A]/22 rounded-lg px-3 py-2.5">
+                                        <p className="text-sm text-[#E8521A] italic">{wordData.spanish_explanation}</p>
                                     </div>
                                 </div>
                             )}

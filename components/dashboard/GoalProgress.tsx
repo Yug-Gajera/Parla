@@ -38,7 +38,7 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
 
             {/* Subtle glow if complete */}
             {percentage >= 100 && (
-                <div className="absolute inset-0 bg-gold-subtle/50 transition-opacity duration-1000 p-0 m-0" />
+                <div className="absolute inset-0 bg-[#E8521A]/4 transition-opacity duration-1000 p-0 m-0" />
             )}
 
             <div className="relative flex items-center justify-center mb-[24px] mt-[8px]">
@@ -59,7 +59,7 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
                         cy={center}
                         r={radius}
                         fill="transparent"
-                        stroke="var(--color-gold)"
+                        stroke="#E8521A"
                         strokeWidth={strokeWidth}
                         strokeLinecap="round"
                         strokeDasharray={circumference}
@@ -81,7 +81,7 @@ export default function GoalProgress({ minutesStudied, dailyGoal }: GoalProgress
             </div>
 
             <div className="text-center w-full px-[16px]">
-                <p className={`text-[13px] font-medium transition-colors duration-500 ${percentage >= 100 ? 'text-gold' : 'text-text-primary'}`}>
+                <p className={`text-[13px] font-medium transition-colors duration-500 ${percentage >= 100 ? 'text-[#E8521A]' : 'text-text-primary'}`}>
                     {message}
                 </p>
             </div>

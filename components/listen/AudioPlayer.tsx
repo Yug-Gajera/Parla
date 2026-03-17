@@ -102,7 +102,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
     if (isLoading) {
         return (
             <div className="fixed inset-0 z-50 bg-[#080808] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-[#c9a84c]" />
+                <Loader2 className="w-8 h-8 animate-spin text-[#E8521A]" />
             </div>
         );
     }
@@ -159,7 +159,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                         />
                                         <div className="w-full h-1 bg-[#1e1e1e] rounded-full overflow-hidden absolute">
                                             <div 
-                                                className="h-full bg-[#c9a84c] rounded-full" 
+                                                className="h-full bg-[#E8521A] rounded-full" 
                                                 style={{ width: `${(currentTime / (duration || 1)) * 100}%` }} 
                                             />
                                         </div>
@@ -174,7 +174,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                     </button>
                                     <button
                                         onClick={isPlaying ? pause : play}
-                                        className="w-16 h-16 rounded-full bg-[#f0ece4] flex items-center justify-center hover:bg-[#c9a84c] hover:scale-105 transition-all shadow-lg"
+                                        className="w-16 h-16 rounded-full bg-[#f0ece4] flex items-center justify-center hover:bg-[#E8521A] hover:scale-105 transition-all shadow-lg"
                                     >
                                         {isPlaying ? <Pause className="w-6 h-6 text-[#080808]" fill="currentColor" /> : <Play className="w-6 h-6 text-[#080808] ml-1" fill="currentColor" />}
                                     </button>
@@ -193,7 +193,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                                     key={s}
                                                     onClick={() => handleSpeedChange(s)}
                                                     className={`px-3 py-1 rounded-full text-[10px] font-mono tracking-widest uppercase transition-colors ${
-                                                        activeSpeed === s ? 'bg-[#141414] text-[#c9a84c] border border-[#2a2a2a]' : 'text-[#5a5652] border border-transparent hover:text-[#9a9590]'
+                                                        activeSpeed === s ? 'bg-[#141414] text-[#E8521A] border border-[#2a2a2a]' : 'text-[#5a5652] border border-transparent hover:text-[#9a9590]'
                                                     }`}
                                                 >{s}x</button>
                                             ))}
@@ -201,7 +201,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                     </div>
                                     {episode.comprehension_questions?.length > 0 && (
                                         <Button size="sm" variant="outline" onClick={() => setPhase('comprehension')} className="text-[10px] uppercase tracking-widest gap-2 bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] rounded-full px-5 h-8">
-                                            Initiate Quiz <ChevronRight className="w-3 h-3 text-[#c9a84c]" />
+                                            Initiate Quiz <ChevronRight className="w-3 h-3 text-[#E8521A]" />
                                         </Button>
                                     )}
                                 </div>
@@ -217,21 +217,21 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                             key={i}
                                             className={`flex gap-5 px-4 py-3 rounded-xl cursor-pointer transition-all ${
                                                 i === currentTranscriptIndex
-                                                    ? 'bg-[#141414] border-l-[3px] border-l-[#c9a84c] shadow-lg'
+                                                    ? 'bg-[#141414] border-l-[3px] border-l-[#E8521A] shadow-lg'
                                                     : i < currentTranscriptIndex 
                                                         ? 'opacity-40 hover:opacity-70' 
                                                         : 'text-[#9a9590] hover:bg-[#0f0f0f] border-l-[3px] border-transparent'
                                                 }`}
                                             onClick={() => seek(seg.start_time)}
                                         >
-                                            <span className={`text-xs font-mono w-12 shrink-0 pt-1 tracking-wider ${i === currentTranscriptIndex ? 'text-[#c9a84c]' : 'text-[#5a5652]'}`}>
+                                            <span className={`text-xs font-mono w-12 shrink-0 pt-1 tracking-wider ${i === currentTranscriptIndex ? 'text-[#E8521A]' : 'text-[#5a5652]'}`}>
                                                 {Math.floor(seg.start_time / 60)}:{String(Math.floor(seg.start_time % 60)).padStart(2, '0')}
                                             </span>
                                             <p className={`text-lg sm:text-xl font-serif leading-relaxed ${i === currentTranscriptIndex ? 'text-[#f0ece4]' : 'text-[#9a9590]'}`}>
                                                 {seg.text.split(/\s+/).map((w, j) => (
                                                     <span
                                                         key={j}
-                                                        className="cursor-pointer hover:text-[#c9a84c] transition-colors"
+                                                        className="cursor-pointer hover:text-[#E8521A] transition-colors"
                                                         onClick={e => { e.stopPropagation(); handleWordTap(w, seg.text); }}
                                                     >{w} </span>
                                                 ))}
@@ -241,12 +241,12 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                 </div>
                             ) : transcriptText ? (
                                 <div className="bg-[#141414] p-8 rounded-2xl border border-[#1e1e1e]">
-                                    <p className="text-[10px] text-[#c9a84c] mb-6 uppercase tracking-[0.2em] font-mono">Full interactive protocol offline. Standard display active.</p>
+                                    <p className="text-[10px] text-[#E8521A] mb-6 uppercase tracking-[0.2em] font-mono">Full interactive protocol offline. Standard display active.</p>
                                     <div className="text-lg font-serif text-[#f0ece4] leading-relaxed whitespace-pre-wrap">
                                         {transcriptText.split(/\s+/).map((w, i) => (
                                             <span
                                                 key={i}
-                                                className="cursor-pointer hover:text-[#c9a84c] transition-colors"
+                                                className="cursor-pointer hover:text-[#E8521A] transition-colors"
                                                 onClick={() => handleWordTap(w, transcriptText.slice(Math.max(0, transcriptText.indexOf(w) - 30), transcriptText.indexOf(w) + 50))}
                                             >{w} </span>
                                         ))}
@@ -271,7 +271,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                         
                         {episode.comprehension_questions.map((q: any, qi: number) => (
                             <Card key={qi} className="p-8 bg-[#141414] border-[#1e1e1e] rounded-2xl">
-                                <p className="font-serif text-xl text-[#f0ece4] mb-6"><span className="text-[#c9a84c] mr-2 text-sm font-mono">{qi + 1}.</span> {q.question}</p>
+                                <p className="font-serif text-xl text-[#f0ece4] mb-6"><span className="text-[#E8521A] mr-2 text-sm font-mono">{qi + 1}.</span> {q.question}</p>
                                 <div className="space-y-3">
                                     {q.options.map((opt: string, oi: number) => (
                                         <button
@@ -279,7 +279,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                             onClick={() => handleAnswer(qi, oi)}
                                             className={`w-full text-left px-5 py-4 rounded-xl text-sm transition-all border ${
                                                 answers[qi] === oi
-                                                    ? 'border-[#c9a84c] bg-[#c9a84c]/10 text-[#f0ece4] shadow-[0_0_15px_rgba(201,168,76,0.1)]'
+                                                    ? 'border-[#E8521A] bg-[#E8521A]/10 text-[#f0ece4] shadow-[0_0_15px_rgba(232,82,26,0.1)]'
                                                     : 'border-[#1e1e1e] bg-[#0f0f0f] text-[#9a9590] hover:border-[#2a2a2a] hover:bg-[#1e1e1e]'
                                                 }`}
                                         >{opt}</button>
@@ -291,7 +291,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={Object.keys(answers).length < episode.comprehension_questions.length}
-                                className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#c9a84c] text-[#080808] hover:bg-[#b98e72] transition-colors disabled:opacity-50 disabled:bg-[#141414] disabled:text-[#5a5652]"
+                                className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#E8521A] text-[#080808] hover:bg-[#D94A15] transition-colors disabled:opacity-50 disabled:bg-[#141414] disabled:text-[#5a5652]"
                             >Submit Assessment</Button>
                         </div>
                     </motion.div>
@@ -301,14 +301,14 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                     <motion.div key="results" className="flex-1 flex items-center justify-center p-6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
                         <Card className="p-10 max-w-md w-full text-center bg-[#141414] border-[#1e1e1e] rounded-3xl shadow-2xl">
                             <div className="w-20 h-20 rounded-full bg-[#080808] border border-[#2a2a2a] flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(201,168,76,0.15)]">
-                                <Trophy className="w-8 h-8 text-[#c9a84c]" />
+                                <Trophy className="w-8 h-8 text-[#E8521A]" />
                             </div>
                             <h3 className="text-3xl font-serif text-[#f0ece4] mb-4">{comprehensionResult?.message || 'Assessment Complete'}</h3>
                             
                             {comprehensionResult?.score !== undefined && (
                                 <div className="my-8">
                                     <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-2">Accuracy Rate</p>
-                                    <p className="text-6xl font-mono text-[#f0ece4]">{comprehensionResult.score}<span className="text-2xl text-[#c9a84c]">%</span></p>
+                                    <p className="text-6xl font-mono text-[#f0ece4]">{comprehensionResult.score}<span className="text-2xl text-[#E8521A]">%</span></p>
                                 </div>
                             )}
                             
@@ -319,13 +319,13 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                 </div>
                                 <div>
                                     <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-1">XP Earned</p>
-                                    <p className="text-xl font-mono text-[#c9a84c]">+{comprehensionResult?.xp_earned || 40}</p>
+                                    <p className="text-xl font-mono text-[#E8521A]">+{comprehensionResult?.xp_earned || 40}</p>
                                 </div>
                             </div>
                             
                             <Button 
                                 onClick={onClose} 
-                                className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#f0ece4] text-[#080808] hover:bg-[#c9a84c] transition-colors"
+                                className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#f0ece4] text-[#080808] hover:bg-[#E8521A] transition-colors"
                             >Return to Library</Button>
                         </Card>
                     </motion.div>

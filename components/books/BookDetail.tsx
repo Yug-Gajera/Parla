@@ -23,9 +23,9 @@ const LEVEL_COLORS: Record<string, string> = {
     A1: 'border-border text-text-primary',
     A2: 'border-border text-text-primary',
     B1: 'border-border text-text-primary',
-    B2: 'border-gold-border text-gold',
-    C1: 'border-gold-border text-gold',
-    C2: 'border-gold-border text-gold',
+    B2: 'border-[#E8521A]/30 text-[#E8521A]',
+    C1: 'border-[#E8521A]/30 text-[#E8521A]',
+    C2: 'border-[#E8521A]/30 text-[#E8521A]',
 };
 
 export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetailProps) {
@@ -55,7 +55,7 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
     if (isLoading) {
         return (
             <div className="fixed inset-0 z-[60] bg-background flex items-center justify-center">
-                <Loader2 className="w-10 h-10 text-gold animate-spin" />
+                <Loader2 className="w-10 h-10 text-[#E8521A] animate-spin" />
             </div>
         );
     }
@@ -113,7 +113,7 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
                     <h1 className="text-3xl sm:text-5xl font-display text-white leading-tight mt-2 drop-shadow-2xl">
                         {book.title}
                     </h1>
-                    <p className="text-gold font-sans text-sm sm:text-base mt-2 drop-shadow-md">{book.author}</p>
+                    <p className="text-[#E8521A] font-sans text-sm sm:text-base mt-2 drop-shadow-md">{book.author}</p>
                 </div>
             </div>
 
@@ -124,16 +124,16 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
                     {/* Stats row */}
                     <div className="flex flex-wrap items-center gap-6 text-[10px] font-mono-num text-text-secondary uppercase tracking-widest mb-6 pb-6 border-b border-border">
                         <span className="flex items-center gap-1.5">
-                            <BookOpen className="w-4 h-4 text-gold" /> {book.total_chapters} Phases
+                            <BookOpen className="w-4 h-4 text-[#E8521A]" /> {book.total_chapters} Phases
                         </span>
                         {book.estimated_hours && (
                             <span className="flex items-center gap-1.5">
-                                <Clock className="w-4 h-4 text-gold" /> ~{book.estimated_hours} Hours
+                                <Clock className="w-4 h-4 text-[#E8521A]" /> ~{book.estimated_hours} Hours
                             </span>
                         )}
                         {book.word_count_total > 0 && (
                             <span className="flex items-center gap-1.5">
-                                <span className="text-gold">W</span> {book.word_count_total.toLocaleString()} Count
+                                <span className="text-[#E8521A]">W</span> {book.word_count_total.toLocaleString()} Count
                             </span>
                         )}
                     </div>
@@ -160,17 +160,17 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
                     {/* Progress bar for in-progress */}
                     {isStarted && !isCompleted && (
                         <div className="bg-surface border border-border p-5 rounded-xl">
-                            <div className="flex items-center justify-between text-[10px] font-mono-num uppercase tracking-widest mb-3">
+                             <div className="flex items-center justify-between text-[10px] font-mono-num uppercase tracking-widest mb-3">
                                 <span className="text-text-secondary">
                                     {chaptersCompleted} of {book.total_chapters} Finalized
                                 </span>
-                                <span className="font-bold text-gold">
+                                <span className="font-bold text-[#E8521A]">
                                     {Math.round((chaptersCompleted / book.total_chapters) * 100)}%
                                 </span>
                             </div>
                             <div className="h-1 bg-border rounded-full overflow-hidden">
                                 <div
-                                    className="h-full bg-gold rounded-full transition-all duration-500 ease-out"
+                                    className="h-full bg-[#E8521A] rounded-full transition-all duration-500 ease-out"
                                     style={{ width: `${(chaptersCompleted / book.total_chapters) * 100}%` }}
                                 />
                             </div>
@@ -182,7 +182,7 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
                         onClick={() => onOpenChapter(currentChapter)}
                         className={`w-full h-14 font-mono-num text-[10px] font-bold uppercase tracking-widest rounded-full gap-2 transition-all ${
                             isCompleted ? 'bg-card text-text-primary border border-border-strong hover:bg-surface' 
-                            : 'bg-gold text-background hover:brightness-110 shadow-[0_4px_20px_var(--color-gold-subtle)]'
+                            : 'bg-[#E8521A] text-background hover:brightness-110 shadow-[0_4px_20px_rgba(232,82,26,0.3)]'
                         }`}
                     >
                         {isCompleted ? (
@@ -198,7 +198,7 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
                 {/* ── Chapter List ── */}
                 <div className="pt-4">
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-1 h-5 bg-gold rounded-full" />
+                        <div className="w-1 h-5 bg-[#E8521A] rounded-full" />
                         <h2 className="font-display text-2xl text-text-primary tracking-tight">Index</h2>
                     </div>
                     
@@ -216,7 +216,7 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
                                     transition={{ delay: i * 0.03 }}
                                     onClick={() => onOpenChapter(ch.chapter_number)}
                                     className={`w-full text-left px-5 py-4 rounded-2xl border transition-all flex items-center gap-4 group ${
-                                        isCurrent ? 'bg-gold-subtle border-gold-border shadow-inner' 
+                                        isCurrent ? 'bg-[#E8521A]/5 border-[#E8521A]/30 shadow-inner' 
                                         : 'bg-surface border-border hover:border-border-strong hover:bg-card'
                                     }`}
                                 >
@@ -226,8 +226,8 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
                                             <Check className="w-4 h-4 text-text-muted" />
                                         </div>
                                     ) : isCurrent ? (
-                                        <div className="w-8 h-8 rounded-full bg-gold-subtle flex items-center justify-center flex-shrink-0 border border-gold-border shadow-[0_0_10px_var(--color-gold-subtle)]">
-                                            <Circle className="w-2.5 h-2.5 text-gold fill-gold" />
+                                        <div className="w-8 h-8 rounded-full bg-[#E8521A]/10 flex items-center justify-center flex-shrink-0 border border-[#E8521A]/30 shadow-[0_0_10px_rgba(232,82,26,0.2)]">
+                                            <Circle className="w-2.5 h-2.5 text-[#E8521A] fill-[#E8521A]" />
                                         </div>
                                     ) : (
                                         <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center flex-shrink-0">
@@ -237,17 +237,17 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
 
                                     <div className="flex-1 min-w-0 py-1">
                                         <div className="flex items-center gap-3 mb-1.5">
-                                            <span className="font-display text-lg text-text-primary group-hover:text-gold transition-colors truncate">
+                                            <span className="font-display text-lg text-text-primary group-hover:text-[#E8521A] transition-colors truncate">
                                                 {ch.title || `Phase ${ch.chapter_number}`}
                                             </span>
                                             {isCurrent && (
-                                                <span className="text-[8px] font-mono-num font-bold text-gold border border-gold-border uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm">
+                                                <span className="text-[8px] font-mono-num font-bold text-[#E8521A] border border-[#E8521A]/30 uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm">
                                                     Active
                                                 </span>
                                             )}
                                         </div>
                                         <div className="flex items-center gap-3 mt-0.5 text-[10px] font-mono-num uppercase tracking-widest text-text-secondary">
-                                            <span className="flex items-center gap-1"><span className="text-gold font-bold opacity-60">#</span> {ch.chapter_number}</span>
+                                            <span className="flex items-center gap-1"><span className="text-[#E8521A] font-bold opacity-60">#</span> {ch.chapter_number}</span>
                                             <span className="w-1 h-1 rounded-full bg-border" />
                                             <span>{ch.word_count || '—'} W</span>
                                             <span className="w-1 h-1 rounded-full bg-border" />
@@ -263,13 +263,13 @@ export default function BookDetail({ bookId, onClose, onOpenChapter }: BookDetai
                                             {!ch.processed && (
                                                 <>
                                                     <span className="w-1 h-1 rounded-full bg-border" />
-                                                    <span className="text-gold animate-pulse">Computing</span>
+                                                    <span className="text-[#E8521A] animate-pulse">Computing</span>
                                                 </>
                                             )}
                                         </div>
                                     </div>
 
-                                    <ChevronRight className="w-4 h-4 text-border-strong group-hover:text-gold transition-colors flex-shrink-0" />
+                                    <ChevronRight className="w-4 h-4 text-border-strong group-hover:text-[#E8521A] transition-colors flex-shrink-0" />
                                 </motion.button>
                             );
                         })}

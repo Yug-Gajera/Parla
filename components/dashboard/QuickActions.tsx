@@ -16,9 +16,9 @@ const ACTIONS = [
         icon: Mic2,
         title: 'Practice Conversation',
         subtitle: '3 scenarios available',
-        variant: 'gold' as VariantName,
-        hoverStyles: 'group-hover:bg-gold-subtle group-hover:border-gold-border group-hover:text-gold',
-        iconColor: 'text-gold'
+        variant: 'gold' as VariantName, // kept variant name for logic but updated styles
+        hoverStyles: 'group-hover:bg-[#E8521A]/10 group-hover:border-[#E8521A]/20 group-hover:text-[#E8521A]',
+        iconColor: 'text-[#E8521A]'
     },
     {
         href: '/learn',
@@ -44,8 +44,8 @@ const ACTIONS = [
         title: 'Leaderboard',
         subtitle: 'Rank #4 in Silver',
         variant: 'gold' as VariantName,
-        hoverStyles: 'group-hover:bg-gold-subtle group-hover:border-gold-border group-hover:text-gold',
-        iconColor: 'text-gold'
+        hoverStyles: 'group-hover:bg-[#E8521A]/10 group-hover:border-[#E8521A]/20 group-hover:text-[#E8521A]',
+        iconColor: 'text-[#E8521A]'
     }
 ];
 

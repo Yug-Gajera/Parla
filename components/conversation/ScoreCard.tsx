@@ -91,7 +91,7 @@ export function ScoreCard({
                                 <span className="label-upper mb-3">You just completed</span>
                                 <h2 className="text-xl font-semibold text-text-primary mb-3">{situationName}</h2>
                                 {situationTwist && (
-                                    <span className="badge-gold">
+                                    <span className="px-2 py-0.5 rounded-sm bg-[#E8521A]/10 border border-[#E8521A]/30 text-[#E8521A] text-[9px] font-mono-num font-bold uppercase tracking-widest">
                                         <Sparkles className="w-3 h-3 mr-1" />
                                         {situationTwist}
                                     </span>
@@ -161,17 +161,17 @@ export function ScoreCard({
                     {/* AI Feedback */}
                     <motion.div variants={itemV}>
                         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                            <MessageSquareQuote size={20} className="text-gold" />
+                            <MessageSquareQuote size={20} className="text-[#E8521A]" />
                             Coach Feedback
                         </h3>
                         <div className="parlova-card-accent p-8">
                             <p className="text-base leading-relaxed text-text-primary mb-6">
                                 {scoring.feedback?.summary}
                             </p>
-                            <div className="bg-gold-subtle border border-gold-border p-4 rounded-xl mb-6 font-medium italic text-gold-hover text-[15px]">
+                            <div className="bg-[#E8521A]/8 border border-[#E8521A]/22 p-4 rounded-xl mb-6 font-medium italic text-[#D94A15] text-[15px]">
                                 &ldquo;{scoring.feedback?.encouragement}&rdquo;
                             </div>
-                            <div className="flex items-start gap-3 pt-6 border-t border-gold-border">
+                            <div className="flex items-start gap-3 pt-6 border-t border-[#E8521A]/22">
                                 <div className="w-8 h-8 rounded-full bg-error-subtle text-error flex items-center justify-center shrink-0 border border-error-border">
                                     <AlertTriangle size={14} />
                                 </div>

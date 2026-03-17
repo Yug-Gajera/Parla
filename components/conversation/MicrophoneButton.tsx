@@ -94,7 +94,7 @@ export function MicrophoneButton({
                     {micState === 'recording' ? (
                         <Square className="w-6 h-6 text-background fill-current" />
                     ) : micState === 'processing' ? (
-                        <Loader2 className="w-6 h-6 text-gold animate-spin" />
+                        <Loader2 className="w-6 h-6 text-[#E8521A] animate-spin" />
                     ) : micState === 'error' ? (
                         <AlertCircle className="w-6 h-6 text-error" />
                     ) : (
@@ -108,7 +108,7 @@ export function MicrophoneButton({
                         <circle
                             cx="44" cy="44" r="42"
                             fill="none"
-                            stroke="var(--color-gold-subtle)"
+                            stroke="rgba(232, 82, 26, 0.15)"
                             strokeWidth="2"
                             strokeDasharray={`${(recordingSeconds / 30) * 263.89} 263.89`}
                             strokeLinecap="round"
@@ -128,12 +128,12 @@ export function MicrophoneButton({
                 )}
                 {micState === 'recording' && (
                     <div className="flex flex-col items-center animate-fade-up">
-                        <p className="text-sm text-gold font-semibold">Listening...</p>
+                        <p className="text-sm text-[#E8521A] font-semibold">Listening...</p>
                         <p className="text-xs text-text-secondary font-mono-num">{timerStr}</p>
                     </div>
                 )}
                 {micState === 'processing' && (
-                    <p className="text-sm text-gold-hover font-medium animate-fade-up">
+                    <p className="text-sm text-[#D94A15] font-medium animate-fade-up">
                         Understanding...
                     </p>
                 )}

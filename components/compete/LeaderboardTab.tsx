@@ -51,7 +51,7 @@ export function LeaderboardTab({
         const isTop3 = typeof entry.rank === 'number' && entry.rank <= 3;
         
         let rankColor = 'text-text-muted';
-        if (entry.rank === 1) rankColor = 'text-gold'; // Gold
+        if (entry.rank === 1) rankColor = 'text-[#E8521A]'; // Orange
         if (entry.rank === 2) rankColor = 'text-text-secondary'; // Silver
         if (entry.rank === 3) rankColor = 'text-text-secondary'; // Bronze
 
@@ -66,7 +66,7 @@ export function LeaderboardTab({
             >
                 {/* Rank / Trophy */}
                 <div className={`w-10 h-10 shrink-0 flex items-center justify-center font-mono-num font-light text-lg ${rankColor}`}>
-                    {entry.rank === 1 ? <Trophy className="w-5 h-5 text-gold" /> :
+                    {entry.rank === 1 ? <Trophy className="w-5 h-5 text-[#E8521A]" /> :
                         entry.rank === 2 ? <Trophy className="w-5 h-5 text-text-muted" /> :
                             entry.rank === 3 ? <Trophy className="w-5 h-5 text-text-muted" /> :
                                 <span className="flex items-center text-sm"><Hash className="w-3 h-3 mr-0.5 opacity-50" />{entry.rank}</span>}
@@ -75,7 +75,7 @@ export function LeaderboardTab({
                 {/* Avatar */}
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center font-mono-num text-sm shrink-0 border
                     ${entry.is_current_user 
-                        ? 'bg-gold-subtle text-gold border-accent-border' 
+                        ? 'bg-[#E8521A]/12 text-[#E8521A] border-[#E8521A]/22' 
                         : 'bg-card text-text-muted border-border'}
                 `}>
                     {entry.avatar}
@@ -130,7 +130,7 @@ export function LeaderboardTab({
                                 size="sm"
                                 className={`rounded-full shrink-0 text-xs px-5 border transition-all ${
                                     isMatch 
-                                        ? 'bg-card text-gold border-border-strong' 
+                                        ? 'bg-card text-[#E8521A] border-border-strong' 
                                         : 'bg-transparent text-text-muted border-transparent hover:text-text-primary hover:bg-card'
                                 }`}
                                 onClick={() => {

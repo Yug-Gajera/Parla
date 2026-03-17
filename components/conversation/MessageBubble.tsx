@@ -35,7 +35,7 @@ export function MessageBubble({ message, isAiStreaming }: MessageBubbleProps) {
                 
                 {/* AI Avatar */}
                 {isAI && (
-                    <div className="w-8 h-8 rounded-full bg-gold-subtle text-gold flex items-center justify-center font-bold text-[10px] tracking-widest border border-gold-border shrink-0 mb-1 font-mono-num">
+                    <div className="w-8 h-8 rounded-full bg-[#E8521A]/10 text-[#E8521A] flex items-center justify-center font-bold text-[10px] tracking-widest border border-[#E8521A]/20 shrink-0 mb-1 font-mono-num">
                         AI
                     </div>
                 )}

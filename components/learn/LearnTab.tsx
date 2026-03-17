@@ -27,7 +27,7 @@ export default function LearnTab({ languageId }: LearnTabProps) {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center h-64">
-                <Loader2 className="w-8 h-8 text-gold animate-spin" />
+                <Loader2 className="w-8 h-8 text-[#E8521A] animate-spin" />
             </div>
         );
     }
@@ -61,11 +61,11 @@ export default function LearnTab({ languageId }: LearnTabProps) {
 
             {/* Progress bar */}
             {allUnlocked ? (
-                <Card className="p-8 bg-card border-gold/20 shadow-[0_0_30px_var(--color-gold-subtle)] rounded-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-50" />
+                <Card className="p-8 bg-card border-[#E8521A]/20 shadow-[0_0_30px_rgba(232,82,26,0.1)] rounded-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E8521A] to-transparent opacity-50" />
                     <div className="flex flex-col md:flex-row items-center gap-8 md:gap-6">
                         <div className="p-4 rounded-full bg-surface border border-border-strong relative z-10 shadow-inner">
-                            <Sparkles className="w-8 h-8 text-gold" />
+                            <Sparkles className="w-8 h-8 text-[#E8521A]" />
                         </div>
                         <div className="flex-1 text-center md:text-left relative z-10">
                             <h3 className="font-display text-2xl text-text-primary mb-2">All Clearances Attained</h3>
@@ -73,7 +73,7 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                         </div>
                         <Button
                             onClick={() => window.location.href = '/practice'}
-                            className="w-full md:w-auto bg-text-primary text-bg font-mono-num text-[10px] uppercase font-bold tracking-widest px-8 h-12 hover:bg-gold transition-colors rounded-full"
+                            className="w-full md:w-auto bg-text-primary text-bg font-mono-num text-[10px] uppercase font-bold tracking-widest px-8 h-12 hover:bg-[#E8521A] transition-colors rounded-full"
                         >
                             Initiate Practice
                         </Button>
@@ -87,7 +87,7 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                     </div>
                     <div className="h-1.5 bg-background rounded-full overflow-hidden border border-border">
                         <motion.div
-                            className="h-full bg-gradient-to-r from-gold/70 to-gold rounded-full shadow-[0_0_10px_rgba(201,168,76,0.2)]"
+                            className="h-full bg-gradient-to-r from-[#E8521A]/70 to-[#E8521A] rounded-full shadow-[0_0_10px_rgba(232,82,26,0.2)]"
                             animate={{ width: `${(totalUnlocked / totalScenarios) * 100}%` }}
                             transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                         />
@@ -100,7 +100,7 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                 <Card className="p-8 bg-card border-border rounded-2xl">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                         <div className="p-4 rounded-full bg-surface border border-border-strong shrink-0">
-                            <LucideIcons.Key className="w-6 h-6 text-gold" />
+                            <LucideIcons.Key className="w-6 h-6 text-[#E8521A]" />
                         </div>
                         <div>
                             <h3 className="font-display text-xl text-text-primary mb-2">Initial Acquisition Module</h3>
@@ -142,31 +142,31 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                         >
                             <Card
                                 className={`p-6 relative overflow-hidden transition-all duration-500 rounded-2xl flex flex-col h-full border ${isUnlocked
-                                    ? 'border-gold/20 bg-surface shadow-[0_4px_20px_var(--color-gold-subtle)]'
+                                    ? 'border-[#E8521A]/20 bg-surface shadow-[0_4px_20px_rgba(232,82,26,0.1)]'
                                     : isFirst
-                                        ? 'border-gold/50 bg-surface shadow-[0_4px_30px_var(--color-gold-subtle)]'
+                                        ? 'border-[#E8521A]/50 bg-surface shadow-[0_4px_30px_rgba(232,82,26,0.15)]'
                                         : 'border-border bg-card hover:border-border-strong'
                                     }`}
                             >
                                 {/* Unlocked checkmark */}
                                 {isUnlocked && (
-                                    <div className="absolute top-4 right-4 bg-background border border-gold rounded-full p-1 shadow-md">
-                                        <CheckCircle2 className="w-3 h-3 text-gold" />
+                                    <div className="absolute top-4 right-4 bg-background border border-[#E8521A] rounded-full p-1 shadow-md">
+                                        <CheckCircle2 className="w-3 h-3 text-[#E8521A]" />
                                     </div>
                                 )}
 
                                 {/* First badge */}
                                 {isFirst && (
-                                    <div className="absolute top-4 right-4 bg-gold/10 text-gold border border-gold/30 text-[9px] font-mono-num tracking-widest px-2 py-1 rounded">
+                                    <div className="absolute top-4 right-4 bg-[#E8521A]/10 text-[#E8521A] border border-[#E8521A]/30 text-[9px] font-mono-num tracking-widest px-2 py-1 rounded">
                                         PRIORITY
                                     </div>
                                 )}
 
                                 <div className="flex items-start gap-4 mb-6">
                                     <div className={`p-3 rounded-lg border ${isUnlocked 
-                                        ? 'bg-background border-border-strong text-gold' 
+                                        ? 'bg-background border-border-strong text-[#E8521A]' 
                                         : isFirst 
-                                            ? 'bg-gold border-gold text-bg' 
+                                            ? 'bg-[#E8521A] border-[#E8521A] text-bg' 
                                             : 'bg-surface border-border text-text-muted'
                                         }`}>
                                         <IconComponent className="w-5 h-5" />
@@ -193,7 +193,7 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                                 <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
                                     <span className={`px-2 py-1 rounded text-[9px] font-mono-num font-bold uppercase tracking-widest border ${
                                         status === 'unlocked'
-                                        ? 'bg-gold/10 text-gold border-gold/20'
+                                        ? 'bg-[#E8521A]/10 text-[#E8521A] border-[#E8521A]/20'
                                         : status === 'in_progress'
                                             ? 'bg-transparent border-border-strong text-text-primary'
                                             : 'bg-transparent border-transparent text-text-muted'
@@ -206,9 +206,9 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                                         onClick={() => setActiveModule({ type: scenario.id, name: scenario.name })}
                                         className={`rounded-full h-8 px-4 text-[9px] font-mono-num tracking-widest uppercase font-bold transition-all ${
                                             isUnlocked
-                                            ? 'bg-surface text-gold border border-gold hover:bg-gold hover:text-bg'
+                                            ? 'bg-surface text-[#E8521A] border border-[#E8521A] hover:bg-[#E8521A] hover:text-bg'
                                             : isFirst || isStarted
-                                                ? 'bg-gold text-bg hover:brightness-110'
+                                                ? 'bg-[#E8521A] text-bg hover:brightness-110'
                                                 : 'bg-surface text-text-muted cursor-not-allowed opacity-50 border border-border'
                                             }`}
                                         disabled={!isUnlocked && !isStarted && !isFirst}
@@ -237,7 +237,7 @@ function StepCircle({ done, active, label }: { done: boolean; active: boolean; l
         <div className="flex flex-col items-center gap-2">
             <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${done
-                    ? 'bg-surface border border-gold text-gold'
+                    ? 'bg-surface border border-[#E8521A] text-[#E8521A]'
                     : active
                         ? 'border border-text-primary bg-text-primary shadow-[0_0_10px_rgba(30,30,30,0.1)]'
                         : 'border border-border-strong bg-card'
@@ -246,7 +246,7 @@ function StepCircle({ done, active, label }: { done: boolean; active: boolean; l
                 {done && <CheckCircle2 className="w-3 h-3" />}
                 {active && <div className="w-1.5 h-1.5 rounded-full bg-bg" />}
             </div>
-            <span className={`text-[9px] font-mono-num uppercase tracking-widest ${active ? 'text-text-primary' : done ? 'text-gold' : 'text-text-muted'}`}>{label}</span>
+            <span className={`text-[9px] font-mono-num uppercase tracking-widest ${active ? 'text-text-primary' : done ? 'text-[#E8521A]' : 'text-text-muted'}`}>{label}</span>
         </div>
     );
 }

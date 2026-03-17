@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { SCENARIOS } from '@/lib/data/scenarios';
 import dynamic from 'next/dynamic';
 const ConversationWindow = dynamic(() => import('./ConversationWindow').then(mod => mod.ConversationWindow), {
-    loading: () => <div className="fixed inset-0 bg-background z-[60] flex items-center justify-center font-mono-num text-[10px] uppercase tracking-widest text-gold">Establishing Neural Link...</div>,
+    loading: () => <div className="fixed inset-0 bg-background z-[60] flex items-center justify-center font-mono-num text-[10px] uppercase tracking-widest text-[#E8521A]">Establishing Neural Link...</div>,
     ssr: false
 });
 import { Button } from '@/components/ui/button';
@@ -120,7 +120,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
 
                     {preSession.situationTeaser && (
                         <div className="bg-card border border-border rounded-2xl p-6 mb-10 max-w-md w-full shadow-inner relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-gold-subtle rounded-bl-full -z-10 group-hover:bg-gold/10 transition-colors duration-700" />
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#E8521A]/5 rounded-bl-full -z-10 group-hover:bg-[#E8521A]/10 transition-colors duration-700" />
                             <p className="text-text-primary italic text-lg leading-relaxed font-display relative z-10">
                                 "{preSession.situationTeaser}"
                             </p>
@@ -188,13 +188,13 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-12 bg-gold-subtle border border-gold-border rounded-2xl p-6 flex items-center justify-between"
+                    className="mb-12 bg-[#E8521A]/5 border border-[#E8521A]/30 rounded-2xl p-6 flex items-center justify-between"
                 >
                     <div className="flex items-center gap-4">
                         <BookOpen className="w-5 h-5 text-gold flex-shrink-0" />
                         <p className="text-sm text-text-primary font-medium leading-relaxed">
                             Complete foundational modules to unlock advanced simulations.{' '}
-                            <a href="/learn" className="text-gold font-bold hover:underline ml-1">
+                            <a href="/learn" className="text-[#E8521A] font-bold hover:underline ml-1">
                                 Proceed to Terminal &rarr;
                             </a>
                         </p>
@@ -219,7 +219,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
             {/* Recents */}
             <div className="mb-20">
                 <h3 className="text-xs font-mono-num uppercase tracking-widest text-text-muted font-bold mb-8 flex items-center gap-3">
-                    <Star className="w-4 h-4 text-gold" /> Recent Deployments
+                    <Star className="w-4 h-4 text-[#E8521A]" /> Recent Deployments
                 </h3>
                 {recentSessions && recentSessions.length > 0 ? (
                     <div className="flex gap-6 overflow-x-auto pb-6 hide-scrollbar px-1">
@@ -227,7 +227,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                             const sc = SCENARIOS.find(s => s.id === session.scenario_type);
                             return (
                                 <Card key={i} className="min-w-[300px] sm:min-w-[360px] p-8 shrink-0 bg-card border-border hover:border-accent-border rounded-[18px] transition-all flex flex-col relative overflow-hidden group shadow-sm hover:shadow-md">
-                                    <div className="absolute top-0 right-0 w-24 h-24 bg-gold-subtle rounded-bl-full -z-10 group-hover:bg-gold/10 transition-colors" />
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#E8521A]/5 rounded-bl-full -z-10 group-hover:bg-[#E8521A]/10 transition-colors" />
                                     
                                     <div className="flex justify-between items-start mb-6">
                                         <div className="font-display text-xl text-text-primary pr-4">{sc?.name || 'Unknown Protocol'}</div>
@@ -267,7 +267,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
 
             {/* Grid */}
             <h3 className="text-xs font-mono-num uppercase tracking-widest text-text-muted font-bold mb-8 flex items-center gap-3">
-                <LayoutGrid className="w-4 h-4 text-gold" /> Available Environments
+                <LayoutGrid className="w-4 h-4 text-[#E8521A]" /> Available Environments
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -290,7 +290,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                             }
                         >
                             {!isLocked && isBeginnerLevel && isUnlocked(scenario.id) && (
-                                <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-gold to-transparent pointer-events-none opacity-40" />
+                                <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#E8521A] to-transparent pointer-events-none opacity-40" />
                             )}
 
                             <div className="p-10 flex flex-col h-full relative z-10">
@@ -299,7 +299,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                     <div className={`p-4 rounded-2xl border ${
                                         isLocked 
                                         ? 'bg-surface text-text-muted border-border' 
-                                        : 'bg-gold-subtle text-gold border-gold/20 shadow-inner'
+                                        : 'bg-[#E8521A]/5 text-[#E8521A] border-[#E8521A]/20 shadow-inner'
                                     }`}>
                                         <IconComponent className="w-7 h-7" />
                                     </div>
@@ -308,7 +308,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                         <span className={`px-3 py-1.5 rounded-lg text-[10px] font-mono-num font-bold uppercase tracking-widest ${
                                             isLocked
                                             ? 'bg-surface text-text-muted'
-                                            : 'bg-surface border border-gold/20 text-gold shadow-sm'
+                                            : 'bg-surface border border-[#E8521A]/20 text-[#E8521A] shadow-sm'
                                             }`}>
                                             {scenario.base_difficulty}
                                         </span>
@@ -328,7 +328,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                                     key={sit.id}
                                                     className={`w-2 h-2 rounded-full transition-all duration-500 ${
                                                         completedIds.includes(sit.id)
-                                                            ? 'bg-gold shadow-[0_0_8px_var(--color-gold)] scale-110'
+                                                            ? 'bg-[#E8521A] shadow-[0_0_8px_rgba(232,82,26,0.4)] scale-110'
                                                             : 'bg-border'
                                                         }`}
                                                 />
@@ -341,8 +341,8 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                 )}
 
                                 <div className="flex flex-wrap gap-x-6 gap-y-3 mb-10 mt-auto">
-                                    <span className="flex items-center gap-2 text-[10px] font-mono-num font-bold text-text-muted uppercase tracking-widest"><Clock className="w-4 h-4 text-gold/60" /> {scenario.estimated_minutes} MIN</span>
-                                    <span className="flex items-center gap-2 text-[10px] font-mono-num font-bold text-text-muted uppercase tracking-widest"><BarChart3 className="w-4 h-4 text-gold/60" /> {scenario.user_role.slice(0,18)}</span>
+                                    <span className="flex items-center gap-2 text-[10px] font-mono-num font-bold text-text-muted uppercase tracking-widest"><Clock className="w-4 h-4 text-[#E8521A]/60" /> {scenario.estimated_minutes} MIN</span>
+                                    <span className="flex items-center gap-2 text-[10px] font-mono-num font-bold text-text-muted uppercase tracking-widest"><BarChart3 className="w-4 h-4 text-[#E8521A]/60" /> {scenario.user_role.slice(0,18)}</span>
                                 </div>
 
                                 <div>

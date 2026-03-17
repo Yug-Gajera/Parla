@@ -44,13 +44,13 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
                         <button
                             onClick={() => setShowFilter('')}
                             className={`shrink-0 transition-all rounded-2xl border ${!showFilter
-                                    ? 'bg-[#141414] border-[#c9a84c]'
+                                    ? 'bg-[#141414] border-[#E8521A]'
                                     : 'bg-[#0f0f0f] border-[#1e1e1e] hover:border-[#2a2a2a]'
                                 }`}
                         >
                             <div className="p-4 w-32 h-32 flex flex-col items-center justify-center gap-3">
-                                <Radio className={`w-6 h-6 ${!showFilter ? 'text-[#c9a84c]' : 'text-[#5a5652]'}`} />
-                                <span className={`text-[10px] font-mono tracking-widest uppercase ${!showFilter ? 'text-[#c9a84c]' : 'text-[#9a9590]'}`}>Master Feed</span>
+                                <Radio className={`w-6 h-6 ${!showFilter ? 'text-[#E8521A]' : 'text-[#5a5652]'}`} />
+                                <span className={`text-[10px] font-mono tracking-widest uppercase ${!showFilter ? 'text-[#E8521A]' : 'text-[#9a9590]'}`}>Master Feed</span>
                             </div>
                         </button>
 
@@ -59,14 +59,14 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
                                 key={show.id}
                                 onClick={() => setShowFilter(show.id === showFilter ? '' : show.id)}
                                 className={`shrink-0 transition-all rounded-2xl overflow-hidden border ${showFilter === show.id
-                                        ? 'border-[#c9a84c] ring-1 ring-[#c9a84c]/20'
+                                        ? 'border-[#E8521A] ring-1 ring-[#232,82,26]/20'
                                         : 'border-[#1e1e1e] hover:border-[#2a2a2a]'
                                     }`}
                             >
                                 <div className="w-32 h-32 flex flex-col items-center justify-center gap-3 relative bg-[#141414]">
                                     <div
                                         className="absolute inset-0 opacity-10"
-                                        style={{ backgroundColor: show.cover_color || '#c9a84c' }}
+                                        style={{ backgroundColor: show.cover_color || '#E8521A' }}
                                     />
                                     <div className="relative z-10 flex flex-col items-center">
                                         <div
@@ -75,7 +75,7 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
                                         >
                                             <Headphones className="w-4 h-4 text-white/90" />
                                         </div>
-                                        <span className={`text-[10px] font-mono tracking-widest uppercase text-center line-clamp-2 px-2 ${showFilter === show.id ? 'text-[#c9a84c]' : 'text-[#f0ece4]'}`}>{show.name}</span>
+                                        <span className={`text-[10px] font-mono tracking-widest uppercase text-center line-clamp-2 px-2 ${showFilter === show.id ? 'text-[#E8521A]' : 'text-[#f0ece4]'}`}>{show.name}</span>
                                         <span className="text-[9px] text-[#5a5652] mt-1 font-mono tracking-wider">{show.episode_count} ep</span>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
             <h3 className="text-[10px] font-mono font-bold text-[#5a5652] uppercase tracking-[0.2em] mb-4">Episodes</h3>
 
             {isLoading && episodes.length === 0 ? (
-                <div className="flex justify-center py-24"><Loader2 className="w-8 h-8 animate-spin text-[#c9a84c]" /></div>
+                <div className="flex justify-center py-24"><Loader2 className="w-8 h-8 animate-spin text-[#E8521A]" /></div>
             ) : episodes.length === 0 ? (
                 <div className="text-center py-24 border border-[#1e1e1e] border-dashed rounded-2xl bg-[#0f0f0f]">
                     <Headphones className="w-12 h-12 mx-auto text-[#5a5652] mb-4" />
@@ -105,7 +105,7 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
                             transition={{ delay: i * 0.03 }}
                         >
                             <Card
-                                className="p-4 flex items-center gap-4 cursor-pointer bg-[#141414] border-[#1e1e1e] hover:border-[#c9a84c]/50 transition-all duration-300 group rounded-2xl h-full"
+                                className="p-4 flex items-center gap-4 cursor-pointer bg-[#141414] border-[#1e1e1e] hover:border-[#232,82,26]/50 transition-all duration-300 group rounded-2xl h-full"
                                 onClick={() => onSelectEpisode(ep.id)}
                             >
                                 {/* Show color dot */}
@@ -118,11 +118,11 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
 
                                 <div className="flex-1 min-w-0 flex flex-col">
                                     <p className="text-[9px] font-mono uppercase tracking-widest text-[#9a9590] mb-0.5">{ep.show?.name}</p>
-                                    <h4 className="font-serif text-base text-[#f0ece4] line-clamp-1 mb-2 group-hover:text-[#c9a84c] transition-colors">{ep.title}</h4>
+                                    <h4 className="font-serif text-base text-[#f0ece4] line-clamp-1 mb-2 group-hover:text-[#E8521A] transition-colors">{ep.title}</h4>
                                     
                                     <div className="flex items-center gap-3">
                                         {ep.cefr_level && (
-                                            <span className="text-[9px] font-mono tracking-widest uppercase border border-[#1e1e1e] px-1.5 py-0.5 rounded text-[#c9a84c] bg-[#c9a84c]/5">
+                                            <span className="text-[9px] font-mono tracking-widest uppercase border border-[#1e1e1e] px-1.5 py-0.5 rounded text-[#E8521A] bg-[#232,82,26]/50">
                                                 {ep.cefr_level}
                                             </span>
                                         )}
@@ -139,7 +139,7 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
 
                                 {ep.user_progress?.completed && (
                                     <div className="shrink-0 bg-[#0f0f0f] border border-[#1e1e1e] rounded-full p-2">
-                                        <CheckCircle className="w-4 h-4 text-[#c9a84c]" />
+                                        <CheckCircle className="w-4 h-4 text-[#E8521A]" />
                                     </div>
                                 )}
                             </Card>
@@ -151,7 +151,7 @@ export default function ListenBrowser({ languageId, onSelectEpisode }: ListenBro
             {hasMore && (
                 <div className="flex justify-center mt-10 mb-6">
                     <Button variant="outline" onClick={fetchMore} disabled={isLoading} className="gap-3 rounded-full bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] hover:border-[#2a2a2a] uppercase text-[10px] tracking-widest h-10 px-8">
-                        {isLoading && <Loader2 className="w-3 h-3 animate-spin text-[#c9a84c]" />}
+                        {isLoading && <Loader2 className="w-3 h-3 animate-spin text-[#E8521A]" />}
                         Access Archive
                     </Button>
                 </div>

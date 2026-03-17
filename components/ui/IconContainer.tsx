@@ -13,7 +13,7 @@ interface IconContainerProps {
 }
 
 const variants: Record<Variant, { bg: string, border: string, color: string }> = {
-  gold: { bg: 'rgba(201,168,76,0.1)', border: 'rgba(201,168,76,0.2)', color: '#c9a84c' },
+  gold: { bg: 'rgba(232,82,26,0.15)', border: 'rgba(232,82,26,0.22)', color: '#E8521A' },
   success: { bg: 'rgba(74,222,128,0.1)', border: 'rgba(74,222,128,0.2)', color: '#4ade80' },
   warning: { bg: 'rgba(251,146,60,0.1)', border: 'rgba(251,146,60,0.2)', color: '#fb923c' },
   error: { bg: 'rgba(248,113,113,0.1)', border: 'rgba(248,113,113,0.2)', color: '#f87171' },

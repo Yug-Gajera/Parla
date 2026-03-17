@@ -84,7 +84,7 @@ export function AddWordSheet({ open, onOpenChange, languageId, refreshDeck }: Ad
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Input terminology..."
-                            className="pl-11 h-12 bg-card border-border-strong text-text-primary placeholder:text-text-muted rounded-xl focus-visible:ring-1 focus-visible:ring-gold focus-visible:ring-offset-0 focus-visible:bg-surface transition-all font-mono"
+                            className="pl-11 h-12 bg-card border-border-strong text-text-primary placeholder:text-text-muted rounded-xl focus-visible:ring-1 focus-visible:ring-[#E8521A] focus-visible:ring-offset-0 focus-visible:bg-surface transition-all font-mono"
                         />
                     </div>
                 </SheetHeader>
@@ -92,7 +92,7 @@ export function AddWordSheet({ open, onOpenChange, languageId, refreshDeck }: Ad
                 <div className="flex-1 overflow-y-auto w-full custom-scrollbar bg-background">
                     {isSearching ? (
                         <div className="flex items-center justify-center p-12">
-                            <Loader2 className="h-6 w-6 animate-spin text-gold" />
+                            <Loader2 className="h-6 w-6 animate-spin text-[#E8521A]" />
                         </div>
                     ) : search.trim().length > 0 && results.length === 0 ? (
                         <div className="flex flex-col items-center justify-center p-14 text-center">
@@ -109,9 +109,9 @@ export function AddWordSheet({ open, onOpenChange, languageId, refreshDeck }: Ad
                                 <div key={word.id} className="flex items-center justify-between p-5 hover:bg-card transition-colors group">
                                     <div className="flex flex-col items-start gap-1">
                                         <div className="flex items-center gap-3">
-                                            <span className="font-serif font-bold text-xl text-text-primary group-hover:text-gold transition-colors">{word.word}</span>
+                                            <span className="font-serif font-bold text-xl text-text-primary group-hover:text-[#E8521A] transition-colors">{word.word}</span>
                                             {word.cefr_level && (
-                                                <span className="px-2 py-0.5 rounded-sm text-[9px] font-mono font-bold uppercase tracking-widest border border-gold/30 text-gold bg-gold/10">
+                                                <span className="px-2 py-0.5 rounded-sm text-[9px] font-mono font-bold uppercase tracking-widest border border-[#E8521A]/30 text-[#E8521A] bg-[#E8521A]/10">
                                                     {word.cefr_level}
                                                 </span>
                                             )}
@@ -127,11 +127,11 @@ export function AddWordSheet({ open, onOpenChange, languageId, refreshDeck }: Ad
                                         className={`h-10 rounded-full font-mono text-[10px] uppercase tracking-widest font-bold transition-all ${
                                             word.is_added 
                                             ? "opacity-50 cursor-default border-border bg-surface text-text-muted" 
-                                            : "bg-gold/10 text-gold border-gold/30 hover:bg-gold hover:text-bg"
+                                            : "bg-[#E8521A]/10 text-[#E8521A] border-[#E8521A]/30 hover:bg-[#E8521A] hover:text-[#080808]"
                                         }`}
                                     >
                                         {addingIds.has(word.id) ? (
-                                            <Loader2 className="h-4 w-4 animate-spin text-gold" />
+                                            <Loader2 className="h-4 w-4 animate-spin text-[#E8521A]" />
                                         ) : word.is_added ? (
                                             <><CheckCircle2 className="h-3.5 h-3.5 mr-1.5" /> Indexed</>
                                         ) : (

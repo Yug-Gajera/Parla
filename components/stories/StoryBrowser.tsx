@@ -29,12 +29,12 @@ const TYPE_EMOJI: Record<string, string> = {
 // Subtle gold-tinted level indicators for the luxury theme
 function levelColor(level: string): string {
     const colors: Record<string, string> = {
-        A1: 'bg-card text-gold border-gold/20',
-        A2: 'bg-card text-gold border-gold/20',
-        B1: 'bg-gold/5 text-gold border-gold/30',
-        B2: 'bg-gold/10 text-gold border-gold/40',
-        C1: 'bg-gold/15 text-gold border-gold/50',
-        C2: 'bg-gold/20 text-text-primary border-gold/60',
+        A1: 'bg-card text-[#E8521A] border-[#E8521A]/20',
+        A2: 'bg-card text-[#E8521A] border-[#E8521A]/20',
+        B1: 'bg-[#E8521A]/5 text-[#E8521A] border-[#E8521A]/30',
+        B2: 'bg-[#E8521A]/10 text-[#E8521A] border-[#E8521A]/40',
+        C1: 'bg-[#E8521A]/15 text-[#E8521A] border-[#E8521A]/50',
+        C2: 'bg-[#E8521A]/20 text-text-primary border-[#E8521A]/60',
     };
     return colors[level] || 'bg-border text-text-muted border-border-strong';
 }
@@ -95,12 +95,12 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
 
             {/* ── SECTION 1: Generate a Story ── */}
             <Card className="p-8 sm:p-10 border-border bg-surface relative overflow-hidden rounded-2xl shadow-sm">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-bl-full -z-10 blur-xl" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#E8521A]/5 rounded-bl-full -z-10 blur-xl" />
 
                 <div className="relative z-10 w-full max-w-2xl">
                     <div className="flex items-center gap-4 mb-3">
                         <div className="p-3 rounded-full bg-card border border-border-strong shadow-inner">
-                            <Sparkles className="w-5 h-5 text-gold" />
+                            <Sparkles className="w-5 h-5 text-[#E8521A]" />
                         </div>
                         <div>
                             <h2 className="text-2xl font-serif text-text-primary tracking-tight">Narrative Synthesis</h2>
@@ -118,8 +118,8 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                                     key={cat.id}
                                     onClick={() => setSelectedCategory(cat.id)}
                                     className={`px-4 py-2 rounded-full text-[11px] font-mono-num uppercase tracking-widest transition-all border ${selectedCategory === cat.id
-                                            ? 'bg-gold/10 text-gold border-gold/30 shadow-md'
-                                            : 'bg-surface border-border-strong text-text-muted hover:text-text-secondary hover:border-gold/20'
+                                        ? 'bg-[#E8521A]/10 text-[#E8521A] border-[#E8521A]/30 shadow-md'
+                                        : 'bg-surface border-border-strong text-text-muted hover:text-text-secondary hover:border-[#E8521A]/20'
                                         }`}
                                 >
                                     {cat.name}
@@ -134,8 +134,8 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                                     key={type.id}
                                     onClick={() => setSelectedContentType(type.id)}
                                     className={`px-4 py-2 rounded-full text-[11px] font-mono-num uppercase tracking-widest transition-all border flex items-center gap-2 ${selectedContentType === type.id
-                                            ? 'bg-gold/10 text-gold border-gold/30 shadow-md'
-                                            : 'bg-surface border-border-strong text-text-muted hover:text-text-secondary hover:border-gold/20'
+                                        ? 'bg-[#E8521A]/10 text-[#E8521A] border-[#E8521A]/30 shadow-md'
+                                        : 'bg-surface border-border-strong text-text-muted hover:text-text-secondary hover:border-[#E8521A]/20'
                                         }`}
                                 >
                                     <span className="opacity-80">{TYPE_EMOJI[type.id]}</span> {type.label}
@@ -150,7 +150,7 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                                 className={`h-12 px-8 rounded-full font-mono-num text-[10px] uppercase tracking-widest font-bold transition-all shadow-md flex gap-2 w-full sm:w-auto
                                     ${(!selectedCategory || !selectedContentType || isGenerating) 
                                         ? 'bg-border text-text-muted cursor-not-allowed border-border-strong' 
-                                        : 'bg-gold text-bg hover:brightness-110 shadow-lg'
+                                        : 'bg-[#E8521A] text-bg hover:brightness-110 shadow-lg'
                                     }
                                 `}
                             >
@@ -162,7 +162,7 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                             </Button>
 
                             <div className="flex flex-col flex-1 pl-4 sm:border-l border-border-strong">
-                                <span className={`text-[10px] font-mono-num uppercase tracking-[0.2em] font-medium ${dailyGenerationsRemaining === 0 ? 'text-error' : 'text-gold'}`}>
+                                <span className={`text-[10px] font-mono-num uppercase tracking-[0.2em] font-medium ${dailyGenerationsRemaining === 0 ? 'text-error' : 'text-[#E8521A]'}`}>
                                     {dailyGenerationsRemaining} Yields Remaining
                                 </span>
                                 <span className="text-[10px] text-text-muted mt-1">
@@ -189,9 +189,9 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[60] bg-background/90 backdrop-blur-sm flex items-center justify-center"
                     >
-                        <Card className="p-10 text-center border-gold/20 bg-card shadow-xl rounded-3xl max-w-sm">
-                            <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <CheckCircle2 className="w-10 h-10 text-gold" />
+                        <Card className="p-10 text-center border-[#E8521A]/20 bg-card shadow-xl rounded-3xl max-w-sm">
+                            <div className="w-20 h-20 bg-[#E8521A]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <CheckCircle2 className="w-10 h-10 text-[#E8521A]" />
                             </div>
                             <h3 className="text-2xl font-serif text-text-primary">Archived Text Located</h3>
                             <p className="text-[10px] font-mono-num text-text-secondary mt-3 uppercase tracking-[0.2em]">Retreiving from cache...</p>
@@ -243,19 +243,19 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                                 className="h-full"
                             >
                                 <Card
-                                    className="p-6 h-full cursor-pointer transition-all duration-300 rounded-2xl flex flex-col bg-card border-border hover:border-gold/40 hover:bg-surface hover:-translate-y-1 hover:shadow-md group"
+                                    className="p-6 h-full cursor-pointer transition-all duration-300 rounded-2xl flex flex-col bg-card border-border hover:border-[#E8521A]/40 hover:bg-surface hover:-translate-y-1 hover:shadow-md group"
                                     onClick={() => setActiveStoryId(story.id)}
                                 >
                                     <div className="flex justify-between items-start mb-4">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-[9px] font-mono-num font-bold uppercase tracking-widest px-2 py-1 rounded bg-background border border-border-strong text-gold">
+                                            <span className="text-[9px] font-mono-num font-bold uppercase tracking-widest px-2 py-1 rounded bg-background border border-border-strong text-[#E8521A]">
                                                 {TYPE_EMOJI[story.content_type]} {story.content_type.replace('_', ' ')}
                                             </span>
                                             {cat && <span className="text-sm grayscale group-hover:grayscale-0 transition-all">{cat.emoji}</span>}
                                         </div>
                                     </div>
 
-                                    <h4 className="font-serif text-lg mb-2 line-clamp-2 leading-snug text-text-primary group-hover:text-gold transition-colors">
+                                    <h4 className="font-serif text-lg mb-2 line-clamp-2 leading-snug text-text-primary group-hover:text-[#E8521A] transition-colors">
                                         {story.title}
                                     </h4>
                                     <p className="text-[13px] font-sans text-text-muted line-clamp-2 mb-6 leading-relaxed">
@@ -271,7 +271,7 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                                         </span>
                                         {story.times_read > 0 && (
                                             <span className="flex items-center gap-1.5 text-[9px] font-mono-num text-text-muted uppercase tracking-[0.1em] ml-auto bg-background px-2 py-1 rounded border border-border">
-                                                <Users className="w-3 h-3 text-gold/50" />
+                                                <Users className="w-3 h-3 text-[#E8521A]/50" />
                                                 {story.times_read} REQS
                                             </span>
                                         )}

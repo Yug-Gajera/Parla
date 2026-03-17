@@ -47,8 +47,8 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
 
     const getIconData = (type: string) => {
         switch (type) {
-            case 'conversation': return { Icon: Mic2, color: 'text-gold', bg: 'bg-gold/10 border border-gold/20' };
-            case 'vocabulary': return { Icon: Book, color: 'text-gold', bg: 'bg-gold/10 border border-gold/20' };
+            case 'conversation': return { Icon: Mic2, color: 'text-[#E8521A]', bg: 'bg-[#E8521A]/10 border border-[#E8521A]/20' };
+            case 'vocabulary': return { Icon: Book, color: 'text-[#E8521A]', bg: 'bg-[#E8521A]/10 border border-[#E8521A]/20' };
             case 'content': return { Icon: PlayCircle, color: 'text-text-primary', bg: 'bg-border border border-border-strong' };
             case 'test': return { Icon: FileCheck, color: 'text-text-secondary', bg: 'bg-card border border-border' };
             default: return { Icon: Book, color: 'text-text-muted', bg: 'bg-surface border border-border' };
@@ -73,7 +73,7 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
                 <h2 className="font-display font-medium text-[16px] text-text-primary flex items-center gap-2">
                     Telemetry Stream
                 </h2>
-                <Link href="/profile" className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-gold hover:text-accent-hover flex items-center gap-1.5 group transition-colors">
+                <Link href="/profile" className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-[#E8521A] hover:text-[#D94A15] flex items-center gap-1.5 group transition-colors">
                     View Logs
                     <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
@@ -107,8 +107,8 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
 
                             {/* Right: XP */}
                             <div className="flex items-center gap-1 mt-3 sm:mt-0 ml-16 sm:ml-0 bg-surface sm:bg-transparent px-3 py-1 sm:p-0 rounded-md sm:rounded-none w-fit">
-                                <span className="font-mono-num text-[13px] font-bold text-gold group-hover:text-accent-hover transition-colors">+{session.xp_earned}</span>
-                                <span className="text-[9px] font-mono-num font-bold uppercase tracking-widest text-gold/60">XP</span>
+                                <span className="font-mono-num text-[13px] font-bold text-[#E8521A] group-hover:text-[#D94A15] transition-colors">+{session.xp_earned}</span>
+                                <span className="text-[9px] font-mono-num font-bold uppercase tracking-widest text-[#E8521A]/60">XP</span>
                             </div>
 
                         </div>

@@ -25,9 +25,9 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
     // Status color mapping
     const statusColors = {
         'new': 'border-border-strong text-text-muted bg-surface',
-        'learning': 'border-gold/40 text-gold bg-gold-subtle',
+        'learning': 'border-[#E8521A]/40 text-[#E8521A] bg-[#E8521A]/5',
         'familiar': 'border-success/40 text-success bg-success-subtle',
-        'mastered': 'border-gold text-background bg-gold',
+        'mastered': 'border-[#E8521A] text-[#080808] bg-[#E8521A]',
     };
 
     const statusGradient = statusColors[word.status as keyof typeof statusColors] || statusColors.new;
@@ -60,7 +60,7 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
                     <div className="flex flex-col items-center justify-center text-center w-full mb-8 mt-2">
                         {baseWord.cefr_level && (
                             <div className="flex items-center justify-center mb-6">
-                                <span className="px-3 py-1 rounded-sm border border-gold/30 text-[10px] font-mono-num font-bold uppercase tracking-[0.2em] bg-gold/5 text-gold">
+                                <span className="px-3 py-1 rounded-sm border border-[#E8521A]/30 text-[10px] font-mono-num font-bold uppercase tracking-[0.2em] bg-[#E8521A]/5 text-[#E8521A]">
                                     {baseWord.cefr_level}
                                 </span>
                             </div>
@@ -108,10 +108,10 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
                         <div className="grid grid-cols-2 gap-3">
                             <div className="bg-surface p-5 rounded-2xl border border-border flex flex-col gap-2 relative overflow-hidden group hover:border-border-strong transition-all">
                                 <div className="absolute -right-4 -top-4 opacity-5">
-                                    <Brain className="w-20 h-20 text-gold" />
+                                    <Brain className="w-20 h-20 text-[#E8521A]" />
                                 </div>
                                 <span className="text-[10px] font-mono-num text-text-muted uppercase tracking-widest flex items-center gap-2">
-                                    <Brain className="w-3.5 h-3.5 text-gold" /> Status
+                                    <Brain className="w-3.5 h-3.5 text-[#E8521A]" /> Status
                                 </span>
                                 <span className={`w-fit mt-1 px-2.5 py-0.5 rounded-sm border text-[9px] font-mono-num font-bold uppercase tracking-[0.1em] ${statusGradient}`}>
                                     {word.status}
@@ -120,10 +120,10 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
 
                             <div className="bg-surface p-5 rounded-2xl border border-border flex flex-col gap-2 relative overflow-hidden group hover:border-border-strong transition-all">
                                 <div className="absolute -right-4 -top-4 opacity-5">
-                                    <Calendar className="w-20 h-20 text-gold" />
+                                    <Calendar className="w-20 h-20 text-[#E8521A]" />
                                 </div>
                                 <span className="text-[10px] font-mono-num text-text-muted uppercase tracking-widest flex items-center gap-2">
-                                    <Calendar className="w-3.5 h-3.5 text-gold" /> Next Review
+                                    <Calendar className="w-3.5 h-3.5 text-[#E8521A]" /> Next Review
                                 </span>
                                 <span className="text-xl font-display text-text-primary mt-1">
                                     {word.next_review_date
@@ -134,10 +134,10 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
 
                             <div className="bg-surface p-5 rounded-2xl border border-border flex flex-col gap-2 relative overflow-hidden group hover:border-border-strong transition-all">
                                 <div className="absolute -right-4 -top-4 opacity-5">
-                                    <Play className="w-20 h-20 text-gold" />
+                                    <Play className="w-20 h-20 text-[#E8521A]" />
                                 </div>
                                 <span className="text-[10px] font-mono-num text-text-muted uppercase tracking-widest flex items-center gap-2">
-                                    <Play className="w-3.5 h-3.5 text-gold" /> Interacted
+                                    <Play className="w-3.5 h-3.5 text-[#E8521A]" /> Interacted
                                 </span>
                                 <span className="flex items-baseline gap-1 mt-1">
                                     <span className="text-2xl font-display text-text-primary">{word.times_seen}</span>
@@ -147,12 +147,12 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
 
                             <div className="bg-surface p-5 rounded-2xl border border-border flex flex-col gap-2 relative overflow-hidden group hover:border-border-strong transition-all">
                                 <div className="absolute -right-4 -top-4 opacity-5">
-                                    <Target className="w-20 h-20 text-gold" />
+                                    <Target className="w-20 h-20 text-[#E8521A]" />
                                 </div>
                                 <span className="text-[10px] font-mono-num text-text-muted uppercase tracking-widest flex items-center gap-2">
-                                    <Target className="w-3.5 h-3.5 text-gold" /> Precision
+                                    <Target className="w-3.5 h-3.5 text-[#E8521A]" /> Precision
                                 </span>
-                                <span className="text-2xl font-display text-gold mt-1">
+                                <span className="text-2xl font-display text-[#E8521A] mt-1">
                                     {accuracy}%
                                 </span>
                             </div>
@@ -164,7 +164,7 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
                     {/* Action Buttons */}
                     <div className="flex flex-col gap-3 w-full mt-auto">
                         <Button
-                            className="w-full bg-gold hover:brightness-110 text-background font-mono-num text-[10px] uppercase tracking-widest font-bold h-14 rounded-full shadow-lg transition-all"
+                            className="w-full bg-[#E8521A] hover:brightness-110 text-[#080808] font-mono-num text-[10px] uppercase tracking-widest font-bold h-14 rounded-full shadow-lg transition-all"
                             onClick={() => {
                                 onOpenChange(false);
                                 onReviewClick(word);

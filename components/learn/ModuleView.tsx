@@ -99,7 +99,7 @@ export default function ModuleView({
                     <h2 className="text-xl font-display text-text-primary truncate max-w-[200px] sm:max-w-md">
                         {scenarioName}
                     </h2>
-                    <p className="text-[9px] text-gold font-mono-num tracking-[0.2em] uppercase mt-0.5">Active Sequence</p>
+                    <p className="text-[9px] text-[#E8521A] font-mono-num tracking-[0.2em] uppercase mt-0.5">Active Sequence</p>
                 </div>
 
                 {/* Step indicator dots */}
@@ -108,13 +108,13 @@ export default function ModuleView({
                         <div key={s.key} className="flex items-center gap-1.5 text-center">
                             <div
                                 className={`rounded-full transition-all duration-300 ${s.completed
-                                    ? 'w-2 h-2 bg-card border border-gold'
+                                    ? 'w-2 h-2 bg-card border border-[#E8521A]'
                                     : i === stepIndex
-                                        ? 'w-2.5 h-2.5 bg-gold shadow-[0_0_10px_rgba(201,168,76,0.3)]'
+                                        ? 'w-2.5 h-2.5 bg-[#E8521A] shadow-[0_0_10px_rgba(232,82,26,0.3)]'
                                         : 'w-2 h-2 bg-surface border border-border-strong'
                                     }`}
                             />
-                            {i < 2 && <div className={`w-3 h-[1px] ${s.completed ? 'bg-gold/50' : 'bg-border'}`} />}
+                            {i < 2 && <div className={`w-3 h-[1px] ${s.completed ? 'bg-[#E8521A]/50' : 'bg-border'}`} />}
                         </div>
                     ))}
                 </div>
@@ -129,7 +129,7 @@ export default function ModuleView({
                             transition={{ repeat: Infinity, duration: 4 }}
                             className="w-16 h-16 rounded-2xl bg-card border border-border-strong flex items-center justify-center shadow-lg"
                         >
-                            <Loader2 className="w-8 h-8 text-gold animate-spin" />
+                            <Loader2 className="w-8 h-8 text-[#E8521A] animate-spin" />
                         </motion.div>
                         <div className="text-center">
                             <p className="text-text-primary font-display text-xl mb-1">Compiling Module Data</p>

@@ -43,10 +43,10 @@ export default function Header({ userName, languageName, languageEmoji, level, s
             <div className={`
                 flex items-center gap-3 px-4 py-2.5 rounded-xl border
                 ${streak >= 7
-                    ? 'bg-gold-subtle border-gold-border text-gold shadow-[0_0_15px_rgba(201,168,76,0.15)]'
+                    ? 'bg-[#E8521A]/5 border-[#E8521A]/30 text-[#E8521A] shadow-[0_0_15px_rgba(232,82,26,0.15)]'
                     : 'bg-card border-border text-text-primary'}
             `}>
-                <Flame size={18} className={streak > 0 ? 'text-gold' : 'text-text-muted'} />
+                <Flame size={18} className={streak > 0 ? 'text-[#E8521A]' : 'text-text-muted'} />
                 <div className="flex flex-col">
                     {streak === 0 ? (
                         <span className="text-caption font-medium text-text-muted">Start your streak today</span>

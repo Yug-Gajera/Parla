@@ -21,8 +21,8 @@ const LEVEL_COLORS: Record<string, string> = {
     A2: 'border-border text-text-primary',
     B1: 'border-border text-text-primary',
     B2: 'border-border text-text-primary',
-    C1: 'border-gold-border text-gold',
-    C2: 'border-gold-border text-gold',
+    C1: 'border-[#E8521A]/30 text-[#E8521A]',
+    C2: 'border-[#E8521A]/30 text-[#E8521A]',
 };
 
 const FILTER_TABS = [
@@ -40,7 +40,7 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
     if (isLoading && books.length === 0) {
         return (
             <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-8 h-8 text-gold animate-spin" />
+                <Loader2 className="w-8 h-8 text-[#E8521A] animate-spin" />
             </div>
         );
     }
@@ -51,7 +51,7 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
             {inProgressBooks.length > 0 && (
                 <section>
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-1.5 h-6 bg-gold rounded-full" />
+                        <div className="w-1.5 h-6 bg-[#E8521A] rounded-full" />
                         <h2 className="text-2xl font-display text-text-primary tracking-tight">Active Volumes</h2>
                     </div>
                     <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 snap-x custom-scrollbar">
@@ -77,19 +77,19 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
                                                 <p className="text-white font-display text-lg leading-tight line-clamp-2 drop-shadow-md">
                                                     {book.title}
                                                 </p>
-                                                <p className="text-gold font-sans text-xs mt-1 drop-shadow-md">{book.author}</p>
+                                                <p className="text-[#E8521A] font-sans text-xs mt-1 drop-shadow-md">{book.author}</p>
                                             </div>
                                         </div>
                                         <div className="p-4 bg-surface">
-                                            <div className="flex items-center justify-between mb-3 text-[10px] font-mono-num uppercase tracking-widest text-text-secondary">
+                                             <div className="flex items-center justify-between mb-3 text-[10px] font-mono-num uppercase tracking-widest text-text-secondary">
                                                 <span>
                                                     Chapter {progress.current_chapter}
                                                 </span>
-                                                <span className="text-gold font-bold">{percent}%</span>
+                                                <span className="text-[#E8521A] font-bold">{percent}%</span>
                                             </div>
                                             <div className="h-1 bg-border rounded-full overflow-hidden">
                                                 <div
-                                                    className="h-full bg-gradient-to-r from-gold to-gold-hover rounded-full transition-all"
+                                                    className="h-full bg-[#E8521A] rounded-full transition-all"
                                                     style={{ width: `${percent}%` }}
                                                 />
                                             </div>
@@ -110,7 +110,7 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
                             key={tab.id}
                             onClick={() => updateFilters({ bookType: tab.id })}
                             className={`text-[11px] font-mono-num tracking-widest uppercase px-4 py-3 border-b-2 whitespace-nowrap transition-all ${filters.bookType === tab.id
-                                    ? 'border-gold text-gold'
+                                    ? 'border-[#E8521A] text-[#E8521A]'
                                     : 'border-transparent text-text-secondary hover:text-text-primary'
                                 }`}
                         >
@@ -126,7 +126,7 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
                                 key={level}
                                 onClick={() => updateFilters({ level: filters.level === level ? '' : level })}
                                 className={`text-[10px] font-mono-num font-bold px-3 py-1.5 rounded-sm border transition-all uppercase tracking-widest ${filters.level === level
-                                        ? 'bg-gold text-background border-gold'
+                                        ? 'bg-[#E8521A] text-[#080808] border-[#E8521A]'
                                         : 'bg-card border-border text-text-secondary hover:border-border-strong hover:text-text-primary'
                                     }`}
                             >
@@ -197,7 +197,7 @@ function BookCard({ book, index, onSelect }: { book: any; index: number; onSelec
 
                 {/* Completed badge */}
                 {isCompleted && (
-                    <div className="absolute top-3 right-3 bg-gold text-background text-[9px] font-mono-num font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm flex items-center gap-1.5 shadow-lg">
+                    <div className="absolute top-3 right-3 bg-[#E8521A] text-bg text-[9px] font-mono-num font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm flex items-center gap-1.5 shadow-lg">
                         <Check className="w-3 h-3" strokeWidth={3} /> Finalized
                     </div>
                 )}
@@ -212,7 +212,7 @@ function BookCard({ book, index, onSelect }: { book: any; index: number; onSelec
                     <h3 className="text-white font-display font-bold text-base sm:text-lg leading-tight line-clamp-2 drop-shadow-md mb-1.5">
                         {book.title}
                     </h3>
-                    <p className="text-gold text-[11px] sm:text-xs font-sans drop-shadow-sm">{book.author}</p>
+                    <p className="text-[#E8521A] text-[11px] sm:text-xs font-sans drop-shadow-sm">{book.author}</p>
                 </div>
             </div>
 
@@ -239,11 +239,11 @@ function BookCard({ book, index, onSelect }: { book: any; index: number; onSelec
                             <span className="text-text-secondary">
                                 Phase {progress.current_chapter}/{book.total_chapters}
                             </span>
-                            <span className="font-bold text-gold">{percent}%</span>
+                            <span className="font-bold text-[#E8521A]">{percent}%</span>
                         </div>
                         <div className="h-0.5 bg-border rounded-full overflow-hidden">
                             <div
-                                className="h-full bg-gold rounded-full"
+                                className="h-full bg-[#E8521A] rounded-full"
                                 style={{ width: `${percent}%` }}
                             />
                         </div>

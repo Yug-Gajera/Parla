@@ -44,13 +44,13 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
             <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 bg-card border border-border p-5 rounded-[18px] shadow-sm">
                 <div className="flex items-center gap-4 w-full sm:w-auto">
                     <div className="w-12 h-12 bg-background border border-border-strong rounded-full flex items-center justify-center shadow-inner">
-                        <span className="text-xl font-mono-num text-gold">{learnedCount}</span>
+                        <span className="text-xl font-mono-num text-[#E8521A]">{learnedCount}</span>
                     </div>
                     <span className="text-[10px] font-mono-num uppercase tracking-widest text-text-muted">/ 10 Acquired</span>
                 </div>
                 <div className="h-1.5 flex-1 max-w-full sm:max-w-xs w-full bg-background border border-border rounded-full overflow-hidden">
                     <motion.div
-                        className="h-full bg-gradient-to-r from-gold/50 to-gold rounded-full shadow-[0_0_10px_rgba(201,168,76,0.2)]"
+                        className="h-full bg-gradient-to-r from-[#E8521A]/50 to-[#E8521A] rounded-full shadow-[0_0_10px_rgba(232,82,26,0.2)]"
                         animate={{ width: `${(learnedCount / 10) * 100}%` }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                     />
@@ -83,7 +83,7 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                                 {/* Front */}
                                 <Card
                                     className={`p-6 transition-all duration-300 rounded-[18px] ${isLearned
-                                        ? 'border-accent-border bg-gold/5 shadow-sm'
+                                        ? 'border-accent-border bg-[#E8521A]/5 shadow-sm'
                                         : 'border-border bg-card hover:border-accent-border hover:bg-surface'
                                         }`}
                                     style={{
@@ -92,20 +92,20 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                                     }}
                                 >
                                     <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-4">
-                                        <p className={`text-xl font-serif leading-tight ${isLearned ? 'text-gold' : 'text-text-primary'}`}>{phrase.spanish}</p>
+                                        <p className={`text-xl font-serif leading-tight ${isLearned ? 'text-[#E8521A]' : 'text-text-primary'}`}>{phrase.spanish}</p>
                                         <div className="flex items-center gap-3 shrink-0">
                                             <span className="px-3 py-1 rounded bg-background border border-border-strong text-[9px] font-mono-num tracking-widest uppercase text-text-muted">
                                                 {phrase.category}
                                             </span>
                                             {isLearned ? (
-                                                <CheckCircle2 className="w-5 h-5 text-gold" />
+                                                <CheckCircle2 className="w-5 h-5 text-[#E8521A]" />
                                             ) : (
                                                 <div className="w-5 h-5 rounded-full border border-border-strong group-hover:bg-border" />
                                             )}
                                         </div>
                                     </div>
                                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 mb-4">
-                                        <p className="text-sm text-gold font-mono-num opacity-80">{phrase.phonetic}</p>
+                                        <p className="text-sm text-[#E8521A] font-mono-num opacity-80">{phrase.phonetic}</p>
                                         <p className="text-sm text-text-secondary">{phrase.english}</p>
                                     </div>
                                     <div className="bg-background border border-border rounded-xl px-4 py-3">
@@ -122,9 +122,9 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                                         display: isFlipped ? 'flex' : 'none',
                                     }}
                                 >
-                                    <div className="absolute inset-0 bg-gold/5" />
+                                    <div className="absolute inset-0 bg-[#E8521A]/5" />
                                     <div className="relative z-10 w-full flex flex-col items-center">
-                                        <p className="text-3xl font-serif text-gold mb-4">{phrase.spanish}</p>
+                                        <p className="text-3xl font-serif text-[#E8521A] mb-4">{phrase.spanish}</p>
                                         <p className="text-lg text-text-primary font-mono-num mb-8 opacity-80">{phrase.phonetic}</p>
                                         <Button className="btn-action px-8">
                                             Assimilate

@@ -24,8 +24,8 @@ const TOPIC_CHIPS = ['all', 'news', 'politics', 'culture', 'science', 'lifestyle
 // Neutral, sophisticated source colors
 const SOURCE_COLORS: Record<string, string> = {
     'BBC Mundo': 'bg-border-strong text-text-primary',
-    'DW Español': 'bg-border text-gold',
-    '20 Minutos': 'bg-card text-gold',
+    'DW Español': 'bg-[#E8521A]/10 text-[#E8521A]',
+    '20 Minutos': 'bg-card text-[#E8521A]',
 };
 
 function timeAgo(dateStr: string): string {
@@ -85,8 +85,8 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-6 border-b border-border">
                 <div className="flex items-center gap-5">
                     <div className="w-12 h-12 rounded-full border border-border-strong bg-surface flex items-center justify-center relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <Newspaper className="w-5 h-5 text-gold relative z-10" />
+                        <div className="absolute inset-0 bg-[#E8521A]/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        < Newspaper className="w-5 h-5 text-[#E8521A] relative z-10" />
                     </div>
                     <div>
                         <h2 className="text-3xl font-serif text-text-primary tracking-tight mb-1">Immersion Library</h2>
@@ -110,7 +110,7 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                                 variant="ghost"
                                 onClick={() => setLevelFilter(tab.value)}
                                 className={`flex-1 md:flex-none text-[10px] font-mono-num tracking-widest uppercase rounded-full h-8 px-5 transition-all
-                                    ${active ? 'bg-card text-gold shadow-md border border-border-strong' : 'text-text-muted hover:text-text-secondary'}
+                                    ${active ? 'bg-card text-[#E8521A] shadow-md border border-border-strong' : 'text-text-muted hover:text-text-secondary'}
                                 `}
                             >
                                 {tab.label}
@@ -129,7 +129,7 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                                 onClick={() => setTopicFilter(topic)}
                                 className={`px-4 py-1.5 rounded-full text-[10px] font-mono-num uppercase tracking-widest whitespace-nowrap transition-all border
                                     ${active
-                                        ? 'bg-gold/10 text-gold border-gold/30 shadow-md'
+                                        ? 'bg-[#E8521A]/10 text-[#E8521A] border-[#E8521A]/30 shadow-md'
                                         : 'bg-card border-border text-text-muted hover:border-border-strong hover:text-text-secondary hover:bg-surface'
                                     }`}
                             >
@@ -184,17 +184,17 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                                 className={`p-6 sm:p-7 cursor-pointer transition-all duration-300 rounded-2xl flex flex-col h-[260px] md:h-[280px] group relative overflow-hidden border
                                     ${isCompleted 
                                         ? 'bg-surface border-border-strong opacity-80' 
-                                        : 'bg-card border-border hover:border-gold/50 hover:bg-surface hover:-translate-y-1 hover:shadow-md'
+                                        : 'bg-card border-border hover:border-[#E8521A]/50 hover:bg-surface hover:-translate-y-1 hover:shadow-md'
                                     }
                                 `}
                                 onClick={() => handleArticleClick(article.id)}
                             >
                                 {/* Completion / Status indicator */}
                                 {isCompleted && (
-                                    <div className="absolute top-4 right-4 bg-background border border-gold/30 px-3 py-1 rounded-full flex items-center gap-2 shadow-inner">
-                                        <CheckCircle2 className="w-3 h-3 text-gold" />
+                                    <div className="absolute top-4 right-4 bg-background border border-[#E8521A]/30 px-3 py-1 rounded-full flex items-center gap-2 shadow-inner">
+                                        <CheckCircle2 className="w-3 h-3 text-[#E8521A]" />
                                         {article.user_progress?.comprehension_score !== null && (
-                                            <span className="text-[10px] font-mono-num text-gold">
+                                            <span className="text-[10px] font-mono-num text-[#E8521A]">
                                                 {article.user_progress?.comprehension_score}%
                                             </span>
                                         )}
@@ -202,7 +202,7 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                                 )}
                                 {isStarted && (
                                     <div className="absolute top-4 right-4">
-                                        <span className="px-3 py-1 rounded-full text-[9px] font-mono-num uppercase tracking-widest bg-gold/10 text-gold border border-gold/20 shadow-sm">
+                                        <span className="px-3 py-1 rounded-full text-[9px] font-mono-num uppercase tracking-widest bg-[#E8521A]/10 text-[#E8521A] border border-[#E8521A]/20 shadow-sm">
                                             Active
                                         </span>
                                     </div>
@@ -224,7 +224,7 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                                 </div>
 
                                 {/* Content */}
-                                <h3 className={`font-serif text-lg leading-snug mb-3 line-clamp-2 ${isCompleted ? 'text-text-secondary' : 'text-text-primary group-hover:text-gold transition-colors'}`}>
+                                <h3 className={`font-serif text-lg leading-snug mb-3 line-clamp-2 ${isCompleted ? 'text-text-secondary' : 'text-text-primary group-hover:text-[#E8521A] transition-colors'}`}>
                                     {article.title}
                                 </h3>
                                 <p className="text-[13px] text-text-muted line-clamp-2 mb-6 font-sans">
@@ -235,14 +235,14 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                                 <div className="mt-auto flex items-center gap-3 flex-wrap">
                                     <span className={`px-2 py-1 rounded text-[9px] font-mono-num font-bold uppercase tracking-[0.2em] border 
                                         ${article.cefr_level === userLevel 
-                                            ? 'bg-gold/10 text-gold border-gold/30 shadow-sm' 
+                                            ? 'bg-[#E8521A]/10 text-[#E8521A] border-[#E8521A]/30 shadow-sm' 
                                             : 'bg-background text-text-secondary border-border-strong'
                                         }
                                     `}>
                                         {article.cefr_level}
                                     </span>
                                     <span className="flex items-center gap-1.5 text-[9px] font-mono-num uppercase tracking-widest text-text-muted">
-                                        <Clock className="w-3 h-3 text-gold/50" />
+                                        <Clock className="w-3 h-3 text-[#E8521A]/50" />
                                         {article.estimated_read_minutes} min
                                     </span>
                                     {article.topics?.[0] && (
@@ -280,7 +280,7 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
 
             {isLoading && articles.length > 0 && (
                 <div className="flex items-center justify-center py-8">
-                    <Loader2 className="w-6 h-6 text-gold animate-spin" />
+                    <Loader2 className="w-6 h-6 text-[#E8521A] animate-spin" />
                 </div>
             )}
 

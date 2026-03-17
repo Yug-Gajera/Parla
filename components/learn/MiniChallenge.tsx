@@ -69,11 +69,11 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                 <div className="w-full mb-10">
                     <div className="flex justify-between text-[10px] font-mono-num uppercase tracking-widest text-text-muted mb-3">
                         <span>{typeLabel[q.type] || 'Verification'}</span>
-                        <span className="text-gold">Seq {currentQ + 1} / {challenge.questions.length}</span>
+                        <span className="text-[#E8521A]">Seq {currentQ + 1} / {challenge.questions.length}</span>
                     </div>
                     <div className="h-1 bg-border rounded-full overflow-hidden">
                         <motion.div
-                            className="h-full bg-gradient-to-r from-gold/50 to-gold"
+                            className="h-full bg-gradient-to-r from-[#E8521A]/50 to-[#E8521A]"
                             animate={{ width: `${((currentQ) / challenge.questions.length) * 100}%` }}
                             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                         />
@@ -98,9 +98,9 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
                             {q.options.map((opt, idx) => {
-                                let cls = 'bg-surface border-border-strong hover:border-gold/50 hover:bg-card text-text-secondary hover:text-text-primary';
+                                let cls = 'bg-surface border-border-strong hover:border-[#E8521A]/50 hover:bg-card text-text-secondary hover:text-text-primary';
                                 if (selected !== null) {
-                                    if (idx === q.correct) cls = 'bg-gold/10 border-gold text-gold shadow-[0_0_20px_rgba(201,168,76,0.15)]';
+                                    if (idx === q.correct) cls = 'bg-[#E8521A]/10 border-[#E8521A] text-[#E8521A] shadow-[0_0_20px_rgba(232,82,26,0.15)]';
                                     else if (idx === selected) cls = 'bg-error/10 border-error/50 text-error opacity-90';
                                     else cls = 'opacity-30 border-border bg-background text-text-muted';
                                 }
@@ -111,7 +111,7 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                                         disabled={selected !== null}
                                         className={`flex items-center gap-4 p-5 rounded-[18px] border transition-all duration-300 text-left group ${cls}`}
                                     >
-                                        <div className={`flex-shrink-0 w-6 h-6 rounded-sm border flex items-center justify-center font-mono-num text-[9px] transition-colors ${selected === null ? 'border-text-muted group-hover:border-gold' : 'border-transparent'}`}>
+                                        <div className={`flex-shrink-0 w-6 h-6 rounded-sm border flex items-center justify-center font-mono-num text-[9px] transition-colors ${selected === null ? 'border-text-muted group-hover:border-[#E8521A]' : 'border-transparent'}`}>
                                             {['01', '02', '03', '04'][idx]}
                                         </div>
                                         <span className="flex-1 font-sans text-[15px]">{opt}</span>
@@ -126,7 +126,7 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                                 animate={{ opacity: 1, y: 0 }}
                                 className="mt-8 p-6 rounded-[18px] bg-card border border-border shadow-sm"
                             >
-                                <p className="text-sm font-sans text-text-primary leading-relaxed"><span className="text-gold font-mono-num text-[10px] uppercase tracking-widest block mb-2">System Output</span>{q.explanation}</p>
+                                <p className="text-sm font-sans text-text-primary leading-relaxed"><span className="text-[#E8521A] font-mono-num text-[10px] uppercase tracking-widest block mb-2">System Output</span>{q.explanation}</p>
                             </motion.div>
                         )}
                     </motion.div>
@@ -156,17 +156,17 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                                 x: (Math.random() - 0.5) * 200,
                             }}
                             transition={{ duration: 2 + Math.random(), delay: i * 0.1, ease: "easeOut" }}
-                            className="absolute bg-gold w-1 h-1 rounded-full shadow-[0_0_10px_rgba(201,168,76,0.2)]"
+                            className="absolute bg-[#E8521A] w-1 h-1 rounded-full shadow-[0_0_10px_rgba(232,82,26,0.2)]"
                         />
                     ))}
                 </div>
             )}
 
             <div className="relative z-10 w-full flex flex-col items-center">
-                <div className={`w-28 h-28 rounded-full flex items-center justify-center border transition-all duration-700 mb-8 ${passed ? 'bg-gold/5 border-gold/30 shadow-[0_0_60px_rgba(201,168,76,0.15)]' : 'bg-error/10 border-error/30'
+                <div className={`w-28 h-28 rounded-full flex items-center justify-center border transition-all duration-700 mb-8 ${passed ? 'bg-[#E8521A]/5 border-[#E8521A]/30 shadow-[0_0_60px_rgba(232,82,26,0.15)]' : 'bg-error/10 border-error/30'
                     }`}>
                     {passed ? (
-                        <Fingerprint className="w-12 h-12 text-gold" strokeWidth={1} />
+                        <Fingerprint className="w-12 h-12 text-[#E8521A]" strokeWidth={1} />
                     ) : (
                         <XCircle className="w-12 h-12 text-error" strokeWidth={1} />
                     )}
@@ -193,7 +193,7 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                 {passed ? (
                     <>
                         <p className="text-sm text-text-secondary mb-12 max-w-sm leading-relaxed">
-                            Simulation module `<span className="text-gold font-mono-num">{scenarioName}</span>` is now accessible in the Practice sector.
+                            Simulation module `<span className="text-[#E8521A] font-mono-num">{scenarioName}</span>` is now accessible in the Practice sector.
                         </p>
                         <Button
                             onClick={() => onComplete(scorePercent)}

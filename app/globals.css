@@ -10,14 +10,14 @@
 /* ── Design Tokens (CSS Custom Properties) ──────────────── */
 @layer base {
   /* LIGHT THEME (Default) */
+  /* LIGHT THEME (Default) */
   :root, [data-theme="light"] {
     --color-bg: #FFFCF2;
     --color-surface: #F5F2E8;
     --color-card: #FFFFFF;
-    --color-card-hover: #F9F8F0;
-
+    --color-card-hover: #FDFAF4;
     --color-border: #E8E4D6;
-    --color-border-strong: #D8D4C8;
+    --color-border-strong: #C8C4B8;
 
     --color-text-primary: #1E1E1A;
     --color-text-secondary: #5A5850;
@@ -26,25 +26,24 @@
 
     --color-accent: #E8521A;
     --color-accent-hover: #D94A15;
-    --color-accent-subtle: rgba(232,82,26,0.06);
-    --color-accent-border: rgba(232,82,26,0.2);
-
-    --color-gold: #C9A84C;
-    --color-gold-subtle: rgba(201,168,76,0.12);
-    --color-gold-border: rgba(201,168,76,0.25);
+    --color-accent-subtle: rgba(232,82,26,0.08);
+    --color-accent-soft: rgba(232,82,26,0.15);
+    --color-accent-medium: rgba(232,82,26,0.75);
+    --color-accent-border: rgba(232,82,26,0.22);
+    --color-accent-border-strong: rgba(232,82,26,0.4);
+    --color-accent-whisper: rgba(232,82,26,0.04);
 
     --color-success: #2D7A4F;
     --color-success-subtle: rgba(45,122,79,0.08);
-
-    --color-warning: #C9A84C;
-    --color-warning-subtle: rgba(201,168,76,0.1);
+    --color-success-border: rgba(45,122,79,0.2);
 
     --color-error: #C93A1A;
-    --color-error-subtle: rgba(201,58,26,1);
+    --color-error-subtle: rgba(201,58,26,0.08);
+    --color-error-border: rgba(201,58,26,0.2);
 
-    --shadow-sm: 0 1px 3px rgba(30,30,26,0.06);
-    --shadow-md: 0 4px 16px rgba(30,30,26,0.08);
-    --shadow-lg: 0 8px 32px rgba(30,30,26,0.1);
+    --shadow-sm: 0 1px 3px rgba(30,30,26,0.07);
+    --shadow-md: 0 4px 16px rgba(30,30,26,0.09);
+    --shadow-lg: 0 8px 32px rgba(30,30,26,0.11);
     --shadow-xl: 0 20px 60px rgba(30,30,26,0.12);
 
     --transition-fast: 0.15s ease;
@@ -60,6 +59,7 @@
     --color-card-hover: #1a1a1a;
     --color-border: #242424;
     --color-border-strong: #2e2e2e;
+
     --color-text-primary: #f0ece4;
     --color-text-secondary: #9a9590;
     --color-text-muted: #5a5652;
@@ -68,18 +68,15 @@
     --color-accent: #E8521A;
     --color-accent-hover: #F05E24;
     --color-accent-subtle: rgba(232,82,26,0.1);
+    --color-accent-soft: rgba(232,82,26,0.18);
+    --color-accent-medium: rgba(232,82,26,0.8);
     --color-accent-border: rgba(232,82,26,0.25);
-
-    --color-gold: #C9A84C;
-    --color-gold-subtle: rgba(201,168,76,0.12);
-    --color-gold-border: rgba(201,168,76,0.25);
+    --color-accent-border-strong: rgba(232,82,26,0.45);
+    --color-accent-whisper: rgba(232,82,26,0.04);
 
     --color-success: #4ade80;
     --color-success-subtle: rgba(74,222,128,0.1);
     --color-success-border: rgba(74,222,128,0.2);
-
-    --color-warning: #C9A84C;
-    --color-warning-subtle: rgba(201,168,76,0.1);
 
     --color-error: #f87171;
     --color-error-subtle: rgba(248,113,113,0.1);
@@ -298,8 +295,8 @@
   .parlova-card-interactive:active { transform: scale(0.99); }
 
   .parlova-card-accent {
-    border-color: var(--color-gold-border);
-    background: linear-gradient(135deg, var(--color-card) 0%, rgba(201,168,76,0.04) 100%);
+    border-color: var(--color-accent-border);
+    background: linear-gradient(135deg, var(--color-card) 0%, var(--color-accent-whisper) 100%);
     box-shadow: var(--shadow-sm);
   }
 
@@ -346,7 +343,7 @@
 
   .pill-score {
     background: rgba(232,82,26,0.1);
-    color: #C93A1A;
+    color: #E8521A;
     border-radius: 9999px;
     font-family: var(--font-dm-sans), system-ui, sans-serif;
     font-size: 12px;
@@ -362,12 +359,7 @@
     color: var(--color-accent);
     border: 1px solid var(--color-accent-border);
   }
-  .badge-gold {
-    background: var(--color-gold-subtle);
-    color: var(--color-gold);
-    border: 1px solid var(--color-gold-border);
-    font-family: var(--font-jetbrains-mono), monospace;
-  }
+
   .badge-success {
     background: var(--color-success-subtle);
     color: var(--color-success);
@@ -386,12 +378,12 @@
     border: 1px solid var(--color-border);
   }
   .badge-level {
-    font-family: var(--font-jetbrains-mono), monospace;
-    font-weight: 500;
+    font-family: var(--font-dm-sans), system-ui, sans-serif;
+    font-weight: 600;
     font-size: 11px;
-    background: var(--color-gold-subtle);
-    color: var(--color-gold);
-    border: 1px solid var(--color-gold-border);
+    background: rgba(232,82,26,0.1);
+    color: #E8521A;
+    border: 1px solid rgba(232,82,26,0.25);
     padding: 3px 8px;
     border-radius: 4px;
   }
@@ -637,19 +629,19 @@
 @layer components {
   .score-card {
     background: var(--color-card);
-    border: 1px solid var(--color-gold-border);
+    border: 1px solid var(--color-accent-border);
     border-radius: 20px;
     padding: 32px;
     max-width: 480px;
     margin: 0 auto;
     box-shadow: var(--shadow-lg);
-    background: linear-gradient(135deg, var(--color-card) 0%, rgba(201,168,76,0.04) 100%);
+    background: linear-gradient(135deg, var(--color-card) 0%, var(--color-accent-whisper) 100%);
   }
   .score-main {
     font-family: var(--font-jetbrains-mono), monospace;
     font-weight: 500;
     font-size: 64px;
-    color: var(--color-gold);
+    color: var(--color-accent);
     line-height: 1;
   }
   .score-label {
@@ -662,14 +654,14 @@
   .score-bar-track {
     flex: 1;
     height: 6px;
-    background: var(--color-border);
+    background: var(--color-accent-subtle);
     border-radius: 9999px;
     overflow: hidden;
   }
   .score-bar-fill {
     height: 100%;
     border-radius: 9999px;
-    background: linear-gradient(90deg, var(--color-gold), #e4c76b);
+    background: var(--color-accent);
     transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
     /* Initial width expected to be 0 via inline style */
   }
@@ -758,7 +750,7 @@
 @layer components {
   .progress-track {
     height: 4px;
-    background: var(--color-border);
+    background: var(--color-accent-subtle);
     border-radius: 9999px;
     overflow: hidden;
     position: relative;
@@ -766,7 +758,7 @@
   .progress-fill {
     height: 100%;
     border-radius: 9999px;
-    background: linear-gradient(90deg, var(--color-accent), rgba(232,82,26,0.6));
+    background: var(--color-accent);
     transition: width 0.4s ease;
   }
   .progress-reading {
@@ -774,13 +766,13 @@
     top: 0;
     left: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--color-accent), rgba(232,82,26,0.7));
+    background: var(--color-accent);
     transition: width 0.1s ease;
     z-index: 20;
   }
   /* Level test bar matches reading structure */
   .level-progress-fill {
-    background: linear-gradient(90deg, var(--color-accent), rgba(232,82,26,0.7));
+    background: var(--color-accent);
   }
 }
 
@@ -876,7 +868,7 @@
     background: linear-gradient(135deg, var(--color-card) 0%, rgba(232,82,26,0.04) 100%);
   }
   .lb-rank { font-family: var(--font-jetbrains-mono), monospace; font-weight: 500; }
-  .lb-rank-1 { color: var(--color-gold); }
+  .lb-rank-1 { color: var(--color-accent); }
   .lb-rank-2 { color: #8A8880; }
   .lb-rank-3 { color: #C8845A; }
   .lb-rank-other { color: var(--color-text-muted); }
@@ -1004,13 +996,13 @@
   .quick-action-icon {
     width: 40px;
     height: 40px;
-    background: rgba(201,168,76,0.1);
+    background: var(--color-accent-soft);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 12px;
-    color: #c9a84c;
+    color: var(--color-accent);
   }
   .quick-action-title {
     font-weight: 600;
@@ -1176,10 +1168,10 @@
 [data-theme="dark"] .score-card {
   background: linear-gradient(
     135deg,
-    #141414 0%,
-    rgba(201,168,76,0.05) 100%
+    var(--color-card) 0%,
+    var(--color-accent-whisper) 100%
   ) !important;
-  border-color: rgba(201,168,76,0.2) !important;
+  border-color: var(--color-accent-border) !important;
 }
 
 /* Vocabulary Deck Overrides */
@@ -1206,9 +1198,9 @@
 
 [data-theme="dark"] .btn-hard,
 [data-theme="dark"] .diff-hard {
-  background: rgba(201,168,76,0.1) !important;
-  color: #C9A84C !important;
-  border-color: rgba(201,168,76,0.2) !important;
+  background: var(--color-accent-soft) !important;
+  color: var(--color-accent) !important;
+  border-color: var(--color-accent-border) !important;
 }
 
 [data-theme="dark"] .btn-good,

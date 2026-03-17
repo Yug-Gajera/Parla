@@ -64,8 +64,8 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                     <span className="text-3xl font-serif text-text-primary">{stats?.total ?? '-'}</span>
                 </div>
                 <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm">
-                    <span className="text-gold text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Pending Review</span>
-                    <span className="text-3xl font-serif text-gold">{stats?.dueToday ?? '-'}</span>
+                    <span className="text-[#E8521A] text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Pending Review</span>
+                    <span className="text-3xl font-serif text-[#E8521A]">{stats?.dueToday ?? '-'}</span>
                 </div>
                 <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm">
                     <span className="text-text-secondary text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Acquiring</span>
@@ -85,7 +85,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search your lexicon..."
-                        className="pl-11 h-12 bg-surface border-border text-text-primary placeholder:text-text-muted rounded-[18px] focus-visible:ring-1 focus-visible:ring-gold focus-visible:ring-offset-0 font-sans shadow-sm"
+                        className="pl-11 h-12 bg-surface border-border text-text-primary placeholder:text-text-muted rounded-[18px] focus-visible:ring-1 focus-visible:ring-[#E8521A] focus-visible:ring-offset-0 font-sans shadow-sm"
                     />
                 </div>
                 <div className="flex overflow-x-auto hide-scrollbar gap-2 pb-1 sm:pb-0">
@@ -94,7 +94,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                             key={f.id}
                             variant="ghost"
                             size="sm"
-                            className={`whitespace-nowrap rounded-[12px] h-12 px-5 text-[11px] font-mono uppercase tracking-widest transition-all ${filter === f.id ? 'bg-gold text-bg font-bold shadow-md' : 'bg-card text-text-secondary border border-border hover:bg-surface hover:text-text-primary'}`}
+                            className={`whitespace-nowrap rounded-[12px] h-12 px-5 text-[11px] font-mono uppercase tracking-widest transition-all ${filter === f.id ? 'bg-[#E8521A] text-[#080808] font-bold shadow-md' : 'bg-card text-text-secondary border border-border hover:bg-surface hover:text-text-primary'}`}
                             onClick={() => setFilter(f.id as any)}
                         >
                             {f.label}
@@ -136,7 +136,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
 
                         {/* Dashed Import Card for Empty State */}
                         <div className="bg-card border border-border rounded-[18px] p-8 text-center mt-6 w-full max-w-sm flex flex-col items-center shadow-sm">
-                            <Upload className="text-gold mb-3" size={32} />
+                            <Upload className="text-[#E8521A] mb-3" size={32} />
                             <h3 className="font-sans font-semibold text-[15px] text-text-primary mb-1">Already know some Spanish?</h3>
                             <p className="font-sans text-[13px] text-text-secondary mb-5 leading-snug">
                                 Import your existing vocabulary instead of starting from scratch
@@ -162,7 +162,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                             >
                                 <div className="flex flex-col gap-1.5 items-start">
                                     <div className="flex items-center gap-3">
-                                        <span className="text-xl font-serif text-text-primary group-hover:text-gold transition-colors leading-none tracking-tight">
+                                        <span className="text-xl font-serif text-text-primary group-hover:text-[#E8521A] transition-colors leading-none tracking-tight">
                                             {word.vocabulary_words.word}
                                         </span>
                                         <StatusBadge status={word.status} />
@@ -197,7 +197,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
             <div className="absolute bottom-6 right-6">
                 <Button
                     size="icon"
-                    className="h-14 w-14 rounded-full bg-gold hover:brightness-110 shadow-lg transition-all z-10 border border-gold/50"
+                    className="h-14 w-14 rounded-full bg-[#E8521A] hover:brightness-110 shadow-lg transition-all z-10 border border-[#E8521A]/50"
                     onClick={() => setIsAddOpen(true)}
                 >
                     <Plus className="h-6 w-6 text-bg" />
@@ -234,9 +234,9 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
 function StatusBadge({ status }: { status: string }) {
     const statusColors = {
         'new': 'bg-surface border-border-strong text-text-muted',
-        'learning': 'bg-gold/10 border-gold/20 text-gold shadow-sm',
+        'learning': 'bg-[#E8521A]/10 border-[#E8521A]/20 text-[#E8521A] shadow-sm',
         'familiar': 'bg-green-600/10 border-green-600/20 text-green-700 shadow-sm',
-        'mastered': 'bg-gold border-gold text-bg shadow-sm',
+        'mastered': 'bg-[#E8521A] border-[#E8521A] text-[#080808] shadow-sm',
     };
     const c = statusColors[status as keyof typeof statusColors] || statusColors.new;
     return (

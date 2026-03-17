@@ -89,7 +89,7 @@ export default function ChapterReader({
         return (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 className="fixed inset-0 z-[60] bg-[#080808] flex flex-col items-center justify-center p-8 font-sans">
-                <Loader2 className="w-12 h-12 text-[#c9a84c] animate-spin mb-6" />
+                <Loader2 className="w-12 h-12 text-[#E8521A] animate-spin mb-6" />
                 <h2 className="text-xl font-serif text-[#f0ece4] mb-3">Initializing Chapter Metadata</h2>
                 <p className="text-[11px] font-mono uppercase tracking-widest text-[#5a5652] text-center max-w-sm leading-relaxed p-4 border border-[#1e1e1e] rounded-xl bg-[#0f0f0f]">
                     System extracting lexicon topology and constructing comprehension vectors.
@@ -103,7 +103,7 @@ export default function ChapterReader({
         return (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 className="fixed inset-0 z-[60] bg-[#080808] flex items-center justify-center">
-                <Loader2 className="w-10 h-10 text-[#c9a84c] animate-spin" />
+                <Loader2 className="w-10 h-10 text-[#E8521A] animate-spin" />
             </motion.div>
         );
     }
@@ -139,7 +139,7 @@ export default function ChapterReader({
                                 x: (Math.random() - 0.5) * 250,
                             }}
                             transition={{ duration: 2 + Math.random() * 2, delay: i * 0.1, ease: "easeOut" }}
-                            className="absolute bg-[#c9a84c] w-1.5 h-1.5 rounded-full shadow-[0_0_15px_rgba(201,168,76,0.8)]"
+                            className="absolute bg-[#E8521A] w-1.5 h-1.5 rounded-full shadow-[0_0_15px_rgba(232,82,26,0.8)]"
                         />
                     ))}
                 </div>
@@ -150,7 +150,7 @@ export default function ChapterReader({
                         <motion.div initial={{ scale: 0 }} animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
                             transition={{ delay: 0.3, type: 'spring' }}
                             className="mx-auto mb-8 p-5 rounded-full bg-[#141414] border border-[#2a2a2a] w-fit shadow-inner">
-                            <Award className="w-12 h-12 text-[#c9a84c]" />
+                            <Award className="w-12 h-12 text-[#E8521A]" />
                         </motion.div>
 
                         <h2 className="text-3xl font-serif text-[#f0ece4] mb-3 leading-tight">
@@ -161,8 +161,8 @@ export default function ChapterReader({
                         </p>
 
                         <div className={`text-6xl font-serif mb-2 ${
-                            comprehensionResult.score >= 70 ? 'text-[#c9a84c]' :
-                            comprehensionResult.score >= 40 ? 'text-[#b98e72]' : 'text-red-400'
+                            comprehensionResult.score >= 70 ? 'text-[#E8521A]' :
+                            comprehensionResult.score >= 40 ? 'text-[#D94A15]' : 'text-red-400'
                         }`}>
                             {comprehensionResult.correct}/{comprehensionResult.total}
                         </div>
@@ -172,7 +172,7 @@ export default function ChapterReader({
 
                         <div className="grid grid-cols-2 gap-4 mb-10">
                             <div className="p-4 rounded-2xl bg-[#141414] border border-[#1e1e1e] shadow-inner flex flex-col items-center">
-                                <p className="text-3xl font-serif text-[#c9a84c] mb-1">+{comprehensionResult.xp_earned}</p>
+                                <p className="text-3xl font-serif text-[#E8521A] mb-1">+{comprehensionResult.xp_earned}</p>
                                 <p className="text-[9px] font-mono text-[#5a5652] uppercase tracking-widest">XP Yield</p>
                             </div>
                             <div className="p-4 rounded-2xl bg-[#141414] border border-[#1e1e1e] shadow-inner flex flex-col items-center">
@@ -185,7 +185,7 @@ export default function ChapterReader({
                             <div className="flex flex-col gap-3">
                                 <Button
                                     onClick={() => onNavigate(comprehensionResult.next_chapter!)}
-                                    className="w-full bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all gap-2"
+                                    className="w-full bg-[#E8521A] hover:bg-[#D94A15] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(232,82,26,0.15)] transition-all gap-2"
                                 >
                                     Initialize Phase {comprehensionResult.next_chapter} <ChevronRight className="w-4 h-4" />
                                 </Button>
@@ -194,7 +194,7 @@ export default function ChapterReader({
                                 </Button>
                             </div>
                         ) : (
-                            <Button onClick={onClose} className="w-full bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all">
+                            <Button onClick={onClose} className="w-full bg-[#E8521A] hover:bg-[#D94A15] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(232,82,26,0.15)] transition-all">
                                 Return to Archive
                             </Button>
                         )}
@@ -222,8 +222,8 @@ export default function ChapterReader({
                     <div className="flex gap-2">
                         {questions.map((_: any, i: number) => (
                             <div key={i} className={`h-1.5 rounded-full transition-all ${
-                                i === currentQuestion ? 'bg-[#c9a84c] w-6 shadow-[0_0_10px_rgba(201,168,76,0.5)]' :
-                                i < currentQuestion ? 'bg-[#c9a84c]/40 w-3' : 'bg-[#1e1e1e] w-3'
+                                i === currentQuestion ? 'bg-[#E8521A] w-6 shadow-[0_0_10px_rgba(232,82,26,0.5)]' :
+                                i < currentQuestion ? 'bg-[#E8521A]/40 w-3' : 'bg-[#1e1e1e] w-3'
                             }`} />
                         ))}
                     </div>
@@ -246,11 +246,11 @@ export default function ChapterReader({
                             {q.options.map((opt: string, optIdx: number) => {
                                 let cls = 'border-[#1e1e1e] bg-[#0f0f0f] text-[#f0ece4] hover:bg-[#141414] hover:border-[#2a2a2a]';
                                 if (showExplanation) {
-                                    if (optIdx === q.correct) cls = 'border-[#c9a84c] bg-[#c9a84c]/5 text-[#c9a84c]';
+                                    if (optIdx === q.correct) cls = 'border-[#E8521A] bg-[#E8521A]/5 text-[#E8521A]';
                                     else if (optIdx === selected && !isCorrect) cls = 'border-red-500/50 bg-red-500/10 text-red-500';
                                     else cls = 'border-[#1e1e1e] bg-[#080808] text-[#5a5652] opacity-50';
                                 } else if (selected === optIdx) {
-                                    cls = 'border-[#c9a84c]/50 bg-[#c9a84c]/5 text-[#c9a84c] shadow-[0_0_15px_rgba(201,168,76,0.05)]';
+                                    cls = 'border-[#E8521A]/50 bg-[#E8521A]/5 text-[#E8521A] shadow-[0_0_15px_rgba(232,82,26,0.05)]';
                                 }
 
                                 return (
@@ -261,7 +261,7 @@ export default function ChapterReader({
                                     >
                                         <div className={`w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 text-[10px] font-mono uppercase font-bold transition-all ${
                                             (showExplanation && optIdx === q.correct) || (!showExplanation && selected === optIdx) 
-                                            ? 'border-[#c9a84c] bg-[#c9a84c]/10 text-[#c9a84c]'
+                                            ? 'border-[#E8521A] bg-[#E8521A]/10 text-[#E8521A]'
                                             : (showExplanation && optIdx === selected && !isCorrect)
                                             ? 'border-red-500/50 bg-red-500/10 text-red-500'
                                             : 'border-[#2a2a2a] bg-[#141414] text-[#5a5652]'
@@ -277,8 +277,8 @@ export default function ChapterReader({
                         <AnimatePresence>
                             {showExplanation && (
                                 <motion.div initial={{ opacity: 0, height: 0, y: 10 }} animate={{ opacity: 1, height: 'auto', y: 0 }} className="mb-8">
-                                    <div className={`p-6 rounded-2xl border shadow-inner ${isCorrect ? 'border-[#c9a84c]/30 bg-[#c9a84c]/5' : 'border-red-500/20 bg-red-500/5'}`}>
-                                        <p className={`text-[12px] font-mono font-bold uppercase tracking-widest mb-3 flex items-center gap-2 ${isCorrect ? 'text-[#c9a84c]' : 'text-red-400'}`}>
+                                    <div className={`p-6 rounded-2xl border shadow-inner ${isCorrect ? 'border-[#E8521A]/30 bg-[#E8521A]/5' : 'border-red-500/20 bg-red-500/5'}`}>
+                                        <p className={`text-[12px] font-mono font-bold uppercase tracking-widest mb-3 flex items-center gap-2 ${isCorrect ? 'text-[#E8521A]' : 'text-red-400'}`}>
                                             {isCorrect ? 'Diagnostic Positive' : 'Diagnostic Negative'}
                                         </p>
                                         <p className="text-sm font-sans text-[#f0ece4]/90 leading-relaxed">{q.explanation}</p>
@@ -292,7 +292,7 @@ export default function ChapterReader({
                 <div className="p-6 bg-[#0f0f0f] border-t border-[#1e1e1e] pb-safe-bottom">
                     <div className="max-w-xl mx-auto">
                         {!showExplanation ? (
-                            <Button className="w-full bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[12px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all" 
+                            <Button className="w-full bg-[#E8521A] hover:bg-[#D94A15] text-[#080808] font-mono text-[12px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(232,82,26,0.15)] transition-all" 
                                 disabled={selected === null} 
                                 onClick={handleCheckAnswer}>
                                 Verify Vector
@@ -316,7 +316,7 @@ export default function ChapterReader({
             {/* Progress bar */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-[#1e1e1e] z-[62]">
                 <motion.div
-                    className="h-full bg-gradient-to-r from-[#8b7538] to-[#c9a84c]"
+                    className="h-full bg-[#E8521A]"
                     animate={{ width: `${readingProgress}%` }}
                     transition={{ ease: 'easeOut' }}
                 />
@@ -335,7 +335,7 @@ export default function ChapterReader({
                         Phase {chapterNumber} <span className="text-[#2a2a2a] mx-1">/</span> {totalChapters}
                     </p>
                 </div>
-                <Button variant="ghost" size="icon" onClick={toggleVocabPanel} className="rounded-full text-[#c9a84c] bg-[#c9a84c]/10 hover:bg-[#c9a84c]/20 border border-[#c9a84c]/20">
+                <Button variant="ghost" size="icon" onClick={toggleVocabPanel} className="rounded-full text-[#E8521A] bg-[#E8521A]/10 hover:bg-[#E8521A]/20 border border-[#E8521A]/20">
                     <BookOpen className="w-4 h-4" />
                 </Button>
             </div>
@@ -375,7 +375,7 @@ export default function ChapterReader({
                     <motion.div initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 80, opacity: 0 }}
                         className="fixed bottom-24 left-4 right-4 z-[65] flex justify-center pointer-events-none">
                         <Button onClick={handleStartComprehension}
-                            className="pointer-events-auto bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[11px] font-bold uppercase tracking-widest h-14 px-8 rounded-full shadow-[0_10px_30px_rgba(201,168,76,0.3)] transition-all gap-3 border border-[#c9a84c]/50">
+                            className="pointer-events-auto bg-[#E8521A] hover:bg-[#D94A15] text-[#080808] font-mono text-[11px] font-bold uppercase tracking-widest h-14 px-8 rounded-full shadow-[0_10px_30px_rgba(232,82,26,0.3)] transition-all gap-3 border border-[#232,82,26]/50">
                             <Sparkles className="w-4 h-4" /> Run Comprehension Diagnostic
                         </Button>
                     </motion.div>
@@ -412,21 +412,21 @@ export default function ChapterReader({
                                 <div key={i} className="flex items-start gap-4 p-5 rounded-2xl bg-[#141414] border border-[#1e1e1e] group hover:border-[#2a2a2a] transition-all">
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-3 mb-2">
-                                            <span className="font-serif text-xl tracking-tight text-[#f0ece4] group-hover:text-[#c9a84c] transition-colors">{v.word}</span>
+                                            <span className="font-serif text-xl tracking-tight text-[#f0ece4] group-hover:text-[#E8521A] transition-colors">{v.word}</span>
                                             <span className="text-[9px] px-2 py-0.5 rounded-sm border border-[#2a2a2a] bg-[#080808] text-[#9a9590] uppercase tracking-widest font-mono">
                                                 {v.part_of_speech}
                                             </span>
                                         </div>
                                         <p className="text-sm font-sans text-[#f0ece4]/90 mb-2">{v.translation}</p>
                                         {v.in_context && (
-                                            <div className="pl-3 border-l-2 border-[#1e1e1e] group-hover:border-[#c9a84c]/30 transition-colors">
+                                            <div className="pl-3 border-l-2 border-[#1e1e1e] group-hover:border-[#E8521A]/30 transition-colors">
                                                 <p className="text-xs font-serif text-[#5a5652] italic line-clamp-2 leading-relaxed">
                                                     "{v.in_context}"
                                                 </p>
                                             </div>
                                         )}
                                     </div>
-                                    <Button size="icon" variant="ghost" className="flex-shrink-0 w-10 h-10 rounded-full border border-[#2a2a2a] bg-[#080808] text-[#5a5652] group-hover:bg-[#c9a84c]/10 group-hover:text-[#c9a84c] group-hover:border-[#c9a84c]/30">
+                                    <Button size="icon" variant="ghost" className="flex-shrink-0 w-10 h-10 rounded-full border border-[#2a2a2a] bg-[#080808] text-[#5a5652] group-hover:bg-[#E8521A]/10 group-hover:text-[#E8521A] group-hover:border-[#E8521A]/30">
                                         <Plus className="w-4 h-4" />
                                     </Button>
                                 </div>
@@ -463,7 +463,7 @@ function InteractiveText({ content, onTapWord }: { content: string; onTapWord: (
     return (
         <div className="space-y-6">
             {paragraphs.map((p, pIdx) => (
-                <p key={pIdx} className="text-xl sm:text-2xl font-serif leading-[1.8] text-[#9a9590] tracking-wide text-justify indent-8 first-letter:text-5xl first-letter:font-black first-letter:text-[#c9a84c] first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:leading-none">
+                <p key={pIdx} className="text-xl sm:text-2xl font-serif leading-[1.8] text-[#9a9590] tracking-wide text-justify indent-8 first-letter:text-5xl first-letter:font-black first-letter:text-[#E8521A] first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:leading-none">
                     <WordTokens text={p} onTapWord={onTapWord} />
                 </p>
             ))}
@@ -487,7 +487,7 @@ function WordTokens({ text, onTapWord }: { text: string; onTapWord: (word: strin
                 return (
                     <span key={i}
                         onClick={() => onTapWord(cleanWord, text)}
-                        className="cursor-pointer rounded-[4px] px-[2px] -mx-[2px] transition-colors duration-200 hover:bg-[#c9a84c]/20 hover:text-[#f0ece4] active:bg-[#c9a84c]/40 cursor-text-lookup">
+                        className="cursor-pointer rounded-[4px] px-[2px] -mx-[2px] transition-colors duration-200 hover:bg-[#E8521A]/20 hover:text-[#f0ece4] active:bg-[#E8521A]/40 cursor-text-lookup">
                         {token}
                     </span>
                 );

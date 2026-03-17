@@ -32,7 +32,7 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
             <div className="flex items-center gap-[16px] w-full mb-[24px]">
                 {/* Current */}
                 <div className="flex flex-col items-center flex-shrink-0">
-                    <div className="w-[44px] h-[44px] rounded-pill bg-gold-subtle text-gold flex items-center justify-center font-mono-num font-medium text-[16px] border border-gold-border shadow-md shadow-gold/10">
+                    <div className="w-[44px] h-[44px] rounded-pill bg-[#E8521A]/15 text-[#E8521A] flex items-center justify-center font-mono-num font-medium text-[16px] border border-[#E8521A]/22 shadow-md shadow-[#E8521A]/10">
                         {currentLevel}
                     </div>
                 </div>
@@ -41,7 +41,7 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
                 <div className="flex-1 flex flex-col justify-center">
                     <div className="progress-track w-full">
                         <motion.div
-                            className={`progress-fill left-0 top-0 absolute ${isTestAvailable ? 'shadow-[0_0_10px_var(--color-gold)]' : ''}`}
+                            className={`progress-fill left-0 top-0 absolute ${isTestAvailable ? 'shadow-[0_0_10px_#E8521A]' : ''}`}
                             initial={{ width: '0%' }}
                             animate={{ width: mounted ? `${isMaxLevel ? 100 : score}%` : '0%' }}
                             transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
@@ -53,7 +53,7 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
                 <div className="flex flex-col items-center flex-shrink-0 relative">
                     <div className={`w-[44px] h-[44px] rounded-pill flex items-center justify-center font-mono-num font-medium text-[16px] border transition-colors ${
                         isTestAvailable 
-                        ? 'bg-gold-subtle/80 text-gold border-gold-border shadow-md shadow-gold/20' 
+                        ? 'bg-[#E8521A]/15 text-[#E8521A] border border-[#E8521A]/22 shadow-md shadow-[#E8521A]/20' 
                         : 'bg-transparent text-text-muted border-border-strong'
                     }`}>
                         {nextLevel}
@@ -70,10 +70,10 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
                 {!isMaxLevel && (
                     <div className="text-[13px] mt-[4px]">
                         {isTestAvailable ? (
-                            <Link href="/learn?tab=test" className="text-gold hover:text-accent-hover flex items-center justify-center gap-[6px] group-hover:underline transition-colors mt-[4px]">
+                            <Link href="/learn?tab=test" className="text-[#E8521A] hover:text-[#D94A15] flex items-center justify-center gap-[6px] group-hover:underline transition-colors mt-[4px]">
                                 <span className="relative flex h-[8px] w-[8px]">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-pill bg-gold opacity-75"></span>
-                                    <span className="relative inline-flex rounded-pill h-[8px] w-[8px] bg-gold"></span>
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-pill bg-[#E8521A] opacity-75"></span>
+                                    <span className="relative inline-flex rounded-pill h-[8px] w-[8px] bg-[#E8521A]"></span>
                                 </span>
                                 Diagnostic ready
                             </Link>

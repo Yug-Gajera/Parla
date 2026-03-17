@@ -32,10 +32,10 @@ const config: Config = {
 					subtle: 'var(--color-accent-subtle)',
 					border: 'var(--color-accent-border)',
 				},
-				gold: {
-					DEFAULT: 'var(--color-gold)',
-					subtle: 'var(--color-gold-subtle)',
-					border: 'var(--color-gold-border)',
+				orange: {
+					DEFAULT: 'var(--color-accent)',
+					subtle: 'var(--color-accent-subtle)',
+					border: 'var(--color-accent-border)',
 				},
 				success: {
 					DEFAULT: 'var(--color-success)',

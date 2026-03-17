@@ -52,7 +52,7 @@ export function CompeteView({ languageId, initialLevel, activeChallenge, userSta
                     </p>
                 </div>
                 <div className="hidden sm:flex h-16 w-16 rounded-full bg-card border border-border items-center justify-center">
-                    <Trophy className="w-8 h-8 text-gold" />
+                    <Trophy className="w-8 h-8 text-[#E8521A]" />
                 </div>
             </div>
 

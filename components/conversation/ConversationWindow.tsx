@@ -195,7 +195,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
             <div ref={scrollRef} className="flex-1 w-full max-w-[760px] mx-auto overflow-y-auto px-4 py-8 scroll-smooth">
                 {isLoading && messages.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-text-secondary">
-                        <Loader2 className="w-8 h-8 animate-spin text-gold mb-4" />
+                        <Loader2 className="w-8 h-8 animate-spin text-[#E8521A] mb-4" />
                         <p className="text-sm">Connecting securely with {scenario?.character_name}...</p>
                     </div>
                 ) : (
@@ -220,7 +220,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
                         {/* AI Typing Indicator */}
                         {isLoading && messages.length > 0 && !isStreaming && (
                             <div className="flex w-full justify-start mb-4 animate-fade-up">
-                                <div className="w-8 h-8 rounded-full bg-gold-subtle text-gold flex items-center justify-center border border-gold-border shrink-0 mt-auto mr-2 font-mono-num text-[10px] font-bold tracking-widest">
+                                <div className="w-8 h-8 rounded-full bg-[#E8521A]/10 text-[#E8521A] flex items-center justify-center border border-[#E8521A]/22 shrink-0 mt-auto mr-2 font-mono-num text-[10px] font-bold tracking-widest">
                                     AI
                                 </div>
                                 <div className="px-4 py-3 rounded-2xl bg-surface rounded-bl-sm border border-border flex items-center gap-1 h-12">
@@ -271,7 +271,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
                                 />
                                 <button
                                     className={`absolute right-1.5 bottom-1.5 w-10 h-10 rounded-full flex items-center justify-center transition-colors
-                                        ${(!input.trim() || isLoading || isStreaming) ? 'bg-border-strong text-text-muted' : 'bg-gold text-background hover:brightness-110'}`}
+                                        ${(!input.trim() || isLoading || isStreaming) ? 'bg-border-strong text-text-muted' : 'bg-[#E8521A] text-background hover:brightness-110'}`}
                                     onClick={handleSend}
                                     disabled={!input.trim() || isLoading || isStreaming}
                                 >

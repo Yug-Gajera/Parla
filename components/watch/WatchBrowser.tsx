@@ -47,7 +47,7 @@ export default function WatchBrowser({ languageId, onSelectVideo }: WatchBrowser
                             onClick={() => setLevelFilter(l)}
                             className={`px-4 py-1.5 rounded-full text-[10px] font-mono-num tracking-wider uppercase whitespace-nowrap transition-all border ${
                                 levelFilter === l 
-                                    ? 'bg-gold-subtle text-gold border-gold-border' 
+                                    ? 'bg-[#E8521A]/5 text-[#E8521A] border-[#E8521A]/30' 
                                     : 'bg-surface text-text-muted border-border hover:border-border-strong hover:text-text-primary'
                                 }`}
                         >{LEVEL_LABELS[l]}</button>
@@ -73,7 +73,7 @@ export default function WatchBrowser({ languageId, onSelectVideo }: WatchBrowser
 
             {/* Video grid */}
             {isLoading && videos.length === 0 ? (
-                <div className="flex justify-center py-24"><Loader2 className="w-8 h-8 animate-spin text-gold" /></div>
+                <div className="flex justify-center py-24"><Loader2 className="w-8 h-8 animate-spin text-[#E8521A]" /></div>
             ) : videos.length === 0 ? (
                 <div className="text-center py-24 border border-border border-dashed rounded-[18px] bg-card shadow-sm">
                     <Monitor className="w-12 h-12 mx-auto text-text-muted mb-4" />
@@ -119,8 +119,8 @@ export default function WatchBrowser({ languageId, onSelectVideo }: WatchBrowser
                                     {/* Completed status */}
                                     {video.user_progress?.completed && (
                                         <div className="absolute top-3 right-3 bg-card/80 backdrop-blur-sm border border-border rounded-full px-2 py-1 flex items-center gap-1.5">
-                                            <CheckCircle className="w-3 h-3 text-gold" />
-                                            <span className="text-[9px] font-mono-num uppercase tracking-wider text-gold">Viewed</span>
+                                            <CheckCircle className="w-3 h-3 text-[#E8521A]" />
+                                            <span className="text-[9px] font-mono-num uppercase tracking-wider text-[#E8521A]">Viewed</span>
                                         </div>
                                     )}
                                 </div>
@@ -128,10 +128,10 @@ export default function WatchBrowser({ languageId, onSelectVideo }: WatchBrowser
                                 {/* Info */}
                                 <div className="p-5 flex-1 flex flex-col">
                                     <p className="text-[10px] text-text-secondary uppercase tracking-[0.2em] mb-2 font-mono-num truncate">{video.channel_name}</p>
-                                    <h3 className="font-display text-lg text-text-primary leading-snug mb-4 line-clamp-2 group-hover:text-gold transition-colors">{video.title}</h3>
+                                    <h3 className="font-display text-lg text-text-primary leading-snug mb-4 line-clamp-2 group-hover:text-[#E8521A] transition-colors">{video.title}</h3>
                                     
                                     <div className="mt-auto flex items-center gap-2 flex-wrap">
-                                        <span className={`text-[10px] font-mono-num tracking-widest uppercase border border-border px-2 py-1 rounded-md text-gold bg-gold-subtle`}>
+                                        <span className={`text-[10px] font-mono-num tracking-widest uppercase border border-border px-2 py-1 rounded-md text-[#E8521A] bg-[#E8521A]/5`}>
                                             {video.cefr_level || 'ALL'}
                                         </span>
                                         {video.topics?.slice(0, 2).map(t => (

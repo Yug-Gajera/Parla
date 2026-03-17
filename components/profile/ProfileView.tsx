@@ -107,7 +107,7 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                                 </span>
                             )}
                         </div>
-                        <div className="absolute -bottom-1 -right-1 bg-card text-accent border border-accent-border font-mono text-xs px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wider">
+                        <div className="absolute -bottom-1 -right-1 bg-card text-[#E8521A] border border-[#E8521A]/22 font-mono text-xs px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wider">
                             {levelProgress.currentLevel}
                         </div>
                     </div>
@@ -132,25 +132,25 @@ export function ProfileView({ initialData }: ProfileViewProps) {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Card className="p-8 flex flex-col justify-between border-border bg-card rounded-[18px] hover:border-accent-border shadow-sm transition-all group">
                     <div className="flex items-center gap-3 text-text-muted mb-6">
-                        <Brain className="w-4 h-4 text-accent transition-transform group-hover:scale-110" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Vocabulary</span>
+                        <Brain className="w-4 h-4 text-[#E8521A] transition-transform group-hover:scale-110" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Vocabulary</span>
                     </div>
                     <span className="text-4xl font-mono text-text-primary">{stats.vocabKnown}</span>
                 </Card>
                 <Card className="p-8 flex flex-col justify-between border-border bg-card rounded-[18px] hover:border-accent-border shadow-sm transition-all group">
                     <div className="flex items-center gap-3 text-text-muted mb-6">
-                        <MessageSquare className="w-4 h-4 text-accent transition-transform group-hover:scale-110" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Dialogues</span>
+                        <MessageSquare className="w-4 h-4 text-[#E8521A] transition-transform group-hover:scale-110" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Dialogues</span>
                     </div>
                     <span className="text-4xl font-mono text-text-primary">{stats.conversations}</span>
                 </Card>
                 <Card className="p-8 flex flex-col justify-between border-border bg-card rounded-[18px] hover:border-accent-border shadow-sm transition-all group">
                     <div className="flex items-center gap-3 text-text-muted mb-6">
-                        <Flame className="w-4 h-4 text-accent transition-transform group-hover:scale-110" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Day Streak</span>
+                        <Flame className="w-4 h-4 text-[#E8521A] transition-transform group-hover:scale-110" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Day Streak</span>
                     </div>
                     <span className="text-4xl font-mono text-text-primary">{stats.streak}</span>
                 </Card>
                 <Card className="p-8 flex flex-col justify-between border-border bg-card rounded-[18px] hover:border-accent-border shadow-sm transition-all group">
                     <div className="flex items-center gap-3 text-text-muted mb-6">
-                        <Clock className="w-4 h-4 text-accent transition-transform group-hover:scale-110" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Focus Hours</span>
+                        <Clock className="w-4 h-4 text-[#E8521A] transition-transform group-hover:scale-110" /> <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Focus Hours</span>
                     </div>
                     <span className="text-4xl font-mono text-text-primary">{stats.totalHours}</span>
                 </Card>
@@ -165,14 +165,14 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                             <div className="flex justify-between items-end mb-6">
                                 <div>
                                     <h4 className="text-[10px] font-mono uppercase tracking-widest text-text-muted mb-2">Current Phase</h4>
-                                    <div className="text-5xl font-serif text-accent tracking-tight">{levelProgress.currentLevel}</div>
+                                    <div className="text-5xl font-serif text-[#E8521A] tracking-tight">{levelProgress.currentLevel}</div>
                                 </div>
                                 <div className="text-right">
                                     <div className="text-[10px] font-mono uppercase tracking-widest text-text-muted mb-2">Continuum</div>
                                     <div className="text-2xl font-mono text-text-primary">{levelProgress.levelScore} <span className="text-text-muted text-sm">/ 100</span></div>
                                 </div>
                             </div>
-                            <Progress value={levelProgress.levelScore} className="h-1.5 bg-border [&>div]:bg-accent rounded-full" />
+                            <Progress value={levelProgress.levelScore} className="h-1.5 bg-border [&>div]:bg-[#E8521A] rounded-full" />
                             {levelProgress.daysToNextLevel != null && levelProgress.daysToNextLevel > 0 && (
                                 <p className="text-xs font-mono text-text-muted text-center mt-6 uppercase tracking-wider">
                                     Est. {levelProgress.daysToNextLevel} days to {CEFR_LEVELS[currentLevelIndex + 1] || 'fluency'}
@@ -195,9 +195,9 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                                         )}
                                         <div className={`w-12 h-12 rounded-full border flex items-center justify-center font-mono text-xs transition-all duration-700
                                             ${isPassed 
-                                                ? 'bg-card border-accent text-accent' 
+                                                ? 'bg-card border-[#E8521A] text-[#E8521A]' 
                                                 : isCurrent 
-                                                    ? 'bg-accent/10 border-accent-border text-accent shadow-sm' 
+                                                    ? 'bg-[#E8521A]/10 border-[#E8521A]/22 text-[#E8521A] shadow-sm' 
                                                     : 'bg-surface border-border text-text-muted'}
                                         `}>
                                             {isPassed ? '✓' : lvl}
@@ -231,7 +231,7 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {certificates.map((cert) => (
                             <Card key={cert.id} className="p-8 border-border bg-card hover:border-accent-border shadow-sm transition-all flex flex-col gap-6 rounded-[18px] relative overflow-hidden group">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-full -z-10 group-hover:bg-accent/10 transition-colors" />
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-[#C9A84C]/5 rounded-bl-full -z-10 group-hover:bg-[#C9A84C]/10 transition-colors" />
                                 
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center text-xl shadow-inner">
@@ -265,7 +265,7 @@ export function ProfileView({ initialData }: ProfileViewProps) {
             <div className="flex flex-col gap-6">
                 <div className="flex justify-between items-end border-b border-border pb-4 font-serif">
                     <h3 className="text-xl tracking-tight text-text-primary">Insignia</h3>
-                    <span className="text-[11px] font-mono uppercase tracking-widest text-accent font-bold">
+                    <span className="text-[11px] font-mono uppercase tracking-widest text-[#E8521A] font-bold">
                         {badges.filter((b) => b.earned).length} / {badges.length} Unlocked
                     </span>
                 </div>
@@ -281,7 +281,7 @@ export function ProfileView({ initialData }: ProfileViewProps) {
                                     title={earned ? `Earned ${b.earned ? new Date(b.earned.earnedAt).toLocaleDateString() : ''}` : b.earnedCriteria}
                                 >
                                     <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center border transition-all duration-300
-                                        ${earned ? 'bg-accent/10 text-accent border-accent-border shadow-sm' : 'bg-surface text-text-muted border-border'}
+                                        ${earned ? 'bg-[#E8521A]/10 text-[#E8521A] border-[#E8521A]/22 shadow-sm' : 'bg-surface text-text-muted border-border'}
                                     `}>
                                         <Icon className="w-6 h-6 sm:w-7 sm:h-7" />
                                     </div>
@@ -367,14 +367,14 @@ function ActivityChart({ activityByDate }: { activityByDate: Record<string, numb
         return d.toISOString().split('T')[0];
     };
 
-    // Gold luxury heat map theme
+    // Orange heat map theme
     const getColor = (mins: number) => {
         if (mins === 0) return 'var(--color-surface)'; // empty state bg
-        if (mins <= 10) return 'rgba(208, 141, 95, 0.2)'; // faint orange
-        if (mins <= 20) return 'rgba(208, 141, 95, 0.4)';
-        if (mins <= 30) return 'rgba(208, 141, 95, 0.6)';
-        if (mins <= 45) return 'rgba(208, 141, 95, 0.8)';
-        return 'rgba(208, 141, 95, 1)'; // solid orange
+        if (mins <= 10) return 'rgba(232, 82, 26, 0.2)'; // faint orange
+        if (mins <= 20) return 'rgba(232, 82, 26, 0.4)';
+        if (mins <= 30) return 'rgba(232, 82, 26, 0.6)';
+        if (mins <= 45) return 'rgba(232, 82, 26, 0.8)';
+        return 'rgba(232, 82, 26, 1)'; // solid orange
     };
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -396,7 +396,7 @@ function ActivityChart({ activityByDate }: { activityByDate: Record<string, numb
             <Card className="p-8 border-border bg-card rounded-[18px] overflow-x-auto relative hide-scrollbar shadow-sm">
                 {Object.keys(activityByDate).length === 0 && (
                     <div className="absolute inset-0 bg-bg/40 backdrop-blur-sm z-10 flex items-center justify-center p-4 rounded-[18px]">
-                        <div className="bg-card border border-border px-6 py-4 rounded-xl shadow-lg text-[10px] uppercase tracking-widest text-accent font-mono font-bold">
+                        <div className="bg-card border border-border px-6 py-4 rounded-xl shadow-lg text-[10px] uppercase tracking-widest text-[#E8521A] font-mono font-bold">
                             Initialize practice to populate heatmap
                         </div>
                     </div>

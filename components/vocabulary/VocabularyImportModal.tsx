@@ -353,10 +353,10 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                 {/* --- Processing View --- */}
                 {processState === 'processing' && (
                     <div className="py-12 flex flex-col items-center w-full animation-fade-in text-center">
-                        <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-gold mb-6" />
+                        <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-[#E8521A] mb-6" />
                         <p className="text-text-secondary text-sm font-sans mb-3">{processStatus}</p>
                         {runningCount.current > 0 && (
-                            <p className="text-gold text-[13px] font-mono font-medium">{runningCount.current} prepared</p>
+                            <p className="text-[#E8521A] text-[13px] font-mono font-medium">{runningCount.current} prepared</p>
                         )}
                     </div>
                 )}
@@ -364,7 +364,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                 {/* --- Success View --- */}
                 {processState === 'success' && (
                     <div className="py-6 flex flex-col items-center w-full animation-fade-in text-center">
-                        <CheckCircle size={40} strokeWidth={1.5} className="text-gold mb-5" />
+                        <CheckCircle size={40} strokeWidth={1.5} className="text-[#E8521A] mb-5" />
                         <h2 className="text-2xl font-serif text-text-primary mb-8">Import complete</h2>
                         
                         <div className="flex gap-8 mb-10 w-full justify-center">
@@ -381,7 +381,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                 <>
                                     <div className="w-[1px] bg-border-strong" />
                                     <div className="flex flex-col items-center gap-1">
-                                        <span className="text-2xl font-mono text-gold font-medium">
+                                        <span className="text-2xl font-mono text-[#E8521A] font-medium">
                                             {finalStats.enriched > 0 ? finalStats.enriched : finalStats.updated}
                                         </span>
                                         <span className="text-xs font-sans text-text-secondary">
@@ -439,7 +439,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                         className={`flex-1 pb-3 text-[13px] font-sans font-medium transition-colors relative z-10 ${isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}
                                     >
                                         {labels[tab]}
-                                        <div className={`absolute bottom-0 left-0 right-0 h-[2px] rounded-t-full transition-all ${isActive ? 'bg-gold' : 'bg-transparent'}`} />
+                                        <div className={`absolute bottom-0 left-0 right-0 h-[2px] rounded-t-full transition-all ${isActive ? 'bg-[#E8521A]' : 'bg-transparent'}`} />
                                     </button>
                                 );
                             })}
@@ -453,9 +453,9 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                 {!ankiData ? (
                                     <div 
                                         onClick={() => fileInputRef.current?.click()}
-                                        className="w-full bg-gold/5 border border-dashed border-gold/30 rounded-[14px] p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-gold/10 transition-colors mb-4"
+                                        className="w-full bg-[#E8521A]/5 border border-dashed border-[#E8521A]/30 rounded-[14px] p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-[#E8521A]/10 transition-colors mb-4"
                                     >
-                                        <Upload size={24} className="text-gold mb-3" />
+                                        <Upload size={24} className="text-[#E8521A] mb-3" />
                                         <p className="text-text-secondary font-sans text-[14px]">Drop your CSV here or click to browse</p>
                                     </div>
                                 ) : (
@@ -497,7 +497,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                     value={pasteText}
                                     onChange={(e) => setPasteText(e.target.value)}
                                     placeholder={`hablar, comer, vivir, casa...\n\nOr paste with translations:\nhablar — to speak\ncomer — to eat`}
-                                    className="w-full h-[160px] bg-card border border-border-strong rounded-xl p-4 text-text-primary font-sans text-[14px] focus:outline-none focus:border-gold/50 transition-colors resize-none placeholder:text-text-muted/50"
+                                    className="w-full h-[160px] bg-card border border-border-strong rounded-xl p-4 text-text-primary font-sans text-[14px] focus:outline-none focus:border-[#E8521A]/50 transition-colors resize-none placeholder:text-text-muted/50"
                                 />
                                 <div className="mt-2 mb-6 px-1">
                                     <span className="font-mono text-[12px] font-medium text-text-secondary">{pasteDetails.count} words detected</span>
@@ -527,17 +527,17 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                                             <div 
                                                 key={tier.id}
                                                 onClick={() => setSelectedTier(tier.id)}
-                                                className={`p-[14px] px-[16px] rounded-[18px] border transition-all duration-150 cursor-pointer flex justify-between items-center ${isSelected ? 'border-accent-border bg-gold/5' : 'border-border bg-surface hover:bg-surface-hover hover:border-border-strong'}`}
+                                                className={`p-[14px] px-[16px] rounded-[18px] border transition-all duration-150 cursor-pointer flex justify-between items-center ${isSelected ? 'border-accent-border bg-[#E8521A]/5' : 'border-border bg-surface hover:bg-surface-hover hover:border-border-strong'}`}
                                             >
                                                 <div className="flex flex-col">
                                                     <div className="flex items-center gap-2 mb-1">
-                                                        <span className="font-mono text-gold font-bold text-[11px] bg-gold/10 px-1.5 py-0.5 rounded uppercase">{tier.id}</span>
+                                                        <span className="font-mono text-[#E8521A] font-bold text-[11px] bg-[#E8521A]/10 px-1.5 py-0.5 rounded uppercase">{tier.id}</span>
                                                         <span className={`font-sans text-[14px] font-medium ${isSelected ? 'text-text-primary' : 'text-text-secondary'}`}>{tier.label}</span>
                                                     </div>
                                                     <span className="font-sans text-[12px] text-text-muted">{tier.desc}</span>
                                                 </div>
                                                 <div className="text-right">
-                                                    <div className={`font-mono text-[13px] ${isSelected ? 'text-gold' : 'text-text-secondary'}`}>
+                                                    <div className={`font-mono text-[13px] ${isSelected ? 'text-[#E8521A]' : 'text-text-secondary'}`}>
                                                         {newWords} new
                                                     </div>
                                                 </div>

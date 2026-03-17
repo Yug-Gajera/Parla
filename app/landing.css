@@ -4,7 +4,7 @@
 --bg-primary:var(--color-bg);--bg-secondary:var(--color-surface);--bg-card:var(--color-card);
 --border:var(--color-border);--border-hover:var(--color-border-strong);
 --accent-primary:var(--color-accent);--accent-primary-hover:var(--color-accent-hover);--accent-primary-muted:var(--color-accent-subtle);
---accent-gold:var(--color-gold);--accent-gold-hover:var(--color-gold-hover);--accent-gold-muted:var(--color-gold-subtle);
+--accent-gold: #E8521A; --accent-gold-hover: #D94A15; --accent-gold-muted: rgba(232,82,26,0.1);
 --text-primary:var(--color-text-primary);--text-secondary:var(--color-text-secondary);--text-muted:var(--color-text-muted);
 --font-display:var(--font-cormorant-garamond);
 --font-body:var(--font-dm-sans);
@@ -92,7 +92,7 @@ h1,h2,h3{font-family:var(--font-display)}
 .mic-btn{width:48px;height:48px;border-radius:50%;background:var(--accent-primary);display:flex;align-items:center;justify-content:center;animation:breathe 3s ease-in-out infinite}
 .mic-btn svg{width:20px;height:20px;fill:var(--color-bg)}
 .phone-mic span{font-size:10px;color:var(--text-secondary)}
-.phone-score{background:rgba(201,168,76,0.1);color:var(--accent-gold);font-family:var(--font-mono);font-size:11px;padding:6px 12px;border-radius:8px;text-align:center;margin-top:16px}
+.phone-score{background:rgba(232,82,26,0.1);color:var(--accent-gold);font-family:var(--font-mono);font-size:11px;padding:6px 12px;border-radius:8px;text-align:center;margin-top:16px}
 @media(max-width:768px){
 .hero-grid{grid-template-columns:1fr;text-align:center}
 .hero h1{font-size:48px}
@@ -225,7 +225,7 @@ h1,h2,h3{font-family:var(--font-display)}
 .pricing-feature .check{color:var(--accent-gold);font-weight:700}
 .pricing-btn{width:100%;padding:12px;border-radius:8px;font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:all 0.3s;border:none;text-align:center;display:block}
 .pricing-btn.gold{background:var(--accent-gold);color:var(--color-bg)}
-.pricing-btn.gold:hover{filter:brightness(1.1);box-shadow:0 0 30px rgba(201,168,76,0.25)}
+.pricing-btn.gold:hover{filter:brightness(1.1);box-shadow:0 0 30px rgba(232,82,26,0.25)}
 .pricing-btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text-secondary)}
 .pricing-btn.ghost:hover{border-color:var(--accent-primary);color:var(--accent-primary)}
 @media(max-width:768px){.pricing-cards{grid-template-columns:1fr}.pricing-card.featured{transform:none}.pricing-card.featured:hover{transform:translateY(-4px)}}
