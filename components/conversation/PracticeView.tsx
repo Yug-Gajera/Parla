@@ -13,6 +13,8 @@ import { Lock, Play, Clock, BarChart3, Star, LayoutGrid, BookOpen, X, Shuffle, A
 import { useModules } from '@/hooks/useModules';
 import { useSituationHistory } from '@/hooks/useSituationHistory';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
+import { PaywallModal } from '@/components/shared/PaywallModal';
 
 // Maps lucide icon names from our DB to components
 import * as LucideIcons from 'lucide-react';
@@ -38,6 +40,9 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
     const { isUnlocked, totalUnlocked, isLoading: modulesLoading } = useModules(languageId);
     const { getCompletionCount, getCompletedSituationIds } = useSituationHistory(languageId);
     const [bannerDismissed, setBannerDismissed] = useState(false);
+    const { plan, limits, isPro, isLoading: limitsLoading } = usePlanLimits();
+    const [isPaywallOpen, setIsPaywallOpen] = useState(false);
+    const [paywallMetric, setPaywallMetric] = useState<'conversation' | 'article' | 'story' | 'word_lookup'>('conversation');
 
     const isBeginnerLevel = level === 'A1' || level === 'A2';
 
@@ -145,6 +150,11 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                     <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
                         <Button
                             onClick={() => {
+                                if (limits && !limits.conversation.allowed) {
+                                    setPaywallMetric('conversation');
+                                    setIsPaywallOpen(true);
+                                    return;
+                                }
                                 setActiveScenarioId(preSession.scenarioId);
                                 setPreSession(null);
                             }}
@@ -345,7 +355,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                     <span className="flex items-center gap-2 text-[10px] font-mono-num font-bold text-text-muted uppercase tracking-widest"><BarChart3 className="w-4 h-4 text-[#E8521A]/60" /> {scenario.user_role.slice(0,18)}</span>
                                 </div>
 
-                                <div>
+                                 <div>
                                     {isLocked ? (
                                         <Button
                                             variant="secondary"
@@ -355,12 +365,26 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                             <Lock className="w-3.5 h-3.5 mr-2" /> Locked
                                         </Button>
                                     ) : (
-                                        <Button
-                                            onClick={() => showPreSession(scenario.id)}
-                                            className="btn-action group"
-                                        >
-                                            Engage <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-all" />
-                                        </Button>
+                                        <div className="flex flex-col gap-2">
+                                            <Button
+                                                onClick={() => {
+                                                    if (limits && !limits.conversation.allowed) {
+                                                        setPaywallMetric('conversation');
+                                                        setIsPaywallOpen(true);
+                                                        return;
+                                                    }
+                                                    showPreSession(scenario.id);
+                                                }}
+                                                className="btn-action group"
+                                            >
+                                                Engage <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-all" />
+                                            </Button>
+                                            {!isPro && limits && (
+                                                <span className="text-[9px] font-mono-num font-bold text-orange-500/80 uppercase tracking-widest text-center">
+                                                    {limits.conversation.remaining} conversations remaining this week
+                                                </span>
+                                            )}
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -368,6 +392,13 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                     );
                 })}
             </div>
+
+            <PaywallModal
+                isOpen={isPaywallOpen}
+                onClose={() => setIsPaywallOpen(false)}
+                metric={paywallMetric}
+                plan={plan}
+            />
         </div>
     );
 }

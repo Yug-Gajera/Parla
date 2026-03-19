@@ -5,13 +5,28 @@ import { SCENARIOS } from '@/lib/data/scenarios';
 import { CONVERSATION_SYSTEM_PROMPT } from '@/lib/claude/prompts';
 import { callClaude } from '@/lib/claude/client';
 
+import { getUserPlan, checkLimit, recordUsage } from '@/lib/planLimits';
+
 export async function POST(req: Request) {
     try {
         const supabase = await createClient();
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        const { data: { user }, error: authError } = await (supabase.auth as any).getUser();
 
         if (authError || !user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // ── Tier Enforcement ────────────────────────────────────
+        const plan = await getUserPlan(user.id);
+        const { allowed, remaining } = await checkLimit(user.id, 'conversation', plan);
+
+        if (!allowed) {
+            return NextResponse.json({
+                error: 'limit_reached',
+                plan,
+                remaining: 0,
+                upgrade_url: '/pricing',
+            }, { status: 403 });
         }
 
         const body = await req.json();
@@ -117,6 +132,9 @@ export async function POST(req: Request) {
             console.error("DB Insert Error", insertError);
             throw insertError;
         }
+
+        // ── Record Usage ────────────────────────────────────────
+        await recordUsage(user.id, 'conversation');
 
         return NextResponse.json({
             success: true,

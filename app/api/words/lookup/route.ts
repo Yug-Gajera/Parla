@@ -18,17 +18,33 @@ function getServiceClient() {
     );
 }
 
+import { getUserPlan, checkLimit, recordUsage } from '@/lib/planLimits';
+
 export async function POST(req: Request) {
     try {
         const supabase = await createClient();
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        const { data: { user }, error: authError } = await (supabase.auth as any).getUser();
         if (authError || !user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { word, context_sentence } = await req.json();
+        const body = await req.json();
+        const { word, context_sentence } = body;
         if (!word) {
             return NextResponse.json({ error: 'Missing word' }, { status: 400 });
+        }
+
+        // ── Tier Enforcement ────────────────────────────────────
+        const plan = await getUserPlan(user.id);
+        const { allowed, remaining } = await checkLimit(user.id, 'word_lookup', plan);
+
+        if (!allowed) {
+            return NextResponse.json({
+                error: 'limit_reached',
+                plan,
+                remaining: 0,
+                upgrade_url: '/pricing',
+            }, { status: 403 });
         }
 
         const cleanWord = word.toLowerCase().trim();
@@ -46,31 +62,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ word_info: cached, source: 'cache' });
         }
 
-        // 2. Check daily lookup limit
-        const today = new Date().toISOString().split('T')[0];
-        const { data: counter } = await serviceClient
-            .from('user_daily_lookup_count')
-            .select('count')
-            .eq('user_id', user.id)
-            .eq('date', today)
-            .single();
-
-        const currentCount = counter?.count || 0;
-
-        if (currentCount >= DAILY_LOOKUP_LIMIT) {
-            return NextResponse.json({
-                word_info: {
-                    word: cleanWord,
-                    translation: null,
-                    spanish_explanation: null,
-                    part_of_speech: null,
-                    in_context: context_sentence || null,
-                    note: 'Daily lookup limit reached',
-                },
-                source: 'limit_reached',
-                daily_lookups_remaining: 0,
-            });
-        }
+        // 2. We skip the old manual counter check as it's now handled by Tier Enforcement checkLimit above.
 
         // 3. Call Claude Haiku for word info
         const anthropic = new Anthropic({
@@ -128,23 +120,13 @@ Return this JSON:
             }, { onConflict: 'word' })
             .select();
 
-        // 5. Increment daily lookup count
-        if (counter) {
-            await serviceClient
-                .from('user_daily_lookup_count')
-                .update({ count: currentCount + 1 })
-                .eq('user_id', user.id)
-                .eq('date', today);
-        } else {
-            await serviceClient
-                .from('user_daily_lookup_count')
-                .insert({ user_id: user.id, date: today, count: 1 });
-        }
+        // 5. Record Usage (centralized)
+        await recordUsage(user.id, 'word_lookup');
 
         return NextResponse.json({
             word_info: wordInfo,
             source: 'generated',
-            daily_lookups_remaining: DAILY_LOOKUP_LIMIT - (currentCount + 1),
+            remaining,
         });
     } catch (error) {
         console.error('[word/lookup] Error:', error);

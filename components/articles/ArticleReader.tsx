@@ -24,7 +24,7 @@ export default function ArticleReader({ articleId, onClose }: ArticleReaderProps
     const {
         article, isLoading, error,
         wordPopover, isWordLoading, showVocabPanel, readingProgress,
-        comprehensionResult, knownWords, wordsTapped,
+        comprehensionResult, knownWords, wordsTapped, remainingLookups, isPro,
         fetchArticle, tapWord, dismissPopover,
         toggleVocabPanel, submitComprehension,
         calculateReadingProgress,
@@ -331,13 +331,14 @@ export default function ArticleReader({ articleId, onClose }: ArticleReaderProps
                 )}
             </AnimatePresence>
 
-            {/* Word popover */}
             <AnimatePresence>
                 {(wordPopover || isWordLoading) && (
                     <WordPopover
                         wordData={wordPopover}
                         isLoading={isWordLoading}
                         onDismiss={dismissPopover}
+                        remainingLookups={remainingLookups}
+                        isPro={isPro}
                     />
                 )}
             </AnimatePresence>

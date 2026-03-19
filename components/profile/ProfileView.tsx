@@ -9,12 +9,14 @@ import Image from 'next/image';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Edit2, Share, Brain, MessageSquare, Flame, Clock, Award, Download, ExternalLink, Settings2, LogOut } from 'lucide-react';
+import { Edit2, Share, Brain, MessageSquare, Flame, Clock, Award, Download, ExternalLink, Settings2, LogOut, Lock } from 'lucide-react';
 import { EditProfileSheet } from './EditProfileSheet';
 import { toast } from 'sonner';
+import Link from 'next/link';
 import { useProfile } from '@/hooks/useProfile';
 import { useRouter } from 'next/navigation';
 import { BADGES, type UserBadgeEarned } from '@/lib/data/badges';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
 
 const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -40,6 +42,7 @@ interface ProfileViewProps {
 export function ProfileView({ initialData }: ProfileViewProps) {
     const router = useRouter();
     const { updateProfile } = useProfile();
+    const { plan, isPro, isLoading: limitsLoading } = usePlanLimits();
     const [profile, setProfile] = useState(initialData.user);
     const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -217,7 +220,26 @@ export function ProfileView({ initialData }: ProfileViewProps) {
             {/* Section 5: Certificates */}
             <div className="flex flex-col gap-6">
                 <h3 className="text-sm uppercase tracking-[0.2em] text-text-muted font-medium">Credentials</h3>
-                {certificates.length === 0 ? (
+                {!isPro ? (
+                    <Card className="p-12 border border-border border-dashed bg-card flex flex-col items-center justify-center text-center min-h-[260px] rounded-[18px] shadow-sm group overflow-hidden relative">
+                         <div className="absolute inset-0 bg-background/40 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center p-6 text-center">
+                            <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-6 shadow-xl border border-white/20">
+                                <Lock className="w-6 h-6 text-[#E8521A]" />
+                            </div>
+                            <h4 className="font-serif text-xl text-text-primary mb-3">Certification Gated</h4>
+                            <p className="text-sm text-text-muted max-w-sm mb-8 leading-relaxed">
+                                Upgrade to Pro to earn official Parlova certifications for your CEFR level achievements.
+                            </p>
+                            <Button asChild className="btn-action rounded-full h-11 px-8">
+                                <Link href="/pricing">Unlock Certificates</Link>
+                            </Button>
+                        </div>
+                        <div className="w-16 h-16 bg-surface border border-border rounded-full flex items-center justify-center mb-6 opacity-20">
+                            <Award className="w-6 h-6 text-text-muted" />
+                        </div>
+                        <h4 className="font-serif text-xl text-text-primary mb-3 opacity-20">No Certificates Recorded</h4>
+                    </Card>
+                ) : certificates.length === 0 ? (
                     <Card className="p-12 border border-border border-dashed bg-card flex flex-col items-center justify-center text-center min-h-[260px] rounded-[18px] shadow-sm">
                         <div className="w-16 h-16 bg-surface border border-border rounded-full flex items-center justify-center mb-6">
                             <Award className="w-6 h-6 text-text-muted" />

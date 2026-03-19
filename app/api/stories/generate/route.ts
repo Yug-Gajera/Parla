@@ -8,12 +8,27 @@ import { createClient } from '@/lib/supabase/server';
 import { getStory } from '@/lib/stories/story-generator';
 import { getRandomTopic } from '@/lib/data/story-topics';
 
+import { getUserPlan, checkLimit, recordUsage } from '@/lib/planLimits';
+
 export async function POST(req: Request) {
     try {
         const supabase = await createClient();
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        const { data: { user }, error: authError } = await (supabase.auth as any).getUser();
         if (authError || !user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // ── Tier Enforcement ────────────────────────────────────
+        const plan = await getUserPlan(user.id);
+        const { allowed, remaining } = await checkLimit(user.id, 'story', plan);
+
+        if (!allowed) {
+            return NextResponse.json({
+                error: 'limit_reached',
+                plan,
+                remaining: 0,
+                upgrade_url: '/pricing',
+            }, { status: 403 });
         }
 
         const body = await req.json();
@@ -39,6 +54,9 @@ export async function POST(req: Request) {
             user.id, language_id, level,
             topic, topic_category, content_type
         );
+
+        // ── Record Usage ────────────────────────────────────────
+        await recordUsage(user.id, 'story');
 
         return NextResponse.json({
             story: result.story,

@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { WordData } from '@/components/shared/WordPopover';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
 
 interface ComprehensionResult {
     score: number;
@@ -22,6 +23,8 @@ export function useArticleReader(articleId: string) {
     const [comprehensionResult, setComprehensionResult] = useState<ComprehensionResult | null>(null);
     const [knownWords, setKnownWords] = useState<Set<string>>(new Set());
     const [wordsTapped, setWordsTapped] = useState(0);
+    const [remainingLookups, setRemainingLookups] = useState<number | null>(null);
+    const { isPro } = usePlanLimits();
 
     const fetchArticle = useCallback(async (id: string) => {
         setIsLoading(true);
@@ -82,6 +85,15 @@ export function useArticleReader(articleId: string) {
                     part_of_speech: data.word_info.part_of_speech,
                     note: data.word_info.note,
                 } : null);
+            } else if (res.status === 402 || (data.error && data.error.includes('limit reached'))) {
+                setWordPopover(prev => prev ? {
+                    ...prev,
+                    note: 'Daily lookup limit reached',
+                } : null);
+            }
+            
+            if (typeof data.remaining === 'number') {
+                setRemainingLookups(data.remaining);
             }
         } catch {
             // Silent fail — word tap should never break the reading experience
@@ -127,7 +139,7 @@ export function useArticleReader(articleId: string) {
     return {
         article, isLoading, error,
         wordPopover, isWordLoading, showVocabPanel, readingProgress,
-        comprehensionResult, knownWords, wordsTapped,
+        comprehensionResult, knownWords, wordsTapped, remainingLookups, isPro,
         fetchArticle, tapWord, dismissPopover,
         toggleVocabPanel, submitComprehension,
         calculateReadingProgress,

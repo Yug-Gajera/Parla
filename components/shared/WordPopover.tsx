@@ -26,6 +26,8 @@ interface WordPopoverProps {
     onAddToDeck?: (word: string) => void;
     showUseInReply?: boolean;
     onUseInReply?: (word: string) => void;
+    remainingLookups?: number | null;
+    isPro?: boolean;
 }
 
 /**
@@ -51,6 +53,8 @@ export default function WordPopover({
     onAddToDeck,
     showUseInReply = false,
     onUseInReply,
+    remainingLookups = null,
+    isPro = false,
 }: WordPopoverProps) {
     if (!wordData && !isLoading) return null;
 
@@ -94,6 +98,11 @@ export default function WordPopover({
                             {wordData.part_of_speech && (
                                 <span className="inline-block px-2 py-0.5 rounded-md bg-surface border border-border-strong text-text-muted text-[11px] font-medium uppercase tracking-wider font-mono-num">
                                     {wordData.part_of_speech}
+                                </span>
+                            )}
+                            {!isPro && remainingLookups !== null && (
+                                <span className="ml-3 text-[9px] font-mono-num font-bold text-orange-500/80 uppercase tracking-widest">
+                                    {remainingLookups} lookups left today
                                 </span>
                             )}
                         </div>

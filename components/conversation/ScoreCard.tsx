@@ -24,6 +24,8 @@ interface ScoreCardProps {
     inputMode?: string;
 }
 
+import { usePlanLimits } from '@/hooks/usePlanLimits';
+
 export function ScoreCard({
     scoring,
     scenario,
@@ -38,6 +40,7 @@ export function ScoreCard({
     inputMode,
 }: ScoreCardProps) {
 
+    const { isPro } = usePlanLimits();
     const fullScenario = SCENARIOS.find(s => s.id === scenario?.id);
     const situations = fullScenario?.situations || [];
 
@@ -122,29 +125,41 @@ export function ScoreCard({
                         <motion.div variants={itemV} className="flex flex-col gap-2">
                             <div className="flex justify-between items-end">
                                 <span className="label-upper">Pronunciation</span>
-                                {inputMode === 'voice' && scoring.pronunciation_score != null ? (
-                                    <span className="pill-score">{scoring.pronunciation_score}%</span>
+                                {isPro ? (
+                                    inputMode === 'voice' && scoring.pronunciation_score != null ? (
+                                        <span className="pill-score">{scoring.pronunciation_score}%</span>
+                                    ) : (
+                                        <span className="font-mono-num font-medium text-[13px] text-text-muted">N/A</span>
+                                    )
                                 ) : (
-                                    <span className="font-mono-num font-medium text-[13px] text-text-muted">N/A</span>
+                                    <span className="text-[9px] font-mono-num font-bold text-[#E8521A] uppercase tracking-widest mb-1">PRO Feature</span>
                                 )}
                             </div>
-                            {inputMode === 'voice' && scoring.pronunciation_score != null ? (
-                                <>
-                                    <div className="progress-track">
-                                        <div className="progress-fill" style={{ width: `${scoring.pronunciation_score}%` }} />
-                                    </div>
-                                    {scoring.clarity_issues && scoring.clarity_issues.length > 0 && (
-                                        <div className="flex flex-wrap gap-1 mt-1">
-                                            {scoring.clarity_issues.map((word: string, i: number) => (
-                                                <span key={i} className="text-[10px] px-1.5 py-0.5 rounded-md bg-warning/10 text-warning border border-warning/20 font-mono-num">
-                                                    {word}
-                                                </span>
-                                            ))}
+                            {isPro ? (
+                                inputMode === 'voice' && scoring.pronunciation_score != null ? (
+                                    <>
+                                        <div className="progress-track">
+                                            <div className="progress-fill" style={{ width: `${scoring.pronunciation_score}%` }} />
                                         </div>
-                                    )}
-                                </>
+                                        {scoring.clarity_issues && scoring.clarity_issues.length > 0 && (
+                                            <div className="flex flex-wrap gap-1 mt-1">
+                                                {scoring.clarity_issues.map((word: string, i: number) => (
+                                                    <span key={i} className="text-[10px] px-1.5 py-0.5 rounded-md bg-warning/10 text-warning border border-warning/20 font-mono-num">
+                                                        {word}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </>
+                                ) : (
+                                    <div className="progress-track opacity-50"><div className="progress-fill w-0" /></div>
+                                )
                             ) : (
-                                <div className="progress-track opacity-50"><div className="progress-fill w-0" /></div>
+                                <div className="bg-[#E8521A]/5 border border-[#E8521A]/20 rounded-lg p-3 text-center">
+                                    <p className="text-[10px] text-[#E8521A] font-medium leading-relaxed font-mono-num uppercase tracking-wider">
+                                        Upgrade to Pro for AI-powered pronunciation scoring
+                                    </p>
+                                </div>
                             )}
                         </motion.div>
 
