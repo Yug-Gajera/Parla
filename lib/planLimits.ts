@@ -17,7 +17,7 @@ export const FREE_LIMITS = {
 export async function getUserPlan(userId: string) {
   const supabase = await createClient();
   const { data } = await (supabase as any)
-    .from('user_profiles')
+    .from('users')
     .select('plan, plan_expires_at, is_beta_user')
     .eq('id', userId)
     .single();
@@ -27,7 +27,7 @@ export async function getUserPlan(userId: string) {
   // Check for expiration
   if (data.plan_expires_at && new Date(data.plan_expires_at) < new Date()) {
     await (supabase as any)
-      .from('user_profiles')
+      .from('users')
       .update({ plan: 'free', plan_expires_at: null } as any)
       .eq('id', userId);
     return 'free';

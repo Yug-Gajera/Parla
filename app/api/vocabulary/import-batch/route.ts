@@ -236,7 +236,7 @@ export async function POST(req: Request) {
 
         // Update User Profile
         const { error: profileError } = await serviceClient
-            .from('user_profiles')
+            .from('users')
             .update({
                 vocabulary_import_method: importSource,
                 vocabulary_import_count: (insertedCount + updatedCount),

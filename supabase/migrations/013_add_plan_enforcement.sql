@@ -1,8 +1,8 @@
 -- 013_add_plan_enforcement.sql
 -- Adds tier-based plan tracking and usage monitoring
 
--- 1. Add columns to user_profiles
-ALTER TABLE user_profiles
+-- 1. Add columns to users
+ALTER TABLE users
 ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'free' CHECK (plan IN ('free', 'pro', 'pro_plus')),
 ADD COLUMN IF NOT EXISTS plan_expires_at TIMESTAMPTZ NULL,
 ADD COLUMN IF NOT EXISTS plan_granted_by TEXT NULL, -- 'stripe' | 'manual' | 'beta' | 'lifetime'

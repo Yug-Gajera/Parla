@@ -26,8 +26,8 @@ BEGIN
     END IF;
 END $$;
 
--- Add tracking columns to user_profiles
-ALTER TABLE user_profiles
+-- Add tracking columns to users
+ALTER TABLE users
 ADD COLUMN IF NOT EXISTS vocabulary_import_method TEXT NULL,
 ADD COLUMN IF NOT EXISTS vocabulary_import_count INTEGER DEFAULT 0,
 ADD COLUMN IF NOT EXISTS estimated_level_from_import TEXT NULL;

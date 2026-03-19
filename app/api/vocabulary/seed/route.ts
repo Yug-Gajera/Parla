@@ -105,7 +105,7 @@ export async function POST(req: Request) {
 
         // 6. Update the user's profile with their import choice
         const { error: profileError } = await serviceClient
-            .from('user_profiles')
+            .from('users')
             .update({
                 vocabulary_import_method: 'frequency_seed',
                 vocabulary_import_count: seedCount,
