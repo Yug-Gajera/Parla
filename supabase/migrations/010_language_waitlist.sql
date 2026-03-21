@@ -13,6 +13,7 @@
     -- Allow anonymous inserts (no auth needed — this is on the landing page)
     ALTER TABLE language_waitlist ENABLE ROW LEVEL SECURITY;
 
+    DROP POLICY IF EXISTS "Anyone can join the waitlist" ON language_waitlist;
     CREATE POLICY "Anyone can join the waitlist"
         ON language_waitlist
         FOR INSERT
@@ -20,6 +21,7 @@
         WITH CHECK (true);
 
     -- Only service role can read waitlist entries
+    DROP POLICY IF EXISTS "Service role can read waitlist" ON language_waitlist;
     CREATE POLICY "Service role can read waitlist"
         ON language_waitlist
         FOR SELECT

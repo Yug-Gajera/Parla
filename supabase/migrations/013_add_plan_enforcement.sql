@@ -26,10 +26,12 @@ ON usage_tracking(user_id, metric, week_number, year_number);
 ALTER TABLE usage_tracking ENABLE ROW LEVEL SECURITY;
 
 -- 5. Add RLS Policies
+DROP POLICY IF EXISTS "usage_tracking_select_own" ON usage_tracking;
 CREATE POLICY "usage_tracking_select_own"
   ON usage_tracking FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "usage_tracking_insert_own" ON usage_tracking;
 CREATE POLICY "usage_tracking_insert_own"
   ON usage_tracking FOR INSERT
   WITH CHECK (auth.uid() = user_id);
