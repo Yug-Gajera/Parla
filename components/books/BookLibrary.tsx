@@ -52,7 +52,7 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
                 <section>
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-1.5 h-6 bg-[#E8521A] rounded-full" />
-                        <h2 className="text-2xl font-display text-text-primary tracking-tight">Active Volumes</h2>
+                        <h2 className="text-2xl font-display text-text-primary tracking-tight">Keep reading</h2>
                     </div>
                     <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 snap-x custom-scrollbar">
                         {inProgressBooks.map(book => {
@@ -140,7 +140,7 @@ export default function BookLibrary({ languageId, onSelectBook }: BookLibraryPro
                 {books.length === 0 ? (
                     <div className="p-16 text-center border border-border border-dashed rounded-[18px] bg-card shadow-sm">
                         <BookOpen className="w-12 h-12 text-text-muted mx-auto mb-6 opacity-80" strokeWidth={1} />
-                        <h3 className="text-xl font-display text-text-primary mb-2">Lexicon Empty</h3>
+                        <h3 className="text-xl font-display text-text-primary mb-2">No books yet</h3>
                         <p className="text-text-muted font-sans text-sm max-w-sm mx-auto leading-relaxed">
                             Project Gutenberg indexing in process. Classic texts will appear here shortly.
                         </p>
@@ -198,7 +198,7 @@ function BookCard({ book, index, onSelect }: { book: any; index: number; onSelec
                 {/* Completed badge */}
                 {isCompleted && (
                     <div className="absolute top-3 right-3 bg-[#E8521A] text-bg text-[9px] font-mono-num font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm flex items-center gap-1.5 shadow-lg">
-                        <Check className="w-3 h-3" strokeWidth={3} /> Finalized
+                        <Check className="w-3 h-3" strokeWidth={3} /> Finished
                     </div>
                 )}
 
@@ -223,7 +223,7 @@ function BookCard({ book, index, onSelect }: { book: any; index: number; onSelec
                         {book.cefr_level}
                     </span>
                     <span className="text-[10px] font-mono-num text-text-secondary uppercase tracking-widest">
-                        {book.total_chapters} Ph.
+                        {book.total_chapters} Ch.
                     </span>
                     {book.estimated_hours && (
                         <span className="text-[10px] font-mono-num text-text-secondary uppercase tracking-widest">
@@ -237,7 +237,7 @@ function BookCard({ book, index, onSelect }: { book: any; index: number; onSelec
                     <div className="mt-auto pt-2">
                         <div className="flex items-center justify-between text-[9px] font-mono-num uppercase tracking-widest mb-1.5">
                             <span className="text-text-secondary">
-                                Phase {progress.current_chapter}/{book.total_chapters}
+                                Chapter {progress.current_chapter}/{book.total_chapters}
                             </span>
                             <span className="font-bold text-[#E8521A]">{percent}%</span>
                         </div>

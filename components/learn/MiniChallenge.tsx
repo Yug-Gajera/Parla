@@ -49,10 +49,10 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
     if (phase === 'questions') {
         const q = challenge.questions[currentQ];
         const typeLabel: Record<string, string> = {
-            translate_to_spanish: 'Translation Protocol',
-            translate_to_english: 'Decryption Protocol',
-            fill_blank: 'Syntactical Insertion',
-            choose_response: 'Contextual Response',
+            translate_to_spanish: 'Translation',
+            translate_to_english: 'Translation',
+            fill_blank: 'Fill in the blank',
+            choose_response: 'Choose a response',
         };
 
         return (
@@ -60,7 +60,7 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                 {/* Header */}
                 <div className="w-full mb-8 bg-card border border-border p-6 rounded-[18px] flex items-center justify-between shadow-sm">
                     <div>
-                        <h2 className="text-sm font-mono-num text-text-primary uppercase tracking-widest mb-1">Diagnostic System</h2>
+                        <h2 className="text-sm font-mono-num text-text-primary uppercase tracking-widest mb-1">Quiz</h2>
                         <p className="text-[10px] text-text-muted uppercase tracking-[0.1em]">{challenge.instructions}</p>
                     </div>
                 </div>
@@ -68,8 +68,8 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                 {/* Progress */}
                 <div className="w-full mb-10">
                     <div className="flex justify-between text-[10px] font-mono-num uppercase tracking-widest text-text-muted mb-3">
-                        <span>{typeLabel[q.type] || 'Verification'}</span>
-                        <span className="text-[#E8521A]">Seq {currentQ + 1} / {challenge.questions.length}</span>
+                        <span>{typeLabel[q.type] || 'Quiz'}</span>
+                        <span className="text-[#E8521A]">Question {currentQ + 1} / {challenge.questions.length}</span>
                     </div>
                     <div className="h-1 bg-border rounded-full overflow-hidden">
                         <motion.div
@@ -126,7 +126,7 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                                 animate={{ opacity: 1, y: 0 }}
                                 className="mt-8 p-6 rounded-[18px] bg-card border border-border shadow-sm"
                             >
-                                <p className="text-sm font-sans text-text-primary leading-relaxed"><span className="text-[#E8521A] font-mono-num text-[10px] uppercase tracking-widest block mb-2">System Output</span>{q.explanation}</p>
+                                <p className="text-sm font-sans text-text-primary leading-relaxed"><span className="text-[#E8521A] font-mono-num text-[10px] uppercase tracking-widest block mb-2">Feedback</span>{q.explanation}</p>
                             </motion.div>
                         )}
                     </motion.div>
@@ -173,17 +173,17 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                 </div>
 
                 <h2 className="text-4xl font-serif text-text-primary mb-4">
-                    {passed ? 'Authorization Granted' : 'Diagnostics Failed'}
+                    {passed ? 'Lesson complete!' : 'Almost there'}
                 </h2>
                 
                 <div className="flex bg-card border border-border p-4 rounded-[18px] items-center gap-6 mb-8 shadow-sm">
                     <div className="text-left">
-                        <p className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest mb-1">Success Rate</p>
+                        <p className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest mb-1">Score</p>
                         <p className="text-xl font-mono-num text-text-primary">{correctCount} <span className="text-text-muted text-sm">/ {challenge.questions.length}</span></p>
                     </div>
                     <div className="w-[1px] h-8 bg-border" />
                     <div className="text-left">
-                        <p className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest mb-1">Index</p>
+                        <p className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest mb-1">Score</p>
                         <div className="pill-score">
                             {scorePercent}%
                         </div>
@@ -193,33 +193,33 @@ export default function MiniChallenge({ challenge, scenarioName, onComplete, onR
                 {passed ? (
                     <>
                         <p className="text-sm text-text-secondary mb-12 max-w-sm leading-relaxed">
-                            Simulation module `<span className="text-[#E8521A] font-mono-num">{scenarioName}</span>` is now accessible in the Practice sector.
+                            You\'ve unlocked the `<span className="text-[#E8521A] font-mono-num">{scenarioName}</span>` conversation in the Practice tab.
                         </p>
                         <Button
                             onClick={() => onComplete(scorePercent)}
                             className="btn-action w-full max-w-xs h-14"
                         >
                             <ArrowRight className="w-4 h-4 mr-2" />
-                            Finalize Module
+                            Finish
                         </Button>
                     </>
                 ) : (
                     <>
                         <p className="text-sm text-text-secondary mb-12 max-w-sm leading-relaxed">
-                            Threshold criteria not met. Recommend revisiting phrase lexicon before re-attempting.
+                            You need a 70% to pass. Review your phrases and try again.
                         </p>
                         <div className="flex flex-col gap-4 w-full max-w-xs">
                             <Button
                                 onClick={onReviewPhrases}
                                 className="btn-secondary w-full max-w-xs h-12"
                             >
-                                <BookOpen className="w-3.5 h-3.5 mr-2" /> Lexicon Review
+                                <BookOpen className="w-3.5 h-3.5 mr-2" /> Review phrases
                             </Button>
                             <Button
                                 onClick={handleRetry}
                                 className="w-full h-12 bg-card text-accent border border-accent/20 hover:bg-surface font-mono-num text-[10px] uppercase tracking-widest rounded-full transition-colors"
                             >
-                                <RotateCcw className="w-3.5 h-3.5 mr-2" /> Re-execute Diagnostic
+                                <RotateCcw className="w-3.5 h-3.5 mr-2" /> Try again
                             </Button>
                         </div>
                     </>

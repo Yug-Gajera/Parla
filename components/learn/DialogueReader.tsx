@@ -123,12 +123,12 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                             }`}
                     >
                         <BookOpen className="w-4 h-4 mr-2" />
-                        Commence Verification
+                        Commence Quiz
                     </Button>
                     <AnimatePresence>
                         {!hasReadAll && (
                             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[9px] font-mono-num text-center text-text-muted mt-3 uppercase tracking-widest">
-                                Scroll to acknowledge complete dialogue sequence
+                                Scroll to the bottom to continue
                             </motion.p>
                         )}
                     </AnimatePresence>
@@ -145,7 +145,7 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                 {/* Progress */}
                 <div className="w-full mb-10">
                     <div className="flex justify-between text-[10px] font-mono-num uppercase tracking-widest text-text-muted mb-3">
-                        <span>Verification Phase</span>
+                        <span>Quiz</span>
                         <span className="text-[#E8521A]">{currentQ + 1} / {dialogue.questions.length}</span>
                     </div>
                     <div className="h-1 bg-border rounded-full overflow-hidden">
@@ -223,11 +223,11 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
             </div>
 
             <h2 className="text-3xl font-serif text-text-primary mb-3">
-                {passed ? 'Phase 1 Complete' : "Review Required"}
+                {passed ? 'Step 1 Complete' : "Almost there"}
             </h2>
             <div className="flex items-center gap-3 mb-6">
                 <p className="font-mono-num text-xs text-text-muted uppercase tracking-widest">
-                    Score metric
+                    Score
                 </p>
                 <p className="font-mono-num text-xl text-[#E8521A]">
                     {scorePercent}%
@@ -236,11 +236,11 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
 
             {passed ? (
                 <p className="text-sm text-text-secondary mb-12 max-w-xs leading-relaxed">
-                    Comprehension validated. Proceeding to lexical acquisition phase.
+                    Great job! Let\'s learn some key phrases.
                 </p>
             ) : (
                 <p className="text-sm text-text-secondary mb-12 max-w-xs leading-relaxed">
-                    Minimum threshold (70%) not met. Diagnostic recalibration required.
+                    You need a 70% to pass. Let\'s try again.
                 </p>
             )}
 
@@ -259,9 +259,9 @@ export default function DialogueReader({ dialogue, onComplete }: DialogueReaderP
                     }`}
             >
                 {passed ? (
-                    <>Proceed to Lexicon <ChevronRight className="w-4 h-4 ml-2" /></>
+                    <>Next step <ChevronRight className="w-4 h-4 ml-2" /></>
                 ) : (
-                    <>Re-initialize Dialogue Review</>
+                    <>Try again</>
                 )}
             </Button>
         </motion.div>

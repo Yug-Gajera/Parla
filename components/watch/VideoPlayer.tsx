@@ -128,7 +128,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
             <div className="fixed inset-0 z-50 bg-background flex items-center justify-center font-sans">
                 <div className="text-center">
                     <p className="text-text-muted mb-6 uppercase tracking-widest text-xs">Video content unavailable</p>
-                    <Button variant="outline" onClick={onClose} className="rounded-full bg-transparent border-border text-text-primary hover:bg-card px-8 text-xs uppercase tracking-widest">Return to Library</Button>
+                    <Button variant="outline" onClick={onClose} className="rounded-full bg-transparent border-border text-text-primary hover:bg-card px-8 text-xs uppercase tracking-widest">Back to library</Button>
                 </div>
             </div>
         );
@@ -194,7 +194,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                             </div>
                             {video.comprehension_questions?.length > 0 && (
                                 <Button size="sm" variant="outline" onClick={() => setPhase('comprehension')} className="text-[10px] uppercase tracking-widest gap-2 bg-transparent border-border text-text-primary hover:bg-card rounded-full px-5 h-8">
-                                    Initiate Quiz <ChevronRight className="w-3 h-3 text-[#E8521A]" />
+                                    Start Quiz <ChevronRight className="w-3 h-3 text-[#E8521A]" />
                                 </Button>
                             )}
                         </div>
@@ -238,7 +238,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                 {phase === 'comprehension' && video.comprehension_questions && (
                     <motion.div key="quiz" className="flex-1 overflow-y-auto p-6 md:p-12 space-y-8 max-w-3xl mx-auto w-full" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}>
                         <div className="text-center mb-10">
-                            <h3 className="font-display text-3xl text-text-primary mb-2">Comprehension Check</h3>
+                            <h3 className="font-display text-3xl text-text-primary mb-2">Quiz</h3>
                             <p className="text-xs font-mono-num uppercase tracking-widest text-text-secondary">Test your understanding</p>
                         </div>
                         
@@ -265,7 +265,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                                 onClick={handleSubmit}
                                 disabled={Object.keys(answers).length < video.comprehension_questions.length}
                                 className="w-full h-12 rounded-full font-mono-num uppercase tracking-widest text-xs font-bold bg-gold text-background hover:brightness-110 transition-colors disabled:opacity-50 disabled:bg-surface disabled:text-text-muted"
-                            >Submit Assessment</Button>
+                            >Submit answers</Button>
                         </div>
                     </motion.div>
                 )}
@@ -276,11 +276,11 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                             <div className="w-20 h-20 rounded-full bg-background border border-border-strong flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(232,82,26,0.15)]">
                                 <Trophy className="w-8 h-8 text-[#E8521A]" />
                             </div>
-                            <h3 className="text-3xl font-display text-text-primary mb-4">{comprehensionResult?.message || 'Assessment Complete'}</h3>
+                            <h3 className="text-3xl font-display text-text-primary mb-4">{comprehensionResult?.message || 'Quiz Complete'}</h3>
                             
                             {comprehensionResult?.score !== undefined && (
                                 <div className="my-8">
-                                    <p className="text-text-secondary text-[10px] uppercase font-mono-num tracking-widest mb-2">Accuracy Rate</p>
+                                    <p className="text-text-secondary text-[10px] uppercase font-mono-num tracking-widest mb-2">Score</p>
                                     <p className="text-6xl font-mono-num text-text-primary">{comprehensionResult.score}<span className="text-2xl text-[#E8521A]">%</span></p>
                                 </div>
                             )}
@@ -299,7 +299,7 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                             <Button 
                                 onClick={onClose} 
                                 className="w-full h-12 rounded-full font-mono-num uppercase tracking-widest text-xs font-bold bg-text-primary text-background hover:bg-gold transition-colors"
-                            >Return to Library</Button>
+                            >Back to library</Button>
                         </Card>
                     </motion.div>
                 )}

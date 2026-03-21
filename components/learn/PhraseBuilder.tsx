@@ -34,9 +34,9 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
         <div className="flex flex-col h-full font-sans max-w-4xl mx-auto w-full px-4 sm:px-6 pt-6">
             {/* Header */}
             <div className="mb-8 text-center sm:text-left">
-                <h2 className="text-3xl font-serif text-text-primary mb-2 tracking-tight">Core Lexicon</h2>
+                <h2 className="text-3xl font-serif text-text-primary mb-2 tracking-tight">Key phrases</h2>
                 <p className="text-sm font-mono-num text-text-muted uppercase tracking-[0.1em]">
-                    Phase 2 &nbsp;&bull;&nbsp; Tap to isolate. Tap again to assimilate.
+                    Step 2 &nbsp;&bull;&nbsp; Tap to see more. Tap again to save it.
                 </p>
             </div>
 
@@ -46,7 +46,7 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                     <div className="w-12 h-12 bg-background border border-border-strong rounded-full flex items-center justify-center shadow-inner">
                         <span className="text-xl font-mono-num text-[#E8521A]">{learnedCount}</span>
                     </div>
-                    <span className="text-[10px] font-mono-num uppercase tracking-widest text-text-muted">/ 10 Acquired</span>
+                    <span className="text-[10px] font-mono-num uppercase tracking-widest text-text-muted">of 10 learned</span>
                 </div>
                 <div className="h-1.5 flex-1 max-w-full sm:max-w-xs w-full bg-background border border-border rounded-full overflow-hidden">
                     <motion.div
@@ -127,7 +127,7 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                                         <p className="text-3xl font-serif text-[#E8521A] mb-4">{phrase.spanish}</p>
                                         <p className="text-lg text-text-primary font-mono-num mb-8 opacity-80">{phrase.phonetic}</p>
                                         <Button className="btn-action px-8">
-                                            Assimilate
+                                            Got it
                                         </Button>
                                     </div>
                                 </Card>
@@ -142,7 +142,7 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                 <div className="max-w-4xl mx-auto flex flex-col items-center">
                     {!canContinue && (
                         <p className="text-[10px] font-mono-num uppercase tracking-widest text-center text-text-muted mb-4">
-                            Acquire minimum 8 phrases to proceed
+                            Learn 8 phrases to keep going
                         </p>
                     )}
                     <Button
@@ -154,9 +154,9 @@ export default function PhraseBuilder({ phraseSet, onComplete }: PhraseBuilderPr
                         className={`w-full max-md h-14 ${canContinue ? 'btn-action' : 'btn-secondary opacity-50 cursor-not-allowed'}`}
                     >
                         {canContinue ? (
-                            <>Proceed to Verification <ChevronRight className="w-4 h-4 ml-2" /></>
+                            <>Next step <ChevronRight className="w-4 h-4 ml-2" /></>
                         ) : (
-                            <><Lock className="w-4 h-4 mr-2" /> System Locked</>
+                            <><Lock className="w-4 h-4 mr-2" /> Keep going to unlock this</>
                         )}
                     </Button>
                 </div>

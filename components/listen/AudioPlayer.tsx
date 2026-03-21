@@ -111,7 +111,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
         return (
             <div className="fixed inset-0 z-50 bg-[#080808] flex flex-col items-center justify-center gap-6 font-sans">
                 <p className="text-[#9a9590] uppercase tracking-widest text-xs">Audio segment unavailable</p>
-                <Button variant="outline" onClick={onClose} className="rounded-full bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] px-8 text-xs uppercase tracking-widest">Return to Library</Button>
+                <Button variant="outline" onClick={onClose} className="rounded-full bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] px-8 text-xs uppercase tracking-widest">Back to library</Button>
             </div>
         );
     }
@@ -201,7 +201,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                     </div>
                                     {episode.comprehension_questions?.length > 0 && (
                                         <Button size="sm" variant="outline" onClick={() => setPhase('comprehension')} className="text-[10px] uppercase tracking-widest gap-2 bg-transparent border-[#1e1e1e] text-[#f0ece4] hover:bg-[#141414] rounded-full px-5 h-8">
-                                            Initiate Quiz <ChevronRight className="w-3 h-3 text-[#E8521A]" />
+                                            Start Quiz <ChevronRight className="w-3 h-3 text-[#E8521A]" />
                                         </Button>
                                     )}
                                 </div>
@@ -265,7 +265,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                 {phase === 'comprehension' && episode.comprehension_questions && (
                     <motion.div key="quiz" className="flex-1 overflow-y-auto p-6 md:p-12 space-y-8 max-w-3xl mx-auto w-full" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}>
                         <div className="text-center mb-10">
-                            <h3 className="font-serif text-3xl text-[#f0ece4] mb-2">Comprehension Check</h3>
+                            <h3 className="font-serif text-3xl text-[#f0ece4] mb-2">Quiz</h3>
                             <p className="text-xs font-mono uppercase tracking-widest text-[#5a5652]">Test your understanding</p>
                         </div>
                         
@@ -292,7 +292,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                                 onClick={handleSubmit}
                                 disabled={Object.keys(answers).length < episode.comprehension_questions.length}
                                 className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#E8521A] text-[#080808] hover:bg-[#D94A15] transition-colors disabled:opacity-50 disabled:bg-[#141414] disabled:text-[#5a5652]"
-                            >Submit Assessment</Button>
+                            >Submit answers</Button>
                         </div>
                     </motion.div>
                 )}
@@ -303,11 +303,11 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                             <div className="w-20 h-20 rounded-full bg-[#080808] border border-[#2a2a2a] flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(201,168,76,0.15)]">
                                 <Trophy className="w-8 h-8 text-[#E8521A]" />
                             </div>
-                            <h3 className="text-3xl font-serif text-[#f0ece4] mb-4">{comprehensionResult?.message || 'Assessment Complete'}</h3>
+                            <h3 className="text-3xl font-serif text-[#f0ece4] mb-4">{comprehensionResult?.message || 'Quiz Complete'}</h3>
                             
                             {comprehensionResult?.score !== undefined && (
                                 <div className="my-8">
-                                    <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-2">Accuracy Rate</p>
+                                    <p className="text-[#5a5652] text-[10px] uppercase font-mono tracking-widest mb-2">Score</p>
                                     <p className="text-6xl font-mono text-[#f0ece4]">{comprehensionResult.score}<span className="text-2xl text-[#E8521A]">%</span></p>
                                 </div>
                             )}
@@ -326,7 +326,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                             <Button 
                                 onClick={onClose} 
                                 className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-[#f0ece4] text-[#080808] hover:bg-[#E8521A] transition-colors"
-                            >Return to Library</Button>
+                            >Back to library</Button>
                         </Card>
                     </motion.div>
                 )}

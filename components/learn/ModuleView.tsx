@@ -92,14 +92,14 @@ export default function ModuleView({
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-card shrink-0">
                 <Button variant="ghost" size="sm" onClick={handleBack} className="gap-2 text-text-secondary hover:bg-surface hover:text-text-primary rounded-full h-9 px-4 uppercase text-[10px] tracking-widest font-mono-num">
-                    <ArrowLeft className="w-4 h-4" /> Terminate
+                    <ArrowLeft className="w-4 h-4" /> Exit
                 </Button>
 
                 <div className="flex flex-col items-center mx-4">
                     <h2 className="text-xl font-display text-text-primary truncate max-w-[200px] sm:max-w-md">
                         {scenarioName}
                     </h2>
-                    <p className="text-[9px] text-[#E8521A] font-mono-num tracking-[0.2em] uppercase mt-0.5">Active Sequence</p>
+                    <p className="text-[9px] text-[#E8521A] font-mono-num tracking-[0.2em] uppercase mt-0.5">In progress</p>
                 </div>
 
                 {/* Step indicator dots */}
@@ -132,8 +132,8 @@ export default function ModuleView({
                             <Loader2 className="w-8 h-8 text-[#E8521A] animate-spin" />
                         </motion.div>
                         <div className="text-center">
-                            <p className="text-text-primary font-display text-xl mb-1">Compiling Module Data</p>
-                            <p className="text-[10px] font-mono-num tracking-[0.2em] uppercase text-text-muted">Fetching structural parameters</p>
+                            <p className="text-text-primary font-display text-xl mb-1">Loading module...</p>
+                            <p className="text-[10px] font-mono-num tracking-[0.2em] uppercase text-text-muted">Getting things ready</p>
                         </div>
                     </div>
                 ) : error ? (
@@ -142,10 +142,10 @@ export default function ModuleView({
                             <LibrarySquare className="w-6 h-6 text-error" />
                         </div>
                         <div className="text-center">
-                            <p className="text-text-primary font-display text-xl mb-1">Module Sync Failure</p>
+                            <p className="text-text-primary font-display text-xl mb-1">Couldn't load module</p>
                             <p className="text-xs text-error font-mono-num tracking-wider">{error}</p>
                         </div>
-                        <Button onClick={onClose} variant="outline" className="rounded-full bg-transparent border-border text-text-primary hover:bg-surface hover:border-border-strong uppercase text-[10px] tracking-widest px-8">Return</Button>
+                        <Button onClick={onClose} variant="outline" className="rounded-full bg-transparent border-border text-text-primary hover:bg-surface hover:border-border-strong uppercase text-[10px] tracking-widest px-8">Go back</Button>
                     </div>
                 ) : module ? (
                     <div className="h-full relative custom-scrollbar">
@@ -210,16 +210,16 @@ export default function ModuleView({
                             onClick={e => e.stopPropagation()}
                             className="bg-card rounded-3xl p-8 max-w-sm w-full border border-border shadow-2xl text-center"
                         >
-                            <h3 className="text-2xl font-display text-text-primary mb-3">Terminate Lesson?</h3>
+                            <h3 className="text-2xl font-display text-text-primary mb-3">Exit lesson?</h3>
                             <p className="text-sm text-text-secondary mb-8 leading-relaxed">
-                                Partial completion data is preserved, but current phase metrics will be purged from memory.
+                                You'll keep your progress so far, but you'll have to restart this step.
                             </p>
                             <div className="flex gap-4">
                                 <Button variant="outline" className="flex-1 bg-transparent border-border text-text-primary hover:bg-border font-mono-num text-[10px] uppercase tracking-widest rounded-full h-11" onClick={() => setShowExitConfirm(false)}>
-                                    Remain
+                                    Stay
                                 </Button>
                                 <Button variant="destructive" className="flex-1 bg-error/10 text-error hover:bg-error/20 border border-error/20 font-mono-num text-[10px] uppercase tracking-widest rounded-full h-11 transition-colors" onClick={onClose}>
-                                    Terminate
+                                    Exit
                                 </Button>
                             </div>
                         </motion.div>

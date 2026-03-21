@@ -104,7 +104,7 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
 
                     {/* Stats Module */}
                     <div className="w-full mb-10">
-                        <h3 className="text-[10px] font-mono-num font-bold text-text-muted uppercase tracking-widest mb-4 px-1">Acquisition Metrics</h3>
+                        <h3 className="text-[10px] font-mono-num font-bold text-text-muted uppercase tracking-widest mb-4 px-1">Stats</h3>
                         <div className="grid grid-cols-2 gap-3">
                             <div className="bg-surface p-5 rounded-2xl border border-border flex flex-col gap-2 relative overflow-hidden group hover:border-border-strong transition-all">
                                 <div className="absolute -right-4 -top-4 opacity-5">
@@ -170,7 +170,7 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
                                 onReviewClick(word);
                             }}
                         >
-                            Initiate Review
+                            Start Review
                         </Button>
                         <Button
                             variant="outline"
@@ -179,7 +179,7 @@ export function WordDetailSheet({ word, open, onOpenChange, onReviewClick, onRem
                             disabled={isRemoving}
                         >
                             {isRemoving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Trash2 className="w-4 h-4 mr-2" />}
-                            Purge from Lexicon
+                            Remove word
                         </Button>
                     </div>
 

@@ -77,13 +77,13 @@ export function AddWordSheet({ open, onOpenChange, languageId, refreshDeck }: Ad
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetContent side="bottom" className="h-[80vh] flex flex-col p-0 bg-background border-t border-border rounded-t-3xl overflow-hidden font-sans">
                 <SheetHeader className="p-6 pb-5 border-b border-border bg-surface">
-                    <SheetTitle className="text-2xl font-serif text-text-primary text-center mb-2">Index Lexicon</SheetTitle>
+                    <SheetTitle className="text-2xl font-serif text-text-primary text-center mb-2">Search Words</SheetTitle>
                     <div className="relative mt-2">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
                         <Input
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Input terminology..."
+                            placeholder="Search for a word..."
                             className="pl-11 h-12 bg-card border-border-strong text-text-primary placeholder:text-text-muted rounded-xl focus-visible:ring-1 focus-visible:ring-[#E8521A] focus-visible:ring-offset-0 focus-visible:bg-surface transition-all font-mono"
                         />
                     </div>
@@ -97,10 +97,10 @@ export function AddWordSheet({ open, onOpenChange, languageId, refreshDeck }: Ad
                     ) : search.trim().length > 0 && results.length === 0 ? (
                         <div className="flex flex-col items-center justify-center p-14 text-center">
                             <p className="text-text-secondary mb-2 font-mono text-sm uppercase tracking-widest">
-                                Unit unindexed
+                                Word not found
                             </p>
                             <p className="text-[11px] text-text-muted font-sans max-w-xs mx-auto leading-relaxed">
-                                Diagnostic failure: Term not found in current database array.
+                                We couldn't find that word in our database.
                             </p>
                         </div>
                     ) : (
@@ -133,9 +133,9 @@ export function AddWordSheet({ open, onOpenChange, languageId, refreshDeck }: Ad
                                         {addingIds.has(word.id) ? (
                                             <Loader2 className="h-4 w-4 animate-spin text-[#E8521A]" />
                                         ) : word.is_added ? (
-                                            <><CheckCircle2 className="h-3.5 h-3.5 mr-1.5" /> Indexed</>
+                                            <><CheckCircle2 className="h-3.5 h-3.5 mr-1.5" /> Added</>
                                         ) : (
-                                            <><Plus className="h-3.5 h-3.5 mr-1.5" /> Acquire</>
+                                            <><Plus className="h-3.5 h-3.5 mr-1.5" /> Learn</>
                                         )}
                                     </Button>
                                 </div>

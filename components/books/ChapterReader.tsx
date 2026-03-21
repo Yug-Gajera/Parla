@@ -90,11 +90,11 @@ export default function ChapterReader({
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 className="fixed inset-0 z-[60] bg-[#080808] flex flex-col items-center justify-center p-8 font-sans">
                 <Loader2 className="w-12 h-12 text-[#E8521A] animate-spin mb-6" />
-                <h2 className="text-xl font-serif text-[#f0ece4] mb-3">Initializing Chapter Metadata</h2>
+                <h2 className="text-xl font-serif text-[#f0ece4] mb-3">Getting chapter ready</h2>
                 <p className="text-[11px] font-mono uppercase tracking-widest text-[#5a5652] text-center max-w-sm leading-relaxed p-4 border border-[#1e1e1e] rounded-xl bg-[#0f0f0f]">
-                    System extracting lexicon topology and constructing comprehension vectors.
+                    We\'re finding the best words for you to learn.
                 </p>
-                <Button onClick={onClose} variant="ghost" className="mt-8 text-[#5a5652] hover:text-[#f0ece4] hover:bg-[#141414] rounded-full font-mono text-[10px] uppercase tracking-widest">Abort Process</Button>
+                <Button onClick={onClose} variant="ghost" className="mt-8 text-[#5a5652] hover:text-[#f0ece4] hover:bg-[#141414] rounded-full font-mono text-[10px] uppercase tracking-widest">Cancel</Button>
             </motion.div>
         );
     }
@@ -113,8 +113,8 @@ export default function ChapterReader({
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 className="fixed inset-0 z-[60] bg-[#080808] flex items-center justify-center font-sans">
                 <div className="text-center">
-                    <p className="text-red-500 font-mono text-sm uppercase tracking-widest mb-4">{error || 'Index Not Found'}</p>
-                    <Button onClick={onClose} variant="outline" className="border-[#1e1e1e] bg-[#141414] hover:bg-[#1e1e1e] text-[#f0ece4] font-mono text-[10px] uppercase tracking-widest rounded-full px-8">Return Home</Button>
+                    <p className="text-red-500 font-mono text-sm uppercase tracking-widest mb-4">{error || 'Chapter Not Found'}</p>
+                    <Button onClick={onClose} variant="outline" className="border-[#1e1e1e] bg-[#141414] hover:bg-[#1e1e1e] text-[#f0ece4] font-mono text-[10px] uppercase tracking-widest rounded-full px-8">Go back</Button>
                 </div>
             </motion.div>
         );
@@ -154,7 +154,7 @@ export default function ChapterReader({
                         </motion.div>
 
                         <h2 className="text-3xl font-serif text-[#f0ece4] mb-3 leading-tight">
-                            {comprehensionResult.book_completed ? 'Archive Finalized' : 'Phase Accomplished'}
+                            {comprehensionResult.book_completed ? 'Book Finished' : 'Chapter Complete'}
                         </h2>
                         <p className="text-[#9a9590] text-sm mb-10 font-sans max-w-[260px] mx-auto">
                             {comprehensionResult.message}
@@ -167,7 +167,7 @@ export default function ChapterReader({
                             {comprehensionResult.correct}/{comprehensionResult.total}
                         </div>
                         <p className="text-[10px] font-mono text-[#5a5652] uppercase tracking-[0.2em] mb-10">
-                            IQ Ratio: {comprehensionResult.score}%
+                            Score: {comprehensionResult.score}%
                         </p>
 
                         <div className="grid grid-cols-2 gap-4 mb-10">
@@ -177,7 +177,7 @@ export default function ChapterReader({
                             </div>
                             <div className="p-4 rounded-2xl bg-[#141414] border border-[#1e1e1e] shadow-inner flex flex-col items-center">
                                 <p className="text-3xl font-serif text-[#f0ece4] mb-1">{wordsTapped}</p>
-                                <p className="text-[9px] font-mono text-[#5a5652] uppercase tracking-widest">Queries</p>
+                                <p className="text-[9px] font-mono text-[#5a5652] uppercase tracking-widest">Words tapped</p>
                             </div>
                         </div>
 
@@ -187,15 +187,15 @@ export default function ChapterReader({
                                     onClick={() => onNavigate(comprehensionResult.next_chapter!)}
                                     className="w-full bg-[#E8521A] hover:bg-[#D94A15] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(232,82,26,0.15)] transition-all gap-2"
                                 >
-                                    Initialize Phase {comprehensionResult.next_chapter} <ChevronRight className="w-4 h-4" />
+                                    Start Chapter {comprehensionResult.next_chapter} <ChevronRight className="w-4 h-4" />
                                 </Button>
                                 <Button onClick={onClose} variant="outline" className="w-full border-[#1e1e1e] bg-transparent text-[#9a9590] hover:text-[#f0ece4] hover:bg-[#141414] font-mono text-[10px] uppercase tracking-widest h-14 rounded-full">
-                                    Return to Archive
+                                    Back to library
                                 </Button>
                             </div>
                         ) : (
                             <Button onClick={onClose} className="w-full bg-[#E8521A] hover:bg-[#D94A15] text-[#080808] font-mono text-[10px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(232,82,26,0.15)] transition-all">
-                                Return to Archive
+                                Back to library
                             </Button>
                         )}
                     </Card>
@@ -218,7 +218,7 @@ export default function ChapterReader({
                 className="fixed inset-0 z-[60] bg-[#080808] flex flex-col font-sans pt-safe-top">
                 
                 <div className="flex items-center justify-between px-6 py-5 border-b border-[#1e1e1e] bg-[#0f0f0f]">
-                    <span className="text-[10px] font-mono text-[#9a9590] uppercase tracking-[0.2em] font-bold">Comprehension Vector</span>
+                    <span className="text-[10px] font-mono text-[#9a9590] uppercase tracking-[0.2em] font-bold">Quiz</span>
                     <div className="flex gap-2">
                         {questions.map((_: any, i: number) => (
                             <div key={i} className={`h-1.5 rounded-full transition-all ${
@@ -279,7 +279,7 @@ export default function ChapterReader({
                                 <motion.div initial={{ opacity: 0, height: 0, y: 10 }} animate={{ opacity: 1, height: 'auto', y: 0 }} className="mb-8">
                                     <div className={`p-6 rounded-2xl border shadow-inner ${isCorrect ? 'border-[#E8521A]/30 bg-[#E8521A]/5' : 'border-red-500/20 bg-red-500/5'}`}>
                                         <p className={`text-[12px] font-mono font-bold uppercase tracking-widest mb-3 flex items-center gap-2 ${isCorrect ? 'text-[#E8521A]' : 'text-red-400'}`}>
-                                            {isCorrect ? 'Diagnostic Positive' : 'Diagnostic Negative'}
+                                            {isCorrect ? 'Correct!' : 'Incorrect'}
                                         </p>
                                         <p className="text-sm font-sans text-[#f0ece4]/90 leading-relaxed">{q.explanation}</p>
                                     </div>
@@ -295,12 +295,12 @@ export default function ChapterReader({
                             <Button className="w-full bg-[#E8521A] hover:bg-[#D94A15] text-[#080808] font-mono text-[12px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(232,82,26,0.15)] transition-all" 
                                 disabled={selected === null} 
                                 onClick={handleCheckAnswer}>
-                                Verify Vector
+                                Submit answer
                             </Button>
                         ) : (
                             <Button className="w-full bg-[#c9a84c] hover:bg-[#b98e72] text-[#080808] font-mono text-[12px] font-bold uppercase tracking-widest h-14 rounded-full shadow-[0_4px_20px_rgba(201,168,76,0.15)] transition-all" 
                                 onClick={handleNextQuestion}>
-                                {currentQuestion < questions.length - 1 ? 'Advance to Next' : 'Transpile Results'}
+                                {currentQuestion < questions.length - 1 ? 'Next question' : 'See results'}
                             </Button>
                         )}
                     </div>
@@ -332,7 +332,7 @@ export default function ChapterReader({
                         {bookInfo?.title}
                     </p>
                     <p className="text-[9px] font-mono text-[#5a5652] uppercase tracking-[0.2em] mt-1">
-                        Phase {chapterNumber} <span className="text-[#2a2a2a] mx-1">/</span> {totalChapters}
+                        Chapter {chapterNumber} <span className="text-[#2a2a2a] mx-1">/</span> {totalChapters}
                     </p>
                 </div>
                 <Button variant="ghost" size="icon" onClick={toggleVocabPanel} className="rounded-full text-[#E8521A] bg-[#E8521A]/10 hover:bg-[#E8521A]/20 border border-[#E8521A]/20">
@@ -344,7 +344,7 @@ export default function ChapterReader({
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 sm:px-10 py-10 pb-32 custom-scrollbar scroll-smooth">
                 <div className="max-w-2xl mx-auto">
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-[#f0ece4] mb-12 leading-tight">
-                        {chapter.title || `Phase ${chapterNumber}`}
+                        {chapter.title || `Chapter ${chapterNumber}`}
                     </h2>
                     <InteractiveText content={chapter.content} onTapWord={tapWord} />
                 </div>
@@ -376,7 +376,7 @@ export default function ChapterReader({
                         className="fixed bottom-24 left-4 right-4 z-[65] flex justify-center pointer-events-none">
                         <Button onClick={handleStartComprehension}
                             className="pointer-events-auto bg-[#E8521A] hover:bg-[#D94A15] text-[#080808] font-mono text-[11px] font-bold uppercase tracking-widest h-14 px-8 rounded-full shadow-[0_10px_30px_rgba(232,82,26,0.3)] transition-all gap-3 border border-[#232,82,26]/50">
-                            <Sparkles className="w-4 h-4" /> Run Comprehension Diagnostic
+                            <Sparkles className="w-4 h-4" /> Start Quiz
                         </Button>
                     </motion.div>
                 )}
@@ -401,7 +401,7 @@ export default function ChapterReader({
                         className="fixed bottom-0 left-0 right-0 z-[70] h-[75vh] bg-[#0c0c0c] border-t border-[#1e1e1e] rounded-t-3xl flex flex-col shadow-[0_-20px_50px_rgba(0,0,0,0.8)] pb-safe-bottom">
                         
                         <div className="flex items-center justify-between px-6 py-5 border-b border-[#1e1e1e]">
-                            <h3 className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#f0ece4]">Extracted Lexicon</h3>
+                            <h3 className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#f0ece4]">Key Words</h3>
                             <button onClick={toggleVocabPanel} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#141414] border border-[#2a2a2a] text-[#5a5652] hover:text-[#f0ece4] hover:border-[#5a5652] transition-colors">
                                 <X className="w-4 h-4" />
                             </button>
@@ -433,7 +433,7 @@ export default function ChapterReader({
                             ))}
                             {(!chapter.vocabulary_items || chapter.vocabulary_items.length === 0) && (
                                 <div className="p-12 text-center text-[#5a5652] font-mono text-[10px] uppercase tracking-widest border border-dashed border-[#1e1e1e] rounded-3xl">
-                                    No terminology flagged in this phase.
+                                    No key words found in this chapter.
                                 </div>
                             )}
                         </div>
