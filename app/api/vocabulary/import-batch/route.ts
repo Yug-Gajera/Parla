@@ -51,12 +51,12 @@ export async function POST(req: Request) {
         const serviceClient = getServiceClient();
 
         // 0. Resolve language code to UUID if needed
-        let languageUuid = languageId;
-        if (languageId.length <= 3) {
+        let languageUuid = languageId || 'es';
+        if (languageUuid.length <= 3) {
             const { data: langData, error: langError } = await serviceClient
                 .from('languages')
                 .select('id')
-                .eq('code', languageId)
+                .eq('code', languageUuid)
                 .single();
             
             if (langError || !langData) {
