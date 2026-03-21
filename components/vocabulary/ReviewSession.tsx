@@ -123,11 +123,11 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                 <div className="w-20 h-20 rounded-full border border-[#E8521A]/30 bg-[#E8521A]/5 shadow-inner flex items-center justify-center mb-8">
                     <Brain className="w-8 h-8 text-[#E8521A]" strokeWidth={1} />
                 </div>
-                <h2 className="text-4xl font-display text-text-primary mb-4">Memory Sync</h2>
+                <h2 className="text-4xl font-display text-text-primary mb-4">Review Words</h2>
                 <p className="text-text-muted text-sm mb-12 text-center max-w-sm font-mono-num uppercase tracking-widest leading-relaxed mt-2">
                     {totalWords === 0
-                        ? "Lexicon index current. No operations pending."
-                        : `Initializing review protocol for ${totalWords} unit${totalWords !== 1 ? 's' : ''}.`}
+                        ? "You're all caught up. No words to review right now."
+                        : `Get ready to review ${totalWords} word${totalWords !== 1 ? 's' : ''}.`}
                 </p>
                 <div className="flex gap-4 w-full max-w-sm flex-col">
                     <Button
@@ -135,10 +135,10 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                         disabled={totalWords === 0}
                         className="bg-[#E8521A] hover:brightness-110 text-[#080808] font-mono-num text-[10px] font-bold uppercase tracking-widest h-14 rounded-full w-full shadow-[0_4px_20px_rgba(232,82,26,0.2)] transition-all"
                     >
-                        Engage Sync Protocol
+                        Start Review
                     </Button>
                     <Button variant="outline" onClick={onClose} className="h-14 rounded-full border-border bg-transparent text-text-secondary hover:bg-surface hover:text-text-primary font-mono-num text-[10px] uppercase tracking-widest w-full">
-                        Abort
+                        Cancel
                     </Button>
                 </div>
             </div>
@@ -175,23 +175,23 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                     <div className="w-24 h-24 rounded-full bg-[#E8521A]/5 border border-[#E8521A]/20 flex items-center justify-center mb-8 shadow-xl">
                         <Fingerprint className="w-10 h-10 text-[#E8521A]" strokeWidth={1} />
                     </div>
-                    <h2 className="text-4xl font-display text-text-primary mb-3">Sync Accomplished</h2>
+                    <h2 className="text-4xl font-display text-text-primary mb-3">Review Finished</h2>
                     <p className="text-text-secondary text-sm mb-12 text-center max-w-sm font-sans leading-relaxed">
-                        Processed {totalWords} index units over {mins} minute{mins !== 1 ? 's' : ''} with optimal flow.
+                        You reviewed {totalWords} words in {mins} minute{mins !== 1 ? 's' : ''}. Great job!
                     </p>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl mb-12">
-                        <StatCard label="Accuracy" value={`${accuracy}%`} />
-                        <StatCard label="XP Yield" value={`+${xp}`} highlight />
-                        <StatCard label="Flawless" value={stats.easy.toString()} icon={<Zap className="w-3.5 h-3.5" />} />
-                        <StatCard label="Recalibrate" value={stats.again.toString()} icon={<RotateCcw className="w-3.5 h-3.5" />} isBad={stats.again > 0} />
+                        <StatCard label="Correct" value={`${accuracy}%`} />
+                        <StatCard label="XP Earned" value={`+${xp}`} highlight />
+                        <StatCard label="Perfect" value={stats.easy.toString()} icon={<Zap className="w-3.5 h-3.5" />} />
+                        <StatCard label="Try Again" value={stats.again.toString()} icon={<RotateCcw className="w-3.5 h-3.5" />} isBad={stats.again > 0} />
                     </div>
 
                     <Button
                         onClick={onClose}
                         className="bg-[#E8521A] hover:brightness-110 text-[#080808] font-mono-num text-[10px] font-bold uppercase tracking-widest px-12 h-14 rounded-full shadow-[0_4px_20px_rgba(232,82,26,0.25)] transition-all"
                     >
-                        Conclude Phase
+                        Done
                     </Button>
                 </div>
             </div>
@@ -255,7 +255,7 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                                         {baseWord.word}
                                     </span>
                                     <p className="text-[10px] font-mono-num tracking-[0.2em] text-text-muted uppercase opacity-70 group-hover:opacity-100 transition-opacity absolute bottom-10">
-                                        Initiate Reveal Sequence
+                                        Tap to see translation
                                     </p>
                                 </div>
                             ) : (
@@ -305,7 +305,7 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                         >
                             <RatingButton
                                 onClick={() => handleRate(1)}
-                                label="Recal"
+                                label="Again"
                                 interval={formatDays(previews.again)}
                                 colorClass="bg-card hover:bg-red-500/10 text-error border-border hover:border-error/30"
                             />
@@ -322,8 +322,7 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                                 colorClass="bg-card hover:bg-green-500/10 text-green-600 border-border hover:border-green-500/30"
                             />
                             <RatingButton
-                                onClick={() => handleRate(5)}
-                                label="Perf"
+                                label="Perfect"
                                 interval={formatDays(previews.easy)}
                                 colorClass="bg-card hover:bg-gold/10 text-gold border-border hover:border-gold/50 bg-gradient-to-t from-gold/5 to-transparent"
                             />
@@ -333,7 +332,7 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                 {!isFlipped && (
                     <div className="h-[76px] flex items-center justify-center">
                         <Button onClick={() => setIsFlipped(true)} variant="outline" className="w-full max-w-xs h-14 rounded-full border-border bg-card hover:bg-surface text-text-primary font-mono-num text-[10px] uppercase tracking-widest font-bold">
-                            Authorize Reveal
+                            Show Answer
                         </Button>
                     </div>
                 )}

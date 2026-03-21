@@ -38,10 +38,10 @@ export function PaywallModal({ isOpen, onClose, metric, plan }: PaywallModalProp
                         <BadgeCheck className="w-10 h-10 text-[#E8521A]" />
                     </div>
                     <DialogTitle className="text-2xl font-display text-text-primary tracking-tight">
-                        You've reached your free limit
+                        You've hit your free limit
                     </DialogTitle>
                     <DialogDescription className="text-text-secondary text-base leading-relaxed">
-                        Upgrade to Pro to get unlimited {label} and unlock advanced AI features like pronunciation scoring and custom scenarios.
+                        Upgrade to Pro to get unlimited {label}. You'll also unlock AI features like speaking feedback and custom stories.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="flex flex-col sm:flex-row gap-3 mt-6">

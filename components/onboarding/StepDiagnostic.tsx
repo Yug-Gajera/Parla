@@ -139,10 +139,10 @@ export default function StepDiagnostic() {
                 >
                     <ArrowLeft size={18} />
                 </button>
-                <h2 className="text-3xl font-serif text-foreground mb-4">Starting Assessment</h2>
+                <h2 className="text-3xl font-serif text-foreground mb-4">Let's find your level.</h2>
                 <p className="text-muted-foreground mb-8 max-w-md">
-                    Based on your vocabulary we are starting your assessment at <strong>{estimatedLevel}</strong>. 
-                    <br/><br/>Tap to adjust if this feels wrong.
+                    Based on your words, we are starting your test at <strong>{estimatedLevel}</strong>. 
+                    <br/><br/>Change this if it feels wrong.
                 </p>
                 <div className="mb-10">
                     <select 
@@ -162,7 +162,7 @@ export default function StepDiagnostic() {
                     onClick={() => setViewState('loading_questions')}
                     className="btn-action px-10 h-14"
                 >
-                    Begin Test {highConfidence && '(Shortened)'}
+                    Start {highConfidence && '(Shortened)'}
                 </Button>
             </div>
         );
@@ -178,9 +178,9 @@ export default function StepDiagnostic() {
                     <ArrowLeft size={18} />
                 </button>
                 <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-accent mb-8" />
-                <h2 className="text-2xl font-serif text-text-primary mb-3">Initializing Diagnostic</h2>
+                <h2 className="text-2xl font-serif text-text-primary mb-3">Getting things ready for you...</h2>
                 <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-text-muted text-center max-w-sm px-6 py-3 border border-border bg-card rounded-[18px] shadow-sm">
-                    Generating vectors for constraint level {targetLevel}
+                    Loading questions...
                 </p>
             </div>
         );
@@ -190,9 +190,9 @@ export default function StepDiagnostic() {
         return (
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4">
                 <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-accent mb-8" />
-                <h2 className="text-2xl font-serif text-text-primary mb-3">Synthesizing Results</h2>
+                <h2 className="text-2xl font-serif text-text-primary mb-3">Checking your answers...</h2>
                 <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-text-muted text-center px-6 py-3 border border-border bg-card rounded-[18px] shadow-sm">
-                    Grading lexicon syntax and semantics
+                    Almost done...
                 </p>
             </div>
         );
@@ -210,15 +210,15 @@ export default function StepDiagnostic() {
                 <div className="p-5 border border-red-500/20 bg-red-500/5 text-red-400 rounded-full mb-6">
                     <AlertTriangle size={32} />
                 </div>
-                <h2 className="text-2xl font-serif text-foreground mb-3">Diagnostic Interrupted</h2>
+                <h2 className="text-2xl font-serif text-foreground mb-3">Something went wrong.</h2>
                 <p className="text-[11px] font-sans text-muted-foreground text-center max-w-sm mb-10 leading-relaxed">
-                    Connection to primary assessor failed. Please verify neural uplink.
+                    Check your connection and try again.
                 </p>
                 <Button
                     onClick={() => { fetchStarted.current = false; setViewState('loading_questions'); }}
                     className="btn-action px-10 h-14"
                 >
-                    Reinitialize
+                    Try Again
                 </Button>
             </div>
         )
@@ -232,7 +232,7 @@ export default function StepDiagnostic() {
             {/* ── Mini Progress ── */}
             <div className="w-full max-w-xl mx-auto mb-16 px-4">
                 <div className="flex justify-between items-center text-[10px] font-mono font-bold mb-3 text-text-muted uppercase tracking-[0.2em]">
-                    <span>Diagnostic Scan</span>
+                    <span>Test</span>
                     <span>{currentIndex + 1} <span className="text-border-strong px-1">/</span> {questions.length}</span>
                 </div>
                 <div className="h-1.5 w-full bg-border rounded-full overflow-hidden shadow-sm">

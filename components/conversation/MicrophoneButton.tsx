@@ -19,10 +19,10 @@ interface MicrophoneButtonProps {
 }
 
 const TIPS = [
-    "Speak in full lines for a better score",
-    "It's okay to be slow — clarity matters",
-    "Use words from the prompt",
-    "Don't translate — just speak",
+    "Try to speak in full sentences",
+    "It's okay to talk slowly",
+    "Use the words we showed you",
+    "Don't worry about translating, just try to speak",
 ];
 
 export function MicrophoneButton({
@@ -134,12 +134,12 @@ export function MicrophoneButton({
                 )}
                 {micState === 'processing' && (
                     <p className="text-sm text-[#D94A15] font-medium animate-fade-up">
-                        Understanding...
+                        Thinking...
                     </p>
                 )}
                 {micState === 'error' && (
                     <p className="text-[13px] text-error text-center max-w-[280px]">
-                        {error?.code === 'not-allowed' ? 'Microphone access denied.' : 'Connection issue. Try again.'}
+                        {error?.code === 'not-allowed' ? "We can't access your microphone" : 'There was a connection issue. Please try again.'}
                     </p>
                 )}
                 
@@ -175,7 +175,7 @@ export function MicrophoneButton({
                         exit={{ opacity: 0, y: 16, scale: 0.96 }}
                         className="w-full max-w-[340px] parlova-card p-6"
                     >
-                        <p className="text-[11px] font-semibold tracking-widest text-text-muted uppercase mb-2 font-mono-num">You said</p>
+                        <p className="text-[11px] font-semibold tracking-widest text-text-muted uppercase mb-2 font-mono-num">You said:</p>
                         <p className="text-[15px] text-text-primary leading-relaxed mb-4">
                             &ldquo;{currentTranscription.transcript}&rdquo;
                         </p>

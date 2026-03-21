@@ -47,7 +47,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
         <div className="w-full h-full flex flex-col relative bg-transparent font-sans">
             {/* Header Row */}
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-serif text-text-primary">Lexicon Inventory</h2>
+                <h2 className="text-2xl font-serif text-text-primary">My Vocabulary</h2>
                 <Button 
                     onClick={() => setIsImportOpen(true)}
                     className="btn-action px-6 h-10 w-fit"
@@ -60,7 +60,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
             {/* Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
                 <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm">
-                    <span className="text-text-muted text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Total Lexicon</span>
+                    <span className="text-text-muted text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Total Words</span>
                     <span className="text-3xl font-serif text-text-primary">{stats?.total ?? '-'}</span>
                 </div>
                 <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm">
@@ -68,7 +68,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                     <span className="text-3xl font-serif text-[#E8521A]">{stats?.dueToday ?? '-'}</span>
                 </div>
                 <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm">
-                    <span className="text-text-secondary text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Acquiring</span>
+                    <span className="text-text-secondary text-[10px] font-mono font-bold uppercase tracking-widest mb-2">Learning</span>
                     <span className="text-3xl font-serif text-text-secondary">{stats?.learning ?? '-'}</span>
                 </div>
                 <div className="p-5 rounded-[18px] bg-card border border-border flex flex-col shadow-sm hover:border-accent-border transition-colors">
@@ -84,7 +84,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search your lexicon..."
+                        placeholder="Search your words..."
                         className="pl-11 h-12 bg-surface border-border text-text-primary placeholder:text-text-muted rounded-[18px] focus-visible:ring-1 focus-visible:ring-[#E8521A] focus-visible:ring-offset-0 font-sans shadow-sm"
                     />
                 </div>
@@ -130,7 +130,7 @@ export function DeckViewer({ languageId, onStartReview }: DeckViewerProps) {
 
                         {!search && (
                             <Button onClick={() => setIsAddOpen(true)} className="btn-action px-8">
-                                <Plus className="mr-2 h-4 w-4" /> Index New Word
+                                <Plus className="mr-2 h-4 w-4" /> Add New Word
                             </Button>
                         )}
 

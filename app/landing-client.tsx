@@ -272,7 +272,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
             <div className="hero-text">
               <div className="hero-label">&#9670; AI Language Learning</div>
               <h1 id="hero-headline"><span className="word">Speak</span> <span className="word">Spanish</span><br /><span className="word">like</span> <span className="word">you</span> <span className="word">were</span><br /><span className="word shimmer">born</span> <span className="word">to.</span></h1>
-              <p className="hero-sub">The AI conversation coach and immersion library that serious learners have been waiting for. Speak out loud. Read real content. Actually become fluent.</p>
+              <p className="hero-sub">The AI speaking coach and reading library you need. Speak out loud. Read real stories. Actually become fluent.</p>
               <div className="hero-buttons">
                 <a href="#pricing" className="btn-primary">Start Speaking Free</a>
                 <a href="#how" className="btn-secondary">See how it works &#8595;</a>
@@ -310,7 +310,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
         <div className="container">
           <div className="section-label reveal">THE PROBLEM</div>
           <h2 className="section-headline reveal">You have studied for years.<br />Why can’t you speak yet?</h2>
-          <p className="problem-body reveal">Duolingo gives you streaks. Babbel gives you lessons. Anki gives you flashcards. But none of them put you in a real conversation and make you actually open your mouth. That is why you are still not fluent.</p>
+          <p className="problem-body reveal">Duolingo gives you streaks. Babbel gives you lessons. Anki gives you flashcards. But none of them put you in a real conversation and make you speak out loud. That is why you are still not fluent.</p>
           <div className="comparison">
             <div className="compare-card old reveal" style={{ transitionDelay: '0.1s' }}>
               <h3 className="compare-title">The Old Way</h3>
@@ -320,7 +320,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
                 <div className="compare-item"><span className="icon-bad">&#10007;</span> Study grammar rules</div>
                 <div className="compare-item"><span className="icon-bad">&#10007;</span> Repeat the same exercises</div>
                 <div className="compare-item"><span className="icon-bad">&#10007;</span> Never actually speak</div>
-                <div className="compare-item"><span className="icon-bad">&#10007;</span> Plateau after 6 months</div>
+                <div className="compare-item"><span className="icon-bad">&#10007;</span> Stop getting better after 6 months</div>
               </div>
             </div>
             <div className="compare-card new reveal" style={{ transitionDelay: '0.2s' }}>
@@ -329,8 +329,8 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
                 <div className="compare-item"><span className="icon-good">&#10003;</span> Speak Spanish out loud</div>
                 <div className="compare-item"><span className="icon-good">&#10003;</span> Read real Spanish content</div>
                 <div className="compare-item"><span className="icon-good">&#10003;</span> Practice real conversations</div>
-                <div className="compare-item"><span className="icon-good">&#10003;</span> Get scored on pronunciation</div>
-                <div className="compare-item"><span className="icon-good">&#10003;</span> Build an immersive vocabulary</div>
+                <div className="compare-item"><span className="icon-good">&#10003;</span> Get a score for your speaking</div>
+                <div className="compare-item"><span className="icon-good">&#10003;</span> Build your vocabulary</div>
                 <div className="compare-item"><span className="icon-good">&#10003;</span> Actually become fluent</div>
               </div>
             </div>
@@ -348,19 +348,19 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
               <span className="step-num">01</span>
               <div className="step-icon"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c0 2 3 4 6 4s6-2 6-4v-5" /></svg></div>
               <h3 className="step-title">Know your level</h3>
-              <p className="step-desc">Take our 10-minute AI diagnostic. Get placed accurately from A1 to C2. Your learning path is built around your exact level from day one.</p>
+              <p className="step-desc">Take our 10-minute test. Find out your level from A1 to C2. Your plan is built just for you from day one.</p>
             </div>
             <div className="step-card reveal" style={{ transitionDelay: '0.2s' }}>
               <span className="step-num">02</span>
               <div className="step-icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /></svg></div>
               <h3 className="step-title">Practice every day</h3>
-              <p className="step-desc">Speak with AI conversation partners in real scenarios. Read Spanish articles, stories, and books. Every word you learn goes into your personal vocabulary deck.</p>
+              <p className="step-desc">Talk with AI in real-life situations. Read Spanish news, stories, and books. Every word you learn gets saved for you to review.</p>
             </div>
             <div className="step-card reveal" style={{ transitionDelay: '0.3s' }}>
               <span className="step-num">03</span>
               <div className="step-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg></div>
               <h3 className="step-title">Watch yourself improve</h3>
-              <p className="step-desc">See your pronunciation score improve. Watch your vocabulary grow. Earn verified certificates at each CEFR level. Fluency you can prove.</p>
+              <p className="step-desc">See your speaking score go up. Watch your vocabulary grow. Earn certificates for each level to prove your skills.</p>
             </div>
           </div>
         </div>
@@ -370,14 +370,14 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
       <section className="section" id="features">
         <div className="container">
           <div className="section-label reveal">FEATURES</div>
-          <h2 className="section-headline reveal">Everything a serious learner needs.<br />Nothing they don’t.</h2>
+          <h2 className="section-headline reveal">Everything you need to learn.<br />Nothing you don’t.</h2>
           <div className="features-grid">
             <div className="feature-card reveal"><div className="feature-icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /></svg></div><h3 className="feature-title">Speak Out Loud</h3><p className="feature-desc">Practice real conversations by speaking Spanish out loud. AI listens, scores your pronunciation, and corrects your grammar.</p><span className="feature-tag">Core Feature</span></div>
             <div className="feature-card reveal"><div className="feature-icon"><svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8" /><line x1="4" y1="20" x2="21" y2="3" /><polyline points="21 16 21 21 16 21" /><line x1="15" y1="15" x2="21" y2="21" /><line x1="4" y1="4" x2="9" y2="9" /></svg></div><h3 className="feature-title">Never the Same Twice</h3><p className="feature-desc">8 real-world scenarios with 5 dynamic variations each. The café is always different. The market always surprises you.</p><span className="feature-tag">40 Variations</span></div>
             <div className="feature-card reveal"><div className="feature-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" /><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" /></svg></div><h3 className="feature-title">Read Real Spanish</h3><p className="feature-desc">Daily news articles, AI stories calibrated to your level, and classic Spanish literature from Project Gutenberg. Tap any word instantly.</p><span className="feature-tag">Updated Daily</span></div>
-            <div className="feature-card reveal"><div className="feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20" /><path d="M2 12h20" /></svg></div><h3 className="feature-title">Words That Stick</h3><p className="feature-desc">Every word you encounter gets saved automatically. Spaced repetition reviews ensure you never forget what you learned.</p><span className="feature-tag">Spaced Repetition</span></div>
-            <div className="feature-card reveal"><div className="feature-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M7 12l3 3 7-7" /></svg></div><h3 className="feature-title">Prove Your Level</h3><p className="feature-desc">Pass our rigorous level tests and earn CEFR-aligned certificates with QR verification. Recognised by employers and universities.</p><span className="feature-tag">Verified</span></div>
-            <div className="feature-card reveal"><div className="feature-icon"><svg viewBox="0 0 24 24"><path d="M2 12h4l3-9 6 18 3-9h4" /></svg></div><h3 className="feature-title">Hear Yourself Improve</h3><p className="feature-desc">Real-time speech recognition scores every spoken response. See exactly which words were unclear and track your pronunciation improving over time.</p><span className="feature-tag">AI Powered</span></div>
+            <div className="feature-card reveal"><div className="feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20" /><path d="M2 12h20" /></svg></div><h3 className="feature-title">Words That Stick</h3><p className="feature-desc">Every word you see gets saved automatically. Smart reviews make sure you never forget what you learned.</p><span className="feature-tag">Spaced Repetition</span></div>
+            <div className="feature-card reveal"><div className="feature-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M7 12l3 3 7-7" /></svg></div><h3 className="feature-title">Prove Your Level</h3><p className="feature-desc">Pass our level tests and get certificates you can share. Great for your resume or school.</p><span className="feature-tag">Verified</span></div>
+            <div className="feature-card reveal"><div className="feature-icon"><svg viewBox="0 0 24 24"><path d="M2 12h4l3-9 6 18 3-9h4" /></svg></div><h3 className="feature-title">Hear Yourself Improve</h3><p className="feature-desc">Get a score for every sentence you speak out loud. See exactly which words you need to work on.</p><span className="feature-tag">AI Powered</span></div>
           </div>
         </div>
       </section>
@@ -430,7 +430,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
           <div className="library-grid">
             <div className="library-card reveal">
               <h3>Real Articles</h3>
-              <p>Fresh Spanish news daily from BBC Mundo, DW Español, and more. Every word tappable.</p>
+              <p>New Spanish news every day from BBC Mundo and others. Tap any word to learn it.</p>
               <div className="library-visual">
                 <div className="article-preview"><span className="level-badge">B1</span>La inteligencia artificial transforma la educación</div>
                 <div className="article-preview"><span className="level-badge">A2</span>Las mejores ciudades para aprender español</div>
@@ -438,7 +438,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
             </div>
             <div className="library-card reveal">
               <h3>AI Stories</h3>
-              <p>Infinite original stories generated at your exact CEFR level on topics you actually enjoy.</p>
+              <p>Custom stories written just for your level about things you like.</p>
               <div className="library-visual">
                 <div className="story-chips"><span className="story-chip">Travel</span><span className="story-chip">Food</span><span className="story-chip">Work</span><span className="story-chip">Daily Life</span><span className="story-chip">Adventure</span><span className="story-chip">Culture</span></div>
                 <div className="article-preview" style={{ marginTop: '8px' }}><span className="level-badge">A2</span>Un día perfecto en Barcelona...</div>
@@ -446,7 +446,7 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
             </div>
             <div className="library-card reveal">
               <h3>Classic Literature</h3>
-              <p>Spanish literary classics from Project Gutenberg. Simplified for your level. Read Don Quijote at B1.</p>
+              <p>Famous Spanish books made easier for your level. Read Don Quijote at B1.</p>
               <div className="library-visual">
                 <div className="book-spines">
                   <div className="book-spine" style={{ height: '90px', background: 'var(--accent-gold)', opacity: '0.8' }}></div>
@@ -495,10 +495,10 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
               <div className="pricing-features">
                 <div className="pricing-feature"><span className="check">&#10003;</span> 3 AI conversations per week</div>
                 <div className="pricing-feature"><span className="check">&#10003;</span> 5 articles per week</div>
-                <div className="pricing-feature"><span className="check">&#10003;</span> Full beginner pathway</div>
+                <div className="pricing-feature"><span className="check">&#10003;</span> Full beginner course</div>
                 <div className="pricing-feature"><span className="check">&#10003;</span> Vocabulary deck</div>
                 <div className="pricing-feature"><span className="check">&#10003;</span> Leaderboard access</div>
-                <div className="pricing-feature"><span className="check">&#10003;</span> Level assessment</div>
+                <div className="pricing-feature"><span className="check">&#10003;</span> Level tests</div>
               </div>
               <Link href="/login?signup=true" className="pricing-btn ghost">Get Started Free</Link>
             </div>
@@ -506,16 +506,16 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
               <div className="pricing-label">Pro <span className="popular-badge">Most Popular</span></div>
               <div className="pricing-price price-switch" data-monthly="$15" data-annual="$99"><span className="price-amount">$15</span><span className="period price-period" data-monthly="/month" data-annual="/year">/month</span></div>
               <div className="pricing-annual annual-note" data-monthly="" data-annual="$99/year · Save 45%">&nbsp;</div>
-              <div className="pricing-sub">Everything a serious learner needs</div>
+              <div className="pricing-sub">Everything you need to learn</div>
               <div className="pricing-features">
                 <div className="pricing-feature"><span className="check">&#10003;</span> Unlimited conversations</div>
                 <div className="pricing-feature"><span className="check">&#10003;</span> Unlimited articles &amp; stories</div>
                 <div className="pricing-feature"><span className="check">&#10003;</span> Full book library</div>
-                <div className="pricing-feature"><span className="check">&#10003;</span> Pronunciation scoring</div>
+                <div className="pricing-feature"><span className="check">&#10003;</span> Speaking scores</div>
                 <div className="pricing-feature"><span className="check">&#10003;</span> Bi-weekly level tests</div>
                 <div className="pricing-feature"><span className="check">&#10003;</span> Weekly challenges</div>
                 <div className="pricing-feature"><span className="check">&#10003;</span> 50% off certificates</div>
-                <div className="pricing-feature"><span className="check">&#10003;</span> Full analytics</div>
+                <div className="pricing-feature"><span className="check">&#10003;</span> See all your stats</div>
               </div>
               <Link href="/login?signup=true" className="pricing-btn gold">Start 7-Day Free Trial</Link>
             </div>
@@ -523,14 +523,14 @@ export default function LandingClient({ isLoggedIn }: LandingProps) {
               <div className="pricing-label">Pro Plus</div>
               <div className="pricing-price price-switch" data-monthly="$29" data-annual="$199"><span className="price-amount">$29</span><span className="period price-period" data-monthly="/month" data-annual="/year">/month</span></div>
               <div className="pricing-annual annual-note" data-monthly="" data-annual="$199/year · Save 43%">&nbsp;</div>
-              <div className="pricing-sub">For learners with a real deadline</div>
+              <div className="pricing-sub">For people who want to learn fast</div>
               <div className="pricing-features">
                 <div className="pricing-feature"><span className="check">&#10003;</span> Everything in Pro</div>
-                <div className="pricing-feature"><span className="check">&#10003;</span> Custom scenario builder</div>
-                <div className="pricing-feature"><span className="check">&#10003;</span> Real-time conversation coaching</div>
-                <div className="pricing-feature"><span className="check">&#10003;</span> Unlimited certificates included</div>
-                <div className="pricing-feature"><span className="check">&#10003;</span> Goal setting with AI study plan</div>
-                <div className="pricing-feature"><span className="check">&#10003;</span> Weekly personalized report</div>
+                <div className="pricing-feature"><span className="check">&#10003;</span> Create your own stories</div>
+                <div className="pricing-feature"><span className="check">&#10003;</span> Live speaking help</div>
+                <div className="pricing-feature"><span className="check">&#10003;</span> All certificates included</div>
+                <div className="pricing-feature"><span className="check">&#10003;</span> Personal study plan</div>
+                <div className="pricing-feature"><span className="check">&#10003;</span> Weekly progress report</div>
                 <div className="pricing-feature"><span className="check">&#10003;</span> Priority support</div>
               </div>
               <Link href="/login?signup=true" className="pricing-btn ghost">Start 7-Day Free Trial</Link>

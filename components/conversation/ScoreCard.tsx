@@ -68,7 +68,7 @@ export function ScoreCard({
                     className="flex flex-col items-center text-center mb-10"
                 >
                     <span className="label-upper mb-2">
-                        Scenario Complete
+                        Conversation Finished
                     </span>
                     <h1 className="font-display text-heading-lg font-semibold text-text-primary mb-8">
                         {scenario?.name}
@@ -79,7 +79,7 @@ export function ScoreCard({
                             {scoring.overall_score}
                         </span>
                         <span className="score-label m-0">
-                            Overall Score
+                            Your Score
                         </span>
                     </div>
                 </motion.div>
@@ -91,7 +91,7 @@ export function ScoreCard({
                     {situationName && (
                         <motion.div variants={itemV}>
                             <div className="parlova-card-accent text-center flex flex-col items-center p-8">
-                                <span className="label-upper mb-3">You just completed</span>
+                                <span className="label-upper mb-3">You just finished</span>
                                 <h2 className="text-xl font-semibold text-text-primary mb-3">{situationName}</h2>
                                 {situationTwist && (
                                     <span className="px-2 py-0.5 rounded-sm bg-[#E8521A]/10 border border-[#E8521A]/30 text-[#E8521A] text-[9px] font-mono-num font-bold uppercase tracking-widest">
@@ -108,7 +108,7 @@ export function ScoreCard({
                         {[
                             { label: 'Grammar', score: scoring.grammar_score },
                             { label: 'Vocabulary', score: scoring.vocabulary_score },
-                            { label: 'Naturalness', score: scoring.naturalness_score },
+                            { label: 'Flow', score: scoring.naturalness_score },
                         ].map((metric, i) => (
                             <motion.div variants={itemV} key={i} className="flex flex-col gap-2">
                                 <div className="flex justify-between items-end">
@@ -132,7 +132,7 @@ export function ScoreCard({
                                         <span className="font-mono-num font-medium text-[13px] text-text-muted">N/A</span>
                                     )
                                 ) : (
-                                    <span className="text-[9px] font-mono-num font-bold text-[#E8521A] uppercase tracking-widest mb-1">PRO Feature</span>
+                                    <span className="text-[9px] font-mono-num font-bold text-[#E8521A] uppercase tracking-widest mb-1">PRO Only</span>
                                 )}
                             </div>
                             {isPro ? (
@@ -157,14 +157,14 @@ export function ScoreCard({
                             ) : (
                                 <div className="bg-[#E8521A]/5 border border-[#E8521A]/20 rounded-lg p-3 text-center">
                                     <p className="text-[10px] text-[#E8521A] font-medium leading-relaxed font-mono-num uppercase tracking-wider">
-                                        Upgrade to Pro for AI-powered pronunciation scoring
+                                        Upgrade to Pro to get feedback on your pronunciation
                                     </p>
                                 </div>
                             )}
                         </motion.div>
 
                         <motion.div variants={itemV} className="sm:col-span-2 pt-4 mt-2 border-t border-border flex items-center justify-between">
-                            <span className="text-[15px] font-medium text-text-primary">Goal Completed</span>
+                            <span className="text-[15px] font-medium text-text-primary">Goal Met</span>
                             {scoring.goal_completed ? (
                                 <Badge label="Yes" type="success" icon={CheckCircle2} />
                             ) : (
@@ -177,7 +177,7 @@ export function ScoreCard({
                     <motion.div variants={itemV}>
                         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                             <MessageSquareQuote size={20} className="text-[#E8521A]" />
-                            Coach Feedback
+                            Feedback from your Coach
                         </h3>
                         <div className="parlova-card-accent p-8">
                             <p className="text-base leading-relaxed text-text-primary mb-6">
@@ -191,7 +191,7 @@ export function ScoreCard({
                                     <AlertTriangle size={14} />
                                 </div>
                                 <div className="pt-1">
-                                    <span className="label-upper mb-1 block text-error">Next Focus</span>
+                                    <span className="label-upper mb-1 block text-error">What to practice next</span>
                                     <p className="text-sm leading-relaxed text-text-primary">{scoring.feedback?.next_focus}</p>
                                 </div>
                             </div>
@@ -201,7 +201,7 @@ export function ScoreCard({
                     {/* Grammar Corrections */}
                     {scoring.feedback?.grammar_errors && scoring.feedback.grammar_errors.length > 0 && (
                         <motion.div variants={itemV}>
-                            <h3 className="text-lg font-semibold mb-4">Grammar Corrections</h3>
+                            <h3 className="text-lg font-semibold mb-4">How to fix your grammar</h3>
                             <div className="flex flex-col gap-3">
                                 {scoring.feedback.grammar_errors.map((err: any, i: number) => (
                                     <div key={i} className="parlova-card p-5 bg-error-subtle border border-error-border">
@@ -223,16 +223,16 @@ export function ScoreCard({
                     <motion.div variants={itemV} className="flex flex-col sm:flex-row gap-3 mt-8 w-full justify-center">
                         {onReplay && (
                             <button className="btn-action flex-1 h-12" onClick={onReplay}>
-                                <RefreshCcw size={18} /> Replay
+                                <RefreshCcw size={18} /> Play again
                             </button>
                         )}
                         {onTryAnother && (
                             <button className="btn-action flex-1 h-12" onClick={onTryAnother}>
-                                <Shuffle size={18} /> Try Another Version
+                                <Shuffle size={18} /> Try another topic
                             </button>
                         )}
                         <button className="btn-action flex-1 h-12" onClick={onClose}>
-                            <LayoutGrid size={18} /> New Scenario
+                            <LayoutGrid size={18} /> Choose new topic
                         </button>
                     </motion.div>
 

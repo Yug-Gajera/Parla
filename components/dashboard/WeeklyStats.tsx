@@ -20,7 +20,7 @@ export default function WeeklyStats({ conversations, wordsLearned, minutesStudie
     const STATS = [
         { icon: MessageSquare, label: 'Conversations', value: conversations },
         { icon: Book, label: 'Words Learned', value: wordsLearned },
-        { icon: Clock, label: 'Min. Studied', value: minutesStudied },
+        { icon: Clock, label: 'Minutes', value: minutesStudied },
         { icon: Flame, label: 'Day Streak', value: streak },
     ];
 

@@ -56,9 +56,9 @@ export default function LearnView({ languageId, languageName, level }: LearnView
 
                 <div className="flex flex-col md:flex-row md:items-end justify-between px-6 sm:px-10 py-8 pb-4 gap-6">
                     <div>
-                        <h1 className="text-3xl sm:text-4xl font-display text-text-primary tracking-tight mb-2">Acquisition Center</h1>
+                        <h1 className="text-3xl sm:text-4xl font-display text-text-primary tracking-tight mb-2">Learning Hub</h1>
                         <p className="text-text-secondary text-xs uppercase tracking-widest font-mono-num">
-                            Mastering {languageName} <span className="mx-2 text-border-strong">|</span> Target: {level}
+                            {languageName} <span className="mx-2 text-border-strong">|</span> Goal: {level}
                         </p>
                     </div>
 
@@ -140,8 +140,8 @@ function ActionBanner({ languageId, onStart }: any) {
                     {dueWords.length}
                 </div>
                 <div className="relative z-10">
-                    <h3 className="font-display text-2xl text-text-primary mb-1">Lexical Review Active</h3>
-                    <p className="text-xs font-mono-num text-text-muted uppercase tracking-widest mt-2">{dueWords.length} pending items require reinforcement.</p>
+                    <h3 className="font-display text-2xl text-text-primary mb-1">Words to Review</h3>
+                    <p className="text-xs font-mono-num text-text-muted uppercase tracking-widest mt-2">{dueWords.length} words are ready for you to practice.</p>
                 </div>
             </div>
 
@@ -149,7 +149,7 @@ function ActionBanner({ languageId, onStart }: any) {
                 onClick={() => onStart(dueWords)}
                 className="w-full sm:w-auto bg-[#E8521A] text-background font-mono-num text-xs uppercase tracking-widest font-bold px-10 h-12 hover:brightness-110 rounded-full transition-all relative z-10 shadow-[0_4px_20px_rgba(232,82,26,0.2)] hover:shadow-[0_6px_25px_rgba(232,82,26,0.25)]"
             >
-                Initiate Protocol
+                Start Review
             </Button>
         </motion.div>
     );
@@ -161,17 +161,17 @@ function LessonsPlaceholder() {
             <Card className="p-16 flex flex-col items-center justify-center text-center bg-card border-dashed border-border rounded-3xl relative overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-50" />
                 <BookOpen className="w-16 h-16 text-border-strong mb-6 relative z-10 group-hover:text-[#E8521A] transition-colors duration-500" />
-                <h3 className="text-3xl font-display text-text-primary mb-4 relative z-10">Structural Analytics</h3>
+                <h3 className="text-3xl font-display text-text-primary mb-4 relative z-10">Grammar Lessons</h3>
                 <p className="text-text-secondary max-w-md font-sans leading-relaxed relative z-10">
-                    Diagnostic grammar pathways matched to your exact acquisition tier are currently indexing.
+                    We are building grammar lessons that match your level.
                 </p>
-                <div className="mt-8 relative z-10 bg-surface border border-border-strong px-6 py-2 rounded-full text-[10px] font-mono-num text-text-muted uppercase tracking-widest">Available in V2 Architecture</div>
+                <div className="mt-8 relative z-10 bg-surface border border-border-strong px-6 py-2 rounded-full text-[10px] font-mono-num text-text-muted uppercase tracking-widest">Coming soon</div>
             </Card>
 
             <div className="pt-6 border-t border-border">
                 <h3 className="text-xs font-mono-num font-bold uppercase tracking-widest text-text-muted mb-6 flex items-center gap-3">
                     <AlertTriangle className="text-[#E8521A] w-4 h-4" />
-                    Recommended Adjustments
+                    Things to practice
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

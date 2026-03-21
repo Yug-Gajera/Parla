@@ -29,16 +29,16 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
                 <div className="w-16 h-16 rounded-full bg-card border border-border-strong flex items-center justify-center mb-6 shadow-inner">
                     <Activity className="w-6 h-6 text-text-muted" />
                 </div>
-                <h3 className="text-xl font-display text-text-primary mb-3">No activity recorded</h3>
+                <h3 className="text-xl font-display text-text-primary mb-3">Nothing here yet</h3>
                 <p className="text-text-secondary text-sm max-w-[280px] mb-8 leading-relaxed">
-                    Initiate your first session to begin earning XP and establishing a baseline.
+                    Do a quick lesson or review some words to get started.
                 </p>
                 <div className="w-full max-w-[200px]">
                     <Link
                         href="/practice"
                         className="btn-action"
                     >
-                        Deploy Session
+                        Start learning
                     </Link>
                 </div>
             </div>
@@ -57,11 +57,11 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
 
     const formatTitle = (type: string) => {
         switch (type) {
-            case 'conversation': return 'Simulated Dialogue';
-            case 'vocabulary': return 'Lexical Reinforcement';
-            case 'content': return 'Comprehension Analysis';
-            case 'test': return 'Diagnostic Evaluation';
-            default: return 'Study Session';
+            case 'conversation': return 'Conversation';
+            case 'vocabulary': return 'Word Review';
+            case 'content': return 'Reading';
+            case 'test': return 'Level Test';
+            default: return 'Study Time';
         }
     }
 
@@ -71,10 +71,10 @@ export default function RecentActivity({ sessions }: RecentActivityProps) {
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-border">
                 <h2 className="font-display font-medium text-[16px] text-text-primary flex items-center gap-2">
-                    Telemetry Stream
+                    Recent Activity
                 </h2>
                 <Link href="/profile" className="text-[10px] font-mono-num font-bold uppercase tracking-widest text-[#E8521A] hover:text-[#D94A15] flex items-center gap-1.5 group transition-colors">
-                    View Logs
+                    View all
                     <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
             </div>

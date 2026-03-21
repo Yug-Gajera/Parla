@@ -53,9 +53,9 @@ export default function LearnTab({ languageId }: LearnTabProps) {
 
             {/* Header */}
             <div>
-                <h2 className="text-3xl font-display text-text-primary tracking-tight mb-2">Foundation Blueprint</h2>
+                <h2 className="text-3xl font-display text-text-primary tracking-tight mb-2">Beginner Lessons</h2>
                 <p className="text-sm text-text-secondary max-w-xl leading-relaxed">
-                    Satisfy module requisites to authorize conversation access.
+                    Finish these lessons to unlock full conversations.
                 </p>
             </div>
 
@@ -68,21 +68,21 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                             <Sparkles className="w-8 h-8 text-[#E8521A]" />
                         </div>
                         <div className="flex-1 text-center md:text-left relative z-10">
-                            <h3 className="font-display text-2xl text-text-primary mb-2">All Clearances Attained</h3>
-                            <p className="text-sm text-text-secondary">Proceed to the Practice sector for unscripted immersion.</p>
+                            <h3 className="font-display text-2xl text-text-primary mb-2">All Lessons Finished</h3>
+                            <p className="text-sm text-text-secondary">You can now chat in real conversations.</p>
                         </div>
                         <Button
                             onClick={() => window.location.href = '/practice'}
                             className="w-full md:w-auto bg-text-primary text-bg font-mono-num text-[10px] uppercase font-bold tracking-widest px-8 h-12 hover:bg-[#E8521A] transition-colors rounded-full"
                         >
-                            Initiate Practice
+                            Start Speaking
                         </Button>
                     </div>
                 </Card>
             ) : (
                 <div className="bg-surface p-6 rounded-2xl border border-border">
                     <div className="flex justify-between items-end mb-4">
-                        <span className="font-mono-num text-[10px] uppercase tracking-widest text-text-muted">{totalUnlocked} / {totalScenarios} Clearances</span>
+                        <span className="font-mono-num text-[10px] uppercase tracking-widest text-text-muted">{totalUnlocked} / {totalScenarios} Unlocked</span>
                         <span className="font-mono-num text-xl text-text-primary">{Math.round((totalUnlocked / totalScenarios) * 100)}<span className="text-text-muted text-sm">%</span></span>
                     </div>
                     <div className="h-1.5 bg-background rounded-full overflow-hidden border border-border">
@@ -103,9 +103,9 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                             <LucideIcons.Key className="w-6 h-6 text-[#E8521A]" />
                         </div>
                         <div>
-                            <h3 className="font-display text-xl text-text-primary mb-2">Initial Acquisition Module</h3>
+                            <h3 className="font-display text-xl text-text-primary mb-2">First Lesson</h3>
                             <p className="text-sm text-text-secondary leading-relaxed">
-                                Establish your baseline. Decode the dialogue, acquire the lexicon, and pass the diagnostic to unlock real-time simulated scenarios.
+                                Learn the basics. Read the text, learn new words, and pass the quick test to unlock speaking practice.
                             </p>
                         </div>
                     </div>
@@ -180,13 +180,13 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                                 {/* Step indicators */}
                                 <div className="flex items-center gap-1 mb-6 mt-auto">
                                     {/* Dialogue */}
-                                    <StepCircle done={dialogueDone} active={isStarted && !dialogueDone} label="Decode" />
+                                    <StepCircle done={dialogueDone} active={isStarted && !dialogueDone} label="Read" />
                                     <div className="flex-1 h-[1px] bg-border" />
                                     {/* Phrases */}
-                                    <StepCircle done={phrasesDone} active={dialogueDone && !phrasesDone} label="Acquire" />
+                                    <StepCircle done={phrasesDone} active={dialogueDone && !phrasesDone} label="Learn" />
                                     <div className="flex-1 h-[1px] bg-border" />
                                     {/* Challenge */}
-                                    <StepCircle done={challengeDone} active={phrasesDone && !challengeDone} label="Verify" />
+                                    <StepCircle done={challengeDone} active={phrasesDone && !challengeDone} label="Test" />
                                 </div>
 
                                 {/* Status + Action */}
@@ -198,7 +198,7 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                                             ? 'bg-transparent border-border-strong text-text-primary'
                                             : 'bg-transparent border-transparent text-text-muted'
                                         }`}>
-                                        {status === 'unlocked' ? 'Authorized' : status === 'in_progress' ? 'Active' : 'Restricted'}
+                                        {status === 'unlocked' ? 'Unlocked' : status === 'in_progress' ? 'Ready' : 'Locked'}
                                     </span>
 
                                     <Button
@@ -214,11 +214,11 @@ export default function LearnTab({ languageId }: LearnTabProps) {
                                         disabled={!isUnlocked && !isStarted && !isFirst}
                                     >
                                         {isUnlocked ? (
-                                            <><LucideIcons.Radio className="w-3 h-3 mr-1.5" /> Simulation</>
+                                            <><LucideIcons.Radio className="w-3 h-3 mr-1.5" /> Review</>
                                         ) : isStarted ? (
                                             <><ChevronRight className="w-3 h-3 mr-1" /> Resume</>
                                         ) : (
-                                            <>Access Log</>
+                                            <>Locked</>
                                         )}
                                     </Button>
                                 </div>

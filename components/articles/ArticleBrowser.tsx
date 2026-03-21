@@ -65,9 +65,10 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
 
     const levelTabs = [
         { value: 'easier', label: 'Simplified' },
-        { value: userLevel, label: `Target (${userLevel})` },
+        { value: 'easier', label: 'Simplified' },
+        { value: userLevel, label: `My Level (${userLevel})` },
         { value: 'harder', label: 'Advanced' },
-        { value: 'all', label: 'Unfiltered' },
+        { value: 'all', label: 'All Levels' },
     ];
 
     return (
@@ -89,9 +90,9 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                         < Newspaper className="w-5 h-5 text-[#E8521A] relative z-10" />
                     </div>
                     <div>
-                        <h2 className="text-3xl font-serif text-text-primary tracking-tight mb-1">Immersion Library</h2>
+                        <h2 className="text-3xl font-serif text-text-primary tracking-tight mb-1">Article Library</h2>
                         <p className="text-[10px] font-mono-num uppercase tracking-[0.2em] text-text-muted">
-                            Authentic publications in <span className="text-text-secondary">real-time</span>
+                            Read real news in Spanish
                         </p>
                     </div>
                 </div>
@@ -228,7 +229,7 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                                     {article.title}
                                 </h3>
                                 <p className="text-[13px] text-text-muted line-clamp-2 mb-6 font-sans">
-                                    {article.summary || "Select to initialize structural analysis and decode content."}
+                                    {article.summary || "Tap to start reading and translating."}
                                 </p>
 
                                 {/* Footer Tags */}
@@ -264,16 +265,16 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
             {!isLoading && articles.length === 0 && !error && (
                 <Card className="p-16 flex flex-col items-center justify-center text-center bg-surface border-dashed border-border rounded-3xl min-h-[300px]">
                     <Search className="w-10 h-10 text-border-strong mb-6" />
-                    <h3 className="text-xl font-serif text-text-primary mb-3">No Publications Found</h3>
+                    <h3 className="text-xl font-serif text-text-primary mb-3">No Articles Found</h3>
                     <p className="text-sm text-text-secondary max-w-sm mb-6 leading-relaxed">
-                        No articles match the current filter parameters. The intelligence feed updates at 00:00 GMT.
+                        We couldn't find any articles with these filters. New articles are added every day.
                     </p>
                     <Button
                         variant="outline"
                         onClick={() => setLevelFilter('all')}
                         className="rounded-full bg-transparent border-border text-text-primary hover:bg-card hover:border-border-strong font-mono-num text-[10px] uppercase tracking-widest px-8 h-10"
                     >
-                        Reset Filter
+                        Clear Filters
                     </Button>
                 </Card>
             )}
@@ -288,7 +289,7 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
 
             {!hasMore && articles.length > 0 && (
                 <p className="text-center text-[10px] font-mono-num uppercase tracking-[0.2em] text-text-muted py-8 border-t border-border mt-4">
-                    End of available feed
+                    No more articles
                 </p>
             )}
         </div>

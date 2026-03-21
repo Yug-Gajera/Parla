@@ -284,7 +284,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
     const submitTier = async () => {
         if (!selectedTier) return;
         setProcessState('processing');
-        setProcessStatus("Planting global frequencies...");
+        setProcessStatus("Adding common words...");
         
         try {
             const res = await fetch('/api/vocabulary/seed', {
@@ -306,7 +306,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
             setProcessState('success');
             
         } catch (e) {
-            toast.error("Seed failed");
+            toast.error("Failed to add words");
             setProcessState('idle');
         }
     };
@@ -395,7 +395,7 @@ export function VocabularyImportModal({ isOpen, onClose, currentLevel = 'A1', on
                         {showsSuggestion && (
                             <div className="bg-surface border border-border-strong rounded-xl p-5 mb-8 w-full flex flex-col items-center">
                                 <p className="text-[13px] font-sans text-text-primary mb-4 text-center">
-                                    Your vocabulary suggests you may be <strong>{finalStats.newLevelEstimate}</strong>.<br/>
+                                    Based on your words, your level might be <strong>{finalStats.newLevelEstimate}</strong>.<br/>
                                     Would you like to update your level?
                                 </p>
                                 <div className="flex gap-3 w-full">

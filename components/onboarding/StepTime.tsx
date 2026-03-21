@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/button';
 import { Clock, ArrowLeft } from 'lucide-react';
 
 const TIMES = [
-    { min: 10, label: '10 Minutes', desc: 'Minimal exposure. Maintaining the baseline.' },
-    { min: 20, label: '20 Minutes', desc: 'Standard calibration. Consistent accumulation.' },
-    { min: 30, label: '30 Minutes', desc: 'Elevated protocol. Accelerated synthesis.' },
-    { min: 45, label: '45+ Minutes', desc: 'Maximum velocity. Total neural immersion.' },
+    { min: 10, label: '10 Minutes', desc: 'Just a little bit every day' },
+    { min: 20, label: '20 Minutes', desc: 'A good amount of practice' },
+    { min: 30, label: '30 Minutes', desc: 'Serious about learning fast' },
+    { min: 45, label: '45+ Minutes', desc: 'Going all in' },
 ];
 
 export default function StepTime() {
@@ -31,10 +31,10 @@ export default function StepTime() {
 
             {/* ── Header ── */}
             <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4 text-center text-foreground drop-shadow-sm">
-                Commitment Horizon
+                How much time do you have?
             </h1>
             <p className="text-muted-foreground text-sm md:text-base font-mono uppercase tracking-widest text-center mb-16">
-                Specify daily immersion duration
+                Pick your daily goal
             </p>
 
             {/* ── List ── */}
@@ -78,7 +78,7 @@ export default function StepTime() {
                     disabled={!dailyGoalMinutes}
                     className="w-full max-w-sm bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[11px] uppercase tracking-widest font-bold h-14 rounded-full shadow-lg transition-all disabled:opacity-30 disabled:shadow-none"
                 >
-                    Lock Duration
+                    Continue
                 </Button>
             </div>
         </div>

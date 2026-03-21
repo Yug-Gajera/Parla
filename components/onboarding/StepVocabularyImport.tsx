@@ -26,7 +26,7 @@ export default function StepVocabularyImport() {
 
     const [activeMethod, setActiveMethod] = useState<ImportMethod>(null);
     const [processState, setProcessState] = useState<ProcessState>('idle');
-    const [processText, setProcessText] = useState('Importing your vocabulary...');
+    const [processText, setProcessText] = useState('Getting things ready for you...');
     const [progressStats, setProgressStats] = useState({ current: 0, total: 0 });
     const [finalStats, setFinalStats] = useState({ count: 0, level: 'A1' });
 
@@ -139,7 +139,7 @@ export default function StepVocabularyImport() {
 
         } catch (err) {
             setProcessState('error');
-            toast.error("Anki import failed.");
+            toast.error("Something went wrong.");
         }
     };
 
@@ -148,7 +148,7 @@ export default function StepVocabularyImport() {
             const words = parsePasteText(pasteText);
             if (!words.length) return;
 
-            startProcessing("Analyzing your word list...");
+            startProcessing("Looking up your words...");
             
             const needingEnrichment = words.filter(w => !w.english);
             const alreadyTranslated = words.filter(w => w.english);
@@ -156,7 +156,7 @@ export default function StepVocabularyImport() {
             let finalWords = [...alreadyTranslated];
 
             if (needingEnrichment.length > 0) {
-                setProcessText(`Enriching words... 0 of ${needingEnrichment.length}`);
+                setProcessText(`Looking up your words... 0 of ${needingEnrichment.length}`);
                 setProgressStats({ current: 0, total: needingEnrichment.length });
 
                 const batches = [];
@@ -180,11 +180,11 @@ export default function StepVocabularyImport() {
                     }
                     enrichedCount += batch.length;
                     setProgressStats(prev => ({ ...prev, current: enrichedCount }));
-                    setProcessText(`Enriching words... ${Math.min(enrichedCount, needingEnrichment.length)} of ${needingEnrichment.length}`);
+                    setProcessText(`Looking up your words... ${Math.min(enrichedCount, needingEnrichment.length)} of ${needingEnrichment.length}`);
                 }
             }
 
-            setProcessText("Building your personalised deck...");
+            setProcessText("Setting up your word list...");
             const res = await fetch('/api/vocabulary/import-batch', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -199,13 +199,13 @@ export default function StepVocabularyImport() {
 
         } catch (err) {
             setProcessState('error');
-            toast.error("Paste import failed.");
+            toast.error("Something went wrong.");
         }
     };
 
     const submitTier = async (tierId: string) => {
         try {
-            startProcessing("Seeding global frequencies...");
+            startProcessing("Adding common words...");
             
             const res = await fetch('/api/vocabulary/seed', {
                 method: 'POST',
@@ -221,7 +221,7 @@ export default function StepVocabularyImport() {
 
         } catch (err) {
             setProcessState('error');
-            toast.error("Dictionary seed failed.");
+            toast.error("Something went wrong.");
         }
     };
 
@@ -247,7 +247,7 @@ export default function StepVocabularyImport() {
     useEffect(() => {
         let interval: NodeJS.Timeout;
         if (processState === 'processing' && progressStats.total === 0) {
-            const texts = ["Importing your vocabulary...", "Analysing word levels...", "Almost ready..."];
+            const texts = ["Getting things ready for you...", "Setting up your words...", "Almost ready..."];
             let idx = 0;
             interval = setInterval(() => {
                 idx = (idx + 1) % texts.length;
@@ -280,16 +280,16 @@ export default function StepVocabularyImport() {
         return (
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4 text-center">
                 <CheckCircle size={72} strokeWidth={1} className="text-primary mb-6" />
-                <h1 className="text-4xl text-foreground font-serif mb-2">Your deck is ready</h1>
+                <h1 className="text-4xl text-foreground font-serif mb-2">Your word list is ready</h1>
                 <p className="text-muted-foreground mb-8 text-lg">
-                    {finalStats.count} words imported<br/>
+                    {finalStats.count} words added to your list<br/>
                     Estimated level: <span className="text-primary font-mono">{finalStats.level}</span>
                 </p>
                 <Button 
                     onClick={nextStep}
                     className="bg-primary hover:bg-primary/90 text-primary-foreground font-mono uppercase tracking-widest text-[11px] font-bold h-14 px-8 rounded-full shadow-md"
                 >
-                    Continue to assessment
+                    Next
                 </Button>
             </div>
         );
@@ -299,7 +299,7 @@ export default function StepVocabularyImport() {
         return (
              <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4 text-center">
                 <AlertTriangle size={56} className="text-red-400 mb-6" />
-                <h2 className="text-2xl text-foreground font-serif mb-4">Import Interrupted</h2>
+                <h2 className="text-2xl text-foreground font-serif mb-4">Something went wrong.</h2>
                 <Button onClick={() => setProcessState('idle')} variant="outline" className="border-border-strong text-foreground">
                     Try Again
                 </Button>
@@ -317,10 +317,10 @@ export default function StepVocabularyImport() {
             </button>
 
             <h1 className="text-3xl md:text-5xl font-serif text-center text-foreground tracking-tight mb-3">
-                Do you have existing vocabulary?
+                Do you already know some Spanish words?
             </h1>
             <p className="text-muted-foreground text-sm md:text-base mb-12 text-center max-w-lg px-4">
-                We'll personalise your deck and assessment to match where you actually are.
+                We'll set up your list to match where you actually are.
             </p>
 
             <div className="w-full max-w-2xl px-4 flex flex-col gap-4">
@@ -334,8 +334,8 @@ export default function StepVocabularyImport() {
                             <Upload size={20} />
                         </div>
                         <div>
-                            <h3 className={`font-serif text-xl ${activeMethod === 'anki' ? 'text-accent' : 'text-text-primary'}`}>Import from Anki</h3>
-                            <p className="text-xs text-text-muted mt-1">Upload your existing Spanish deck as a CSV file</p>
+                            <h3 className={`font-serif text-xl ${activeMethod === 'anki' ? 'text-accent' : 'text-text-primary'}`}>I use Anki — import my word list</h3>
+                            <p className="text-xs text-text-muted mt-1">Upload your Spanish deck as a .csv file</p>
                         </div>
                     </div>
                     {activeMethod === 'anki' && (
@@ -375,13 +375,13 @@ export default function StepVocabularyImport() {
                             <Clipboard size={20} />
                         </div>
                         <div>
-                            <h3 className={`font-serif text-xl ${activeMethod === 'paste' ? 'text-accent' : 'text-text-primary'}`}>Paste a word list</h3>
+                            <h3 className={`font-serif text-xl ${activeMethod === 'paste' ? 'text-accent' : 'text-text-primary'}`}>I have a list of words somewhere</h3>
                             <p className="text-xs text-text-muted mt-1">Paste words from notes, spreadsheets, or anywhere else</p>
                         </div>
                     </div>
                     {activeMethod === 'paste' && (
                         <div className="px-5 pb-5 pt-2 animation-fade-in">
-                            <p className="text-[10px] text-text-muted mb-3">Separate words with commas, spaces, or new lines. Translations optional.</p>
+                            <p className="text-[10px] text-text-muted mb-3">Paste your words here, one per line or separated by commas. Translations optional.</p>
                             <textarea 
                                 value={pasteText}
                                 onChange={(e) => setPasteText(e.target.value)}
@@ -404,8 +404,8 @@ export default function StepVocabularyImport() {
                             <BarChart size={20} />
                         </div>
                         <div>
-                            <h3 className={`font-serif text-xl ${activeMethod === 'tier' ? 'text-accent' : 'text-text-primary'}`}>Tell us your approximate level</h3>
-                            <p className="text-xs text-text-muted mt-1">We'll seed your deck with the most common words at your level</p>
+                            <h3 className={`font-serif text-xl ${activeMethod === 'tier' ? 'text-accent' : 'text-text-primary'}`}>Just fill it in based on my level</h3>
+                            <p className="text-xs text-text-muted mt-1">We'll add the most common words for your level</p>
                         </div>
                     </div>
                     {activeMethod === 'tier' && (
@@ -437,7 +437,7 @@ export default function StepVocabularyImport() {
                             <Sparkles size={20} />
                         </div>
                         <div>
-                            <h3 className="font-serif text-lg text-text-muted">Start from scratch</h3>
+                            <h3 className="font-serif text-lg text-text-muted">No — start from zero</h3>
                             <p className="text-xs text-text-muted mt-0.5">Words will build up naturally as you read</p>
                         </div>
                     </div>

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { SCENARIOS } from '@/lib/data/scenarios';
 import dynamic from 'next/dynamic';
 const ConversationWindow = dynamic(() => import('./ConversationWindow').then(mod => mod.ConversationWindow), {
-    loading: () => <div className="fixed inset-0 bg-background z-[60] flex items-center justify-center font-mono-num text-[10px] uppercase tracking-widest text-[#E8521A]">Establishing Neural Link...</div>,
+    loading: () => <div className="fixed inset-0 bg-background z-[60] flex items-center justify-center font-mono-num text-[10px] uppercase tracking-widest text-[#E8521A]">Loading your partner...</div>,
     ssr: false
 });
 import { Button } from '@/components/ui/button';
@@ -119,7 +119,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                     className="flex flex-col items-center text-center w-full"
                 >
                     <span className="text-[10px] font-mono-num font-bold tracking-widest text-text-muted uppercase mb-4">
-                        Simulation Briefing
+                        Before we start
                     </span>
                     <h1 className="text-3xl md:text-5xl font-display text-text-primary tracking-tight mb-8 leading-snug">{preSession.scenarioName}</h1>
 
@@ -138,11 +138,11 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                             <span className="font-sans font-medium text-text-primary">{preSession.userRole}</span>
                         </div>
                         <div className="bg-card border border-border rounded-[18px] p-5 text-center transition-all hover:border-accent-border">
-                            <span className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest block mb-2">Objective</span>
+                            <span className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest block mb-2">Goal</span>
                             <span className="font-sans font-medium text-text-primary text-sm leading-tight">{preSession.goal.length > 40 ? preSession.goal.slice(0, 40) + '...' : preSession.goal}</span>
                         </div>
                         <div className="bg-card border border-border rounded-[18px] p-5 text-center transition-all hover:border-accent-border">
-                            <span className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest block mb-2">Duration</span>
+                            <span className="text-[9px] font-mono-num text-text-muted uppercase tracking-widest block mb-2">Time</span>
                             <span className="font-mono-num text-lg text-text-primary">{preSession.estimatedMinutes} <span className="text-xs text-text-muted">MIN</span></span>
                         </div>
                     </div>
@@ -160,13 +160,13 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                             }}
                             className="btn-action flex-1"
                         >
-                            <Play className="w-4 h-4 mr-2" /> Initialize
+                            <Play className="w-4 h-4 mr-2" /> Start
                         </Button>
                         <Button
                             onClick={() => showPreSession(preSession.scenarioId)}
                             className="btn-secondary h-12 flex-1 rounded-xl text-[10px] font-bold uppercase tracking-widest"
                         >
-                            <RefreshCcw className="w-3.5 h-3.5 mr-2" /> Reroll
+                            <RefreshCcw className="w-3.5 h-3.5 mr-2" /> Change
                         </Button>
                     </div>
 
@@ -174,7 +174,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                         onClick={() => setPreSession(null)}
                         className="mt-8 text-[11px] font-mono-num font-bold uppercase tracking-widest text-text-muted hover:text-text-primary transition-colors flex items-center gap-2"
                     >
-                        &larr; Abort Briefing
+                        &larr; Go back
                     </button>
                 </motion.div>
             </div>
@@ -188,9 +188,9 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
 
             {/* Header Text */}
             <div className="mb-14">
-                <h1 className="text-4xl md:text-6xl font-display text-text-primary tracking-tight mb-4">Neural Simulations</h1>
+                <h1 className="text-4xl md:text-6xl font-display text-text-primary tracking-tight mb-4">Practice Conversations</h1>
                 <p className="text-text-secondary max-w-2xl leading-relaxed text-base">
-                    Engage in context-rich scenarios designed to stress-test your spontaneous linguistic retrieval under pressure.
+                    Chat in real-life situations to get comfortable speaking.
                 </p>
             </div>
 
@@ -203,9 +203,9 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                     <div className="flex items-center gap-4">
                         <BookOpen className="w-5 h-5 text-gold flex-shrink-0" />
                         <p className="text-sm text-text-primary font-medium leading-relaxed">
-                            Complete foundational modules to unlock advanced simulations.{' '}
+                            Finish beginner lessons to unlock more topics.{' '}
                             <a href="/learn" className="text-[#E8521A] font-bold hover:underline ml-1">
-                                Proceed to Terminal &rarr;
+                                Go to lessons &rarr;
                             </a>
                         </p>
                     </div>
@@ -222,14 +222,14 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                     onClick={handleSurpriseMe}
                     className="btn-action w-fit h-14 px-8 rounded-[18px]"
                 >
-                    <Shuffle className="w-4 h-4 mr-3" /> Randomize Simulation
+                    <Shuffle className="w-4 h-4 mr-3" /> Random Topic
                 </Button>
             </div>
 
             {/* Recents */}
             <div className="mb-20">
                 <h3 className="text-xs font-mono-num uppercase tracking-widest text-text-muted font-bold mb-8 flex items-center gap-3">
-                    <Star className="w-4 h-4 text-[#E8521A]" /> Recent Deployments
+                    <Star className="w-4 h-4 text-[#E8521A]" /> Recent Chats
                 </h3>
                 {recentSessions && recentSessions.length > 0 ? (
                     <div className="flex gap-6 overflow-x-auto pb-6 hide-scrollbar px-1">
@@ -240,7 +240,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                     <div className="absolute top-0 right-0 w-24 h-24 bg-[#E8521A]/5 rounded-bl-full -z-10 group-hover:bg-[#E8521A]/10 transition-colors" />
                                     
                                     <div className="flex justify-between items-start mb-6">
-                                        <div className="font-display text-xl text-text-primary pr-4">{sc?.name || 'Unknown Protocol'}</div>
+                                        <div className="font-display text-xl text-text-primary pr-4">{sc?.name || 'Unknown Topic'}</div>
                                         <div className="pill-score mr-2">
                                             {(session as any).overall_score}%
                                         </div>
@@ -254,7 +254,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                         className="btn-action"
                                         onClick={() => showPreSession(session.scenario_type)}
                                     >
-                                        Re-engage
+                                        Chat again
                                     </Button>
                                 </Card>
                             );
@@ -266,9 +266,9 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                             <Clock className="w-8 h-8 text-text-muted" />
                         </div>
                         <div>
-                            <h4 className="font-display text-2xl text-text-primary mb-3">No history recorded</h4>
+                            <h4 className="font-display text-2xl text-text-primary mb-3">No chats yet</h4>
                             <p className="text-sm text-text-secondary max-w-sm leading-relaxed">
-                                Initiate your first simulation to establish baseline neural metrics and linguistic performance.
+                                Start your first conversation to practice speaking.
                             </p>
                         </div>
                     </Card>
@@ -277,7 +277,7 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
 
             {/* Grid */}
             <h3 className="text-xs font-mono-num uppercase tracking-widest text-text-muted font-bold mb-8 flex items-center gap-3">
-                <LayoutGrid className="w-4 h-4 text-[#E8521A]" /> Available Environments
+                <LayoutGrid className="w-4 h-4 text-[#E8521A]" /> Choose a Topic
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -377,11 +377,11 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                                                 }}
                                                 className="btn-action group"
                                             >
-                                                Engage <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-all" />
+                                                Start <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-all" />
                                             </Button>
                                             {!isPro && limits && (
                                                 <span className="text-[9px] font-mono-num font-bold text-orange-500/80 uppercase tracking-widest text-center">
-                                                    {limits.conversation.remaining} conversations remaining this week
+                                                    {limits.conversation.remaining} chats left this week
                                                 </span>
                                             )}
                                         </div>

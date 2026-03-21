@@ -10,11 +10,12 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 
 const LEVELS = [
-    { id: 'A1', label: 'Novice Data', desc: 'Null proficiency. Initializing foundational arrays.' },
-    { id: 'A2', label: 'Basic Constructs', desc: 'Functional vocabulary. Executing simple queries.' },
-    { id: 'B1', label: 'Intermediate Matrix', desc: 'Sustained exchanges. Handling primary variables.' },
-    { id: 'B2', label: 'Advanced Processing', desc: 'Complex dialogues. Sporadic syntax errors.' },
-    { id: 'C1', label: 'Near-Native Ops', desc: 'Fluid generation. Seeking total optimization.' },
+    { id: 'A1', label: 'Just starting out', desc: 'I know a few words like hola and gracias' },
+    { id: 'A2', label: 'I know the basics', desc: 'I can say simple things and understand slow Spanish' },
+    { id: 'B1', label: 'Getting there', desc: 'I can have short conversations but I still make mistakes' },
+    { id: 'B2', label: 'Pretty good', desc: 'I can talk about most things pretty well' },
+    { id: 'C1', label: 'Advanced', desc: 'I speak Spanish well and rarely struggle' },
+    { id: 'C2', label: 'Near fluent', desc: 'Spanish feels almost like my first language' },
 ];
 
 export default function StepLevel() {
@@ -32,10 +33,10 @@ export default function StepLevel() {
 
             {/* ── Header ── */}
             <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4 text-center text-foreground drop-shadow-sm">
-                Current Aptitude
+                How much Spanish do you know?
             </h1>
             <p className="text-muted-foreground text-sm md:text-base font-mono uppercase tracking-widest text-center mb-16 px-4">
-                Define functional parameters. Verification sequence to follow.
+                We will check this with a quick test later.
             </p>
 
             {/* ── List ── */}
@@ -79,7 +80,7 @@ export default function StepLevel() {
                     disabled={!selfReportedLevel}
                     className="btn-action w-full max-w-sm h-14"
                 >
-                    Initialize Verification
+                    Continue
                 </Button>
             </div>
         </div>

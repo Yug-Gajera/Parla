@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/button';
 import { Plane, Briefcase, Heart, Star, ArrowLeft } from 'lucide-react';
 
 const GOALS = [
-    { id: 'travel', icon: Plane, label: 'Travel & Holidays', desc: 'Navigate globally with native proficiency' },
-    { id: 'business', icon: Briefcase, label: 'Business & Career', desc: 'Command professional environments' },
-    { id: 'family', icon: Heart, label: 'Family & Heritage', desc: 'Secure fluency for deep connections' },
-    { id: 'fluency', icon: Star, label: 'Total Immersion', desc: 'Internalize syntax entirely' },
+    { id: 'travel', icon: Plane, label: 'Travel', desc: 'I want to travel to Spanish speaking places' },
+    { id: 'work', icon: Briefcase, label: 'Work', desc: 'I need it for my job' },
+    { id: 'family', icon: Heart, label: 'Family', desc: 'My family or partner speaks Spanish' },
+    { id: 'fun', icon: Star, label: 'Fun', desc: 'I just want to learn something new' },
 ];
 
 export default function StepGoal() {
@@ -31,10 +31,10 @@ export default function StepGoal() {
 
             {/* ── Header ── */}
             <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4 text-center text-foreground drop-shadow-sm">
-                Define Objective
+                Why are you learning Spanish?
             </h1>
             <p className="text-muted-foreground text-sm md:text-base font-mono uppercase tracking-widest text-center mb-16">
-                Establish primary calibration target
+                Pick your main goal
             </p>
 
             {/* ── Grid ── */}
@@ -78,7 +78,7 @@ export default function StepGoal() {
                     disabled={!goal}
                     className="btn-action w-full max-w-sm h-14"
                 >
-                    Confirm Parameter
+                    Continue
                 </Button>
             </div>
         </div>

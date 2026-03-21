@@ -29,9 +29,9 @@ export default function StepLanguage() {
     return (
         <div className="flex flex-col items-center w-full animation-fade-in font-sans pb-16">
             {/* ── Header ── */}
-            <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4 text-center text-foreground drop-shadow-sm">Select Archive</h1>
+            <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4 text-center text-foreground drop-shadow-sm">Welcome to Parlova.</h1>
             <p className="text-muted-foreground text-sm md:text-base font-mono uppercase tracking-widest text-center mb-16">
-                Choose the lexicon to initialize
+                Let's get you speaking Spanish.
             </p>
 
             {/* ── Grid ── */}
@@ -59,7 +59,7 @@ export default function StepLanguage() {
 
                             {/* Badge */}
                             <div className={`absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1 text-[9px] font-mono tracking-[0.2em] font-bold uppercase rounded-sm border ${lang.available ? (isSelected ? 'bg-accent text-bg border-accent-border' : 'bg-surface text-text-muted border-border') : 'bg-transparent border-border text-text-muted'}`}>
-                                {lang.available ? 'Active' : 'Locked'}
+                                {lang.available ? 'Ready' : 'Soon'}
                             </div>
                         </button>
                     );
@@ -73,7 +73,7 @@ export default function StepLanguage() {
                     disabled={!selectedLanguageId}
                     className="w-full max-w-sm bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[11px] uppercase tracking-widest font-bold h-14 rounded-full shadow-lg transition-all disabled:opacity-30 disabled:shadow-none"
                 >
-                    Proceed with Selection
+                    Continue
                 </Button>
             </div>
         </div>

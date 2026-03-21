@@ -89,7 +89,7 @@ export function LeaderboardTab({
                             <span className="pill-score py-0.5 px-3">You</span>
                         )}
                     </div>
-                    {isPinned && <div className="text-[10px] font-mono-num text-text-muted mt-1 uppercase tracking-widest">Current Position</div>}
+                    {isPinned && <div className="text-[10px] font-mono-num text-text-muted mt-1 uppercase tracking-widest">Your Rank</div>}
                 </div>
 
                 {/* Score */}
@@ -159,12 +159,12 @@ export function LeaderboardTab({
                     <div className="w-16 h-16 bg-card border border-border rounded-full flex items-center justify-center mb-6">
                         <Trophy className="w-6 h-6 text-text-muted" />
                     </div>
-                    <h3 className="text-xl text-text-primary font-display mb-3">Leaderboard Empty</h3>
+                    <h3 className="text-xl text-text-primary font-display mb-3">Leaderboard is Empty</h3>
                     <p className="text-text-secondary text-sm max-w-sm mb-8 leading-relaxed">
-                        No activity recorded for this level in the selected week. Start practicing to claim the top spot.
+                        Nobody has practiced at this level this week. Start practicing to take the #1 spot!
                     </p>
                     <Button asChild className="btn-action w-fit px-8 h-12">
-                        <Link href="/practice">Begin Practice</Link>
+                        <Link href="/practice">Start Practicing</Link>
                     </Button>
                 </Card>
             ) : (

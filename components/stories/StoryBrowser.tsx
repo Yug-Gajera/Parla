@@ -103,15 +103,15 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                             <Sparkles className="w-5 h-5 text-[#E8521A]" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-serif text-text-primary tracking-tight">Narrative Synthesis</h2>
+                            <h2 className="text-2xl font-serif text-text-primary tracking-tight">Create a Story</h2>
                             <p className="text-[10px] font-mono-num text-text-muted uppercase tracking-widest mt-1">
-                                Generate leveled literature dynamically
+                                Make a custom story for your level
                             </p>
                         </div>
                     </div>
 
                     <div className="bg-card border border-border rounded-xl p-6 mt-8">
-                        <p className="text-[10px] font-mono-num uppercase text-text-muted mb-3 tracking-[0.2em] font-medium">Domain Specification</p>
+                        <p className="text-[10px] font-mono-num uppercase text-text-muted mb-3 tracking-[0.2em] font-medium">Choose a Topic</p>
                         <div className="flex gap-2 flex-wrap mb-8">
                             {TOPIC_CATEGORIES.map(cat => (
                                 <button
@@ -127,7 +127,7 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                             ))}
                         </div>
 
-                        <p className="text-[10px] font-mono-num uppercase text-text-muted mb-3 tracking-[0.2em] font-medium">Format Parameters</p>
+                        <p className="text-[10px] font-mono-num uppercase text-text-muted mb-3 tracking-[0.2em] font-medium">Choose a Style</p>
                         <div className="flex gap-2 flex-wrap mb-8">
                             {CONTENT_TYPES.map(type => (
                                 <button
@@ -155,18 +155,18 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                                 `}
                             >
                                 {isGenerating ? (
-                                    <><Loader2 className="w-4 h-4 animate-spin shrink-0" /> Compiling Data...</>
+                                    <><Loader2 className="w-4 h-4 animate-spin shrink-0" /> Writing Story...</>
                                 ) : (
-                                    <><Zap className="w-4 h-4 shrink-0" /> Initialize Generation</>
+                                    <><Zap className="w-4 h-4 shrink-0" /> Generate Story</>
                                 )}
                             </Button>
 
                             <div className="flex flex-col flex-1 pl-4 sm:border-l border-border-strong">
                                 <span className={`text-[10px] font-mono-num uppercase tracking-[0.2em] font-medium ${dailyGenerationsRemaining === 0 ? 'text-error' : 'text-[#E8521A]'}`}>
-                                    {dailyGenerationsRemaining} Yields Remaining
+                                    {dailyGenerationsRemaining} Stories Left Today
                                 </span>
                                 <span className="text-[10px] text-text-muted mt-1">
-                                    Resets diurnally at 00:00 GMT
+                                    Resets every day
                                 </span>
                             </div>
                         </div>
@@ -193,8 +193,8 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                             <div className="w-20 h-20 bg-[#E8521A]/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <CheckCircle2 className="w-10 h-10 text-[#E8521A]" />
                             </div>
-                            <h3 className="text-2xl font-serif text-text-primary">Archived Text Located</h3>
-                            <p className="text-[10px] font-mono-num text-text-secondary mt-3 uppercase tracking-[0.2em]">Retreiving from cache...</p>
+                            <h3 className="text-2xl font-serif text-text-primary">Found a Story</h3>
+                            <p className="text-[10px] font-mono-num text-text-secondary mt-3 uppercase tracking-[0.2em]">Loading saved story...</p>
                         </Card>
                     </motion.div>
                 )}
@@ -207,9 +207,9 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                         <BookOpen className="w-4 h-4 text-text-secondary" />
                     </div>
                     <div>
-                        <h3 className="text-xl font-serif text-text-primary">Literature Database</h3>
+                        <h3 className="text-xl font-serif text-text-primary">Story Library</h3>
                         <p className="text-[10px] font-mono-num uppercase tracking-[0.2em] text-text-muted mt-1">
-                            Authored by Parlova operatives
+                            Written by the community
                         </p>
                     </div>
                 </div>
@@ -285,9 +285,9 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                 {!isLoading && stories.length === 0 && (
                     <Card className="p-16 flex flex-col items-center justify-center text-center bg-surface border-dashed border-border rounded-3xl mt-6 shadow-sm">
                         <BookOpen className="w-10 h-10 text-border-strong mb-6" />
-                        <h3 className="text-xl font-serif text-text-primary mb-3">Database Empty</h3>
+                        <h3 className="text-xl font-serif text-text-primary mb-3">No Stories Yet</h3>
                         <p className="text-sm font-sans text-text-secondary max-w-sm leading-relaxed">
-                            No narrative files currently reside at this sector index. Be the first to run the generation sequence above.
+                            We couldn't find any stories here. Be the first to create one!
                         </p>
                     </Card>
                 )}
@@ -302,7 +302,7 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                 
                 {!hasMore && stories.length > 0 && (
                     <p className="text-center text-[10px] font-mono-num uppercase tracking-[0.2em] text-text-muted py-8 border-t border-border mt-4">
-                        End of archive
+                        No more stories
                     </p>
                 )}
             </div>

@@ -95,7 +95,7 @@ export function ChallengesTab({ activeChallenge, userProgress, pastChallenges }:
                             {!isComplete && (
                                 <Link href={activeChallenge.action_url}>
                                 <Button className="bg-text-primary text-background hover:bg-[#E8521A] transition-colors rounded-full px-8 h-10 text-xs tracking-widest uppercase font-medium">
-                                    Take Action
+                                    Start Now
                                 </Button>
                                 </Link>
                             )}
@@ -133,7 +133,7 @@ export function ChallengesTab({ activeChallenge, userProgress, pastChallenges }:
                                 </div>
                                 {completed && (
                                     <span className="text-[10px] font-medium bg-background border border-border text-[#E8521A] px-3 py-1 rounded-full uppercase tracking-widest">
-                                        Earned
+                                        Done
                                     </span>
                                 )}
                             </motion.div>

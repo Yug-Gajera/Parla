@@ -78,7 +78,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
     };
 
     const handleEnd = async () => {
-        const confirm = window.confirm("Ready to wrap up? AI will score your conversation now.");
+        const confirm = window.confirm("Ready to finish? See how you did.");
         if (!confirm) return;
 
         const result = await endSession();
@@ -145,7 +145,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
                     </button>
                     <div className="flex flex-col">
                         <span className="font-display text-lg font-semibold leading-tight text-text-primary">
-                            {scenario?.name || 'Practice Session'}
+                            {scenario?.name || 'Conversation'}
                         </span>
                         <div className="flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
@@ -196,7 +196,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
                 {isLoading && messages.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-text-secondary">
                         <Loader2 className="w-8 h-8 animate-spin text-[#E8521A] mb-4" />
-                        <p className="text-sm">Connecting securely with {scenario?.character_name}...</p>
+                        <p className="text-sm">Connecting to {scenario?.character_name}...</p>
                     </div>
                 ) : (
                     <div className="flex flex-col w-full pb-10">
@@ -279,7 +279,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
                                 </button>
                             </div>
                             <p className="text-center mt-3 text-[10px] font-bold text-text-muted uppercase tracking-widest select-none font-mono-num">
-                                Text mode — no pronunciation score
+                                Text mode — no speaking score
                             </p>
                         </>
                     )}

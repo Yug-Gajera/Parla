@@ -129,7 +129,7 @@ export default function ArticleReader({ articleId, onClose }: ArticleReaderProps
                             <Award className="w-[32px] h-[32px]" />
                         </motion.div>
 
-                        <h2 className="font-serif text-[28px] font-semibold text-text-primary mb-[8px]">Reading Complete</h2>
+                        <h2 className="font-serif text-[28px] font-semibold text-text-primary mb-[8px]">Finished Reading</h2>
                         <p className="text-[15px] text-text-secondary mb-[32px]">{comprehensionResult.message}</p>
 
                         <div className="mb-[32px]">
@@ -154,7 +154,7 @@ export default function ArticleReader({ articleId, onClose }: ArticleReaderProps
 
                         <div className="flex flex-col gap-[12px]">
                             <button onClick={onClose} className="w-full py-3 rounded-xl bg-[#E8521A] text-bg font-semibold hover:brightness-110 transition-all font-mono-num uppercase tracking-wider text-sm shadow-md">
-                                Keep Reading
+                                Read Another
                             </button>
                             <button onClick={() => { setPhase('reading'); toggleVocabPanel(); }} className="w-full py-3 rounded-xl border border-border-strong text-text-primary hover:bg-card transition-all font-mono-num uppercase tracking-wider text-sm">
                                 Review Vocabulary
@@ -176,7 +176,7 @@ export default function ArticleReader({ articleId, onClose }: ArticleReaderProps
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 className="fixed inset-0 z-[60] bg-background flex flex-col pt-safe-top">
                 <div className="flex items-center justify-between px-[20px] h-[64px] border-b border-border">
-                    <span className="text-[14px] font-semibold text-text-primary">Comprehension Check</span>
+                    <span className="text-[14px] font-semibold text-text-primary">Quick Quiz</span>
                     <div className="flex gap-[6px]">
                         {article.comprehension_questions.map((_: unknown, i: number) => (
                             <div key={i} className={`h-[4px] rounded-full transition-all duration-300 ${
@@ -325,7 +325,7 @@ export default function ArticleReader({ articleId, onClose }: ArticleReaderProps
                             className="btn btn-primary h-[56px] px-[32px] pointer-events-auto shadow-2xl shadow-[rgba(232,82,26,0.2)]"
                         >
                             <Sparkles className="w-[18px] h-[18px] mr-[8px]" />
-                            Check Understanding
+                            Take the Quiz
                         </button>
                     </motion.div>
                 )}
@@ -357,7 +357,7 @@ export default function ArticleReader({ articleId, onClose }: ArticleReaderProps
                             className="absolute bottom-0 left-0 right-0 z-[65] max-h-[85vh] bg-surface border-t border-border rounded-t-[24px] shadow-[0_-20px_40px_rgba(0,0,0,0.05)] flex flex-col">
                             
                             <div className="flex items-center justify-between px-[24px] h-[72px] border-b border-border shrink-0">
-                                <h3 className="font-serif text-[20px] font-semibold text-text-primary">Key Vocabulary</h3>
+                                <h3 className="font-serif text-[20px] font-semibold text-text-primary">Important Words</h3>
                                 <button onClick={toggleVocabPanel} className="w-[32px] h-[32px] rounded-full flex items-center justify-center bg-black/5 text-text-secondary hover:bg-black/10 transition-colors">
                                     <X className="w-[16px] h-[16px]" />
                                 </button>
@@ -393,16 +393,16 @@ export default function ArticleReader({ articleId, onClose }: ArticleReaderProps
                         <motion.div initial={{ scale: 0.96 }} animate={{ scale: 1 }} exit={{ scale: 0.96 }}
                             onClick={e => e.stopPropagation()}
                             className="bg-card border border-border shadow-lg p-[32px] max-w-[360px] w-full text-center rounded-2xl">
-                            <h3 className="font-serif text-[24px] font-semibold mb-[12px] text-text-primary">Leave Article?</h3>
+                            <h3 className="font-serif text-[24px] font-semibold mb-[12px] text-text-primary">Stop Reading?</h3>
                             <p className="text-[14px] text-text-secondary mb-[32px] leading-relaxed">
-                                You're making great progress. Do you want to stop reading here?
+                                Do you want to leave this article for now?
                             </p>
                             <div className="flex flex-col gap-[12px]">
                                 <button className="w-full py-3 rounded-xl bg-[#E8521A] text-bg font-semibold hover:brightness-110 tracking-widest font-mono-num uppercase shadow-md transition-all" onClick={() => setShowExitConfirm(false)}>
                                     Keep Reading
                                 </button>
                                 <button className="w-full py-3 rounded-xl border border-border-strong text-text-primary hover:bg-surface font-mono-num tracking-widest uppercase transition-all" onClick={onClose}>
-                                    Yes, Exit
+                                    Leave Article
                                 </button>
                             </div>
                         </motion.div>

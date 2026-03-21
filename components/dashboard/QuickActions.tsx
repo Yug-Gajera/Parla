@@ -14,8 +14,8 @@ const ACTIONS = [
     {
         href: '/practice',
         icon: Mic2,
-        title: 'Practice Conversation',
-        subtitle: '3 scenarios available',
+        title: 'Talk',
+        subtitle: '3 topics ready',
         variant: 'gold' as VariantName, // kept variant name for logic but updated styles
         hoverStyles: 'group-hover:bg-[#E8521A]/10 group-hover:border-[#E8521A]/20 group-hover:text-[#E8521A]',
         iconColor: 'text-[#E8521A]'
@@ -23,8 +23,8 @@ const ACTIONS = [
     {
         href: '/learn',
         icon: Layers,
-        title: 'Study Vocabulary',
-        subtitle: '12 words due today',
+        title: 'Review words',
+        subtitle: '12 words to review',
         variant: 'neutral' as VariantName,
         hoverStyles: 'group-hover:bg-accent-subtle group-hover:border-accent-border group-hover:text-accent',
         iconColor: 'text-accent'
@@ -32,8 +32,8 @@ const ACTIONS = [
     {
         href: '/learn?tab=lessons',
         icon: BookOpen,
-        title: 'Take a Lesson',
-        subtitle: 'Grammar: Past Tense',
+        title: 'Learn grammar',
+        subtitle: 'Today: Past Tense',
         variant: 'success' as VariantName,
         hoverStyles: 'group-hover:bg-success-subtle group-hover:border-success-border group-hover:text-success',
         iconColor: 'text-success'

@@ -51,26 +51,26 @@ export default function StepResult() {
             }
 
             console.log('[StepResult] Success! Redirecting to /home');
-            toast.success('System Initialized.');
+            toast.success('Ready to go!');
             window.location.href = '/home';
 
         } catch (err) {
             console.error('[StepResult] Error caught:', err);
-            toast.error(err instanceof Error ? err.message : 'Initialization failure');
+            toast.error(err instanceof Error ? err.message : 'Something went wrong');
             setIsSaving(false);
         }
     };
 
     const getLevelName = (lvl: string) => {
         const map: Record<string, string> = {
-            'A1': 'Novice Data State',
-            'A2': 'Basic Constructs',
-            'B1': 'Intermediate Matrix',
-            'B2': 'Advanced Processing',
-            'C1': 'Near-Native Ops',
-            'C2': 'Mastery'
+            'A1': 'Just starting out',
+            'A2': 'I know the basics',
+            'B1': 'Getting there',
+            'B2': 'Pretty good',
+            'C1': 'Advanced',
+            'C2': 'Near fluent'
         };
-        return map[lvl] || 'Novice Data State';
+        return map[lvl] || 'Just starting out';
     };
 
     return (
@@ -103,7 +103,7 @@ export default function StepResult() {
 
             {/* ── Header ── */}
             <h1 className="text-[10px] md:text-sm font-mono uppercase tracking-[0.3em] font-bold mb-10 text-center text-text-muted z-10">
-                Diagnostic Conclusion
+                Your Result
             </h1>
 
             {/* ── Badge ── */}
@@ -115,7 +115,7 @@ export default function StepResult() {
             >
                 <div className="absolute inset-0 bg-accent/5 rounded-full blur-2xl" />
                 <div className="w-48 h-48 rounded-full border border-accent-border bg-card shadow-lg flex flex-col items-center justify-center ring-1 ring-accent/10 ring-offset-8 ring-offset-background">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-accent mb-2 font-bold">Class</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-accent mb-2 font-bold">Level</span>
                     <span className="text-7xl font-serif text-text-primary tracking-tight drop-shadow-sm">
                         {assessedLevel || 'A1'}
                     </span>
@@ -133,7 +133,7 @@ export default function StepResult() {
             >
                 <h2 className="text-3xl font-serif mb-4 text-text-primary tracking-wide">{getLevelName(assessedLevel || 'A1')}</h2>
                 <p className="text-text-muted font-sans text-center max-w-sm leading-relaxed">
-                    System calibrated. Your unique neural mapping has been defined. We will proceed to integrate missing grammar nodes.
+                    You're all set. We've built your custom learning path to help you reach your goals.
                 </p>
             </motion.div>
 
@@ -144,22 +144,22 @@ export default function StepResult() {
                 transition={{ delay: 0.4 }}
                 className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-6 z-10 mb-16 px-4"
             >
-                 <div className="p-8 rounded-[18px] bg-card border border-border shadow-sm">
+                <div className="p-8 rounded-[18px] bg-card border border-border shadow-sm">
                     <h3 className="font-mono text-[11px] font-bold tracking-widest uppercase text-text-muted mb-6 flex items-center gap-3 border-b border-border pb-4">
-                        <Target className="text-accent w-4 h-4" /> Current Matrix
+                        <Target className="text-accent w-4 h-4" /> What you can do now
                     </h3>
                     <ul className="space-y-4 text-sm font-sans text-text-primary/80">
                         <li className="flex items-start gap-4 group">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent/50 mt-1.5 flex-shrink-0 group-hover:bg-accent transition-colors" />
-                            <span className="leading-relaxed">Process primary standard input within familiar domains</span>
+                            <span className="leading-relaxed">Understand simple things you see often</span>
                         </li>
                         <li className="flex items-start gap-4 group">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent/50 mt-1.5 flex-shrink-0 group-hover:bg-accent transition-colors" />
-                            <span className="leading-relaxed">Navigate standard global transit scenarios</span>
+                            <span className="leading-relaxed">Get around while traveling</span>
                         </li>
                         <li className="flex items-start gap-4 group">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent/50 mt-1.5 flex-shrink-0 group-hover:bg-accent transition-colors" />
-                            <span className="leading-relaxed">Generate basic connected syntax streams</span>
+                            <span className="leading-relaxed">Write short, simple sentences</span>
                         </li>
                     </ul>
                 </div>
@@ -169,20 +169,20 @@ export default function StepResult() {
                         <Brain className="w-32 h-32 text-accent" />
                     </div>
                     <h3 className="font-mono text-[11px] font-bold tracking-widest uppercase text-accent mb-6 flex items-center gap-3 border-b border-border pb-4">
-                        <Settings2 className="text-accent w-4 h-4" /> Trajectory Targets
+                        <Settings2 className="text-accent w-4 h-4" /> Next goals
                     </h3>
                     <ul className="space-y-4 text-sm font-sans text-text-primary/90 relative z-10">
                         <li className="flex items-start gap-4 group">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0 shadow-sm" />
-                            <span className="leading-relaxed">Decode complex abstractions and profound semantics</span>
+                            <span className="leading-relaxed">Understand deeper meaning in conversations</span>
                         </li>
                         <li className="flex items-start gap-4 group">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0 shadow-sm" />
-                            <span className="leading-relaxed">Engage with zero latency and absolute fluidity</span>
+                            <span className="leading-relaxed">Speak without translating in your head</span>
                         </li>
                         <li className="flex items-start gap-4 group">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0 shadow-sm" />
-                            <span className="leading-relaxed">Synthesize articulate logic structures dynamically</span>
+                            <span className="leading-relaxed">Express complex thoughts clearly</span>
                         </li>
                     </ul>
                 </div>
@@ -201,7 +201,7 @@ export default function StepResult() {
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-[12px] font-bold uppercase tracking-widest h-16 rounded-full shadow-lg transition-all flex items-center justify-center gap-3 border border-primary/50"
                 >
                     {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
-                    Initialize Interface
+                    Start Learning
                 </Button>
             </motion.div>
 

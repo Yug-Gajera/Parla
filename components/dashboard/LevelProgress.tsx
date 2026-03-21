@@ -64,7 +64,7 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
             {/* ── Status Info ── */}
             <div className="flex flex-col text-center w-full">
                 <span className="font-mono-num font-medium text-[16px] text-text-primary">
-                    {isMaxLevel ? 'Mastery Achieved' : `${score} / 100 XP`}
+                    {isMaxLevel ? 'You reached the max level!' : `${score} / 100 XP`}
                 </span>
 
                 {!isMaxLevel && (
@@ -75,11 +75,11 @@ export default function LevelProgress({ currentLevel, score }: LevelProgressProp
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-pill bg-[#E8521A] opacity-75"></span>
                                     <span className="relative inline-flex rounded-pill h-[8px] w-[8px] bg-[#E8521A]"></span>
                                 </span>
-                                Diagnostic ready
+                                Take your level test
                             </Link>
                         ) : (
                             <span className="text-text-secondary">
-                                Next test in about {daysUntilTest} days
+                                Next test in {daysUntilTest} days
                             </span>
                         )}
                     </div>

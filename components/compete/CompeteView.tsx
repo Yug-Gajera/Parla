@@ -48,7 +48,7 @@ export function CompeteView({ languageId, initialLevel, activeChallenge, userSta
                 <div>
                     <h1 className="text-4xl sm:text-5xl text-text-primary mb-3 tracking-tight font-display">Compete</h1>
                     <p className="text-text-secondary text-lg font-light max-w-xl leading-relaxed">
-                        Measure your language acquisition against the Parlova community.
+                        See how you rank against other Parlova learners.
                     </p>
                 </div>
                 <div className="hidden sm:flex h-16 w-16 rounded-full bg-card border border-border items-center justify-center">

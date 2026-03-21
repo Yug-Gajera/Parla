@@ -70,7 +70,7 @@ export function MessageBubble({ message, isAiStreaming }: MessageBubbleProps) {
                             >
                                 <AlertTriangle className="w-3 h-3 text-warning" />
                                 <span className="text-[11px] text-warning font-medium opacity-80">
-                                    Some words were unclear
+                                    We couldn't hear some words clearly
                                 </span>
                                 {showClarityDetails
                                     ? <ChevronUp className="w-3 h-3 text-warning opacity-60" />

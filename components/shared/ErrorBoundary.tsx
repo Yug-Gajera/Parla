@@ -45,7 +45,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
                         <div className="space-y-2">
                             <h1 className="text-2xl font-bold mb-2">Something isn&apos;t right</h1>
                             <p className="text-sm text-muted-foreground">
-                                {this.props.message || "An unexpected error occurred while loading this section. Our team has been notified."}
+                                {this.props.message || "Something went wrong while loading this page. Our team has been told about it."}
                             </p>
                         </div>
 
@@ -82,7 +82,7 @@ export function SectionError({ reset, sectionName }: { reset: () => void, sectio
                 <div className="space-y-2">
                     <h2 className="text-xl font-bold text-foreground">Error loading {sectionName}</h2>
                     <p className="text-sm text-muted-foreground">
-                        We couldn't retrieve the latest data for this page. Please check your connection and try again.
+                        We couldn't get the data for this page. Check your internet and try again.
                     </p>
                 </div>
 

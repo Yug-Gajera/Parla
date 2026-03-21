@@ -66,7 +66,7 @@ export default function SettingsPage() {
         if (error) {
             toast.error(error.message);
         } else {
-            toast.success("Security token dispatched");
+            toast.success("Password reset email sent");
         }
     };
 
@@ -87,12 +87,12 @@ export default function SettingsPage() {
         <div className="w-full max-w-[1000px] mx-auto p-6 md:p-10 space-y-10 font-sans pb-32">
             <div className="flex justify-between items-end mb-12">
                 <div>
-                    <h1 className="text-4xl md:text-5xl text-text-primary font-serif tracking-tight mb-2">Systems & Preferences</h1>
-                    <p className="text-[11px] font-mono text-text-muted uppercase tracking-widest">Configure Parlova operational parameters</p>
+                    <h1 className="text-4xl md:text-5xl text-text-primary font-serif tracking-tight mb-2">Settings</h1>
+                    <p className="text-[11px] font-mono text-text-muted uppercase tracking-widest">Manage your account and preferences</p>
                 </div>
                 {isSaving && (
                     <div className="flex items-center text-[10px] font-mono font-bold text-accent uppercase tracking-widest animate-pulse border border-accent-border bg-accent/5 px-3 py-1.5 rounded-lg shadow-sm">
-                        Synchronizing...
+                        Saving...
                     </div>
                 )}
             </div>
@@ -102,39 +102,39 @@ export default function SettingsPage() {
                 <section>
                     <div className="flex items-center gap-3 mb-6 border-b border-border pb-4 font-serif">
                         <Mail className="w-4 h-4 text-accent" />
-                        <h2 className="text-xl tracking-tight text-text-primary">Identity & Security</h2>
+                        <h2 className="text-xl tracking-tight text-text-primary">Account Details</h2>
                     </div>
                     <Card className="p-8 bg-card border border-border shadow-sm rounded-[18px] divide-y divide-border/50">
                         <div className="pb-8">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted mb-3 block">Primary Uplink</Label>
+                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted mb-3 block">Email Address</Label>
                             <div className="flex items-center justify-between">
                                 <span className="text-text-primary font-medium">{user?.email}</span>
                                 <span className="text-[10px] font-mono bg-surface border border-border text-accent px-3 py-1 rounded-md uppercase tracking-widest font-bold shadow-sm">Verified</span>
                             </div>
                         </div>
                         <div className="py-8">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted mb-3 block">Access Key</Label>
+                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted mb-3 block">Password</Label>
                             <div className="flex items-center justify-between">
                                 <span className="text-text-muted font-mono text-sm tracking-widest">••••••••••••</span>
                                 <Button variant="outline" size="sm" className="btn-action rounded-full font-mono text-[10px] uppercase tracking-widest h-9" onClick={handlePasswordReset}>
-                                    Cycle Key
+                                    Change Password
                                 </Button>
                             </div>
                         </div>
                         <div className="pt-8">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-red-500 mb-3 block">Critical Operations</Label>
+                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-red-500 mb-3 block">Danger Zone</Label>
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                     <Button variant="outline" size="sm" className="rounded-full bg-red-500/5 border-red-200 text-red-600 hover:bg-red-500/10 hover:text-red-700 font-mono text-[10px] uppercase tracking-widest h-9 transition-all">
-                                        Purge Identity
+                                        Delete Account
                                     </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent className="bg-card border border-border max-w-md p-10 rounded-[32px] shadow-2xl">
                                     <AlertDialogHeader className="mb-8">
-                                        <AlertDialogTitle className="text-3xl font-serif text-text-primary">Confirm Annihilation</AlertDialogTitle>
+                                        <AlertDialogTitle className="text-3xl font-serif text-text-primary">Are you sure?</AlertDialogTitle>
                                         <AlertDialogDescription className="text-text-muted text-sm leading-relaxed mt-4">
-                                            This sequence is irreversible. All language nodes, XP, and neural mappings will be disintegrated.
-                                            Type <span className="font-mono text-red-500 bg-red-500/5 px-1.5 py-0.5 rounded border border-red-200">PURGE</span> to verify authorization.
+                                            This cannot be undone. All your progress, XP, and words will be lost forever.
+                                            Type <span className="font-mono text-red-500 bg-red-500/5 px-1.5 py-0.5 rounded border border-red-200">PURGE</span> to confirm.
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <Input
@@ -144,13 +144,13 @@ export default function SettingsPage() {
                                         placeholder="PURGE"
                                     />
                                     <AlertDialogFooter className="gap-3">
-                                        <AlertDialogCancel className="rounded-full bg-surface border-border text-text-muted hover:text-text-primary hover:bg-border font-mono text-[11px] uppercase tracking-widest h-14 px-8 mt-0 transition-all">Abort</AlertDialogCancel>
+                                        <AlertDialogCancel className="rounded-full bg-surface border-border text-text-muted hover:text-text-primary hover:bg-border font-mono text-[11px] uppercase tracking-widest h-14 px-8 mt-0 transition-all">Cancel</AlertDialogCancel>
                                         <AlertDialogAction
                                             onClick={handleDeleteAccount}
                                             disabled={deleteConfirm !== 'PURGE'}
                                             className="rounded-full bg-red-500 hover:bg-red-600 text-white font-mono text-[11px] uppercase tracking-widest font-bold h-14 px-8 disabled:opacity-30 shadow-lg shadow-red-500/20 transition-all"
                                         >
-                                            Execute Purge
+                                            Delete Account
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -163,11 +163,11 @@ export default function SettingsPage() {
                 <section>
                     <div className="flex items-center gap-3 mb-6 border-b border-border pb-4 font-serif">
                         <Brain className="w-4 h-4 text-accent" />
-                        <h2 className="text-xl tracking-tight text-text-primary">Neural Calibration</h2>
+                        <h2 className="text-xl tracking-tight text-text-primary">Learning Goals</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <div className="space-y-6">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted block">Immersion Horizon</Label>
+                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted block">Daily Goal</Label>
                             <RadioGroup
                                 defaultValue={settings?.daily_goal_minutes?.toString() || "20"}
                                 onValueChange={handleGoalChange}
@@ -189,7 +189,7 @@ export default function SettingsPage() {
                         </div>
 
                         <div className="space-y-6">
-                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted block">Extraction Vectors</Label>
+                            <Label className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-muted block">Topics I Like</Label>
                             <div className="grid grid-cols-2 gap-4 bg-surface p-8 rounded-[32px] border border-border shadow-inner">
                                 {CONTENT_TYPES.map((type) => (
                                     <div key={type.id} className="flex items-center space-x-3 group cursor-pointer hover:bg-white/50 p-2 rounded-xl transition-colors -m-2">
@@ -216,16 +216,16 @@ export default function SettingsPage() {
                 <section>
                     <div className="flex items-center gap-3 mb-6 border-b border-border pb-4 font-serif">
                         <Palette className="w-4 h-4 text-accent" />
-                        <h2 className="text-xl tracking-tight text-text-primary">Visual Interface</h2>
+                        <h2 className="text-xl tracking-tight text-text-primary">App Theme</h2>
                     </div>
                     <Card className="p-10 bg-card border border-border shadow-sm rounded-[32px] transition-all hover:border-accent-border">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                             <div>
-                                <h4 className="font-serif text-2xl text-text-primary mb-2">Parlova Premium Light</h4>
-                                <p className="text-text-muted text-sm leading-relaxed max-w-md">The original artisanal experience. Deep focus through warm palettes and rich typography.</p>
+                                <h4 className="font-serif text-2xl text-text-primary mb-2">Light Mode</h4>
+                                <p className="text-text-muted text-sm leading-relaxed max-w-md">A clean, bright look that's easy to read.</p>
                             </div>
                             <span className="text-[10px] font-mono bg-accent/5 text-accent border border-accent-border font-bold px-4 py-2 rounded-lg uppercase tracking-widest whitespace-nowrap text-center shadow-sm">
-                                PRIMARY MODE ACTIVE
+                                CURRENT THEME
                             </span>
                         </div>
                     </Card>
@@ -235,23 +235,23 @@ export default function SettingsPage() {
                 <section>
                     <div className="flex items-center gap-3 mb-6 border-b border-border pb-4 font-serif">
                         <Database className="w-4 h-4 text-accent" />
-                        <h2 className="text-xl tracking-tight text-text-primary">Data Telemetry</h2>
+                        <h2 className="text-xl tracking-tight text-text-primary">Privacy & Data</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <Button
                             variant="outline"
                             className="h-auto p-10 flex flex-col items-start gap-3 rounded-[32px] border border-border bg-card hover:bg-surface hover:border-accent/30 group transition-all hover:shadow-md"
-                            onClick={() => toast.success("Extraction sequence initiated. Packet delivery in T-24H.")}
+                            onClick={() => toast.success("Data export started. We'll email it to you soon.")}
                         >
-                            <span className="font-serif text-2xl text-text-primary group-hover:text-accent transition-colors">Export Logs</span>
-                            <span className="text-sm text-text-muted text-left leading-relaxed">Generate a cohesive package of all syntactic interactions for offline archiving.</span>
+                            <span className="font-serif text-2xl text-text-primary group-hover:text-accent transition-colors">Download My Data</span>
+                            <span className="text-sm text-text-muted text-left leading-relaxed">Get a copy of everything you've learned and saved.</span>
                         </Button>
                         <Button
                             variant="outline"
                             className="h-auto p-10 flex flex-col items-start gap-3 rounded-[32px] border border-border bg-card hover:bg-surface hover:border-accent/30 group transition-all hover:shadow-md"
                         >
-                            <span className="font-serif text-2xl text-text-primary group-hover:text-accent transition-colors">Security Protocol</span>
-                            <span className="text-sm text-text-muted text-left leading-relaxed">Review cryptographic boundaries, neural encryption, and data retention policies.</span>
+                            <span className="font-serif text-2xl text-text-primary group-hover:text-accent transition-colors">Privacy Policy</span>
+                            <span className="text-sm text-text-muted text-left leading-relaxed">Read how we keep your data safe and private.</span>
                         </Button>
                     </div>
                 </section>
