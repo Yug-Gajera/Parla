@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import PracticeView from '@/components/conversation/PracticeView';
+import { FirstConversationClient } from '@/components/first-conversation/FirstConversationClient';
 
-export default async function PracticePage() {
+export default async function FirstConversationPage() {
     const supabase = await createClient();
 
     const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -11,15 +11,15 @@ export default async function PracticePage() {
         redirect('/login');
     }
 
-    // Check if user has completed first conversation
+    // Check if user has already completed the first conversation
     const { data: userData } = await supabase
         .from('users')
         .select('has_completed_first_conversation')
         .eq('id', user.id)
         .single();
     
-    if (userData && !(userData as any).has_completed_first_conversation) {
-        redirect('/practice/first-conversation');
+    if (userData && (userData as any).has_completed_first_conversation) {
+        redirect('/practice');
     }
 
     // Get active language
@@ -36,27 +36,23 @@ export default async function PracticePage() {
     const languageId = (userLanguage as any).language_id;
     const level = (userLanguage as any).current_level || 'A1';
 
-    // Fetch recent sessions
+    // Check for existing returning session
     const { data: recentSessionsData } = await supabase
         .from('conversation_sessions')
-        .select('id, scenario_type, created_at, duration_seconds, grammar_score, vocabulary_score, naturalness_score, goal_completed')
-        .not('feedback', 'is', null)
+        .select('id, goal_completed')
         .eq('user_id', user.id)
-        .eq('language_id', languageId)
+        .eq('scenario_type', 'first_conversation')
         .order('created_at', { ascending: false })
-        .limit(3);
+        .limit(1)
+        .maybeSingle();
 
-    const recentSessions = (recentSessionsData || []).map((s: any) => ({
-        ...s,
-        duration_minutes: Math.ceil((s.duration_seconds || 0) / 60) || 1,
-        overall_score: Math.round(((s.grammar_score || 0) * 0.3 + (s.vocabulary_score || 0) * 0.3 + (s.naturalness_score || 0) * 0.25 + (s.goal_completed ? 100 : 0) * 0.15)) || 0
-    }));
+    const existingSessionId = (recentSessionsData && !(recentSessionsData as any).goal_completed) ? (recentSessionsData as any).id : null;
 
     return (
-        <PracticeView
+        <FirstConversationClient
             languageId={languageId}
             level={level}
-            recentSessions={recentSessions || []}
+            existingSessionId={existingSessionId}
         />
     );
 }
