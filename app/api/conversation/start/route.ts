@@ -32,6 +32,22 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { scenario_id, language_id, level, skip_situation_id } = body;
 
+        // 0. Resolve language code to UUID if needed
+        let languageUuid = language_id;
+        if (language_id && language_id.length <= 3) {
+            const { data: langData, error: langError } = await supabase
+                .from('languages')
+                .select('id')
+                .eq('code', language_id)
+                .single();
+            
+            if (langError || !langData) {
+                console.error('[conversation/start] Language resolution failed:', langError);
+                return NextResponse.json({ error: 'Unsupported language' }, { status: 400 });
+            }
+            languageUuid = langData.id;
+        }
+
         const scenario = SCENARIOS.find(s => s.id === scenario_id);
         if (!scenario) {
             return NextResponse.json({ error: 'Scenario not found' }, { status: 404 });
@@ -116,7 +132,7 @@ export async function POST(req: Request) {
             .from('conversation_sessions')
             .insert({
                 user_id: user.id,
-                language_id: language_id,
+                language_id: languageUuid,
                 scenario_type: scenario.id,
                 scenario_name: scenario.name,
                 mode: 'text',

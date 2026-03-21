@@ -34,6 +34,22 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { language_id, topic_category, content_type } = body;
 
+        // 0. Resolve language code to UUID if needed
+        let languageUuid = language_id;
+        if (language_id && language_id.length <= 3) {
+            const { data: langData, error: langError } = await supabase
+                .from('languages')
+                .select('id')
+                .eq('code', language_id)
+                .single();
+            
+            if (langError || !langData) {
+                console.error('[stories/generate] Language resolution failed:', langError);
+                return NextResponse.json({ error: 'Unsupported language' }, { status: 400 });
+            }
+            languageUuid = langData.id;
+        }
+
         if (!language_id || !topic_category || !content_type) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
@@ -43,7 +59,7 @@ export async function POST(req: Request) {
             .from('user_languages')
             .select('current_level')
             .eq('user_id', user.id)
-            .eq('language_id', language_id)
+            .eq('language_id', languageUuid)
             .single();
         const level = userLang?.current_level || 'B1';
 
@@ -51,7 +67,7 @@ export async function POST(req: Request) {
         const topic = body.topic || getRandomTopic(topic_category);
 
         const result = await getStory(
-            user.id, language_id, level,
+            user.id, languageUuid, level,
             topic, topic_category, content_type
         );
 

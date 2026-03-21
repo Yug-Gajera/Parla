@@ -50,11 +50,27 @@ export async function POST(req: Request) {
 
         const serviceClient = getServiceClient();
 
+        // 0. Resolve language code to UUID if needed
+        let languageUuid = languageId;
+        if (languageId.length <= 3) {
+            const { data: langData, error: langError } = await serviceClient
+                .from('languages')
+                .select('id')
+                .eq('code', languageId)
+                .single();
+            
+            if (langError || !langData) {
+                console.error('Language resolution failed:', langError);
+                return NextResponse.json({ error: 'Unsupported language' }, { status: 400 });
+            }
+            languageUuid = langData.id;
+        }
+
         // 1. Fetch currently existing global words
         const { data: existingGlobalWords } = await serviceClient
             .from('vocabulary_words')
             .select('id, word')
-            .eq('language_id', languageId)
+            .eq('language_id', languageUuid)
             .in('word', spanishStrings);
 
         const globalWordMap = new Map<string, string>();
@@ -70,7 +86,7 @@ export async function POST(req: Request) {
             const cleanSp = w.spanish.trim().toLowerCase();
             if (!globalWordMap.has(cleanSp)) {
                 wordsToInsertGlobal.push({
-                    language_id: languageId,
+                    language_id: languageUuid,
                     word: cleanSp,
                     translation: w.english.trim(),
                     part_of_speech: w.part_of_speech || 'noun',

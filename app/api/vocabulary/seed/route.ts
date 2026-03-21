@@ -35,11 +35,27 @@ export async function POST(req: Request) {
 
         const serviceClient = getServiceClient();
 
+        // 0. Resolve language code to UUID if needed
+        let languageUuid = languageId;
+        if (languageId.length <= 3) {
+            const { data: langData, error: langError } = await serviceClient
+                .from('languages')
+                .select('id')
+                .eq('code', languageId)
+                .single();
+            
+            if (langError || !langData) {
+                console.error('Language resolution failed:', langError);
+                return NextResponse.json({ error: 'Unsupported language' }, { status: 400 });
+            }
+            languageUuid = langData.id;
+        }
+
         // 1. Fetch top N words by frequency from global dictionary
         const { data: topWords, error: fetchError } = await serviceClient
             .from('vocabulary_words')
             .select('id')
-            .eq('language_id', languageId)
+            .eq('language_id', languageUuid)
             // If the dictionary lacks frequency_rank we just pull by created_at or limit
             // We assume frequency_rank exists and 1 is most frequent
             .order('frequency_rank', { ascending: true, nullsFirst: false })
