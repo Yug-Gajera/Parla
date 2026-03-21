@@ -88,7 +88,7 @@ export async function POST(req: Request) {
                 wordsToInsertGlobal.push({
                     language_id: languageUuid,
                     word: cleanSp,
-                    translation: w.english.trim(),
+                    translation: (w.english || '').trim(),
                     part_of_speech: w.part_of_speech || 'noun',
                     cefr_level: w.cefr_level || 'A1',
                     example_sentence: w.example_sentence || '',

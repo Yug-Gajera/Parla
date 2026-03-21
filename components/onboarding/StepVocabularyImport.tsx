@@ -49,7 +49,7 @@ export default function StepVocabularyImport() {
             const char = text[i];
             if (char === '"') {
                 inQuotes = !inQuotes;
-            } else if ((char === ',' || char === '\t') && !inQuotes) {
+            } else if ((char === ',' || char === '\t' || char === ';') && !inQuotes) {
                 row.push(cur.replace(/<\/?[^>]+(>|$)/g, "").trim());
                 cur = '';
             } else if (char === '\n' && !inQuotes) {
@@ -66,11 +66,14 @@ export default function StepVocabularyImport() {
             rows.push(row);
         }
         
-        return rows.map(r => ({
-            spanish: r[0] || '',
-            english: r[1] || '',
-            interval: r[2] ? parseInt(r[2]) : undefined
-        })).filter(w => w.spanish.length > 0);
+        return rows.map(r => {
+            const parsedInterval = r[2] ? parseInt(r[2]) : undefined;
+            return {
+                spanish: r[0] || '',
+                english: r[1] || '',
+                interval: !isNaN(parsedInterval as number) ? parsedInterval : undefined
+            };
+        }).filter(w => w.spanish.length > 0);
     };
 
     const parsePasteText = (text: string) => {
