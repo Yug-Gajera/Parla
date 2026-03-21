@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 import { createClient } from '@/lib/supabase/server';
 import { SCENARIOS } from '@/lib/data/scenarios';
-import { CONVERSATION_SYSTEM_PROMPT } from '@/lib/claude/prompts';
+import { CONVERSATION_SYSTEM_PROMPT, injectLevelRules } from '@/lib/claude/prompts';
 import { streamClaude } from '@/lib/claude/client';
 
 export async function POST(req: Request) {
@@ -42,12 +42,14 @@ export async function POST(req: Request) {
             ? 'This is a more challenging variation — be realistic and do not make it too easy for the user.'
             : '';
 
-        const systemPrompt = CONVERSATION_SYSTEM_PROMPT
+        const systemPromptRaw = CONVERSATION_SYSTEM_PROMPT
             .replace('{CONTEXT}', scenario?.base_context || '')
             .replace('{SITUATION}', situationModifier)
             .replace('{GOAL}', scenario?.goal || '')
             .replace('{LEVEL}', level || 'A2')
             .replace('{DIFFICULTY_NOTE}', difficultyNote);
+
+        const systemPrompt = injectLevelRules(systemPromptRaw, level || 'A2');
 
         // Build Claude message array
         const apiMessages = [

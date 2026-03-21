@@ -14,6 +14,9 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Send, Loader2, StopCircle, Keyboard, Mic2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { type TranscriptionResult } from '@/lib/voice/transcription';
+import { useProfile } from '@/hooks/useProfile';
+import { SuggestedReplies, type Suggestion } from './SuggestedReplies';
+import { SpeakReplyModal } from './SpeakReplyModal';
 
 interface ConversationWindowProps {
     scenarioId: string;
@@ -25,16 +28,18 @@ interface ConversationWindowProps {
 export function ConversationWindow({ scenarioId, languageId, level, onClose }: ConversationWindowProps) {
     const {
         scenario, messages, isLoading, isStreaming, elapsedSeconds,
-        situationName, situationTwist, situationId,
+        situationName, situationTwist, situationId, sessionId,
         inputMode, switchToTextMode,
         startSession, sendMessage, endSession, resetConversation,
     } = useConversation(scenarioId, languageId, level);
 
     const { getCompletedSituationIds, getBestScore, refetch: refetchHistory } = useSituationHistory(languageId);
+    const { settings } = useProfile();
 
     const [input, setInput] = useState('');
     const [scoringData, setScoringData] = useState<any>(null);
     const [showTextSwitch, setShowTextSwitch] = useState(false);
+    const [activeSpeakSuggestion, setActiveSpeakSuggestion] = useState<Suggestion | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const mins = Math.floor(elapsedSeconds / 60);
@@ -237,6 +242,24 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
             {/* Input Area */}
             <div className="w-full border-t border-border bg-surface/90 backdrop-blur-xl p-4 pb-[calc(env(safe-area-inset-bottom)+16px)] shrink-0">
                 <div className="max-w-[760px] mx-auto">
+                    
+                    {/* Suggested Replies Feature */}
+                    {messages.length > 0 && lastAiMessage && !isStreaming && (
+                        <SuggestedReplies 
+                            sessionId={sessionId}
+                            conversationHistory={messages}
+                            level={level}
+                            speakToReplyEnabled={settings?.speak_to_reply ?? true}
+                            onSelectSuggestion={(suggestion, requireSpeak) => {
+                                if (requireSpeak) {
+                                    setActiveSpeakSuggestion(suggestion);
+                                } else {
+                                    sendMessage(suggestion.spanish);
+                                }
+                            }}
+                        />
+                    )}
+
                     {inputMode === 'voice' ? (
                         <div className="flex flex-col items-center">
                             {lastAiMessage && !isStreaming && (
@@ -285,6 +308,22 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
                     )}
                 </div>
             </div>
+
+            {/* Speak Reply Modal */}
+            <AnimatePresence>
+                {activeSpeakSuggestion && (
+                    <SpeakReplyModal
+                        suggestion={activeSpeakSuggestion}
+                        sessionId={sessionId}
+                        userLevel={level}
+                        onClose={() => setActiveSpeakSuggestion(null)}
+                        onSuccess={(spokenText) => {
+                            setActiveSpeakSuggestion(null);
+                            sendMessage(spokenText);
+                        }}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { Loader2, Mail, Palette, Database, Brain } from 'lucide-react';
+import { Loader2, Mail, Palette, Database, Brain, Mic } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 const CONTENT_TYPES = [
@@ -34,10 +34,27 @@ const CONTENT_TYPES = [
 ];
 
 export default function SettingsPage() {
-    const { user, settings, isLoading, updateSettings } = useProfile();
+    const { user, userLanguage, settings, isLoading, updateSettings } = useProfile();
     const [deleteConfirm, setDeleteConfirm] = useState('');
     const [isSaving, setIsSaving] = useState(false);
+    const [showSpeakConfirm, setShowSpeakConfirm] = useState(false);
     const supabase = createClient();
+
+    const handleSpeakToggleClick = (checked: boolean) => {
+        const level = userLanguage?.current_level || 'A1';
+        if (!checked && (level === 'A1' || level === 'A2')) {
+            setShowSpeakConfirm(true);
+        } else {
+            handleSpeakToggleConfirm(checked);
+        }
+    };
+
+    const handleSpeakToggleConfirm = async (checked: boolean) => {
+        setShowSpeakConfirm(false);
+        setIsSaving(true);
+        await updateSettings({ speak_to_reply: checked });
+        setIsSaving(false);
+    };
 
     const handleGoalChange = async (value: string) => {
         setIsSaving(true);
@@ -210,6 +227,59 @@ export default function SettingsPage() {
                             </div>
                         </div>
                     </div>
+                </section>
+
+                {/* Learning Support */}
+                <section>
+                    <div className="flex items-center gap-3 mb-6 border-b border-border pb-4 font-serif">
+                        <Mic className="w-4 h-4 text-accent" />
+                        <h2 className="text-xl tracking-tight text-text-primary">Learning Support</h2>
+                    </div>
+                    <Card className="p-8 bg-card border border-border shadow-sm rounded-[18px]">
+                        <div className="flex items-start justify-between">
+                            <div className="space-y-1">
+                                <Label htmlFor="speak-suggested" className="text-text-primary text-base font-medium block">
+                                    Speak suggested replies
+                                </Label>
+                                <p className="text-text-muted text-sm leading-relaxed max-w-sm">
+                                    Practice by saying replies out loud instead of sending them as text.
+                                </p>
+                            </div>
+                            <Checkbox
+                                id="speak-suggested"
+                                checked={settings?.speak_to_reply ?? true}
+                                onCheckedChange={(checked) => handleSpeakToggleClick(!!checked)}
+                                className="border-border data-[state=checked]:bg-accent data-[state=checked]:border-accent w-6 h-6 rounded-md shadow-inner"
+                            />
+                        </div>
+
+                        {/* Confirm Modal for A1/A2 */}
+                        <AlertDialog open={showSpeakConfirm} onOpenChange={setShowSpeakConfirm}>
+                            <AlertDialogContent className="bg-card border border-border max-w-md p-8 rounded-[32px] shadow-2xl">
+                                <AlertDialogHeader className="mb-6">
+                                    <AlertDialogTitle className="text-2xl font-serif text-text-primary">Are you sure?</AlertDialogTitle>
+                                    <AlertDialogDescription className="text-text-muted text-[15px] leading-relaxed mt-3">
+                                        Speaking practice is what makes Parlova work best. 
+                                        Are you sure you want to turn this off?
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter className="gap-3">
+                                    <AlertDialogCancel
+                                        onClick={() => setShowSpeakConfirm(false)}
+                                        className="rounded-full bg-surface border-border text-text-muted hover:text-text-primary hover:bg-border font-mono text-[11px] uppercase tracking-widest h-12 px-6 transition-all m-0"
+                                    >
+                                        Keep it on
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                        onClick={() => handleSpeakToggleConfirm(false)}
+                                        className="rounded-full bg-accent hover:bg-accent/90 text-white font-mono text-[11px] uppercase tracking-widest font-bold h-12 px-6 shadow-md transition-all m-0"
+                                    >
+                                        Turn off
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </Card>
                 </section>
 
                 {/* Appearance */}

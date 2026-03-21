@@ -282,6 +282,7 @@ export function useConversation(scenarioId: string, languageId: string, level: s
         sendMessage,
         endSession,
         resetConversation,
+        sessionId,
         switchToTextMode,
     };
 }

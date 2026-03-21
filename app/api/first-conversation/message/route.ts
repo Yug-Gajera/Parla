@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { createClient } from '@/lib/supabase/server';
 import { streamClaude } from '@/lib/claude/client';
 import { FIRST_CONVERSATION_SYSTEM_PROMPT } from '../start/route';
+import { injectLevelRules } from '@/lib/claude/prompts';
 
 export async function POST(req: Request) {
     try {
@@ -50,9 +51,11 @@ export async function POST(req: Request) {
         const stream = new ReadableStream({
             async start(controller) {
                 try {
+                    const systemPrompt = injectLevelRules(FIRST_CONVERSATION_SYSTEM_PROMPT, 'A1', true);
+
                     const claudeStream = await streamClaude(
                         apiMessages,
-                        FIRST_CONVERSATION_SYSTEM_PROMPT,
+                        systemPrompt,
                         { temperature: 0.7, maxTokens: 300, model: 'sonnet' }
                     );
 

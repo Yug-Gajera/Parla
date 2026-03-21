@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { injectLevelRules } from '@/lib/claude/prompts';
 import { callClaude } from '@/lib/claude/client';
 
 export const FIRST_CONVERSATION_SYSTEM_PROMPT = `
@@ -94,10 +95,12 @@ export async function POST(req: Request) {
             languageUuid = langData.id;
         }
 
+        const systemPrompt = injectLevelRules(FIRST_CONVERSATION_SYSTEM_PROMPT, 'A1', true);
+
         // Generate Opening Message via Claude
         const response = await callClaude(
             [{ role: 'user', content: 'START SCENARIO. You are Parlo. Send your very first opening line to start the interaction (Step 1). Follow formatting rules precisely.' }],
-            FIRST_CONVERSATION_SYSTEM_PROMPT,
+            systemPrompt,
             { temperature: 0.7, maxTokens: 150, model: 'sonnet' }
         );
 
