@@ -84,7 +84,7 @@ export function SpeakReplyModal({ suggestion, sessionId, userLevel, onClose, onS
 
         try {
             const formData = new FormData();
-            formData.append('file', audioBlob, 'audio.webm');
+            formData.append('audio', audioBlob, 'audio.webm');
             formData.append('language', 'es-ES'); // or mx
 
             // 1. Transcribe

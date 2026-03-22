@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { trackEvent } from '@/lib/posthog';
+import { speakSpanish } from '@/lib/webSpeech';
 
 interface PhaseProps {
     scenario: GuidedScenario;
@@ -43,6 +44,7 @@ export default function Phase3Speak({ scenario, userId, onComplete, onClose }: P
         // Initialize the first AI turn
         setTurns([script[0]]);
         setCurrentStep(1); // The next step is user's turn
+        speakSpanish(script[0].text, 0.75);
     }, []);
 
     const startRecording = async () => {
@@ -88,22 +90,40 @@ export default function Phase3Speak({ scenario, userId, onComplete, onClose }: P
 
         const formData = new FormData();
         formData.append('audio', audioBlob, 'audio.webm');
-        formData.append('target_phrase', targetPhraseObj.text);
-        formData.append('language_id', 'es'); // Default for MVP
+        formData.append('language', 'es');
 
         try {
-            const res = await fetch('/api/conversation/score-attempt', {
+            // 1. Transcribe
+            const transcriptRes = await fetch('/api/voice/transcribe', {
                 method: 'POST',
                 body: formData
             });
+            
+            if (!transcriptRes.ok) throw new Error('Transcription failed');
+            const transcriptData = await transcriptRes.json();
+            const spokenText = transcriptData.transcript || '';
 
-            if (!res.ok) throw new Error('Scoring failed');
-            const data = await res.json();
+            // 2. Score attempt
+            const scoreRes = await fetch('/api/conversation/score-attempt', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    target_text: targetPhraseObj.text,
+                    spoken_text: spokenText,
+                    user_level: 'A1', // Default for guided
+                    session_id: null,
+                    attempt_number: 1,
+                    skipped: false
+                })
+            });
+
+            if (!scoreRes.ok) throw new Error('Scoring failed');
+            const data = await scoreRes.json();
             
             // Add user's scored response
             const newTurn: Turn = { 
                 speaker: 'user', 
-                text: data.transcription || '(Inaudible)', 
+                text: spokenText || '(Inaudible)', 
                 isScored: true, 
                 passed: data.score >= 60 
             };
@@ -116,7 +136,7 @@ export default function Phase3Speak({ scenario, userId, onComplete, onClose }: P
                 phase: 3,
                 turn_number: currentStep,
                 target_text: targetPhraseObj.text,
-                spoken_text: data.transcription,
+                spoken_text: spokenText,
                 score: data.score,
                 passed: data.score >= 60
             } as any);
@@ -126,8 +146,10 @@ export default function Phase3Speak({ scenario, userId, onComplete, onClose }: P
                 setTimeout(() => {
                     const nextStep = currentStep + 1;
                     if (nextStep < script.length) {
-                        setTurns(prev => [...prev, script[nextStep]]);
+                        const aiTurn = script[nextStep];
+                        setTurns(prev => [...prev, aiTurn]);
                         setCurrentStep(nextStep + 1); // Point to next user turn
+                        speakSpanish(aiTurn.text, 0.75);
                     } else {
                         // Finished
                         trackEvent('guided_learning_phase_completed', {
