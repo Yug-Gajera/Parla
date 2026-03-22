@@ -27,6 +27,9 @@ export interface Database {
                     full_name: string | null;
                     avatar_url: string | null;
                     native_language: string;
+                    guided_scenarios_completed: number;
+                    conversation_unlocked: boolean;
+                    guided_scenario_progress: Json;
                     created_at: string;
                     updated_at: string;
                 };
@@ -36,6 +39,9 @@ export interface Database {
                     full_name?: string | null;
                     avatar_url?: string | null;
                     native_language?: string;
+                    guided_scenarios_completed?: number;
+                    conversation_unlocked?: boolean;
+                    guided_scenario_progress?: Json;
                     created_at?: string;
                     updated_at?: string;
                 };
@@ -45,6 +51,9 @@ export interface Database {
                     full_name?: string | null;
                     avatar_url?: string | null;
                     native_language?: string;
+                    guided_scenarios_completed?: number;
+                    conversation_unlocked?: boolean;
+                    guided_scenario_progress?: Json;
                     updated_at?: string;
                 };
             };
@@ -55,6 +64,7 @@ export interface Database {
                     daily_goal_minutes: number;
                     notification_enabled: boolean;
                     preferred_content_types: string[];
+                    guided_learning_enabled: boolean;
                     created_at: string;
                     updated_at: string;
                 };
@@ -64,6 +74,7 @@ export interface Database {
                     daily_goal_minutes?: number;
                     notification_enabled?: boolean;
                     preferred_content_types?: string[];
+                    guided_learning_enabled?: boolean;
                     created_at?: string;
                     updated_at?: string;
                 };
@@ -71,6 +82,7 @@ export interface Database {
                     daily_goal_minutes?: number;
                     notification_enabled?: boolean;
                     preferred_content_types?: string[];
+                    guided_learning_enabled?: boolean;
                     updated_at?: string;
                 };
             };
@@ -378,6 +390,41 @@ export interface Database {
                     session_type?: string | null;
                     duration_minutes?: number;
                     xp_earned?: number;
+                };
+            };
+            guided_scenario_attempts: {
+                Row: {
+                    id: string;
+                    user_id: string;
+                    scenario_id: string;
+                    phase: number;
+                    turn_number: number | null;
+                    target_text: string | null;
+                    spoken_text: string | null;
+                    score: number | null;
+                    passed: boolean | null;
+                    created_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    user_id: string;
+                    scenario_id: string;
+                    phase: number;
+                    turn_number?: number | null;
+                    target_text?: string | null;
+                    spoken_text?: string | null;
+                    score?: number | null;
+                    passed?: boolean | null;
+                    created_at?: string;
+                };
+                Update: {
+                    scenario_id?: string;
+                    phase?: number;
+                    turn_number?: number | null;
+                    target_text?: string | null;
+                    spoken_text?: string | null;
+                    score?: number | null;
+                    passed?: boolean | null;
                 };
             };
         };

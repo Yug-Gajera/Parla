@@ -14,7 +14,7 @@ export default async function PracticePage() {
     // Check if user has completed first conversation
     const { data: userData } = await supabase
         .from('users')
-        .select('has_completed_first_conversation')
+        .select('has_completed_first_conversation, conversation_unlocked, guided_scenarios_completed')
         .eq('id', user.id)
         .single();
     
@@ -57,6 +57,8 @@ export default async function PracticePage() {
             languageId={languageId}
             level={level}
             recentSessions={recentSessions || []}
+            conversationUnlocked={(userData as any)?.conversation_unlocked || false}
+            guidedScenariosCompleted={(userData as any)?.guided_scenarios_completed || 0}
         />
     );
 }

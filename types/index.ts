@@ -60,6 +60,9 @@ export interface User {
     full_name: string | null;
     avatar_url: string | null;
     native_language: string;
+    guided_scenarios_completed: number;
+    conversation_unlocked: boolean;
+    guided_scenario_progress: Record<string, any>;
     created_at: string;
     updated_at: string;
 }
@@ -70,6 +73,7 @@ export interface UserSettings {
     daily_goal_minutes: number;
     notification_enabled: boolean;
     preferred_content_types: string[];
+    guided_learning_enabled: boolean;
     created_at: string;
     updated_at: string;
 }

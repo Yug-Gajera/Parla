@@ -11,6 +11,8 @@ const ReviewSession = dynamic(() => import('../vocabulary/ReviewSession').then(m
 import LearnTab from './LearnTab';
 import ArticleBrowser from '../articles/ArticleBrowser';
 import StoryBrowser from '../stories/StoryBrowser';
+import GuidedScenarioList from './GuidedScenarioList';
+import { trackEvent } from '@/lib/posthog';
 import { VocabularyWord } from '@/hooks/useVocabulary';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,12 +23,18 @@ interface LearnViewProps {
     languageId: string;
     languageName: string;
     level: string;
+    guidedEnabled?: boolean;
+    guidedScenariosCompleted?: number;
 }
 
-export default function LearnView({ languageId, languageName, level }: LearnViewProps) {
+export default function LearnView({ languageId, languageName, level, guidedEnabled = false, guidedScenariosCompleted = 0 }: LearnViewProps) {
     const [reviewWords, setReviewWords] = useState<VocabularyWord[] | null>(null);
 
-    // Default tab: "learn" for A1/A2, "read" for B1+
+    // Two main tabs: Guided and Free Practice
+    // Default to guided if enabled
+    const [mainTab, setMainTab] = useState<'guided' | 'free_practice'>(guidedEnabled ? 'guided' : 'free_practice');
+
+    // Default Sub-tab: "learn" for A1/A2, "read" for B1+
     const isBeginnerLevel = level === 'A1' || level === 'A2';
     const defaultTab = isBeginnerLevel ? 'learn' : 'read';
 
@@ -51,8 +59,7 @@ export default function LearnView({ languageId, languageName, level }: LearnView
                 )}
             </AnimatePresence>
 
-            {/* Main Tabs UI */}
-            <Tabs defaultValue={defaultTab} className="w-full flex-1 flex flex-col h-full">
+            {/* Main Content UI */}
 
                 <div className="flex flex-col md:flex-row md:items-end justify-between px-6 sm:px-10 py-8 pb-4 gap-6">
                     <div>
@@ -61,45 +68,89 @@ export default function LearnView({ languageId, languageName, level }: LearnView
                             {languageName} <span className="mx-2 text-border-strong">|</span> Goal: {level}
                         </p>
                     </div>
-
-                    <TabsList className="bg-surface border border-border p-1.5 rounded-2xl shrink-0 hide-scrollbar overflow-x-auto justify-start self-start md:self-auto h-auto gap-1">
-                        {['learn', 'read', 'stories', 'vocabulary', 'lessons'].map(tab => (
-                            <TabsTrigger 
-                                key={tab}
-                                value={tab} 
-                                className="capitalize font-mono-num text-[10px] tracking-widest px-6 py-2.5 rounded-xl data-[state=active]:bg-card data-[state=active]:text-accent data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-border-strong text-text-muted hover:text-text-secondary transition-all"
-                            >
-                                {tab}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
                 </div>
 
-                <div className="flex-1 w-full px-6 sm:px-10 py-6 pb-20 overflow-hidden relative">
-
-                    <TabsContent value="learn" className="h-full m-0 data-[state=inactive]:hidden flex flex-col overflow-y-auto custom-scrollbar">
-                        <LearnTab languageId={languageId} languageName={languageName} level={level} />
-                    </TabsContent>
-
-                    <TabsContent value="read" className="h-full m-0 data-[state=inactive]:hidden flex flex-col overflow-y-auto custom-scrollbar">
-                        <ArticleBrowser languageId={languageId} userLevel={level} />
-                    </TabsContent>
-
-                    <TabsContent value="stories" className="h-full m-0 data-[state=inactive]:hidden flex flex-col overflow-y-auto custom-scrollbar">
-                        <StoryBrowser languageId={languageId} />
-                    </TabsContent>
-
-                    <TabsContent value="vocabulary" className="h-full m-0 data-[state=inactive]:hidden flex flex-col">
-                        <ActionBanner languageId={languageId} onStart={handleStartReview} />
-                        <DeckViewer languageId={languageId} onStartReview={handleStartReview} />
-                    </TabsContent>
-
-                    <TabsContent value="lessons" className="m-0 data-[state=inactive]:hidden h-full flex flex-col overflow-y-auto custom-scrollbar">
-                        <LessonsPlaceholder />
-                    </TabsContent>
-
+                {/* ── Main Top Tabs (Guided vs Free Practice) ── */}
+                <div className="flex items-center gap-6 px-6 sm:px-10 overflow-x-auto custom-scrollbar border-b border-[#1e1e1e]">
+                    <button
+                        onClick={() => {
+                            setMainTab('guided');
+                            trackEvent('learn_main_tab_switched', { tab: 'guided' });
+                        }}
+                        className={`text-[11px] font-mono-num tracking-widest uppercase py-3 border-b-2 whitespace-nowrap transition-all ${mainTab === 'guided'
+                                ? 'border-[#E8521A] text-[#E8521A]'
+                                : 'border-transparent text-text-secondary hover:text-text-primary'
+                            }`}
+                    >
+                        Guided
+                    </button>
+                    <button
+                        onClick={() => {
+                            setMainTab('free_practice');
+                            trackEvent('learn_main_tab_switched', { tab: 'free_practice' });
+                        }}
+                        className={`text-[11px] font-mono-num tracking-widest uppercase py-3 border-b-2 whitespace-nowrap transition-all ${mainTab === 'free_practice'
+                                ? 'border-[#E8521A] text-[#E8521A]'
+                                : 'border-transparent text-text-secondary hover:text-text-primary'
+                            }`}
+                    >
+                        Free Practice
+                    </button>
                 </div>
-            </Tabs>
+
+                <div className="flex-1 w-full flex flex-col overflow-hidden relative">
+                    
+                    {mainTab === 'guided' && (
+                        <div className="flex-1 w-full px-6 sm:px-10 py-6 pb-20 overflow-y-auto custom-scrollbar">
+                            <GuidedScenarioList 
+                                languageId={languageId} 
+                                level={level}
+                                completedCount={guidedScenariosCompleted}
+                            />
+                        </div>
+                    )}
+
+                    {mainTab === 'free_practice' && (
+                        <Tabs defaultValue={defaultTab} className="w-full flex-1 flex flex-col h-full">
+                            <div className="px-6 sm:px-10 py-4 pb-0 flex overflow-x-auto hide-scrollbar">
+                                <TabsList className="bg-surface border border-border p-1.5 rounded-2xl shrink-0 h-auto gap-1">
+                                    {['learn', 'read', 'stories', 'vocabulary', 'lessons'].map(tab => (
+                                        <TabsTrigger 
+                                            key={tab}
+                                            value={tab} 
+                                            className="capitalize font-mono-num text-[10px] tracking-widest px-6 py-2.5 rounded-xl data-[state=active]:bg-card data-[state=active]:text-accent data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-border-strong text-text-muted hover:text-text-secondary transition-all"
+                                        >
+                                            {tab}
+                                        </TabsTrigger>
+                                    ))}
+                                </TabsList>
+                            </div>
+
+                            <div className="flex-1 w-full px-6 sm:px-10 py-6 pb-20 overflow-hidden relative">
+                                <TabsContent value="learn" className="h-full m-0 data-[state=inactive]:hidden flex flex-col overflow-y-auto custom-scrollbar">
+                                    <LearnTab languageId={languageId} languageName={languageName} level={level} />
+                                </TabsContent>
+
+                                <TabsContent value="read" className="h-full m-0 data-[state=inactive]:hidden flex flex-col overflow-y-auto custom-scrollbar">
+                                    <ArticleBrowser languageId={languageId} userLevel={level} />
+                                </TabsContent>
+
+                                <TabsContent value="stories" className="h-full m-0 data-[state=inactive]:hidden flex flex-col overflow-y-auto custom-scrollbar">
+                                    <StoryBrowser languageId={languageId} />
+                                </TabsContent>
+
+                                <TabsContent value="vocabulary" className="h-full m-0 data-[state=inactive]:hidden flex flex-col">
+                                    <ActionBanner languageId={languageId} onStart={handleStartReview} />
+                                    <DeckViewer languageId={languageId} onStartReview={handleStartReview} />
+                                </TabsContent>
+
+                                <TabsContent value="lessons" className="m-0 data-[state=inactive]:hidden h-full flex flex-col overflow-y-auto custom-scrollbar">
+                                    <LessonsPlaceholder />
+                                </TabsContent>
+                            </div>
+                        </Tabs>
+                    )}
+                </div>
         </div>
     );
 }

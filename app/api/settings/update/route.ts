@@ -12,12 +12,19 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { daily_goal_minutes, notification_enabled, preferred_content_types } = body;
+        const { daily_goal_minutes, notification_enabled, preferred_content_types, guided_learning_enabled } = body;
 
         const updates: any = {};
         if (daily_goal_minutes !== undefined) updates.daily_goal_minutes = daily_goal_minutes;
         if (notification_enabled !== undefined) updates.notification_enabled = notification_enabled;
         if (preferred_content_types !== undefined) updates.preferred_content_types = preferred_content_types;
+        if (guided_learning_enabled !== undefined) updates.guided_learning_enabled = guided_learning_enabled;
+
+        // If user turns off guided learning, immediately unlock conversations
+        if (guided_learning_enabled === false) {
+            // @ts-ignore
+            await supabase.from('users').update({ conversation_unlocked: true }).eq('id', user.id);
+        }
 
         // Verify if a setting row exists via Upsert using on_conflict
         const { data, error } = await supabase

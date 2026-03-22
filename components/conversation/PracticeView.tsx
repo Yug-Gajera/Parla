@@ -15,6 +15,7 @@ import { useSituationHistory } from '@/hooks/useSituationHistory';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePlanLimits } from '@/hooks/usePlanLimits';
 import { PaywallModal } from '@/components/shared/PaywallModal';
+import { trackEvent } from '@/lib/posthog';
 
 // Maps lucide icon names from our DB to components
 import * as LucideIcons from 'lucide-react';
@@ -23,6 +24,8 @@ interface PracticeViewProps {
     languageId: string;
     level: string;
     recentSessions: any[];
+    conversationUnlocked?: boolean;
+    guidedScenariosCompleted?: number;
 }
 
 interface PreSessionData {
@@ -34,7 +37,9 @@ interface PreSessionData {
     situationTeaser?: string;
 }
 
-export default function PracticeView({ languageId, level, recentSessions }: PracticeViewProps) {
+import { createClient } from '@/lib/supabase/client';
+
+export default function PracticeView({ languageId, level, recentSessions, conversationUnlocked = false, guidedScenariosCompleted = 0 }: PracticeViewProps) {
     const [activeScenarioId, setActiveScenarioId] = useState<string | null>(null);
     const [preSession, setPreSession] = useState<PreSessionData | null>(null);
     const { isUnlocked, totalUnlocked, isLoading: modulesLoading } = useModules(languageId);
@@ -62,13 +67,36 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
     };
     const userLevelNum = levelMap[level] || 1;
 
+    const [unlockedLocally, setUnlockedLocally] = useState(conversationUnlocked);
+    const [unlocking, setUnlocking] = useState(false);
+    const supabase = createClient();
+
+    const handleUnlock = async () => {
+        setUnlocking(true);
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+            // @ts-ignore
+            await supabase.from('users').update({ conversation_unlocked: true }).eq('id', user.id);
+            trackEvent('conversation_unlocked_manually', {
+                user_id: user.id,
+                scenarios_completed: guidedScenariosCompleted
+            });
+            setUnlockedLocally(true);
+        }
+        setUnlocking(false);
+    };
+
     const isAccessible = (scenarioId: string, scenarioDifficulty: string) => {
+        if (isBeginnerLevel && !unlockedLocally) return false;
+        
         if (!isBeginnerLevel) {
             const reqLevelNum = levelMap[scenarioDifficulty] || 1;
             return reqLevelNum <= userLevelNum;
         }
         return isUnlocked(scenarioId);
     };
+
+    const isSoftLocked = isBeginnerLevel && !unlockedLocally;
 
     const showPreSession = (scenarioId: string) => {
         const scenario = SCENARIOS.find(s => s.id === scenarioId);
@@ -215,65 +243,98 @@ export default function PracticeView({ languageId, level, recentSessions }: Prac
                 </motion.div>
             )}
 
-            {/* Surprise Me button */}
-            <div className="mb-14">
-                <Button
-                    variant="outline"
-                    onClick={handleSurpriseMe}
-                    className="btn-action w-fit h-14 px-8 rounded-[18px]"
-                >
-                    <Shuffle className="w-4 h-4 mr-3" /> Random Topic
-                </Button>
-            </div>
-
-            {/* Recents */}
-            <div className="mb-20">
-                <h3 className="text-xs font-mono-num uppercase tracking-widest text-text-muted font-bold mb-8 flex items-center gap-3">
-                    <Star className="w-4 h-4 text-[#E8521A]" /> Recent Chats
-                </h3>
-                {recentSessions && recentSessions.length > 0 ? (
-                    <div className="flex gap-6 overflow-x-auto pb-6 hide-scrollbar px-1">
-                        {recentSessions.slice(0, 3).map((session, i) => {
-                            const sc = SCENARIOS.find(s => s.id === session.scenario_type);
-                            return (
-                                <Card key={i} className="min-w-[300px] sm:min-w-[360px] p-8 shrink-0 bg-card border-border hover:border-accent-border rounded-[18px] transition-all flex flex-col relative overflow-hidden group shadow-sm hover:shadow-md">
-                                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#E8521A]/5 rounded-bl-full -z-10 group-hover:bg-[#E8521A]/10 transition-colors" />
-                                    
-                                    <div className="flex justify-between items-start mb-6">
-                                        <div className="font-display text-xl text-text-primary pr-4">{sc?.name || 'Unknown Topic'}</div>
-                                        <div className="pill-score mr-2">
-                                            {(session as any).overall_score}%
-                                        </div>
-                                    </div>
-                                    <div className="text-[10px] font-mono-num font-bold text-text-muted uppercase tracking-wider mb-10 flex items-center gap-2">
-                                        <span>{new Date(session.created_at).toLocaleDateString()}</span>
-                                        <span className="w-1 h-1 bg-border rounded-full" />
-                                        <span>{session.duration_minutes} MIN</span>
-                                    </div>
-                                    <Button
-                                        className="btn-action"
-                                        onClick={() => showPreSession(session.scenario_type)}
-                                    >
-                                        Chat again
-                                    </Button>
-                                </Card>
-                            );
-                        })}
+            {isSoftLocked ? (
+                <div className="mb-14 relative overflow-hidden bg-card border border-[#E8521A]/30 rounded-3xl p-8 sm:p-10 shadow-sm text-center">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#E8521A]/10 rounded-bl-full -z-10 blur-2xl" />
+                    <div className="w-16 h-16 rounded-full bg-surface border border-[#E8521A]/20 flex items-center justify-center mx-auto mb-6">
+                        <Lock className="w-8 h-8 text-[#E8521A]" />
                     </div>
-                ) : (
-                    <Card className="p-14 border-border border-dashed bg-card rounded-[40px] flex flex-col items-center justify-center text-center gap-6">
-                        <div className="w-20 h-20 rounded-full bg-surface border border-border flex items-center justify-center shadow-inner">
-                            <Clock className="w-8 h-8 text-text-muted" />
+                    <h2 className="text-2xl md:text-3xl font-display text-text-primary mb-3">
+                        Unlock Open Conversations
+                    </h2>
+                    <p className="text-text-secondary max-w-lg mx-auto mb-8 leading-relaxed">
+                        To ensure you have the best experience, free conversation practice unlocks after you reach A2 level or complete 3 Guided Scenarios in the Learn tab.
+                    </p>
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono-num font-bold uppercase tracking-widest bg-surface border border-border px-3 py-1 rounded-full shadow-inner">
+                                <span className="text-[#E8521A]">{guidedScenariosCompleted}</span> / 3 Scenarios Completed
+                            </span>
                         </div>
-                        <div>
-                            <h4 className="font-display text-2xl text-text-primary mb-3">No chats yet</h4>
-                            <p className="text-sm text-text-secondary max-w-sm leading-relaxed">
-                                Start your first conversation to practice speaking.
-                            </p>
-                        </div>
-                    </Card>
-                )}
-            </div>
+                        {guidedScenariosCompleted >= 3 && (
+                            <Button 
+                                onClick={handleUnlock}
+                                disabled={unlocking}
+                                className="bg-[#E8521A] text-background hover:brightness-110 font-mono text-[11px] uppercase tracking-widest font-bold h-12 px-8 rounded-full shadow-[0_4px_20px_rgba(232,82,26,0.2)] transition-all mt-4"
+                            >
+                                {unlocking ? 'Unlocking...' : 'I feel ready'}
+                            </Button>
+                        )}
+                    </div>
+                </div>
+            ) : (
+                <>
+                    {/* Surprise Me button */}
+                    <div className="mb-14">
+                        <Button
+                            variant="outline"
+                            onClick={handleSurpriseMe}
+                            className="btn-action w-fit h-14 px-8 rounded-[18px]"
+                        >
+                            <Shuffle className="w-4 h-4 mr-3" /> Random Topic
+                        </Button>
+                    </div>
+
+                    {/* Recents */}
+                    <div className="mb-20">
+                        <h3 className="text-xs font-mono-num uppercase tracking-widest text-text-muted font-bold mb-8 flex items-center gap-3">
+                            <Star className="w-4 h-4 text-[#E8521A]" /> Recent Chats
+                        </h3>
+                        {recentSessions && recentSessions.length > 0 ? (
+                            <div className="flex gap-6 overflow-x-auto pb-6 hide-scrollbar px-1">
+                                {recentSessions.slice(0, 3).map((session, i) => {
+                                    const sc = SCENARIOS.find(s => s.id === session.scenario_type);
+                                    return (
+                                        <Card key={i} className="min-w-[300px] sm:min-w-[360px] p-8 shrink-0 bg-card border-border hover:border-accent-border rounded-[18px] transition-all flex flex-col relative overflow-hidden group shadow-sm hover:shadow-md">
+                                            <div className="absolute top-0 right-0 w-24 h-24 bg-[#E8521A]/5 rounded-bl-full -z-10 group-hover:bg-[#E8521A]/10 transition-colors" />
+                                            
+                                            <div className="flex justify-between items-start mb-6">
+                                                <div className="font-display text-xl text-text-primary pr-4">{sc?.name || 'Unknown Topic'}</div>
+                                                <div className="pill-score mr-2">
+                                                    {(session as any).overall_score}%
+                                                </div>
+                                            </div>
+                                            <div className="text-[10px] font-mono-num font-bold text-text-muted uppercase tracking-wider mb-10 flex items-center gap-2">
+                                                <span>{new Date(session.created_at).toLocaleDateString()}</span>
+                                                <span className="w-1 h-1 bg-border rounded-full" />
+                                                <span>{session.duration_minutes} MIN</span>
+                                            </div>
+                                            <Button
+                                                className="btn-action"
+                                                onClick={() => showPreSession(session.scenario_type)}
+                                            >
+                                                Chat again
+                                            </Button>
+                                        </Card>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <Card className="p-14 border-border border-dashed bg-card rounded-[40px] flex flex-col items-center justify-center text-center gap-6">
+                                <div className="w-20 h-20 rounded-full bg-surface border border-border flex items-center justify-center shadow-inner">
+                                    <Clock className="w-8 h-8 text-text-muted" />
+                                </div>
+                                <div>
+                                    <h4 className="font-display text-2xl text-text-primary mb-3">No chats yet</h4>
+                                    <p className="text-sm text-text-secondary max-w-sm leading-relaxed">
+                                        Start your first conversation to practice speaking.
+                                    </p>
+                                </div>
+                            </Card>
+                        )}
+                    </div>
+                </>
+            )}
 
             {/* Grid */}
             <h3 className="text-xs font-mono-num uppercase tracking-widest text-text-muted font-bold mb-8 flex items-center gap-3">

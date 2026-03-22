@@ -60,6 +60,7 @@ export const metadata: Metadata = {
 };
 
 import { Toaster } from 'sonner';
+import { PostHogProvider } from '@/components/providers/PostHogProvider';
 
 export default function RootLayout({
   children,
@@ -71,8 +72,10 @@ export default function RootLayout({
       <body
         className={`${cormorantGaramond.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        {children}
-        <Toaster position="top-center" richColors />
+        <PostHogProvider>
+          {children}
+          <Toaster position="top-center" richColors />
+        </PostHogProvider>
       </body>
     </html>
   );
