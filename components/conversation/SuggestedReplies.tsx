@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lightbulb, Loader2, Volume2, Send, X } from 'lucide-react';
+import { speakSpanish } from '@/lib/webSpeech';
 
 export interface Suggestion {
     spanish: string;
@@ -25,15 +26,7 @@ export function SuggestedReplies({ sessionId, conversationHistory, level, speakT
     const [selectedForChoice, setSelectedForChoice] = useState<number | null>(null);
 
     const speakPhonetic = (text: string) => {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.75;
-            utterance.lang = 'es-ES';
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            window.speechSynthesis.speak(utterance);
-        }
+        speakSpanish(text, 0.75);
     };
 
     const isA1A2 = level === 'A1' || level === 'A2';

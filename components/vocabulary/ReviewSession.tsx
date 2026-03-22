@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle2, RotateCcw, Brain, Zap, X, Fingerprint, Volume2 } from 'lucide-react';
 import { calculateSM2 } from '@/lib/utils/vocabulary';
+import { speakSpanish } from '@/lib/webSpeech';
 
 type SessionState = 'idle' | 'reviewing' | 'complete';
 
@@ -117,15 +118,7 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
     };
 
     const speakWord = (text: string) => {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.8;
-            utterance.lang = 'es-ES';
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            window.speechSynthesis.speak(utterance);
-        }
+        speakSpanish(text, 0.8);
     };
 
     // ── Render: IDLE ──

@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { ChatMessage } from '@/hooks/useConversation';
 import { motion } from 'framer-motion';
 import { Mic2, AlertTriangle, ChevronDown, ChevronUp, Volume2 } from 'lucide-react';
+import { speakSpanish } from '@/lib/webSpeech';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -19,15 +20,7 @@ export function MessageBubble({ message, isAiStreaming }: MessageBubbleProps) {
     const [showClarityDetails, setShowClarityDetails] = useState(false);
 
     const speakMessage = (text: string) => {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.85;
-            utterance.lang = 'es-ES';
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            window.speechSynthesis.speak(utterance);
-        }
+        speakSpanish(text, 0.85);
     };
 
     const timeString = message.timestamp

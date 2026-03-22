@@ -7,6 +7,7 @@
 import React from 'react';
 import { X, Plus, Check, Loader2, BookOpen, Volume2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { speakSpanish } from '@/lib/webSpeech';
 
 export interface WordData {
     word: string;
@@ -59,15 +60,7 @@ export default function WordPopover({
     if (!wordData && !isLoading) return null;
 
     const speakWord = (text: string) => {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.75;
-            utterance.lang = 'es-ES';
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            window.speechSynthesis.speak(utterance);
-        }
+        speakSpanish(text, 0.75);
     };
 
     return (

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { speakSpanish } from '@/lib/webSpeech';
 import { Loader2, Send, Mic2, Bot, CheckCircle2 } from 'lucide-react';
 import { MicrophoneButton } from '@/components/conversation/MicrophoneButton';
 import { type TranscriptionResult } from '@/lib/voice/transcription';
@@ -49,17 +50,9 @@ export function FirstConversationWindow({ languageId, sessionId: initialSessionI
     }, [messages, isStreaming]);
 
     const speakMessage = (text: string) => {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            // Strip the [English] parts from the speech
-            const cleanText = text.replace(/\[[^\]]+\]/g, '').trim();
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.rate = 0.75;
-            utterance.lang = 'es-ES';
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            window.speechSynthesis.speak(utterance);
-        }
+        // Strip the [English] parts from the speech
+        const cleanText = text.replace(/\[[^\]]+\]/g, '').trim();
+        speakSpanish(cleanText, 0.75);
     };
 
     // Auto-play AI messages when they finish streaming
