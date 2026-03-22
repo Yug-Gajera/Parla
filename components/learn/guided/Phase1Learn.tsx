@@ -21,7 +21,10 @@ export default function Phase1Learn({ scenario, onComplete, onClose }: PhaseProp
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'es-ES'; // assuming spanish for MVP
+            utterance.rate = 0.7;
+            utterance.lang = 'es-ES';
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
             window.speechSynthesis.speak(utterance);
         }
     };

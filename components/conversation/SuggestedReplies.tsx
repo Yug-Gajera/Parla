@@ -24,6 +24,18 @@ export function SuggestedReplies({ sessionId, conversationHistory, level, speakT
     const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
     const [selectedForChoice, setSelectedForChoice] = useState<number | null>(null);
 
+    const speakPhonetic = (text: string) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.75;
+            utterance.lang = 'es-ES';
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+    };
+
     const isA1A2 = level === 'A1' || level === 'A2';
     // The requirement is enforced for A1/A2. B1+ can choose if the setting is on, or if the setting is off they also don't have to.
     const mustSpeak = isA1A2 && speakToReplyEnabled;
@@ -109,7 +121,17 @@ export function SuggestedReplies({ sessionId, conversationHistory, level, speakT
                                             className="flex flex-col text-left p-3 rounded-xl border border-border bg-background hover:border-accent hover:bg-accent/5 transition-colors"
                                         >
                                             <span className="font-serif text-[18px] text-text-primary mb-1">{s.spanish}</span>
-                                            <span className="font-body text-[13px] text-text-secondary italic">{s.english}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-body text-[13px] text-text-secondary italic">{s.english}</span>
+                                                {s.phonetic && (
+                                                    <button 
+                                                        onClick={(e) => { e.stopPropagation(); speakPhonetic(s.phonetic || s.spanish); }}
+                                                        className="text-[10px] text-accent hover:underline font-mono uppercase tracking-widest"
+                                                    >
+                                                        Speak Phonetic
+                                                    </button>
+                                                )}
+                                            </div>
                                         </button>
                                         
                                         {/* B1+ Choice prompt */}

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { VocabularyWord } from '@/hooks/useVocabulary';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, RotateCcw, Brain, Zap, X, Fingerprint } from 'lucide-react';
+import { CheckCircle2, RotateCcw, Brain, Zap, X, Fingerprint, Volume2 } from 'lucide-react';
 import { calculateSM2 } from '@/lib/utils/vocabulary';
 
 type SessionState = 'idle' | 'reviewing' | 'complete';
@@ -113,6 +113,18 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
         } else {
             setIsFlipped(false);
             setCurrentIndex(prev => prev + 1);
+        }
+    };
+
+    const speakWord = (text: string) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.8;
+            utterance.lang = 'es-ES';
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
         }
     };
 
@@ -261,9 +273,17 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
                             ) : (
                                 // BACK
                                 <div className="flex flex-col items-center justify-center h-full w-full animation-fade-in relative z-10">
-                                    <span className="text-3xl sm:text-4xl font-display text-[#E8521A] mb-3 opacity-90">
-                                        {baseWord.word}
-                                    </span>
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <span className="text-3xl sm:text-4xl font-display text-[#E8521A] opacity-90">
+                                            {baseWord.word}
+                                        </span>
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); speakWord(baseWord.word); }}
+                                            className="p-1.5 rounded-full bg-[#E8521A]/10 text-[#E8521A] hover:bg-[#E8521A]/20 transition-colors"
+                                        >
+                                            <Volume2 className="w-5 h-5" />
+                                        </button>
+                                    </div>
                                     <span className="text-4xl sm:text-6xl font-display text-text-primary mb-6 leading-tight tracking-tight">
                                         {baseWord.translation}
                                     </span>

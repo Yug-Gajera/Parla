@@ -5,7 +5,7 @@
 // ============================================================
 
 import React from 'react';
-import { X, Plus, Check, Loader2, BookOpen } from 'lucide-react';
+import { X, Plus, Check, Loader2, BookOpen, Volume2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export interface WordData {
@@ -58,6 +58,18 @@ export default function WordPopover({
 }: WordPopoverProps) {
     if (!wordData && !isLoading) return null;
 
+    const speakWord = (text: string) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.75;
+            utterance.lang = 'es-ES';
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 16, scale: 0.96 }}
@@ -92,9 +104,17 @@ export default function WordPopover({
                     <div className="flex flex-col">
                         {/* Header */}
                         <div className="mb-5 pr-8">
-                            <h3 className="font-display text-2xl font-semibold text-text-primary leading-none mb-2">
-                                {wordData.word}
-                            </h3>
+                            <div className="flex items-center gap-2 mb-2">
+                                <h3 className="font-display text-2xl font-semibold text-text-primary leading-none">
+                                    {wordData.word}
+                                </h3>
+                                <button 
+                                    onClick={() => speakWord(wordData.word)}
+                                    className="p-1.5 rounded-full bg-surface-hover text-text-muted hover:text-[#E8521A] transition-colors"
+                                >
+                                    <Volume2 className="w-4 h-4" />
+                                </button>
+                            </div>
                             {wordData.part_of_speech && (
                                 <span className="inline-block px-2 py-0.5 rounded-md bg-surface border border-border-strong text-text-muted text-[11px] font-medium uppercase tracking-wider font-mono-num">
                                     {wordData.part_of_speech}

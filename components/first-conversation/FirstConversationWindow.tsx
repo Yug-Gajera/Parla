@@ -48,6 +48,30 @@ export function FirstConversationWindow({ languageId, sessionId: initialSessionI
         if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }, [messages, isStreaming]);
 
+    const speakMessage = (text: string) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            // Strip the [English] parts from the speech
+            const cleanText = text.replace(/\[[^\]]+\]/g, '').trim();
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.rate = 0.75;
+            utterance.lang = 'es-ES';
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+    };
+
+    // Auto-play AI messages when they finish streaming
+    const lastMessageRef = useRef<string>('');
+    useEffect(() => {
+        const lastMsg = messages[messages.length - 1];
+        if (lastMsg && lastMsg.role === 'assistant' && !isStreaming && lastMsg.content !== lastMessageRef.current) {
+            speakMessage(lastMsg.content);
+            lastMessageRef.current = lastMsg.content;
+        }
+    }, [messages, isStreaming]);
+
     // Start session if no session ID
     useEffect(() => {
         if (!sessionId) {

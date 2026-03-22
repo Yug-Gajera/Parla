@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, XCircle, RefreshCcw, LayoutGrid, MessageSquareQuote, Shuffle, Sparkles, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, XCircle, RefreshCcw, LayoutGrid, MessageSquareQuote, Shuffle, Sparkles, AlertTriangle, Volume2 } from 'lucide-react';
 import { SCENARIOS } from '@/lib/data/scenarios';
 
 interface ScoreCardProps {
@@ -54,6 +54,18 @@ export function ScoreCard({
     const itemV: any = {
         hidden: { opacity: 0, y: 16 },
         show: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } }
+    };
+
+    const speakCorrection = (text: string) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.7;
+            utterance.lang = 'es-ES';
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
     };
 
     return (
@@ -210,7 +222,15 @@ export function ScoreCard({
                                                 {err.error}
                                             </span>
                                             <span className="hidden lg:inline text-text-muted">→</span>
-                                            <span className="text-[15px] font-bold text-success font-mono-num">{err.correction}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[15px] font-bold text-success font-mono-num">{err.correction}</span>
+                                                <button 
+                                                    onClick={() => speakCorrection(err.correction)}
+                                                    className="p-1 rounded-full bg-success/10 text-success hover:bg-success/20 transition-colors"
+                                                >
+                                                    <Volume2 className="w-3 h-3" />
+                                                </button>
+                                            </div>
                                         </div>
                                         <p className="text-sm text-text-secondary leading-relaxed">{err.explanation}</p>
                                     </div>

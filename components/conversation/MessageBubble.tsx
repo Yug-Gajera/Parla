@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import { ChatMessage } from '@/hooks/useConversation';
 import { motion } from 'framer-motion';
-import { Mic2, AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Mic2, AlertTriangle, ChevronDown, ChevronUp, Volume2 } from 'lucide-react';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -17,6 +17,18 @@ interface MessageBubbleProps {
 export function MessageBubble({ message, isAiStreaming }: MessageBubbleProps) {
     const isAI = message.role === 'assistant';
     const [showClarityDetails, setShowClarityDetails] = useState(false);
+
+    const speakMessage = (text: string) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.85;
+            utterance.lang = 'es-ES';
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+    };
 
     const timeString = message.timestamp
         ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -35,8 +47,17 @@ export function MessageBubble({ message, isAiStreaming }: MessageBubbleProps) {
                 
                 {/* AI Avatar */}
                 {isAI && (
-                    <div className="w-8 h-8 rounded-full bg-[#E8521A]/10 text-[#E8521A] flex items-center justify-center font-bold text-[10px] tracking-widest border border-[#E8521A]/20 shrink-0 mb-1 font-mono-num">
-                        AI
+                    <div className="flex flex-col items-center gap-2 mb-1">
+                        <div className="w-8 h-8 rounded-full bg-[#E8521A]/10 text-[#E8521A] flex items-center justify-center font-bold text-[10px] tracking-widest border border-[#E8521A]/20 shrink-0 font-mono-num">
+                            AI
+                        </div>
+                        <button 
+                            onClick={() => speakMessage(message.content)}
+                            disabled={isAiStreaming}
+                            className="p-1 rounded-full bg-surface-hover text-text-muted hover:text-[#E8521A] transition-colors disabled:opacity-30"
+                        >
+                            <Volume2 className="w-3 h-3" />
+                        </button>
                     </div>
                 )}
 
