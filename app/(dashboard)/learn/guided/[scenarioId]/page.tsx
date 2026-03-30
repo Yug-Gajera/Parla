@@ -50,7 +50,30 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
         } else if (phase === 'practice') {
             setCurrentPhase('speak');
         } else if (phase === 'speak') {
-            // Update users table guided_scenarios_completed if this is a new completion
+            // 1. Save all phrases from this scenario to the user's vocabulary deck
+            try {
+                const wordsToImport = scenario.phrases.map(p => ({
+                    spanish: p.text,
+                    english: p.translation,
+                    cefr_level: 'A1',
+                    part_of_speech: 'phrase'
+                }));
+
+                await fetch('/api/vocabulary/import-batch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        words: wordsToImport,
+                        importSource: 'guided_scenario',
+                        languageId: 'es'
+                    })
+                });
+            } catch (err) {
+                console.error('Failed to import vocabulary:', err);
+                // Non-blocking: we still want to show the completion screen
+            }
+
+            // 2. Update users table guided_scenarios_completed if this is a new completion
             // For now, fetch current completed, compare scenario order, and if scenario.order > completed, update.
             // @ts-ignore
             const { data } = await supabase.from('users').select('guided_scenarios_completed').eq('id', user.id).single();
