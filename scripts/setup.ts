@@ -16,7 +16,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function setup() {
-    console.log('🚀 Starting FluentLoop Environment Setup...');
+    console.log('🚀 Starting Parlova Environment Setup...');
 
     // 1. Verify connection
     const { data: health, error: healthError } = await supabase.from('languages').select('count', { count: 'exact', head: true });
@@ -56,7 +56,7 @@ async function setup() {
         }
     }
 
-    console.log('\n✨ Setup complete! FluentLoop is ready for development.');
+    console.log('\n✨ Setup complete! Parlova is ready for development.');
     console.log('👉 Run "npm run dev" to start the application.');
 }
 

@@ -1,5 +1,5 @@
 // ============================================================
-// FluentLoop — Root Middleware
+// Parlova — Root Middleware
 // ============================================================
 
 import { type NextRequest } from 'next/server';
