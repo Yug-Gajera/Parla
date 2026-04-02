@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
 
         // Generate via OpenAI TTS
         const mp3Response = await getOpenAI().audio.speech.create({
-            model: 'tts-1',
+            model: 'tts-1-hd',
             voice: selectedVoice as any,
             input: text,
             speed: selectedSpeed,
