@@ -59,7 +59,7 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
                     part_of_speech: 'phrase'
                 }));
 
-                await fetch('/api/vocabulary/import-batch', {
+                const importRes = await fetch('/api/vocabulary/import-batch', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -68,6 +68,11 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
                         languageId: 'es'
                     })
                 });
+
+                if (!importRes.ok) {
+                    const errBody = await importRes.json().catch(() => ({}));
+                    console.error('Vocab import failed:', importRes.status, errBody);
+                }
             } catch (err) {
                 console.error('Failed to import vocabulary:', err);
                 // Non-blocking: we still want to show the completion screen
@@ -84,6 +89,7 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
             }
             setCurrentPhase('complete');
         } else if (phase === 'complete') {
+            router.refresh();
             router.push('/learn');
         }
     };

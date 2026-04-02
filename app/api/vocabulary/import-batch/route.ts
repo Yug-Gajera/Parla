@@ -26,10 +26,10 @@ export async function POST(req: Request) {
         const { data: { user }, error: authError } = await (supabase.auth as any).getUser();
 
         if (authError || !user) {
-            // return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
         
-        let testUserId = user ? user.id : 'b0e008fa-aaee-4bf4-b040-4fe75ad39be6';
+        const userId = user.id;
 
 
         const body = await req.json();
@@ -123,7 +123,7 @@ export async function POST(req: Request) {
         const { data: existingUserVocab } = await serviceClient
             .from('user_vocabulary')
             .select('id, word_id, interval_days')
-            .eq('user_id', testUserId)
+            .eq('user_id', userId)
             .in('word_id', wordIds);
             
         const existingUserVocabMap = new Map<string, any>();
@@ -184,7 +184,7 @@ export async function POST(req: Request) {
             } else {
                 // New word for the user
                 recordsToInsert.push({
-                    user_id: testUserId,
+                    user_id: userId,
                     word_id: wordId,
                     status: status,
                     interval_days: mappedInterval,
@@ -262,7 +262,7 @@ export async function POST(req: Request) {
                 estimated_level_from_import: estimatedLevel,
                 last_vocabulary_import: new Date().toISOString()
             })
-            .eq('id', testUserId);
+            .eq('id', userId);
 
         if (profileError) {
              console.error('Profile update failed:', profileError);

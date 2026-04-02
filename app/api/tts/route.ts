@@ -15,17 +15,13 @@ function getOpenAI(): OpenAI {
 
 export async function POST(req: NextRequest) {
     try {
-        const supabase = await createClient();
-        const { data: { session } } = await supabase.auth.getSession();
+        // Parse body and create supabase client in parallel
+        const [supabase, body] = await Promise.all([
+            createClient(),
+            req.json(),
+        ]);
 
-        if (!session) {
-            return NextResponse.json(
-                { error: 'Unauthorised' },
-                { status: 401 }
-            );
-        }
-
-        const { text, speed, voice } = await req.json();
+        const { text, speed, voice } = body;
 
         if (!text || text.length > 500) {
             return NextResponse.json(
@@ -34,21 +30,46 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        // Auth check — run in parallel with cache key generation
+        const authPromise = supabase.auth.getSession();
+
         const selectedVoice = voice || 'nova';
         const selectedSpeed = speed || 1.0;
 
-        // Cache key based on text + speed + voice
         const cacheKey = createHash('md5')
             .update(`${text}-${selectedSpeed}-${selectedVoice}`)
             .digest('hex');
 
-        // Try to serve from cache first
-        const { data: cached } = await supabase
-            .storage
+        // Run auth check + cache lookup + start TTS generation all in parallel
+        // TTS generation is the slowest part, so start it immediately
+        const ttsPromise = getOpenAI().audio.speech.create({
+            model: 'tts-1',
+            voice: selectedVoice as any,
+            input: text,
+            speed: selectedSpeed,
+            response_format: 'mp3',
+        });
+
+        const cachePromise = supabase.storage
             .from('tts-cache')
-            .download(`${cacheKey}.mp3`);
+            .download(`${cacheKey}.mp3`)
+            .catch(() => ({ data: null }));
+
+        // Wait for auth first (fast)
+        const { data: { session } } = await authPromise;
+        if (!session) {
+            return NextResponse.json(
+                { error: 'Unauthorised' },
+                { status: 401 }
+            );
+        }
+
+        // Check cache (may already be resolved)
+        const cacheResult = await cachePromise;
+        const cached = (cacheResult as any)?.data;
 
         if (cached) {
+            // Cancel the TTS promise (it'll run but we won't use it)
             const buffer = await cached.arrayBuffer();
             return new NextResponse(buffer, {
                 headers: {
@@ -58,30 +79,18 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        // Generate via OpenAI TTS
-        const mp3Response = await getOpenAI().audio.speech.create({
-            model: 'tts-1-hd',
-            voice: selectedVoice as any,
-            input: text,
-            speed: selectedSpeed,
-            response_format: 'mp3',
-        });
-
+        // Wait for TTS (already started, so minimal extra wait)
+        const mp3Response = await ttsPromise;
         const audioBuffer = Buffer.from(
             await mp3Response.arrayBuffer()
         );
 
-        // Cache the result in Supabase storage (fire and forget)
+        // Cache + log usage (fire and forget — don't block response)
         supabase.storage
             .from('tts-cache')
-            .upload(
-                `${cacheKey}.mp3`,
-                audioBuffer,
-                { contentType: 'audio/mpeg' }
-            )
-            .catch((err: any) => console.error('TTS cache upload error:', err));
+            .upload(`${cacheKey}.mp3`, audioBuffer, { contentType: 'audio/mpeg' })
+            .catch(() => {});
 
-        // Log usage (fire and forget)
         (supabase as any).from('tts_usage').insert({
             user_id: session.user.id,
             character_count: text.length,
