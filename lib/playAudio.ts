@@ -1,4 +1,5 @@
 let currentAudio: HTMLAudioElement | null = null;
+let currentAbortController: AbortController | null = null;
 
 export type AudioSpeed = 'veryslow' | 'slow' | 'normal' | 'fast';
 
@@ -20,6 +21,9 @@ export async function playSpanishAudio(
 
     stopCurrentAudio();
 
+    const abortController = new AbortController();
+    currentAbortController = abortController;
+
     try {
         onStart?.();
 
@@ -33,13 +37,20 @@ export async function playSpanishAudio(
                 speed: SPEED_MAP[speed],
                 voice,
             }),
+            signal: abortController.signal,
         });
+
+        // Bail out silently if this call was cancelled
+        if (abortController.signal.aborted) return;
 
         if (!response.ok) {
             throw new Error('TTS request failed');
         }
 
         const audioBlob = await response.blob();
+
+        if (abortController.signal.aborted) return;
+
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
         currentAudio = audio;
@@ -53,14 +64,29 @@ export async function playSpanishAudio(
             };
             audio.onerror = () => {
                 URL.revokeObjectURL(audioUrl);
-                currentAudio = null;
-                onError?.();
-                reject(new Error('Playback failed'));
+                // Only treat as real error if not intentionally aborted
+                if (!abortController.signal.aborted) {
+                    currentAudio = null;
+                    onError?.();
+                    reject(new Error('Playback failed'));
+                } else {
+                    resolve();
+                }
             };
-            audio.play().catch(reject);
+            audio.play().catch(err => {
+                if (!abortController.signal.aborted) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
         });
 
     } catch (error) {
+        // Only fallback to Web Speech if this was a real failure,
+        // not an intentional cancellation from stopCurrentAudio()
+        if (abortController.signal.aborted) return;
+
         console.error('Audio error:', error);
         fallbackToWebSpeech(text, speed);
         onEnd?.();
@@ -68,10 +94,22 @@ export async function playSpanishAudio(
 }
 
 export function stopCurrentAudio(): void {
+    // Abort any in-flight fetch
+    if (currentAbortController) {
+        currentAbortController.abort();
+        currentAbortController = null;
+    }
+
+    // Stop HTML audio playback
     if (currentAudio) {
         currentAudio.pause();
         currentAudio.src = '';
         currentAudio = null;
+    }
+
+    // Cancel any active Web Speech fallback
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
     }
 }
 
