@@ -78,15 +78,22 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
                 // Non-blocking: we still want to show the completion screen
             }
 
-            // 2. Update users table guided_scenarios_completed if this is a new completion
-            // For now, fetch current completed, compare scenario order, and if scenario.order > completed, update.
-            // @ts-ignore
-            const { data } = await supabase.from('users').select('guided_scenarios_completed').eq('id', user.id).single();
-            const currentCompleted = (data as any)?.guided_scenarios_completed || 0;
-            if (scenario.order > currentCompleted) {
-                // @ts-ignore
-                await supabase.from('users').update({ guided_scenarios_completed: scenario.order }).eq('id', user.id);
+            // 2. Update guided_scenarios_completed via server-side API (client Supabase can't update users table due to RLS)
+            try {
+                const completeRes = await fetch('/api/guided/complete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ scenarioOrder: scenario.order })
+                });
+
+                if (!completeRes.ok) {
+                    const errBody = await completeRes.json().catch(() => ({}));
+                    console.error('Guided completion update failed:', completeRes.status, errBody);
+                }
+            } catch (err) {
+                console.error('Failed to update guided completion:', err);
             }
+
             setCurrentPhase('complete');
         } else if (phase === 'complete') {
             router.refresh();
