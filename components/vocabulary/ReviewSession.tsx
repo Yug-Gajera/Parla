@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle2, RotateCcw, Brain, Zap, X, Fingerprint, Volume2 } from 'lucide-react';
 import { calculateSM2 } from '@/lib/utils/vocabulary';
-import { speakSpanish } from '@/lib/webSpeech';
+import { playSpanishAudio } from '@/lib/playAudio';
 
 type SessionState = 'idle' | 'reviewing' | 'complete';
 
@@ -118,7 +118,7 @@ export function ReviewSession({ wordsToReview, languageId, onClose, onCompletion
     };
 
     const speakWord = (text: string) => {
-        speakSpanish(text, 0.8);
+        playSpanishAudio(text, 'slow');
     };
 
     // ── Render: IDLE ──

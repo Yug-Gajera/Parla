@@ -3,7 +3,7 @@ import { GuidedScenario } from '@/lib/data/guided_scenarios';
 import { X, Volume2, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent } from '@/lib/posthog';
-import { speakSpanish } from '@/lib/webSpeech';
+import { playSpanishAudio } from '@/lib/playAudio';
 
 interface PhaseProps {
     scenario: GuidedScenario;
@@ -19,7 +19,7 @@ export default function Phase1Learn({ scenario, onComplete, onClose }: PhaseProp
     // We don't have real audio files for these dummy phrases yet,
     // so we'll use a mocked TTS synthesis for demonstration.
     const speakPhrase = (text: string) => {
-        speakSpanish(text, 0.7);
+        playSpanishAudio(text, 'veryslow');
     };
 
     useEffect(() => {

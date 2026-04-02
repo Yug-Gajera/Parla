@@ -7,7 +7,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, XCircle, RefreshCcw, LayoutGrid, MessageSquareQuote, Shuffle, Sparkles, AlertTriangle, Volume2 } from 'lucide-react';
-import { speakSpanish } from '@/lib/webSpeech';
+import { playSpanishAudio } from '@/lib/playAudio';
 import { SCENARIOS } from '@/lib/data/scenarios';
 
 interface ScoreCardProps {
@@ -58,7 +58,7 @@ export function ScoreCard({
     };
 
     const speakCorrection = (text: string) => {
-        speakSpanish(text, 0.7);
+        playSpanishAudio(text, 'veryslow');
     };
 
     return (

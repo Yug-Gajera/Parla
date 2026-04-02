@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { speakSpanish } from '@/lib/webSpeech';
+import { playSpanishAudio } from '@/lib/playAudio';
 import { Loader2, Send, Mic2, Bot, CheckCircle2 } from 'lucide-react';
 import { MicrophoneButton } from '@/components/conversation/MicrophoneButton';
 import { type TranscriptionResult } from '@/lib/voice/transcription';
@@ -52,7 +52,7 @@ export function FirstConversationWindow({ languageId, sessionId: initialSessionI
     const speakMessage = (text: string) => {
         // Strip the [English] parts from the speech
         const cleanText = text.replace(/\[[^\]]+\]/g, '').trim();
-        speakSpanish(cleanText, 0.75);
+        playSpanishAudio(cleanText, 'slow');
     };
 
     // Auto-play AI messages when they finish streaming

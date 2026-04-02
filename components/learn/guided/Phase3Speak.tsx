@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { trackEvent } from '@/lib/posthog';
-import { speakSpanish } from '@/lib/webSpeech';
+import { playSpanishAudio } from '@/lib/playAudio';
 
 interface PhaseProps {
     scenario: GuidedScenario;
@@ -44,7 +44,7 @@ export default function Phase3Speak({ scenario, userId, onComplete, onClose }: P
         // Initialize the first AI turn
         setTurns([script[0]]);
         setCurrentStep(1); // The next step is user's turn
-        speakSpanish(script[0].text, 0.75);
+        playSpanishAudio(script[0].text, 'slow');
     }, []);
 
     const startRecording = async () => {
@@ -149,7 +149,7 @@ export default function Phase3Speak({ scenario, userId, onComplete, onClose }: P
                         const aiTurn = script[nextStep];
                         setTurns(prev => [...prev, aiTurn]);
                         setCurrentStep(nextStep + 1); // Point to next user turn
-                        speakSpanish(aiTurn.text, 0.75);
+                        playSpanishAudio(aiTurn.text, 'slow');
                     } else {
                         // Finished
                         trackEvent('guided_learning_phase_completed', {
