@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GuidedScenario } from '@/lib/data/guided_scenarios';
 import { X, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,21 +10,22 @@ interface PhaseProps {
     onClose: () => void;
 }
 
-// A simple flashcard practice. User sees English -> guesses Spanish, then flips to check.
-// They select "I knew it" or "Still learning".
-// If "I knew it", it is removed from the active queue.
-
 export default function Phase2Practice({ scenario, onComplete, onClose }: PhaseProps) {
     const [queue, setQueue] = useState(scenario.phrases);
     const [isFlipped, setIsFlipped] = useState(false);
 
+    useEffect(() => {
+        if (queue.length === 0) {
+            trackEvent('guided_learning_phase_completed', {
+                scenario_id: scenario.id,
+                phase: 2,
+                user_level: 'A1'
+            });
+            onComplete();
+        }
+    }, [queue.length, scenario.id, onComplete]);
+
     if (queue.length === 0) {
-        trackEvent('guided_learning_phase_completed', {
-            scenario_id: scenario.id,
-            phase: 2,
-            user_level: 'A1'
-        });
-        onComplete();
         return null;
     }
 
@@ -49,7 +50,7 @@ export default function Phase2Practice({ scenario, onComplete, onClose }: PhaseP
     return (
         <div className="flex flex-col h-full min-h-0 font-sans bg-background">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5">
+            <div className="flex items-center justify-between px-6 py-5 shrink-0">
                 <button onClick={onClose} className="p-2 -ml-2 text-text-muted hover:text-text-primary">
                     <X className="w-5 h-5" />
                 </button>
@@ -63,13 +64,13 @@ export default function Phase2Practice({ scenario, onComplete, onClose }: PhaseP
                 </div>
             </div>
 
-            <div className="text-center px-6 mt-4">
+            <div className="text-center px-6 mt-4 shrink-0">
                 <h3 className="text-xl font-display text-text-primary">Practice Flashcards</h3>
                 <p className="text-text-secondary text-sm mt-1">Translate to Spanish</p>
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col items-center justify-center p-6 perspective-[1000px] relative">
+            <div className="flex-1 min-h-0 overflow-y-auto flex flex-col items-center justify-center p-6 perspective-[1000px] relative">
                 <AnimatePresence mode="popLayout">
                     <motion.div
                         key={currentPhrase.id + (isFlipped ? '-back' : '-front')}
@@ -78,19 +79,19 @@ export default function Phase2Practice({ scenario, onComplete, onClose }: PhaseP
                         exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                         onClick={() => !isFlipped && setIsFlipped(true)}
-                        className={`w-full max-w-sm aspect-[4/5] rounded-[32px] cursor-pointer shadow-lg border flex flex-col items-center justify-center p-8 text-center bg-card
+                        className={`w-full max-w-sm aspect-[4/5] max-h-full rounded-[32px] cursor-pointer shadow-lg border flex flex-col items-center justify-center py-8 px-6 text-center bg-card shrink-0
                             ${isFlipped ? 'border-[#E8521A]/30 bg-surface' : 'border-border hover:border-accent-border'}`}
                     >
                         {!isFlipped ? (
                             <>
                                 <span className="text-[10px] uppercase font-mono tracking-widest text-text-muted mb-8">Tap to reveal</span>
-                                <h2 className="text-3xl font-display text-text-primary">
+                                <h2 className="text-[26px] leading-[1.3] font-display text-text-primary">
                                     {currentPhrase.translation}
                                 </h2>
                             </>
                         ) : (
                             <>
-                                <h2 className="text-4xl font-display text-[#E8521A] mb-4">
+                                <h2 className="text-[30px] leading-[1.3] font-display text-[#E8521A] mb-4">
                                     {currentPhrase.text}
                                 </h2>
                                 <p className="font-mono text-text-muted text-sm tracking-widest uppercase mb-8">
@@ -103,7 +104,7 @@ export default function Phase2Practice({ scenario, onComplete, onClose }: PhaseP
             </div>
 
             {/* Bottom Nav */}
-            <div className="p-6 border-t border-[#1e1e1e] h-32 flex flex-col justify-center">
+            <div className="p-6 border-t border-[#1e1e1e] shrink-0 h-32 flex flex-col justify-center">
                 {!isFlipped ? (
                     <button
                         onClick={() => setIsFlipped(true)}
