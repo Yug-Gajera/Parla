@@ -29,6 +29,50 @@ interface LearnViewProps {
 
 export default function LearnView({ languageId, languageName, level, guidedEnabled = false, guidedScenariosCompleted = 0 }: LearnViewProps) {
     const [reviewWords, setReviewWords] = useState<VocabularyWord[] | null>(null);
+    const [completedCount, setCompletedCount] = useState(guidedScenariosCompleted);
+
+    useEffect(() => {
+        setCompletedCount(guidedScenariosCompleted);
+    }, [guidedScenariosCompleted]);
+
+    useEffect(() => {
+        const setupRealtime = async () => {
+            const { createClient } = await import('@/lib/supabase/client');
+            const supabase = createClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            const userId = session?.user?.id;
+            
+            if (!userId) return;
+
+            const channel = supabase
+                .channel('user-progress')
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'UPDATE',
+                        schema: 'public',
+                        table: 'users',
+                        filter: `id=eq.${userId}`,
+                    },
+                    (payload) => {
+                        const newData = payload.new as any;
+                        if (newData.guided_scenarios_completed !== undefined) {
+                            setCompletedCount(newData.guided_scenarios_completed);
+                        }
+                    }
+                )
+                .subscribe();
+
+            return () => {
+                supabase.removeChannel(channel);
+            };
+        };
+        
+        const cleanup = setupRealtime();
+        return () => {
+            cleanup.then(fn => fn && fn());
+        };
+    }, []);
 
     // Two main tabs: Guided and Free Practice
     // Default to guided if enabled
@@ -105,7 +149,7 @@ export default function LearnView({ languageId, languageName, level, guidedEnabl
                             <GuidedScenarioList 
                                 languageId={languageId} 
                                 level={level}
-                                completedCount={guidedScenariosCompleted}
+                                completedCount={completedCount}
                             />
                         </div>
                     )}

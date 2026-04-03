@@ -9,6 +9,7 @@ import Phase2Practice from '@/components/learn/guided/Phase2Practice';
 import Phase3Speak from '@/components/learn/guided/Phase3Speak';
 import ScenarioComplete from '@/components/learn/guided/ScenarioComplete';
 import Phase4Build from '@/components/learn/guided/Phase4Build';
+import { completeScenario } from '@/lib/guidedLearning';
 import { trackEvent } from '@/lib/posthog';
 import { CheckCircle2 } from 'lucide-react';
 
@@ -118,27 +119,26 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
 
             // Update completion status
             try {
-                const completeRes = await fetch('/api/guided/complete', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        scenarioOrder: scenario.order,
-                        phase4Progress: {
-                            phase4_complete: true,
-                            phase4_round1_score: payload?.round1_score || 0,
-                            phase4_round2_score: payload?.round2_score || 0,
-                            phase4_round3_attempts: payload?.round3_attempts || 0
-                        }
-                    })
-                });
-                if (!completeRes.ok) console.error('Completion update failed');
+                const result = await completeScenario(
+                    user.id,
+                    scenario.id,
+                    scenario.order,
+                    {
+                        phase1: true,
+                        phase2: true,
+                        phase3: 100, // Or average score if available
+                        phase4: true
+                    }
+                );
+                if (!result.success) {
+                    console.error('Completion update failed');
+                }
             } catch (err) {
                 console.error(err);
             }
 
             setCurrentPhase('complete');
         } else if (phase === 'complete') {
-            router.refresh();
             router.push('/learn');
         }
     };
