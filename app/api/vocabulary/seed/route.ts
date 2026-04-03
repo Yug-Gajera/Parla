@@ -111,7 +111,7 @@ export async function POST(req: Request) {
             // 5. Batch upsert to user's SRS deck
             const { error: seedError } = await serviceClient
                 .from('user_vocabulary')
-                .upsert(seedRecords, { onConflict: 'user_id, word_id', ignoreDuplicates: true });
+                .upsert(seedRecords, { onConflict: 'user_id,word_id', ignoreDuplicates: true });
 
             if (seedError) {
                 console.error('Seed Upsert Error:', seedError);

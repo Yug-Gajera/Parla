@@ -107,7 +107,7 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         words: wordsToImport,
-                        importSource: 'guided_phase4',
+                        importSource: 'content_encounter',
                         languageId: 'es',
                         familiarity: 2
                     })
