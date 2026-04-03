@@ -145,14 +145,14 @@ export async function POST(req: Request) {
             const wordId = globalWordMap.get(cleanSp);
             if (!wordId) continue;
 
-            let familiarity = w.familiarity || 2;
+            let familiarity = w.familiarity ?? body.familiarity ?? 2;
             let status = 'new';
             let mappedInterval = w.interval || 1;
             
             if (w.interval !== undefined && w.interval !== null) {
                 if (w.interval > 21) {
                     familiarity = 5;
-                    status = 'learned';
+                    status = 'mastered';
                 }
                 else if (w.interval >= 7) {
                     familiarity = 3;
@@ -163,6 +163,17 @@ export async function POST(req: Request) {
                     status = 'learning';
                 }
                 mappedInterval = w.interval;
+            } else {
+                // If interval is not provided, map familiarity to status
+                if (familiarity >= 4) {
+                    status = 'mastered';
+                } else if (familiarity >= 3) {
+                    status = 'familiar';
+                } else if (familiarity >= 2) {
+                    status = 'learning';
+                } else {
+                    status = 'new';
+                }
             }
 
             const existingRow = existingUserVocabMap.get(wordId);
