@@ -107,7 +107,8 @@ export async function POST(req: Request) {
             
             if (insertError) {
                 console.error('Global Word Insert Error:', insertError);
-                return NextResponse.json({ error: 'Database insert failed' }, { status: 500 });
+                require('fs').writeFileSync('/tmp/vocab_error.log', JSON.stringify({type: 'Global Insert', err: insertError}, null, 2));
+                return NextResponse.json({ error: 'Database insert failed: ' + insertError.message, details: insertError }, { status: 500 });
             }
 
             if (newlyInsertedGlobal) {
@@ -224,7 +225,8 @@ export async function POST(req: Request) {
 
             if (userVocabError) {
                 console.error('User Vocabulary Insert Error:', userVocabError);
-                return NextResponse.json({ error: 'Failed to bind vocabulary to user deck' }, { status: 500 });
+                require('fs').writeFileSync('/tmp/vocab_error.log', JSON.stringify({type: 'User Vocab Insert', err: userVocabError}, null, 2));
+                return NextResponse.json({ error: 'Failed to bind vocabulary to user deck: ' + userVocabError.message, details: userVocabError }, { status: 500 });
             }
             insertedCount = insertedUserVocab?.length || 0;
         }

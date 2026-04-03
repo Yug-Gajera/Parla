@@ -112,7 +112,10 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
                         familiarity: 2
                     })
                 });
-                if (!importRes.ok) console.error('Vocab import failed');
+                if (!importRes.ok) {
+                    const errBody = await importRes.json();
+                    console.error('Vocab import failed. Details:', errBody);
+                }
             } catch (err) {
                 console.error('Failed to import vocabulary:', err);
             }
