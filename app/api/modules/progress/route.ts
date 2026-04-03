@@ -154,23 +154,26 @@ export async function POST(req: Request) {
                 for (const phrase of learned_phrases) {
                     if (!phrase.spanish || !phrase.english) continue;
 
+                    const cleanSpanish = phrase.spanish.trim().toLowerCase();
+                    const cleanEnglish = phrase.english.trim();
+
                     // 1. Upsert into global vocabulary_words bank
                     const { data: existingWord } = await serviceClient
                         .from('vocabulary_words')
                         .select('id')
                         .eq('language_id', language_id)
-                        .eq('word', phrase.spanish)
+                        .eq('word', cleanSpanish)
                         .maybeSingle();
 
                     let wordId = existingWord?.id;
 
                     if (!wordId) {
-                        const { data: newWord } = await serviceClient
+                        const { data: newWord, error: insertError } = await serviceClient
                             .from('vocabulary_words')
                             .insert({
                                 language_id,
-                                word: phrase.spanish,
-                                translation: phrase.english,
+                                word: cleanSpanish,
+                                translation: cleanEnglish,
                                 pronunciation: phrase.phonetic || null,
                                 part_of_speech: 'phrase',
                                 cefr_level: 'A1',
@@ -178,20 +181,30 @@ export async function POST(req: Request) {
                             })
                             .select('id')
                             .single();
+                        
+                        if (insertError) {
+                            console.error('[modules/progress] word insert error:', insertError);
+                        }
                         wordId = newWord?.id;
                     }
 
                     if (!wordId) continue;
 
                     // 2. Add to user's deck (ignore if already exists)
-                    await serviceClient
+                    const { error: uvError } = await serviceClient
                         .from('user_vocabulary')
                         .upsert({
                             user_id: user.id,
                             word_id: wordId,
                             status: 'learning',
+                            interval_days: 1,
+                            added_at: new Date().toISOString(),
                             next_review_date: new Date().toISOString().split('T')[0],
                         }, { onConflict: 'user_id,word_id' });
+
+                    if (uvError) {
+                        console.error('[modules/progress] uv upsert error:', uvError);
+                    }
                 }
 
                 console.log(`[modules/progress] Saved ${learned_phrases.length} phrases to vocabulary for user ${user.id}`);
