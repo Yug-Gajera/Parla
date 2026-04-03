@@ -383,11 +383,13 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
     }
 
     if (round === 'round1') {
-        const currentData = content.round1[exerciseIndex];
+        const currentData = content?.round1?.[exerciseIndex];
+        if (!currentData) return null;
+
         return (
-            <div className="flex flex-col h-[100dvh] bg-background">
+            <div className="flex flex-col h-full bg-background min-h-0">
                 {renderHeader('Round 1 of 3 — Connect', ((exerciseIndex) / 5) * 100)}
-                <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col items-center justify-center">
+                <div className="flex-1 min-h-0 overflow-y-auto px-6 py-8 flex flex-col items-center justify-center">
                     <div className="bg-surface border border-border rounded-[20px] p-[28px_24px] w-full max-w-[480px]">
                         <p className="font-sans font-medium text-[13px] uppercase text-text-muted mb-6">
                             Join these two phrases:
@@ -460,18 +462,21 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
     }
 
     if (round === 'round2') {
-        const currentData = content.round2[exerciseIndex];
+        const currentData = content?.round2?.[exerciseIndex];
         // Combine answer with wrong options and shuffle
         const [options, setOptions] = useState<string[]>([]);
         useEffect(() => {
-            const opts = [currentData.correct_answer, ...currentData.wrong_options];
+            if (!currentData) return;
+            const opts = [currentData.correct_answer, ...(currentData.wrong_options || [])];
             setOptions(opts.sort(() => Math.random() - 0.5));
         }, [currentData]);
 
+        if (!currentData) return null;
+
         return (
-            <div className="flex flex-col h-[100dvh] bg-background">
+            <div className="flex flex-col h-full bg-background min-h-0">
                 {renderHeader('Round 2 of 3 — Fill the blank', ((exerciseIndex) / 5) * 100)}
-                <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col items-center justify-center">
+                <div className="flex-1 min-h-0 overflow-y-auto px-6 py-8 flex flex-col items-center justify-center">
                     <div className="bg-surface border border-border rounded-[20px] p-[28px_24px] w-full max-w-[480px]">
                         <p className="font-sans font-medium text-[13px] uppercase text-text-muted mb-6">
                             Choose the missing word:
@@ -531,11 +536,13 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
     }
 
     if (round === 'round3') {
-        const currentData = content.round3[exerciseIndex];
+        const currentData = content?.round3?.[exerciseIndex];
+        if (!currentData) return null;
+
         return (
-            <div className="flex flex-col h-[100dvh] bg-background">
+            <div className="flex flex-col h-full bg-background min-h-0">
                 {renderHeader('Round 3 of 3 — Build it', ((exerciseIndex) / 5) * 100)}
-                <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col items-center">
+                <div className="flex-1 min-h-0 overflow-y-auto px-6 py-8 flex flex-col items-center">
                     <div className="w-full max-w-[480px]">
                         <p className="font-sans font-medium text-[13px] uppercase text-text-muted mb-4">
                             Put these words in order:
@@ -609,7 +616,7 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
 
     if (round === 'complete') {
         return (
-            <div className="flex flex-col h-[100dvh] items-center justify-center bg-background p-6">
+            <div className="flex flex-col h-full min-h-0 items-center justify-center bg-background p-6">
                 <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}

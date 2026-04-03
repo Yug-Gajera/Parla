@@ -19,7 +19,8 @@ export default function Phase1Learn({ scenario, onComplete, onClose }: PhaseProp
     // We don't have real audio files for these dummy phrases yet,
     // so we'll use a mocked TTS synthesis for demonstration.
     const speakPhrase = (text: string) => {
-        playSpanishAudio(text, 'veryslow');
+        const cleanText = text.replace(/\.\.\./g, '');
+        playSpanishAudio(cleanText, 'veryslow');
     };
 
     useEffect(() => {
@@ -43,7 +44,7 @@ export default function Phase1Learn({ scenario, onComplete, onClose }: PhaseProp
     const progress = ((currentIndex + 1) / phrases.length) * 100;
 
     return (
-        <div className="flex flex-col h-full font-sans bg-background">
+        <div className="flex flex-col h-full min-h-0 font-sans bg-background">
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5">
                 <button onClick={onClose} className="p-2 -ml-2 text-text-muted hover:text-text-primary">

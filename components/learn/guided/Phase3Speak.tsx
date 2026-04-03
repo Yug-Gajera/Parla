@@ -183,7 +183,7 @@ export default function Phase3Speak({ scenario, userId, onComplete, onClose }: P
     const progress = (passedUserTurns / totalUserTurns) * 100;
 
     return (
-        <div className="flex flex-col h-[100dvh] font-sans bg-background relative overflow-hidden">
+        <div className="flex flex-col h-full min-h-0 font-sans bg-background relative overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 shrink-0 bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-border">
                 <button onClick={onClose} className="p-2 -ml-2 text-text-muted hover:text-text-primary">

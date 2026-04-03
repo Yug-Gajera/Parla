@@ -47,7 +47,7 @@ export default function Phase2Practice({ scenario, onComplete, onClose }: PhaseP
     };
 
     return (
-        <div className="flex flex-col h-full font-sans bg-background">
+        <div className="flex flex-col h-full min-h-0 font-sans bg-background">
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5">
                 <button onClick={onClose} className="p-2 -ml-2 text-text-muted hover:text-text-primary">
