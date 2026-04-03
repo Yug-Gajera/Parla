@@ -102,7 +102,7 @@ export async function POST(req: Request) {
         if (wordsToInsertGlobal.length > 0) {
             const { data: newlyInsertedGlobal, error: insertError } = await serviceClient
                 .from('vocabulary_words')
-                .insert(wordsToInsertGlobal)
+                .upsert(wordsToInsertGlobal, { onConflict: 'language_id,word' })
                 .select('id, word');
             
             if (insertError) {
@@ -219,7 +219,7 @@ export async function POST(req: Request) {
         if (recordsToInsert.length > 0) {
             const { data: insertedUserVocab, error: userVocabError } = await serviceClient
                 .from('user_vocabulary')
-                .upsert(recordsToInsert, { onConflict: 'user_id, word_id', ignoreDuplicates: true })
+                .upsert(recordsToInsert, { onConflict: 'user_id,word_id', ignoreDuplicates: true })
                 .select('id');
 
             if (userVocabError) {
