@@ -199,6 +199,17 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
     // R2 states
     const [r2Selected, setR2Selected] = useState<string | null>(null);
     const [r2Correct, setR2Correct] = useState<boolean | null>(null);
+    const [r2Options, setR2Options] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (round === 'round2' && content?.round2) {
+            const cd = content.round2[exerciseIndex];
+            if (cd) {
+                const opts = [cd.correct_answer, ...(cd.wrong_options || [])];
+                setR2Options(opts.sort(() => Math.random() - 0.5));
+            }
+        }
+    }, [round, exerciseIndex, content]);
 
     const handleR2Tap = (word: string, currentData: any) => {
         if (r2Selected !== null) return;
@@ -463,13 +474,6 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
 
     if (round === 'round2') {
         const currentData = content?.round2?.[exerciseIndex];
-        // Combine answer with wrong options and shuffle
-        const [options, setOptions] = useState<string[]>([]);
-        useEffect(() => {
-            if (!currentData) return;
-            const opts = [currentData.correct_answer, ...(currentData.wrong_options || [])];
-            setOptions(opts.sort(() => Math.random() - 0.5));
-        }, [currentData]);
 
         if (!currentData) return null;
 
@@ -504,7 +508,7 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
 
                         {!r2Correct ? (
                             <div className="flex gap-3 justify-center mb-2">
-                                {options.map((opt, i) => {
+                                {r2Options.map((opt, i) => {
                                     const isSelected = r2Selected === opt;
                                     const isWrongSelected = isSelected && r2Correct === false;
                                     const isCorrectAnswer = opt === currentData.correct_answer && r2Correct === false;

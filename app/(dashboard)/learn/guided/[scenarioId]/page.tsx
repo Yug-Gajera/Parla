@@ -144,7 +144,7 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
     };
 
     return (
-        <div className="flex flex-col h-[100dvh] bg-background w-full max-w-md mx-auto relative overflow-hidden">
+        <div className="flex flex-col h-[calc(100vh-64px)] md:h-[calc(100vh-64px)] w-full max-w-md mx-auto relative overflow-hidden bg-background">
             {renderStepIndicator()}
             <div className="flex-1 relative overflow-hidden">
                 {currentPhase === 'learn' && (
