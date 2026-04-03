@@ -8,9 +8,11 @@ import Phase1Learn from '@/components/learn/guided/Phase1Learn';
 import Phase2Practice from '@/components/learn/guided/Phase2Practice';
 import Phase3Speak from '@/components/learn/guided/Phase3Speak';
 import ScenarioComplete from '@/components/learn/guided/ScenarioComplete';
+import Phase4Build from '@/components/learn/guided/Phase4Build';
 import { trackEvent } from '@/lib/posthog';
+import { CheckCircle2 } from 'lucide-react';
 
-type Phase = 'learn' | 'practice' | 'speak' | 'complete';
+type Phase = 'learn' | 'practice' | 'speak' | 'build' | 'complete';
 
 export default function GuidedScenarioPage({ params }: { params: { scenarioId: string } }) {
     const router = useRouter();
@@ -43,14 +45,54 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
         return <div className="min-h-screen flex items-center justify-center bg-background text-text-primary">Loading...</div>;
     }
 
-    const handlePhaseComplete = async (phase: Phase) => {
-        // Record attempt in database based on phase completion (optional, done mostly in specific handlers)
+    const phases: { id: Phase; label: string; step: number }[] = [
+        { id: 'learn', label: 'Learn', step: 1 },
+        { id: 'practice', label: 'Practice', step: 2 },
+        { id: 'speak', label: 'Speak', step: 3 },
+        { id: 'build', label: 'Build', step: 4 }
+    ];
+
+    const currentStepIndex = phases.findIndex(p => p.id === currentPhase);
+
+    const renderStepIndicator = () => {
+        if (currentPhase === 'complete') return null;
+        
+        return (
+            <div className="flex justify-center items-center gap-6 py-4 border-b border-border bg-background/80 backdrop-blur-md z-20">
+                {phases.map((p, index) => {
+                    const isActive = currentPhase === p.id;
+                    const isCompleted = currentStepIndex > index;
+
+                    return (
+                        <div key={p.id} className="flex flex-col items-center">
+                            <span className={`text-[11px] font-mono uppercase tracking-widest font-bold mb-1 transition-colors ${isActive ? 'text-[#E8521A]' : isCompleted ? 'text-text-primary' : 'text-text-muted'}`}>
+                                Step {p.step}: {p.label}
+                            </span>
+                            <div className="h-4 flex items-center justify-center">
+                                {isCompleted ? (
+                                    <CheckCircle2 className="w-4 h-4 text-[#E8521A]" />
+                                ) : isActive ? (
+                                    <div className="w-2 h-2 rounded-full bg-[#E8521A]" />
+                                ) : (
+                                    <div className="w-2 h-2 rounded-full bg-border" />
+                                )}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
+    const handlePhaseComplete = async (phase: Phase, payload?: any) => {
         if (phase === 'learn') {
             setCurrentPhase('practice');
         } else if (phase === 'practice') {
             setCurrentPhase('speak');
         } else if (phase === 'speak') {
-            // 1. Save all phrases from this scenario to the user's vocabulary deck
+            setCurrentPhase('build');
+        } else if (phase === 'build') {
+            // Save words to vocabulary
             try {
                 const wordsToImport = scenario.phrases.map(p => ({
                     spanish: p.text,
@@ -64,34 +106,34 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         words: wordsToImport,
-                        importSource: 'guided_scenario',
-                        languageId: 'es'
+                        importSource: 'guided_phase4',
+                        languageId: 'es',
+                        familiarity: 2
                     })
                 });
-
-                if (!importRes.ok) {
-                    const errBody = await importRes.json().catch(() => ({}));
-                    console.error('Vocab import failed:', importRes.status, errBody);
-                }
+                if (!importRes.ok) console.error('Vocab import failed');
             } catch (err) {
                 console.error('Failed to import vocabulary:', err);
-                // Non-blocking: we still want to show the completion screen
             }
 
-            // 2. Update guided_scenarios_completed via server-side API (client Supabase can't update users table due to RLS)
+            // Update completion status
             try {
                 const completeRes = await fetch('/api/guided/complete', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ scenarioOrder: scenario.order })
+                    body: JSON.stringify({ 
+                        scenarioOrder: scenario.order,
+                        phase4Progress: {
+                            phase4_complete: true,
+                            phase4_round1_score: payload?.round1_score || 0,
+                            phase4_round2_score: payload?.round2_score || 0,
+                            phase4_round3_attempts: payload?.round3_attempts || 0
+                        }
+                    })
                 });
-
-                if (!completeRes.ok) {
-                    const errBody = await completeRes.json().catch(() => ({}));
-                    console.error('Guided completion update failed:', completeRes.status, errBody);
-                }
+                if (!completeRes.ok) console.error('Completion update failed');
             } catch (err) {
-                console.error('Failed to update guided completion:', err);
+                console.error(err);
             }
 
             setCurrentPhase('complete');
@@ -103,34 +145,45 @@ export default function GuidedScenarioPage({ params }: { params: { scenarioId: s
 
     return (
         <div className="flex flex-col h-[100dvh] bg-background w-full max-w-md mx-auto relative overflow-hidden">
-            {currentPhase === 'learn' && (
-                <Phase1Learn 
-                    scenario={scenario} 
-                    onComplete={() => handlePhaseComplete('learn')}
-                    onClose={() => router.push('/learn')}
-                />
-            )}
-            {currentPhase === 'practice' && (
-                <Phase2Practice 
-                    scenario={scenario} 
-                    onComplete={() => handlePhaseComplete('practice')}
-                    onClose={() => router.push('/learn')}
-                />
-            )}
-            {currentPhase === 'speak' && (
-                <Phase3Speak 
-                    scenario={scenario} 
-                    userId={user.id}
-                    onComplete={() => handlePhaseComplete('speak')}
-                    onClose={() => router.push('/learn')}
-                />
-            )}
-            {currentPhase === 'complete' && (
-                <ScenarioComplete 
-                    scenario={scenario} 
-                    onFinish={() => handlePhaseComplete('complete')} 
-                />
-            )}
+            {renderStepIndicator()}
+            <div className="flex-1 relative overflow-hidden">
+                {currentPhase === 'learn' && (
+                    <Phase1Learn 
+                        scenario={scenario} 
+                        onComplete={() => handlePhaseComplete('learn')}
+                        onClose={() => router.push('/learn')}
+                    />
+                )}
+                {currentPhase === 'practice' && (
+                    <Phase2Practice 
+                        scenario={scenario} 
+                        onComplete={() => handlePhaseComplete('practice')}
+                        onClose={() => router.push('/learn')}
+                    />
+                )}
+                {currentPhase === 'speak' && (
+                    <Phase3Speak 
+                        scenario={scenario} 
+                        userId={user.id}
+                        onComplete={() => handlePhaseComplete('speak')}
+                        onClose={() => router.push('/learn')}
+                    />
+                )}
+                {currentPhase === 'build' && (
+                    <Phase4Build 
+                        scenario={scenario} 
+                        userId={user.id}
+                        onComplete={(payload) => handlePhaseComplete('build', payload)}
+                        onClose={() => router.push('/learn')}
+                    />
+                )}
+                {currentPhase === 'complete' && (
+                    <ScenarioComplete 
+                        scenario={scenario} 
+                        onFinish={() => handlePhaseComplete('complete')} 
+                    />
+                )}
+            </div>
         </div>
     );
 }

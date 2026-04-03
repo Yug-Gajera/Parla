@@ -427,6 +427,24 @@ export interface Database {
                     passed?: boolean | null;
                 };
             };
+            guided_phase4_content: {
+                Row: {
+                    id: string;
+                    scenario_id: string;
+                    content: Json;
+                    created_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    scenario_id: string;
+                    content: Json;
+                    created_at?: string;
+                };
+                Update: {
+                    scenario_id?: string;
+                    content?: Json;
+                };
+            };
         };
         Views: Record<string, never>;
         Functions: Record<string, never>;

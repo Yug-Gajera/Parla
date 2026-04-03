@@ -93,12 +93,14 @@ What this includes:
 - 1–2 Reels/week → Language learning journey (Spanish with Parlova, Chinese progress on the side)
 - 1 Reel/week → Lifestyle (gym, anime, day-in-life)
 - 1 Carousel/week → Knowledge drop (language tips, learning science)
+- **Daily/regular → "Day X" series posts** (mix of Reels, carousel posts, and photo dumps — app updates + personal life)
 - Daily Stories → Behind-the-scenes, polls, Q&A, casual life
 
 **Reel formulas that work:**
 - **Hook → Build → Payoff** — "I built an AI that teaches you Spanish in a way Duolingo can't" → show it → demo the conversation
 - **POV/Day-in-life** — "POV: you're 20 and building an AI startup between classes"
-- **Before/After** — "My Chinese Day 1 vs Day 30"
+- **Day X update** — "Day 47 of building an AI language app" → what you shipped + personal life clip
+- **Before/After** — "My Spanish Day 1 vs Day 30"
 - **React/Roast** — "Rating language learning apps as someone who built one"
 - **Tutorial** — "3 phrases that instantly make you sound like a native"
 
@@ -175,7 +177,105 @@ Both compound."
    - College student + startup founder + gym + anime
    - Example: "Day in the Life of a 20-Year-Old AI Startup Founder"
 
-**YouTube Shorts:** Repurpose your best Instagram Reels. Same content, cross-posted.
+**YouTube Shorts:** Repurpose your best Instagram Reels and Day X clips. Same content, cross-posted.
+
+---
+
+## 📆 "Day X" Recurring Series — Your Anchor Content
+
+This is your **most important recurring format**. A daily/near-daily series that documents your life building Parlova as a college student. Mix of Reels, photo posts, and carousels.
+
+**Why this works:**
+- Creates a number people want to follow ("oh he's on Day 87, I need to catch up")
+- Low pressure — not every day needs to be groundbreaking
+- Algorithm loves consistency and series content
+- Builds a real audience who feels invested in YOUR journey
+- The mix of dev + personal makes it feel like a documentary, not marketing
+
+### Format Options (rotate between these)
+
+| Format | When to use | Example |
+|--------|------------|--------|
+| **Reel (30–60s)** | Shipped a feature, had a big day, or funny moment | Screen recording of new feature + face-to-camera reaction |
+| **Photo dump (carousel)** | Chill day, campus life, gym, food | 5–8 photos: code on laptop, campus, gym selfie, food, sunset |
+| **Single image + caption** | Quick update, reflection, or milestone | Screenshot of code/stats + honest caption |
+| **Talking head Reel** | Sharing a lesson, thought, or decision | Face-to-camera: "Day 34 — today I realized..." |
+
+### Template — Reel Version (30–45 sec)
+
+```
+[TEXT ON SCREEN: "Day X of building an AI language app"]
+
+SHOT 1 (0:00–0:03): Hook
+→ "Day [X] of building Parlova."
+
+SHOT 2 (0:03–0:20): What you shipped / worked on
+→ "Today I [built/fixed/launched/designed] [feature]."
+→ Show screen recording or code snippet (quick cuts)
+
+SHOT 3 (0:20–0:35): Personal life clip
+→ Gym clip / campus walk / cooking / anime watching / gaming
+→ Can be voiceover: "Also hit the gym, new PR on bench"
+  or just vibes with music
+
+SHOT 4 (0:35–0:45): Close
+→ "See you tomorrow." / "Day [X+1] tomorrow."
+→ Or just end on a vibe shot with music
+```
+
+### Template — Photo Dump / Carousel Version
+
+```
+Slide 1: Code on screen or Parlova UI (the "work" shot)
+Slide 2: Your setup / workspace
+Slide 3: Campus / college life moment
+Slide 4: Gym or food
+Slide 5: Something random / funny / aesthetic
+
+Caption:
+"Day [X] of building Parlova 🛠️
+
+Today:
+→ [What you built/fixed — 1 line]
+→ [What you learned — 1 line]
+→ [Personal thing — 1 line]
+
+[Question for engagement]"
+```
+
+### Template — Quick Post (single image)
+
+```
+[Screenshot of code, a stat, or Parlova UI]
+
+Caption:
+"Day [X].
+[One-liner about what happened today.]
+[Optional: short reflection or funny comment]"
+```
+
+### Day X Content Ideas (first 30 days)
+
+| Day | Dev Update | Personal Element |
+|-----|-----------|------------------|
+| 1 | "Starting this series. Here's what Parlova looks like today." | Intro — who I am, what I'm building |
+| 2 | Fixed a bug in conversation scoring | Morning gym session |
+| 3 | Redesigned the scenario selection screen | College class + coding after |
+| 4 | Added new conversation scenario | Anime I'm watching right now |
+| 5 | Spanish learning progress update (using Parlova) | Weekend vibes |
+| 7 | Week 1 recap — what I shipped this week | Full day-in-the-life Reel |
+| 10 | First user feedback / DM reaction | Gym PR or new routine |
+| 14 | Week 2 recap + metrics if any | "2 weeks of posting every day as an introvert" |
+| 20 | Shipped a meaningful feature | Milestone reflection |
+| 30 | Month 1 recap — everything I shipped and learned | "30 days of building in public — honest thoughts" |
+
+### Rules for the Day X Series
+
+1. **Don't skip days** — if you miss a day, don't fake it. Just say "Day 12 (missed yesterday, was burnt out)" — that's more relatable than perfection.
+2. **Not every day needs a big feature** — "Day 23: refactored some code, went to class, hit the gym. Quiet day." is perfectly fine.
+3. **The personal stuff IS the content** — people follow for the journey, not just the product. Your gym clips, anime takes, and college moments are not filler — they're what makes this a personal brand, not a product page.
+4. **Keep it fast** — Reels should be 30–45 sec for daily updates. Save 60–90 sec for big shipping days.
+5. **Use the same text style** — always start with "Day X of building an AI language app" as the on-screen text. Visual consistency = brand recognition.
 
 ---
 
