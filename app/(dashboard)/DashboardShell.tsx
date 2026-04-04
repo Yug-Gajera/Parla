@@ -136,7 +136,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             </main>
 
             {/* ── Mobile Bottom Nav ── */}
-            <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[64px] bg-background/90 backdrop-blur-xl border-t border-border flex items-center justify-around px-2 pb-[env(safe-area-inset-bottom)] z-[100]">
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[64px] bg-background/90 backdrop-blur-xl border-t border-border grid grid-cols-6 items-center px-1 pb-[env(safe-area-inset-bottom)] z-[100]">
                 {NAV_ITEMS.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
@@ -144,10 +144,10 @@ export default function DashboardShell({ children }: { children: React.ReactNode
                     // Primary Action (Practice/Speak)
                     if (item.href === '/practice') {
                         return (
-                            <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 px-4 no-underline">
+                            <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 px-1 py-1 no-underline">
                                 <div className={`w-[48px] h-[48px] rounded-[14px] flex items-center justify-center -mt-[16px] transition-all duration-200 border ${
                                     isActive 
-                                        ? 'bg-accent border-accent shadow-lg shadow-accent/20 text-bg' 
+                                        ? 'bg-accent border-accent shadow-md shadow-accent/20 text-bg' 
                                         : 'bg-accent-subtle border-accent-border shadow-none text-accent'
                                 }`}>
                                     <Icon
@@ -164,7 +164,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 
                     // Standard tabs
                     return (
-                        <Link key={item.href} href={item.href} className="flex-1 flex flex-col items-center gap-1 px-3 py-1 no-underline">
+                        <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 px-1 py-1 no-underline">
                             <div className={`w-[32px] h-[32px] rounded-[8px] flex items-center justify-center transition-all duration-150 ${
                                 isActive ? 'bg-accent-subtle font-semibold text-accent' : 'bg-transparent text-text-muted font-normal'
                             }`}>
