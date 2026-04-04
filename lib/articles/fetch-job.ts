@@ -6,7 +6,7 @@ import { fetchAllNewArticles } from './rss-fetcher';
 import { processArticleBatch } from './article-processor';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
-const DAILY_CAP = 20;
+const DAILY_CAP = 10;
 
 function getServiceClient() {
     return createSupabaseClient(

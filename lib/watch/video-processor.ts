@@ -143,7 +143,7 @@ export async function processVideo(
         cefr_level?: string;
         topics?: string[];
     }
-): Promise<{ success: boolean; videoId?: string; error?: string }> {
+): Promise<{ success: boolean; videoId?: string; error?: string; existing?: boolean }> {
     const serviceClient = getServiceClient();
 
     // 1. Check if already processed
@@ -155,7 +155,7 @@ export async function processVideo(
 
     if (existing) {
         console.log(`[VideoProcessor] Skipping ${youtubeId} — already exists`);
-        return { success: true, videoId: existing.id };
+        return { success: true, videoId: existing.id, existing: true };
     }
 
     console.log(`[VideoProcessor] Processing video ${youtubeId}...`);
@@ -181,7 +181,7 @@ export async function processVideo(
 
             const response = await anthropic.messages.create({
                 model: HAIKU_MODEL,
-                max_tokens: 800,
+                max_tokens: 1500,
                 system: VIDEO_ANALYSIS_PROMPT,
                 messages: [{
                     role: 'user',
@@ -192,7 +192,9 @@ export async function processVideo(
             const textBlock = response.content.find(b => b.type === 'text');
             if (textBlock && textBlock.type === 'text') {
                 try {
-                    analysis = JSON.parse(textBlock.text);
+                    let rawText = textBlock.text.trim();
+                    rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+                    analysis = JSON.parse(rawText);
                 } catch {
                     console.error(`[VideoProcessor] JSON parse failed for ${youtubeId}`);
                 }

@@ -139,8 +139,10 @@ export async function importAllClassicBooks(languageId: string): Promise<{
     let imported = 0;
     let skipped = 0;
     let failed = 0;
+    const MAX_NEW_BOOKS = 1;
 
     for (const config of CLASSIC_BOOKS) {
+        if (imported >= MAX_NEW_BOOKS) break;
         const result = await importClassicBook(config, languageId);
         if (result.success) {
             if (result.bookId) imported++;

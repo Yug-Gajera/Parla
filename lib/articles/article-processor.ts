@@ -56,7 +56,7 @@ export async function processArticle(
 
         const response = await anthropic.messages.create({
             model: HAIKU_MODEL,
-            max_tokens: 800,
+            max_tokens: 1500,
             system: ARTICLE_ANALYSIS_PROMPT,
             messages: [{ role: 'user', content: userMessage }],
         });
@@ -74,7 +74,9 @@ export async function processArticle(
         // Parse JSON — if it fails, skip this article, don't crash the job
         let analysis;
         try {
-            analysis = JSON.parse(textBlock.text);
+            let rawText = textBlock.text.trim();
+            rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+            analysis = JSON.parse(rawText);
         } catch {
             console.error(`[Processor] JSON parse failed for: ${raw.title}`);
             console.error(`[Processor] Raw response: ${textBlock.text.slice(0, 200)}`);

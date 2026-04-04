@@ -161,7 +161,7 @@ export async function processEpisode(
         const truncatedText = text.slice(0, 3000);
         const response = await anthropic.messages.create({
             model: HAIKU_MODEL,
-            max_tokens: 800,
+            max_tokens: 1500,
             system: PODCAST_ANALYSIS_PROMPT,
             messages: [{
                 role: 'user',
@@ -172,7 +172,9 @@ export async function processEpisode(
         const textBlock = response.content.find(b => b.type === 'text');
         if (textBlock && textBlock.type === 'text') {
             try {
-                analysis = JSON.parse(textBlock.text);
+                let rawText = textBlock.text.trim();
+                rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+                analysis = JSON.parse(rawText);
             } catch {
                 console.error(`[PodcastProcessor] JSON parse failed for "${episode.title}"`);
             }
@@ -226,7 +228,7 @@ export async function fetchAndProcessAllShows(languageId: string): Promise<{
     let totalFetched = 0;
     let totalProcessed = 0;
     let totalFailed = 0;
-    const MAX_TOTAL = 3;
+    const MAX_TOTAL = 1;
 
     for (const show of shows as any[]) {
         if (totalFetched >= MAX_TOTAL) break;

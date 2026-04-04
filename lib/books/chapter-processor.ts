@@ -57,7 +57,7 @@ export async function processChapter(
 
         const response = await anthropic.messages.create({
             model: HAIKU_MODEL,
-            max_tokens: 800,
+            max_tokens: 1500,
             system: CHAPTER_ANALYSIS_PROMPT,
             messages: [{
                 role: 'user',
@@ -70,7 +70,9 @@ export async function processChapter(
 
         let analysis;
         try {
-            analysis = JSON.parse(textBlock.text);
+            let rawText = textBlock.text.trim();
+            rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+            analysis = JSON.parse(rawText);
         } catch {
             console.error(`[ChapterProcessor] JSON parse failed for chapter ${chapterNumber}`);
             return null;

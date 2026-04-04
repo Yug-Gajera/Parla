@@ -19,7 +19,15 @@ export async function POST(req: Request) {
     // Bulk import: process all curated videos
     if (import_all && language_id) {
         const results = [];
+        let newlyProcessedCount = 0;
+        const MAX_NEW_VIDEOS = 2; // only analyze up to 2 new videos per pull
+        
         for (const video of CURATED_VIDEOS) {
+            if (newlyProcessedCount >= MAX_NEW_VIDEOS) {
+                console.log('[WatchProcess] Reached limit of new videos for this run.');
+                break;
+            }
+            
             const result = await processVideo(video.youtube_id, language_id, {
                 title: video.title,
                 channel_name: video.channel_name,
@@ -28,6 +36,11 @@ export async function POST(req: Request) {
                 topics: video.topics,
             });
             results.push({ youtube_id: video.youtube_id, ...result });
+            
+            if (!(result as any).existing) {
+                newlyProcessedCount++;
+            }
+            
             await new Promise(r => setTimeout(r, 1000));
         }
         return NextResponse.json({ results });
