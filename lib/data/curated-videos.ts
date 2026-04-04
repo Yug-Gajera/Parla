@@ -44,7 +44,7 @@ export const CURATED_VIDEOS: CuratedVideo[] = [
         why_included: 'Clear pronunciation, practical phrases, Mexican Spanish',
     },
     {
-        youtube_id: 'AI997gnz-1U',
+        youtube_id: 'yXAw2w11PFE',
         title: 'Spanish Stories for Complete Beginners (1 Hour)',
         channel_name: 'Dreaming Spanish',
         channel_url: 'https://www.youtube.com/@DreamingSpanish',

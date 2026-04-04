@@ -8,6 +8,9 @@ import { createClient } from '@supabase/supabase-js';
 
 const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 
+// Circuit breaker for rate limiting in the current process
+let isScraperBlocked = false;
+
 function getServiceClient() {
     return createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -26,6 +29,25 @@ interface TranscriptSegment {
  * Returns null if captions are not available.
  */
 export async function getYouTubeTranscript(youtubeId: string): Promise<TranscriptSegment[] | null> {
+    const apiKey = process.env.YOUTUBE_API_KEY;
+
+    // 1. Try official API if key is present
+    if (apiKey) {
+        try {
+            console.log(`[VideoProcessor] Attempting API transcript for ${youtubeId}...`);
+            // This requires a bit more logic because the Captions API returns IDs, then you fetch the content.
+            // For now, let's keep it simple and treat it as a fallback or future enhancement if scraper is blocked.
+        } catch (e) {
+            console.error(`[VideoProcessor] API transcript failed:`, e);
+        }
+    }
+
+    // 2. Scraper with circuit breaker
+    if (isScraperBlocked) {
+        console.warn(`[VideoProcessor] Scraper is currently circuit-broken due to previous 429s. Skipping ${youtubeId}.`);
+        return null;
+    }
+
     try {
         // Fetch the video page HTML
         const pageRes = await fetch(`https://www.youtube.com/watch?v=${youtubeId}`, {
@@ -39,16 +61,31 @@ export async function getYouTubeTranscript(youtubeId: string): Promise<Transcrip
         const html = await pageRes.text();
 
         // Extract captionTracks from the page's player config
-        const captionMatch = html.match(/"captionTracks":\s*(\[.*?\])/);
-        if (!captionMatch) {
-            console.log(`[VideoProcessor] No captions found for ${youtubeId}`);
-            return null;
+        // Use a more robust check for ytInitialPlayerResponse which contains the full track info
+        let captionTracks: any[] = [];
+        const playerResponseMatch = html.match(/ytInitialPlayerResponse\s*=\s*({.*?});/);
+        
+        if (playerResponseMatch) {
+            try {
+                const playerResponse = JSON.parse(playerResponseMatch[1]);
+                captionTracks = playerResponse.captions?.playerCaptionsTracklistRenderer?.captionTracks || [];
+            } catch (e) {
+                console.warn(`[VideoProcessor] Failed to parse ytInitialPlayerResponse for ${youtubeId}`);
+            }
         }
 
-        let captionTracks;
-        try {
-            captionTracks = JSON.parse(captionMatch[1]);
-        } catch {
+        // Fallback: simple string match if the full JSON parse failed or was empty
+        if (!captionTracks.length) {
+            const captionMatch = html.match(/"captionTracks":\s*(\[.*?\])/);
+            if (captionMatch) {
+                try {
+                    captionTracks = JSON.parse(captionMatch[1]);
+                } catch (e) {}
+            }
+        }
+
+        if (!captionTracks.length) {
+            console.log(`[VideoProcessor] No captions found in HTML for ${youtubeId}`);
             return null;
         }
 
@@ -73,13 +110,48 @@ export async function getYouTubeTranscript(youtubeId: string): Promise<Transcrip
         }
 
         // Fetch the caption XML
-        const captionRes = await fetch(track.baseUrl);
-        if (!captionRes.ok) return null;
+        let captionRes = await fetch(track.baseUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept-Language': 'es,en;q=0.9',
+                'Referer': `https://www.youtube.com/watch?v=${youtubeId}`,
+            },
+        });
+
+        // 429 Retry logic
+        if (captionRes.status === 429) {
+            console.log(`[VideoProcessor] Rate limited (429) for ${youtubeId}. Retrying in 20s...`);
+            await new Promise(r => setTimeout(r, 20000));
+            captionRes = await fetch(track.baseUrl, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'Accept-Language': 'es,en;q=0.9',
+                    'Referer': `https://www.youtube.com/watch?v=${youtubeId}`,
+                },
+            });
+            
+            if (captionRes.status === 429) {
+                console.error(`[VideoProcessor] STILL rate limited after retry. Circuit-breaking scraper.`);
+                isScraperBlocked = true;
+                return null;
+            }
+        }
+
+        if (!captionRes.ok) {
+            console.error(`[VideoProcessor] Caption fetch failed: ${captionRes.status} for ${youtubeId}`);
+            return null;
+        }
         const xml = await captionRes.text();
+        console.log(`[VideoProcessor] XML sample for ${youtubeId}: ${xml.slice(0, 100)}`);
+        if (!xml || xml.length < 50) {
+            console.error(`[VideoProcessor] Empty XML returned for ${youtubeId}`);
+            return null;
+        }
 
         // Parse XML transcript
         const segments: TranscriptSegment[] = [];
-        const regex = /<text start="([\d.]+)" dur="([\d.]+)"[^>]*>(.*?)<\/text>/g;
+        // Support both <text> and <p> tags
+        const regex = /<(?:text|p) (?:start|t)="([\d.]+)" (?:dur|d)="([\d.]+)"[^>]*>(.*?)<\/(?:text|p)>/g;
         let match;
 
         while ((match = regex.exec(xml)) !== null) {
@@ -149,16 +221,20 @@ export async function processVideo(
     // 1. Check if already processed
     const { data: existing } = await serviceClient
         .from('videos')
-        .select('id')
+        .select('id, processed')
         .eq('youtube_id', youtubeId)
         .single();
 
-    if (existing) {
-        console.log(`[VideoProcessor] Skipping ${youtubeId} — already exists`);
+    if (existing?.processed) {
+        console.log(`[VideoProcessor] Skipping ${youtubeId} — already exists and processed`);
         return { success: true, videoId: existing.id, existing: true };
     }
 
-    console.log(`[VideoProcessor] Processing video ${youtubeId}...`);
+    if (existing) {
+        console.log(`[VideoProcessor] retrying processing for ${youtubeId} (previously failed)...`);
+    } else {
+        console.log(`[VideoProcessor] Processing NEW video ${youtubeId}...`);
+    }
 
     // 2. Get metadata
     const meta = await getVideoMetadata(youtubeId);
@@ -204,27 +280,41 @@ export async function processVideo(
         }
     }
 
-    // 5. Insert into database
-    const { data: video, error } = await serviceClient
-        .from('videos')
-        .insert({
-            language_id: languageId,
-            youtube_id: youtubeId,
-            title: overrides?.title || title,
-            channel_name: channelName,
-            channel_url: overrides?.channel_url || null,
-            thumbnail_url: thumbnailUrl,
-            cefr_level: overrides?.cefr_level || analysis?.cefr_level || 'B1',
-            topics: overrides?.topics || analysis?.topics || [],
-            transcript: transcript,
-            vocabulary_items: analysis?.vocabulary_items?.slice(0, 5) || null,
-            comprehension_questions: analysis?.comprehension_questions?.slice(0, 3) || null,
-            summary: analysis?.summary || null,
-            processed: !!analysis,
-            is_published: !!analysis,
-        })
-        .select()
-        .single();
+    // 5. Upsert into database
+    const videoData = {
+        language_id: languageId,
+        youtube_id: youtubeId,
+        title: overrides?.title || title,
+        channel_name: channelName,
+        channel_url: overrides?.channel_url || null,
+        thumbnail_url: thumbnailUrl,
+        cefr_level: overrides?.cefr_level || analysis?.cefr_level || 'B1',
+        topics: overrides?.topics || analysis?.topics || [],
+        transcript: transcript,
+        vocabulary_items: analysis?.vocabulary_items?.slice(0, 5) || null,
+        comprehension_questions: analysis?.comprehension_questions?.slice(0, 3) || null,
+        summary: analysis?.summary || null,
+        processed: !!analysis,
+        is_published: true, // Show all curated videos even if AI analysis fails
+    };
+
+    let result;
+    if (existing) {
+        result = await serviceClient
+            .from('videos')
+            .update(videoData)
+            .eq('id', existing.id)
+            .select()
+            .single();
+    } else {
+        result = await serviceClient
+            .from('videos')
+            .insert(videoData)
+            .select()
+            .single();
+    }
+
+    const { data: video, error } = result;
 
     if (error) {
         console.error(`[VideoProcessor] Insert error:`, error);

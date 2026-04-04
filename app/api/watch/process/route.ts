@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     if (import_all && language_id) {
         const results = [];
         let newlyProcessedCount = 0;
-        const MAX_NEW_VIDEOS = 2; // only analyze up to 2 new videos per pull
+        const MAX_NEW_VIDEOS = 10; // allow more videos during this fix session
         
         for (const video of CURATED_VIDEOS) {
             if (newlyProcessedCount >= MAX_NEW_VIDEOS) {
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
                 newlyProcessedCount++;
             }
             
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(r => setTimeout(r, 5000));
         }
         return NextResponse.json({ results });
     }

@@ -315,42 +315,30 @@ Return ONLY valid JSON matching this exact structure:
 Do not include markdown tags or any preamble. Output ONLY valid JSON.
 `;
 
-export const ARTICLE_ANALYSIS_PROMPT = `You analyze Spanish articles for a language learning app. Return ONLY valid JSON, no other text.
-
+export const ARTICLE_ANALYSIS_PROMPT = `Extract 6 vocabulary items, 3 comprehension questions, and a 2-sentence summary from this Spanish article. Return ONLY valid JSON:
 {
   "cefr_level": "A1|A2|B1|B2|C1|C2",
-  "level_score": 0-100,
+  "level_score": number,
   "estimated_read_minutes": number,
-  "topics": ["topic1", "topic2"],
-  "summary": "2 sentence English summary max",
-  "vocabulary_items": [
-    {
-      "word": "Spanish word",
-      "translation": "English translation",
-      "spanish_explanation": "brief explanation in simple Spanish, under 15 words, how a native speaker would explain it",
-      "part_of_speech": "noun|verb|adjective|adverb|phrase",
-      "difficulty": "A1|A2|B1|B2|C1|C2",
-      "in_context": "sentence from article with this word",
-      "note": ""
-    }
-  ],
-  "comprehension_questions": [
-    {
+  "topics": ["string", "string"],
+  "summary": "string",
+  "vocabulary_items": [{
+      "word": "string",
+      "translation": "string",
+      "spanish_explanation": "string",
+      "part_of_speech": "string",
+      "difficulty": "string",
+      "in_context": "string",
+      "note": "string"
+  }],
+  "comprehension_questions": [{
       "id": 1,
-      "question": "question in English",
-      "options": ["a","b","c","d"],
+      "question": "string",
+      "options": ["string", "string", "string", "string"],
       "correct": 0,
-      "explanation": "brief why"
-    }
-  ]
-}
-
-RULES:
-- Extract EXACTLY 6 vocabulary items. No more, no less.
-- Generate EXACTLY 3 comprehension questions. No more, no less.
-- "correct" is the 0-indexed position of the right answer.
-- Be concise. No markdown, no extra text outside JSON.
-`;
+      "explanation": "string"
+  }]
+}`;
 
 export const STORY_GENERATION_PROMPT = `You write original Spanish stories for language learners. Return ONLY valid JSON, absolutely nothing else. Maximum 400 words for the story content. Write entirely in Spanish. Never mention it is for language learning.
 

@@ -52,11 +52,13 @@ export async function processArticle(
             apiKey: process.env.ANTHROPIC_API_KEY,
         });
 
-        const userMessage = `Title: ${raw.title}\n\nContent: ${raw.content}`;
+        const MAX_ARTICLE_CHARS = 2000;
+        const truncatedContent = raw.content.slice(0, MAX_ARTICLE_CHARS);
+        const userMessage = `Title: ${raw.title}\n\nContent: ${truncatedContent}`;
 
         const response = await anthropic.messages.create({
             model: HAIKU_MODEL,
-            max_tokens: 1500,
+            max_tokens: 600,
             system: ARTICLE_ANALYSIS_PROMPT,
             messages: [{ role: 'user', content: userMessage }],
         });

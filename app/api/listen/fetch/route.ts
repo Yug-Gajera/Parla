@@ -29,12 +29,17 @@ export async function POST(req: Request) {
     // If seed_shows: insert podcast shows first
     if (seed_shows) {
         const serviceClient = getServiceClient();
+
+        // Mark all current shows as inactive to start. Configured ones will be reactivated.
+        await serviceClient.from('podcast_shows').update({ is_active: false }).neq('id', '00000000-0000-0000-0000-000000000000');
+
         for (const show of PODCAST_SHOWS) {
-            const { data: existing } = await serviceClient
+            const { data: existingArray } = await serviceClient
                 .from('podcast_shows')
                 .select('id')
-                .eq('rss_url', show.rss_url)
-                .single();
+                .eq('name', show.name)
+                .limit(1);
+            const existing = existingArray?.[0];
 
             if (!existing) {
                 await serviceClient.from('podcast_shows').insert({
@@ -46,8 +51,20 @@ export async function POST(req: Request) {
                     cefr_level_range: show.cefr_level_range,
                     topics: show.topics,
                     has_transcripts: show.has_transcripts,
+                    is_active: true,
                 });
                 console.log(`[ListenFetch] Seeded show: ${show.name}`);
+            } else {
+                await serviceClient.from('podcast_shows').update({
+                    description: show.description,
+                    rss_url: show.rss_url,
+                    cover_color: show.cover_color,
+                    cefr_level_range: show.cefr_level_range,
+                    topics: show.topics,
+                    has_transcripts: show.has_transcripts,
+                    is_active: true,
+                }).eq('id', existing.id);
+                console.log(`[ListenFetch] Updated existing show: ${show.name}`);
             }
         }
     }
