@@ -141,27 +141,6 @@ export default function DashboardShell({ children }: { children: React.ReactNode
                     const Icon = item.icon;
                     const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
 
-                    // Primary Action (Practice/Speak)
-                    if (item.href === '/practice') {
-                        return (
-                            <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 px-1 py-1 no-underline">
-                                <div className={`w-[48px] h-[48px] rounded-[14px] flex items-center justify-center -mt-[16px] transition-all duration-200 border ${
-                                    isActive 
-                                        ? 'bg-accent border-accent shadow-md shadow-accent/20 text-bg' 
-                                        : 'bg-transparent border-transparent shadow-none text-text-muted'
-                                }`}>
-                                    <Icon
-                                        size={20}
-                                        strokeWidth={isActive ? 2 : 1.5}
-                                    />
-                                </div>
-                                <span className={`font-body text-[10px] tracking-[0.02em] ${isActive ? 'font-semibold text-accent' : 'font-normal text-text-muted'}`}>
-                                    {item.label}
-                                </span>
-                            </Link>
-                        );
-                    }
-
                     // Standard tabs
                     return (
                         <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 px-1 py-1 no-underline">
