@@ -96,13 +96,187 @@ What this includes:
 - **Daily/regular → "Day X" series posts** (mix of Reels, carousel posts, and photo dumps — app updates + personal life)
 - Daily Stories → Behind-the-scenes, polls, Q&A, casual life
 
-**Reel formulas that work:**
+### 🎬 Reel Framework — The 3 Reel Archetypes
+
+Every Reel you post should fall into one of these three categories. Rotate between them throughout the week to balance **reach**, **connection**, and **credibility**.
+
+| Archetype | Purpose | Ideal Frequency | Key Metric |
+|-----------|---------|-----------------|------------|
+| 🎓 **Educational** | Reach — gets shared + saved | 2–3/week | Saves & shares |
+| 📖 **Storytelling** | Connection — builds loyal followers | 2/week | Watch time & comments |
+| 👑 **Authority** | Credibility — positions you as an expert | 1–2/week | Follows & profile visits |
+
+---
+
+#### 🎓 Educational Reels — *"Teach something in 60 seconds"*
+
+**Why they work:** People save and share content that teaches them something useful. This is your #1 reach driver — the algorithm pushes content with high save rates to new audiences.
+
+**Structure:**
+```
+HOOK (0:00–0:03): Bold claim or question that triggers curiosity
+  → "Most people learn Spanish wrong. Here's why."
+  → "3 phrases that instantly make you sound fluent"
+  → "You're wasting your time with flashcards. Do this instead."
+
+TEACH (0:03–0:40): Deliver 1–3 clear, actionable points
+  → Use text overlays for key takeaways
+  → Show examples (screen recordings of Parlova, written phrases, etc.)
+  → Keep each point punchy — 10–15 sec max per point
+
+CTA (0:40–0:50): Soft call-to-action
+  → "Save this for your next study session"
+  → "Which one are you going to try first? Drop a comment"
+  → "Follow for more language hacks"
+```
+
+**Content ideas for Educational Reels:**
+- "3 phrases native Spanish speakers actually use (not from textbooks)"
+- "The shadowing technique — 60-second breakdown"
+- "Why spaced repetition beats cramming (with visuals)"
+- "CEFR levels explained — which one are you really?"
+- "The 80/20 rule of vocabulary — learn these words first"
+- "Input vs. output — the #1 concept language learners miss"
+- "How to go from 'I understand it' to 'I can speak it'"
+- "Your accent doesn't matter. Here's what does."
+- "The science of why you forget words (and how SRS fixes it)"
+- "3 things I learned about language learning from building an AI app"
+
+**Best practices:**
+- Use numbered lists on screen (people love "3 tips" / "5 mistakes")
+- Add captions — most people watch on mute
+- End with a save-worthy takeaway so people bookmark it
+- Post these on **Tuesday, Wednesday, and Friday** for max reach
+
+---
+
+#### 📖 Storytelling Reels — *"Make them feel something"*
+
+**Why they work:** Stories create emotional connection. When people feel invested in YOUR journey, they follow you, turn on notifications, and come back daily. Storytelling Reels turn casual viewers into loyal fans.
+
+**Structure:**
+```
+HOOK (0:00–0:03): A moment that pulls people in emotionally
+  → "I almost quit building Parlova last week."
+  → "The first time I spoke Spanish to a real person…"
+  → "Nobody tells you this about building a startup at 20."
+
+TENSION (0:03–0:25): Build the story — what happened, the struggle, the moment
+  → Be vulnerable and real — this is what separates you from generic content
+  → Use B-roll (coding, walking, gym clips) while narrating
+  → Pace it like a mini-movie: setup → conflict → turning point
+
+RESOLUTION (0:25–0:50): The lesson, the payoff, the moment of clarity
+  → "And that's when I realized…"
+  → "So I did the only thing that made sense — I kept building."
+  → Land on something universal — a feeling everyone can relate to
+
+CLOSE (0:50–0:60): Optional — reflective one-liner or just end on a vibe shot
+  → "Day [X]. Still going."
+  → Or simply end with music — let the emotion sit
+```
+
+**Content ideas for Storytelling Reels:**
+- "The moment I realized Duolingo wasn't teaching me to speak — and what I did about it"
+- "I tried ordering food in Spanish after 30 days. Here's what happened."
+- "My parents' reaction when I told them I'm building a startup instead of studying"
+- "I got my first user feedback on Parlova. I wasn't ready."
+- "The hardest bug I've ever fixed — and what it taught me about persistence"
+- "Why I started learning Chinese even though it terrifies me"
+- "I'm an introvert. Here's what it feels like to post online every day."
+- "Day 50 — the honest truth about building in public"
+- "I spoke Spanish for 60 seconds straight. Here's the journey to get there."
+- "The late-night coding session that changed everything about Parlova"
+- "What being trilingual taught me about starting over with a new language"
+- "I let strangers test my app. One reaction broke me."
+
+**Best practices:**
+- Film in natural settings — face-to-camera while walking, in your dorm, at the gym
+- Use your real voice, not a polished "content creator" voice
+- Music matters — match the mood (lo-fi for reflective, upbeat for wins)
+- These don't need flashy editing — raw and authentic outperforms polished
+- Best days: **Monday** (start the week with a narrative) and **Thursday** (mid-week personal moment)
+
+---
+
+#### 👑 Authority Reels — *"Prove you know what you're talking about"*
+
+**Why they work:** Authority content positions you as a credible expert — not just another creator, but someone who has *built* something real. People follow experts. Investors notice experts. Media covers experts. This is how you go from "college kid making Reels" to "the 20-year-old who built an AI language app."
+
+**Structure:**
+```
+HOOK (0:00–0:03): Strong opinion, bold claim, or contrarian take
+  → "Duolingo won't teach you to speak. I built the app that will."
+  → "Every language app is lying to you. Here's the truth."
+  → "I've built 40 AI conversation scenarios. Here's what I learned about how people actually learn."
+
+PROOF (0:03–0:30): Back it up — show evidence, data, or your unique perspective
+  → Show Parlova in action (screen recordings of conversations, scoring, SRS)
+  → Reference real numbers — lines of code, scenarios built, user conversations
+  → Compare your approach vs. competitors (with respect — don't be petty)
+  → Use builder-specific language: "I designed the scoring system to weigh naturalness
+    higher than grammar because that's how real fluency works"
+
+POSITION (0:30–0:50): State your thesis — what you believe and why you're different
+  → "Speaking practice > streak counting. That's what I built Parlova for."
+  → "The future of language learning is AI conversation, not multiple choice."
+  → This is where you plant your flag — this is YOUR perspective on the industry
+
+CTA (0:50–0:60): Drive to action
+  → "Link in bio to try Parlova"
+  → "Follow to watch me build the future of language learning"
+  → "What do you think — am I right or am I crazy? Tell me in the comments."
+```
+
+**Content ideas for Authority Reels:**
+- "Why every language app fails at teaching speaking (builder's breakdown)"
+- "I built an AI scoring system for conversations. Here's how it works."
+- "Rating language learning apps as someone who literally built one"
+- "My app uses GPT-4o AND Claude — here's why you need both"
+- "How I handle 40 different AI conversation scenarios (tech deep-dive)"
+- "The 3 metrics that actually matter for language learning (grammar, vocab, naturalness)"
+- "Why I chose to build for speaking first, not reading or writing"
+- "Duolingo taught me colors. Parlova taught me to argue with my landlord in Spanish."
+- "I tested the top 5 language apps. Here's the uncomfortable truth."
+- "What building an AI language app taught me about how humans actually learn"
+- "The difference between translation practice and conversation practice (most apps don't know)"
+- "I built Chinese support into Parlova because no app was good enough — here's the breakdown"
+
+**Best practices:**
+- Confidence is key — deliver your points like you KNOW this (because you do)
+- Show the product — screen recordings of Parlova are your proof of work
+- Keep comparisons respectful but honest — "Duolingo is great for gamification, but it doesn't teach speaking"
+- Use data when you have it — "After building 40 conversation scenarios, I noticed…"
+- Best days: **Monday** and **Friday** — pair with shipping updates for maximum impact
+
+---
+
+#### 🔄 Weekly Reel Rotation (Suggested)
+
+| Day | Reel Type | Example |
+|-----|-----------|---------|
+| **Monday** | 👑 Authority OR 📖 Storytelling | "I shipped X this week — here's why it matters" / Dev narrative |
+| **Tuesday** | 🎓 Educational | Language tip / Learning hack |
+| **Wednesday** | 🎓 Educational | Knowledge drop with visuals |
+| **Thursday** | 📖 Storytelling | Lifestyle story / Journey moment |
+| **Friday** | 👑 Authority | Shipping update + strong take |
+| **Saturday** | 📖 Storytelling OR 🎓 Educational | Day X recap / Quick language lesson |
+
+---
+
+#### ⚡ Quick-Reference Hook Formulas
+
+These are plug-and-play hooks that work across all three reel types:
+
 - **Hook → Build → Payoff** — "I built an AI that teaches you Spanish in a way Duolingo can't" → show it → demo the conversation
 - **POV/Day-in-life** — "POV: you're 20 and building an AI startup between classes"
 - **Day X update** — "Day 47 of building an AI language app" → what you shipped + personal life clip
 - **Before/After** — "My Spanish Day 1 vs Day 30"
 - **React/Roast** — "Rating language learning apps as someone who built one"
 - **Tutorial** — "3 phrases that instantly make you sound like a native"
+- **Contrarian take** — "Unpopular opinion: you don't need to study grammar"
+- **The moment** — "The exact moment I realized I could actually speak Spanish…"
+- **Builder's take** — "I reviewed 5 language apps. As someone who built one, here's the truth."
 
 ---
 

@@ -6,8 +6,9 @@
 
 import React from 'react';
 import { X, Plus, Check, Loader2, BookOpen, Volume2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { playSpanishAudio } from '@/lib/playAudio';
+import { RateLimitWarning } from '@/components/ui/RateLimitWarning';
 
 export interface WordData {
     word: string;
@@ -158,6 +159,16 @@ export default function WordPopover({
                             <p className="text-xs text-error mb-4 text-center px-2 bg-error-subtle py-2 rounded-lg border border-error-border">
                                 Daily word lookup limit reached. Try again tomorrow.
                             </p>
+                        )}
+
+                        {remainingLookups !== null && remainingLookups <= 20 && (
+                            <RateLimitWarning
+                                operation="word_lookup"
+                                current={(isPro ? 100 : 10) - remainingLookups}
+                                limit={isPro ? 100 : 10}
+                                remaining={remainingLookups}
+                                resetAt={new Date(new Date().setUTCHours(24, 0, 0, 0)).toISOString()}
+                            />
                         )}
 
                         {/* Actions */}

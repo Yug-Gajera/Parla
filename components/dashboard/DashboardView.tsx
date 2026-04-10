@@ -24,6 +24,11 @@ interface DashboardViewProps {
     conversations: number;
     levelScore: number;
     currentLevel: string;
+    plan: string;
+    dailyUsage: {
+        conversation: number;
+        word_lookup: number;
+    };
 }
 
 export default function DashboardView({
@@ -36,12 +41,45 @@ export default function DashboardView({
     wordsLearned,
     conversations,
     levelScore,
-    currentLevel
+    currentLevel,
+    plan,
+    dailyUsage,
 }: DashboardViewProps) {
 
     const userName = user?.user_metadata?.full_name?.split(' ')[0] || 'Learner';
     const langName = userLanguage?.languages?.name || 'Spanish';
     const langEmoji = userLanguage?.languages?.emoji || '🌍';
+    const isPaidPlan = plan === 'pro' || plan === 'pro_plus';
+    const convLimit = plan === 'pro_plus' ? 20 : (plan === 'pro' ? 10 : 1);
+    const lookupLimit = plan === 'pro_plus' ? 200 : (plan === 'pro' ? 100 : 10);
+
+    const renderUsageBar = (value: number, limit: number) => {
+        const pct = Math.min(100, Math.round((value / Math.max(1, limit)) * 100));
+        const fill = pct >= 95 ? '#ef4444' : pct >= 80 ? '#f59e0b' : 'var(--color-accent)';
+        return (
+            <div className="flex items-center gap-3">
+                <div
+                    style={{
+                        width: '120px',
+                        height: '4px',
+                        borderRadius: '9999px',
+                        background: 'var(--color-border)',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${pct}%`,
+                            height: '100%',
+                            borderRadius: '9999px',
+                            background: fill,
+                        }}
+                    />
+                </div>
+                <span className="text-[12px] text-text-muted">{value}/{limit}</span>
+            </div>
+        );
+    };
 
     return (
         <div className="flex flex-col w-full h-full">
@@ -66,6 +104,19 @@ export default function DashboardView({
                             minutesStudied={minutesStudied}
                             streak={streak}
                         />
+                        {isPaidPlan && (
+                            <div className="mt-4 rounded-[14px] border border-border bg-card p-3">
+                                <p className="text-[12px] text-text-muted mb-2">Today&apos;s usage:</p>
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-[12px] text-text-muted">Conversations</span>
+                                    {renderUsageBar(dailyUsage.conversation, convLimit)}
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[12px] text-text-muted">Word lookups</span>
+                                    {renderUsageBar(dailyUsage.word_lookup, lookupLimit)}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Middle Section: Quick Actions & Goal */}

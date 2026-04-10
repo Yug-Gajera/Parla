@@ -26,6 +26,15 @@ export interface TranscriptionRecord {
     recording_duration_seconds: number;
 }
 
+interface RateLimitInfo {
+    operation: string;
+    current: number;
+    limit: number;
+    remaining: number;
+    isWarning: boolean;
+    resetAt: string;
+}
+
 export function useConversation(scenarioId: string, languageId: string, level: string) {
     const [sessionId, setSessionId] = useState<string | null>(null);
     const [scenario, setScenario] = useState<Scenario | null>(null);
@@ -43,6 +52,7 @@ export function useConversation(scenarioId: string, languageId: string, level: s
     const [situationTwist, setSituationTwist] = useState<string | null>(null);
     const [situationId, setSituationId] = useState<string | null>(null);
     const [phase, setPhase] = useState<ConversationPhase>('idle');
+    const [rateLimit, setRateLimit] = useState<RateLimitInfo | null>(null);
 
     // Voice mode state
     const [inputMode, setInputMode] = useState<'voice' | 'text'>('voice');
@@ -87,6 +97,7 @@ export function useConversation(scenarioId: string, languageId: string, level: s
             setSituationTeaser(data.situation_teaser);
             setSituationTwist(data.situation_twist);
             setSituationId(data.situation_id);
+            setRateLimit(data.rateLimit || null);
             setMessages([{
                 role: 'assistant',
                 content: data.message,
@@ -256,6 +267,7 @@ export function useConversation(scenarioId: string, languageId: string, level: s
         setSituationTeaser(null);
         setSituationTwist(null);
         setSituationId(null);
+        setRateLimit(null);
         setPhase('idle');
         setElapsedSeconds(0);
         setInputMode('voice');
@@ -284,5 +296,6 @@ export function useConversation(scenarioId: string, languageId: string, level: s
         resetConversation,
         sessionId,
         switchToTextMode,
+        rateLimit,
     };
 }

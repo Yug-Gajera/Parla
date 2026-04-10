@@ -30,7 +30,7 @@ export default function ChapterReader({
     const {
         chapter, bookInfo, isLoading, isProcessing, error,
         wordPopover, isWordLoading, showVocabPanel, readingProgress,
-        comprehensionResult, wordsTapped,
+        comprehensionResult, wordsTapped, remainingLookups, isPro,
         fetchChapter, tapWord, dismissPopover,
         toggleVocabPanel, submitComprehension,
         calculateReadingProgress,
@@ -389,6 +389,8 @@ export default function ChapterReader({
                         wordData={wordPopover}
                         isLoading={isWordLoading}
                         onDismiss={dismissPopover}
+                        remainingLookups={remainingLookups}
+                        isPro={isPro}
                     />
                 )}
             </AnimatePresence>

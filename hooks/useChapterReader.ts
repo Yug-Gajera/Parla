@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { WordData } from '@/components/shared/WordPopover';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
 
 interface ComprehensionResult {
     score: number;
@@ -25,6 +26,8 @@ export function useChapterReader(bookId: string, chapterNumber: number) {
     const [readingProgress, setReadingProgress] = useState(0);
     const [comprehensionResult, setComprehensionResult] = useState<ComprehensionResult | null>(null);
     const [wordsTapped, setWordsTapped] = useState(0);
+    const [remainingLookups, setRemainingLookups] = useState<number | null>(null);
+    const { isPro } = usePlanLimits();
 
     const fetchChapter = useCallback(async () => {
         setIsLoading(true);
@@ -101,6 +104,9 @@ export function useChapterReader(bookId: string, chapterNumber: number) {
                     note: data.word_info.note,
                 } : null);
             }
+            if (typeof data.remaining === 'number') {
+                setRemainingLookups(data.remaining);
+            }
         } catch {
             // Silent fail
         } finally {
@@ -143,7 +149,7 @@ export function useChapterReader(bookId: string, chapterNumber: number) {
     return {
         chapter, bookInfo, isLoading, isProcessing, error,
         wordPopover, isWordLoading, showVocabPanel, readingProgress,
-        comprehensionResult, wordsTapped,
+        comprehensionResult, wordsTapped, remainingLookups, isPro,
         fetchChapter, tapWord, dismissPopover,
         toggleVocabPanel, submitComprehension,
         calculateReadingProgress,

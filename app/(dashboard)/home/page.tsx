@@ -9,6 +9,7 @@ import { QuickActionsSkeleton } from '@/components/dashboard/QuickActions';
 import { WeeklyStatsSkeleton } from '@/components/dashboard/WeeklyStats';
 import { LevelProgressSkeleton } from '@/components/dashboard/LevelProgress';
 import { RecentActivitySkeleton } from '@/components/dashboard/RecentActivity';
+import { getUserPlan } from '@/lib/planLimits';
 
 // Helper to get start of current week (Monday)
 function getStartOfWeek() {
@@ -77,7 +78,8 @@ async function DashboardData() {
         { data: sessions },
         { count: weeklyWordsCount },
         { count: weeklyConversationsCount },
-        { data: todaySessions }
+        { data: todaySessions },
+        { data: dailyUsageRows }
     ] = await Promise.all([
 
         // Active Language Data (Level, Streak, Score)
@@ -117,7 +119,13 @@ async function DashboardData() {
         supabase.from('study_sessions')
             .select('duration_minutes')
             .eq('user_id', user.id)
-            .gte('created_at', startOfToday)
+            .gte('created_at', startOfToday),
+
+        // Daily rate-limit usage rows for dashboard indicators
+        (supabase as any).from('rate_limits')
+            .select('operation, count')
+            .eq('user_id', user.id)
+            .eq('date', new Date().toISOString().split('T')[0])
     ]);
 
     // If no language set up, redirect to onboarding
@@ -131,6 +139,11 @@ async function DashboardData() {
     const currentLevel = (userLanguage as any)?.current_level || 'A1';
 
     const dailyGoal = (userSettings as any)?.daily_goal_minutes || 20;
+    const plan = await getUserPlan(user.id);
+    const usageMap = (dailyUsageRows || []).reduce((acc: any, row: any) => {
+        acc[row.operation] = row.count;
+        return acc;
+    }, {} as Record<string, number>);
 
     // Calculate minutes studied today
     const minutesStudiedToday = (todaySessions || []).reduce(
@@ -160,6 +173,11 @@ async function DashboardData() {
             conversations={weeklyConversationsCount || 0}
             levelScore={levelScore}
             currentLevel={currentLevel}
+            plan={plan}
+            dailyUsage={{
+                conversation: usageMap.conversation || 0,
+                word_lookup: usageMap.word_lookup || 0,
+            }}
         />
     );
 }

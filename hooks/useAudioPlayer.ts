@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { WordData } from '@/components/shared/WordPopover';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
 
 export function useAudioPlayer(episodeId: string) {
     const [episode, setEpisode] = useState<any>(null);
@@ -15,7 +16,9 @@ export function useAudioPlayer(episodeId: string) {
     const [wordPopover, setWordPopover] = useState<WordData | null>(null);
     const [isWordLoading, setIsWordLoading] = useState(false);
     const [wordsTapped, setWordsTapped] = useState(0);
+    const [remainingLookups, setRemainingLookups] = useState<number | null>(null);
     const [comprehensionResult, setComprehensionResult] = useState<any>(null);
+    const { isPro } = usePlanLimits();
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const fetchEpisode = useCallback(async () => {
@@ -99,6 +102,9 @@ export function useAudioPlayer(episodeId: string) {
                     note: data.word_info.note,
                 } : null);
             }
+            if (typeof data.remaining === 'number') {
+                setRemainingLookups(data.remaining);
+            }
         } catch { /* silent */ } finally { setIsWordLoading(false); }
     }, [episode, pause]);
 
@@ -131,7 +137,7 @@ export function useAudioPlayer(episodeId: string) {
     return {
         episode, show, isLoading, currentTime, duration, isPlaying, playbackSpeed,
         currentTranscriptIndex, wordPopover, isWordLoading, wordsTapped,
-        comprehensionResult, audioRef,
+        comprehensionResult, audioRef, remainingLookups, isPro,
         fetchEpisode, play, pause, seek, setSpeed,
         syncTranscript, tapWord, dismissPopover, submitAnswers,
         setCurrentTime, setDuration, setIsPlaying,

@@ -17,6 +17,7 @@ import { type TranscriptionResult } from '@/lib/voice/transcription';
 import { useProfile } from '@/hooks/useProfile';
 import { SuggestedReplies, type Suggestion } from './SuggestedReplies';
 import { SpeakReplyModal } from './SpeakReplyModal';
+import { RateLimitWarning } from '@/components/ui/RateLimitWarning';
 
 interface ConversationWindowProps {
     scenarioId: string;
@@ -30,7 +31,7 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
         scenario, messages, isLoading, isStreaming, elapsedSeconds,
         situationName, situationTwist, situationId, sessionId,
         inputMode, switchToTextMode,
-        startSession, sendMessage, endSession, resetConversation,
+        startSession, sendMessage, endSession, resetConversation, rateLimit,
     } = useConversation(scenarioId, languageId, level);
 
     const { getCompletedSituationIds, getBestScore, refetch: refetchHistory } = useSituationHistory(languageId);
@@ -262,6 +263,17 @@ export function ConversationWindow({ scenarioId, languageId, level, onClose }: C
 
                     {inputMode === 'voice' ? (
                         <div className="flex flex-col items-center">
+                            {rateLimit && rateLimit.operation === 'conversation' && rateLimit.remaining <= 3 && (
+                                <div className="w-full max-w-[420px]">
+                                    <RateLimitWarning
+                                        operation={rateLimit.operation}
+                                        current={rateLimit.current}
+                                        limit={rateLimit.limit}
+                                        remaining={rateLimit.remaining}
+                                        resetAt={rateLimit.resetAt}
+                                    />
+                                </div>
+                            )}
                             {lastAiMessage && !isStreaming && (
                                 <div className="w-full max-w-[400px] mb-3 px-4 py-3 rounded-xl bg-surface-hover border border-border">
                                     <p className="text-[13px] text-text-secondary line-clamp-2 leading-relaxed">

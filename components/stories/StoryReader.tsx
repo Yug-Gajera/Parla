@@ -25,7 +25,7 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
     const {
         story, isLoading, error,
         wordPopover, isWordLoading, showVocabPanel, readingProgress,
-        comprehensionResult, wordsTapped,
+        comprehensionResult, wordsTapped, remainingLookups, isPro,
         fetchStory, tapWord, dismissPopover,
         toggleVocabPanel, submitComprehension,
         calculateReadingProgress,
@@ -311,6 +311,8 @@ export default function StoryReader({ storyId, onClose }: StoryReaderProps) {
                         wordData={wordPopover}
                         isLoading={isWordLoading}
                         onDismiss={dismissPopover}
+                        remainingLookups={remainingLookups}
+                        isPro={isPro}
                     />
                 )}
             </AnimatePresence>

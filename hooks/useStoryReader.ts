@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { WordData } from '@/components/shared/WordPopover';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
 
 interface ComprehensionResult {
     score: number;
@@ -21,6 +22,8 @@ export function useStoryReader(storyId: string) {
     const [readingProgress, setReadingProgress] = useState(0);
     const [comprehensionResult, setComprehensionResult] = useState<ComprehensionResult | null>(null);
     const [wordsTapped, setWordsTapped] = useState(0);
+    const [remainingLookups, setRemainingLookups] = useState<number | null>(null);
+    const { isPro } = usePlanLimits();
 
     const fetchStory = useCallback(async (id: string) => {
         setIsLoading(true);
@@ -77,6 +80,9 @@ export function useStoryReader(storyId: string) {
                     note: data.word_info.note,
                 } : null);
             }
+            if (typeof data.remaining === 'number') {
+                setRemainingLookups(data.remaining);
+            }
         } catch {
             // Silent fail
         } finally {
@@ -118,7 +124,7 @@ export function useStoryReader(storyId: string) {
     return {
         story, isLoading, error,
         wordPopover, isWordLoading, showVocabPanel, readingProgress,
-        comprehensionResult, wordsTapped,
+        comprehensionResult, wordsTapped, remainingLookups, isPro,
         fetchStory, tapWord, dismissPopover,
         toggleVocabPanel, submitComprehension,
         calculateReadingProgress,

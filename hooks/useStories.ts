@@ -19,6 +19,15 @@ interface Story {
     } | null;
 }
 
+interface RateLimitInfo {
+    operation: string;
+    current: number;
+    limit: number;
+    remaining: number;
+    isWarning: boolean;
+    resetAt: string;
+}
+
 export function useStories(languageId: string) {
     const [stories, setStories] = useState<Story[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +40,7 @@ export function useStories(languageId: string) {
     const [dailyGenerationsRemaining, setDailyGenerationsRemaining] = useState(3);
     const [generatedStory, setGeneratedStory] = useState<any>(null);
     const [wasGenerated, setWasGenerated] = useState(false);
+    const [rateLimit, setRateLimit] = useState<RateLimitInfo | null>(null);
 
     const fetchStories = useCallback(async (pageNum: number, reset = false) => {
         setIsLoading(true);
@@ -89,6 +99,7 @@ export function useStories(languageId: string) {
             if (res.status === 429) {
                 setDailyGenerationsRemaining(0);
                 setError(data.message || 'Daily limit reached');
+                setRateLimit(data.rateLimit || null);
                 return;
             }
 
@@ -97,6 +108,7 @@ export function useStories(languageId: string) {
             setGeneratedStory(data.story);
             setWasGenerated(data.was_generated);
             setDailyGenerationsRemaining(data.daily_generations_remaining);
+            setRateLimit(data.rateLimit || null);
 
             // Refresh stories list
             fetchStories(1, true);
@@ -116,6 +128,7 @@ export function useStories(languageId: string) {
         stories, isLoading, isGenerating, error, hasMore,
         selectedCategory, selectedContentType,
         dailyGenerationsRemaining, generatedStory, wasGenerated,
+        rateLimit,
         setSelectedCategory, setSelectedContentType,
         getStory, fetchMore, clearGeneratedStory,
     };

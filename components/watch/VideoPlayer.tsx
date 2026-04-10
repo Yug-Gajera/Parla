@@ -28,7 +28,7 @@ const SPEEDS = [0.75, 1, 1.25, 1.5];
 export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
     const {
         video, isLoading, currentSubtitleIndex, wordPopover, isWordLoading,
-        comprehensionResult, playerRef,
+        comprehensionResult, playerRef, remainingLookups, isPro,
         syncSubtitles, tapWord, dismissPopover, seekTo, setSpeed, submitAnswers, setIsPlaying,
     } = useVideoPlayer(videoId);
 
@@ -312,6 +312,8 @@ export default function VideoPlayer({ videoId, onClose }: VideoPlayerProps) {
                         wordData={wordPopover}
                         onDismiss={dismissPopover}
                         isLoading={isWordLoading}
+                        remainingLookups={remainingLookups}
+                        isPro={isPro}
                     />
                 )}
             </AnimatePresence>

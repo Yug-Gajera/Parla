@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { WordData } from '@/components/shared/WordPopover';
+import { usePlanLimits } from '@/hooks/usePlanLimits';
 
 interface TranscriptSegment { start_time: number; end_time: number; text: string; }
 
@@ -15,8 +16,10 @@ export function useVideoPlayer(videoId: string) {
     const [wordPopover, setWordPopover] = useState<WordData | null>(null);
     const [isWordLoading, setIsWordLoading] = useState(false);
     const [wordsTapped, setWordsTapped] = useState(0);
+    const [remainingLookups, setRemainingLookups] = useState<number | null>(null);
     const [comprehensionResult, setComprehensionResult] = useState<any>(null);
     const playerRef = useRef<any>(null);
+    const { isPro } = usePlanLimits();
 
     const fetchVideo = useCallback(async () => {
         setIsLoading(true);
@@ -84,6 +87,9 @@ export function useVideoPlayer(videoId: string) {
                     note: data.word_info.note,
                 } : null);
             }
+            if (typeof data.remaining === 'number') {
+                setRemainingLookups(data.remaining);
+            }
         } catch { /* silent */ } finally { setIsWordLoading(false); }
     }, [video]);
 
@@ -127,7 +133,7 @@ export function useVideoPlayer(videoId: string) {
     return {
         video, isLoading, currentTime, isPlaying, playbackSpeed,
         currentSubtitleIndex, wordPopover, isWordLoading, wordsTapped,
-        comprehensionResult, playerRef,
+        comprehensionResult, playerRef, remainingLookups, isPro,
         fetchVideo, syncSubtitles, tapWord, dismissPopover,
         seekTo, setSpeed, submitAnswers, setIsPlaying,
     };

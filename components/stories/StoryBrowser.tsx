@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Sparkles, Loader2, Users, CheckCircle2, BookOpen, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import { RateLimitWarning } from '@/components/ui/RateLimitWarning';
 
 const StoryReader = dynamic(() => import('./StoryReader'), { ssr: false });
 
@@ -44,6 +45,7 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
         stories, isLoading, isGenerating, error, hasMore,
         selectedCategory, selectedContentType,
         dailyGenerationsRemaining, generatedStory, wasGenerated,
+        rateLimit,
         setSelectedCategory, setSelectedContentType,
         getStory, fetchMore, clearGeneratedStory,
     } = useStories(languageId);
@@ -144,6 +146,17 @@ export default function StoryBrowser({ languageId }: StoryBrowserProps) {
                         </div>
 
                         <div className="flex flex-col sm:flex-row sm:items-center gap-6 pt-6 border-t border-border">
+                            {rateLimit && rateLimit.operation === 'story' && rateLimit.remaining <= 3 && (
+                                <div className="w-full sm:w-auto sm:min-w-[320px]">
+                                    <RateLimitWarning
+                                        operation={rateLimit.operation}
+                                        current={rateLimit.current}
+                                        limit={rateLimit.limit}
+                                        remaining={rateLimit.remaining}
+                                        resetAt={rateLimit.resetAt}
+                                    />
+                                </div>
+                            )}
                             <Button
                                 onClick={getStory}
                                 disabled={!selectedCategory || !selectedContentType || isGenerating}

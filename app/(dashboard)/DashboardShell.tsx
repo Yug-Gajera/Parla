@@ -148,7 +148,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
                                 <div className={`w-[48px] h-[48px] rounded-[14px] flex items-center justify-center -mt-[16px] transition-all duration-200 border ${
                                     isActive 
                                         ? 'bg-accent border-accent shadow-md shadow-accent/20 text-bg' 
-                                        : 'bg-accent-subtle border-accent-border shadow-none text-accent'
+                                        : 'bg-transparent border-transparent shadow-none text-text-muted'
                                 }`}>
                                     <Icon
                                         size={20}

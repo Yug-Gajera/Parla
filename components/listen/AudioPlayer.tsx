@@ -31,7 +31,7 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
     const {
         episode, show, isLoading, currentTime, duration, isPlaying, playbackSpeed,
         currentTranscriptIndex, wordPopover, isWordLoading,
-        comprehensionResult, audioRef,
+        comprehensionResult, audioRef, remainingLookups, isPro,
         play, pause, seek, setSpeed,
         syncTranscript, tapWord, dismissPopover, submitAnswers,
         setCurrentTime, setDuration, setIsPlaying,
@@ -339,6 +339,8 @@ export default function AudioPlayer({ episodeId, onClose }: AudioPlayerProps) {
                         wordData={wordPopover}
                         onDismiss={dismissPopover}
                         isLoading={isWordLoading}
+                        remainingLookups={remainingLookups}
+                        isPro={isPro}
                     />
                 )}
             </AnimatePresence>

@@ -8,7 +8,8 @@ import { createClient } from '@/lib/supabase/server';
 import { getStory } from '@/lib/stories/story-generator';
 import { getRandomTopic } from '@/lib/data/story-topics';
 
-import { getUserPlan, checkLimit, recordUsage } from '@/lib/planLimits';
+import { getUserPlan, checkLimit, recordUsage as recordPlanUsage } from '@/lib/planLimits';
+import { checkRateLimit, recordUsage as recordRateUsage } from '@/lib/rateLimits';
 
 export async function POST(req: Request) {
     try {
@@ -30,6 +31,20 @@ export async function POST(req: Request) {
                 upgrade_url: '/pricing',
             }, { status: 403 });
         }
+        const rateLimit = await checkRateLimit(
+            user.id,
+            user.email || '',
+            plan as 'free' | 'pro' | 'pro_plus',
+            'story'
+        );
+        if (!rateLimit.allowed) {
+            return NextResponse.json({
+                error: 'daily_rate_limit_reached',
+                plan,
+                rateLimit,
+                upgrade_url: '/pricing',
+            }, { status: 429 });
+        }
 
         const body = await req.json();
         const { language_id, topic_category, content_type } = body;
@@ -42,12 +57,12 @@ export async function POST(req: Request) {
                 .select('id')
                 .eq('code', language_id)
                 .single();
-            
+
             if (langError || !langData) {
                 console.error('[stories/generate] Language resolution failed:', langError);
                 return NextResponse.json({ error: 'Unsupported language' }, { status: 400 });
             }
-            languageUuid = langData.id;
+            languageUuid = (langData as any).id;
         }
 
         if (!language_id || !topic_category || !content_type) {
@@ -72,12 +87,26 @@ export async function POST(req: Request) {
         );
 
         // ── Record Usage ────────────────────────────────────────
-        await recordUsage(user.id, 'story');
+        await recordPlanUsage(user.id, 'story');
+        await recordRateUsage(user.id, 'story');
+        const nextCurrent = rateLimit.current + 1;
+        const nextRemaining = Math.max(0, rateLimit.limit - nextCurrent);
+        const isWarning =
+            nextCurrent >= Math.floor(rateLimit.limit * 0.8) &&
+            nextCurrent < rateLimit.limit;
 
         return NextResponse.json({
             story: result.story,
             was_generated: result.wasGenerated,
-            daily_generations_remaining: result.dailyRemaining,
+            daily_generations_remaining: Math.min(result.dailyRemaining, nextRemaining),
+            rateLimit: {
+                current: nextCurrent,
+                limit: rateLimit.limit,
+                remaining: nextRemaining,
+                isWarning,
+                resetAt: rateLimit.resetAt,
+                operation: 'story',
+            },
         });
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);

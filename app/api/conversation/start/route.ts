@@ -5,7 +5,8 @@ import { SCENARIOS } from '@/lib/data/scenarios';
 import { CONVERSATION_SYSTEM_PROMPT, injectLevelRules } from '@/lib/claude/prompts';
 import { callClaude } from '@/lib/claude/client';
 
-import { getUserPlan, checkLimit, recordUsage } from '@/lib/planLimits';
+import { getUserPlan, checkLimit, recordUsage as recordPlanUsage } from '@/lib/planLimits';
+import { checkRateLimit, recordUsage as recordRateUsage } from '@/lib/rateLimits';
 
 export async function POST(req: Request) {
     try {
@@ -28,6 +29,20 @@ export async function POST(req: Request) {
                 upgrade_url: '/pricing',
             }, { status: 403 });
         }
+        const rateLimit = await checkRateLimit(
+            user.id,
+            user.email || '',
+            plan as 'free' | 'pro' | 'pro_plus',
+            'conversation'
+        );
+        if (!rateLimit.allowed) {
+            return NextResponse.json({
+                error: 'daily_rate_limit_reached',
+                plan,
+                rateLimit,
+                upgrade_url: '/pricing',
+            }, { status: 429 });
+        }
 
         const body = await req.json();
         const { scenario_id, language_id, level, skip_situation_id } = body;
@@ -40,12 +55,12 @@ export async function POST(req: Request) {
                 .select('id')
                 .eq('code', language_id)
                 .single();
-            
+
             if (langError || !langData) {
                 console.error('[conversation/start] Language resolution failed:', langError);
                 return NextResponse.json({ error: 'Unsupported language' }, { status: 400 });
             }
-            languageUuid = langData.id;
+            languageUuid = (langData as any).id;
         }
 
         const scenario = SCENARIOS.find(s => s.id === scenario_id);
@@ -152,7 +167,39 @@ export async function POST(req: Request) {
         }
 
         // ── Record Usage ────────────────────────────────────────
-        await recordUsage(user.id, 'conversation');
+        await recordPlanUsage(user.id, 'conversation');
+        await recordRateUsage(user.id, 'conversation');
+
+        const nextCurrent = rateLimit.current + 1;
+        const nextRemaining = Math.max(0, rateLimit.limit - nextCurrent);
+        const isWarning =
+            nextCurrent >= Math.floor(rateLimit.limit * 0.8) &&
+            nextCurrent < rateLimit.limit;
+
+        if (isWarning) {
+            console.log(
+                `Rate limit warning for ${user.id}: ${nextCurrent}/${rateLimit.limit} conversations today`
+            );
+            const alertUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/alert-high-usage`;
+            if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+                fetch(alertUrl, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: user.id,
+                        email: user.email,
+                        operation: 'conversation',
+                        current: nextCurrent,
+                        limit: rateLimit.limit,
+                    }),
+                }).catch((alertError) => {
+                    console.error('[conversation/start] high-usage alert failed:', alertError);
+                });
+            }
+        }
 
         return NextResponse.json({
             success: true,
@@ -163,6 +210,14 @@ export async function POST(req: Request) {
             situation_teaser: selectedSituation.teaser,
             situation_twist: selectedSituation.twist,
             situation_id: selectedSituation.id,
+            rateLimit: {
+                current: nextCurrent,
+                limit: rateLimit.limit,
+                remaining: nextRemaining,
+                isWarning,
+                resetAt: rateLimit.resetAt,
+                operation: 'conversation',
+            },
         });
 
     } catch (error) {

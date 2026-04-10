@@ -9,7 +9,6 @@ import Anthropic from '@anthropic-ai/sdk';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
-const DAILY_LOOKUP_LIMIT = 30;
 
 function getServiceClient() {
     return createSupabaseClient(
@@ -18,7 +17,8 @@ function getServiceClient() {
     );
 }
 
-import { getUserPlan, checkLimit, recordUsage } from '@/lib/planLimits';
+import { getUserPlan, checkLimit, recordUsage as recordPlanUsage } from '@/lib/planLimits';
+import { checkRateLimit, recordUsage as recordRateUsage } from '@/lib/rateLimits';
 
 export async function POST(req: Request) {
     try {
@@ -46,6 +46,25 @@ export async function POST(req: Request) {
                 upgrade_url: '/pricing',
             }, { status: 403 });
         }
+        const rateLimit = await checkRateLimit(
+            user.id,
+            user.email || '',
+            plan as 'free' | 'pro' | 'pro_plus',
+            'word_lookup'
+        );
+        if (!rateLimit.allowed) {
+            return NextResponse.json({
+                error: 'daily_rate_limit_reached',
+                plan,
+                rateLimit,
+                upgrade_url: '/pricing',
+            }, { status: 429 });
+        }
+        const nextCurrent = rateLimit.current + 1;
+        const nextRemaining = Math.max(0, rateLimit.limit - nextCurrent);
+        const isWarning =
+            nextCurrent >= Math.floor(rateLimit.limit * 0.8) &&
+            nextCurrent < rateLimit.limit;
 
         const cleanWord = word.toLowerCase().trim();
         const serviceClient = getServiceClient();
@@ -59,7 +78,21 @@ export async function POST(req: Request) {
             .single();
 
         if (cached) {
-            return NextResponse.json({ word_info: cached, source: 'cache' });
+            await recordRateUsage(user.id, 'word_lookup');
+            await recordPlanUsage(user.id, 'word_lookup');
+            return NextResponse.json({
+                word_info: cached,
+                source: 'cache',
+                remaining: nextRemaining,
+                rateLimit: {
+                    current: nextCurrent,
+                    limit: rateLimit.limit,
+                    remaining: nextRemaining,
+                    isWarning,
+                    resetAt: rateLimit.resetAt,
+                    operation: 'word_lookup',
+                },
+            });
         }
 
         // 2. We skip the old manual counter check as it's now handled by Tier Enforcement checkLimit above.
@@ -121,12 +154,21 @@ Return this JSON:
             .select();
 
         // 5. Record Usage (centralized)
-        await recordUsage(user.id, 'word_lookup');
+        await recordPlanUsage(user.id, 'word_lookup');
+        await recordRateUsage(user.id, 'word_lookup');
 
         return NextResponse.json({
             word_info: wordInfo,
             source: 'generated',
-            remaining,
+            remaining: Math.min(remaining, nextRemaining),
+            rateLimit: {
+                current: nextCurrent,
+                limit: rateLimit.limit,
+                remaining: nextRemaining,
+                isWarning,
+                resetAt: rateLimit.resetAt,
+                operation: 'word_lookup',
+            },
         });
     } catch (error) {
         console.error('[word/lookup] Error:', error);
