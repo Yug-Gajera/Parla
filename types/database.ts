@@ -30,6 +30,7 @@ export interface Database {
                     guided_scenarios_completed: number;
                     conversation_unlocked: boolean;
                     guided_scenario_progress: Json;
+                    has_seen_tour: boolean;
                     created_at: string;
                     updated_at: string;
                 };
@@ -42,6 +43,7 @@ export interface Database {
                     guided_scenarios_completed?: number;
                     conversation_unlocked?: boolean;
                     guided_scenario_progress?: Json;
+                    has_seen_tour?: boolean;
                     created_at?: string;
                     updated_at?: string;
                 };
@@ -54,6 +56,7 @@ export interface Database {
                     guided_scenarios_completed?: number;
                     conversation_unlocked?: boolean;
                     guided_scenario_progress?: Json;
+                    has_seen_tour?: boolean;
                     updated_at?: string;
                 };
             };

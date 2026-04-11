@@ -11,7 +11,7 @@ export async function GET() {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { data: userData, error } = await supabase
+        const { data: userData, error } = await (supabase as any)
             .from('users')
             .select('has_seen_tour')
             .eq('id', user.id)
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'has_seen_tour must be a boolean' }, { status: 400 });
         }
 
-        const { error } = await supabase
+        const { error } = await (supabase as any)
             .from('users')
             .update({ has_seen_tour })
             .eq('id', user.id);
