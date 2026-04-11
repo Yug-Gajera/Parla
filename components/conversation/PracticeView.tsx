@@ -253,7 +253,7 @@ export default function PracticeView({ languageId, level, recentSessions, conver
                         Unlock Open Conversations
                     </h2>
                     <p className="text-text-secondary max-w-lg mx-auto mb-8 leading-relaxed">
-                        To ensure you have the best experience, free conversation practice unlocks after you reach A2 level or complete 3 Guided Scenarios in the Learn tab.
+                        Practice conversations unlock after you reach A2 or finish 3 lessons.
                     </p>
                     <div className="flex flex-col items-center gap-4">
                         <div className="flex items-center gap-2">

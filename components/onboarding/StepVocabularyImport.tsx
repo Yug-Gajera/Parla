@@ -148,7 +148,7 @@ export default function StepVocabularyImport() {
             const words = parsePasteText(pasteText);
             if (!words.length) return;
 
-            startProcessing("Looking up your words...");
+            startProcessing("Looking up words...");
             
             const needingEnrichment = words.filter(w => !w.english);
             const alreadyTranslated = words.filter(w => w.english);
@@ -184,7 +184,7 @@ export default function StepVocabularyImport() {
                 }
             }
 
-            setProcessText("Setting up your word list...");
+            setProcessText("Setting up...");
             const res = await fetch('/api/vocabulary/import-batch', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -247,7 +247,7 @@ export default function StepVocabularyImport() {
     useEffect(() => {
         let interval: NodeJS.Timeout;
         if (processState === 'processing' && progressStats.total === 0) {
-            const texts = ["Getting things ready for you...", "Setting up your words...", "Almost ready..."];
+            const texts = ["Getting ready...", "Setting up...", "Almost there..."];
             let idx = 0;
             interval = setInterval(() => {
                 idx = (idx + 1) % texts.length;
@@ -320,7 +320,7 @@ export default function StepVocabularyImport() {
                 Do you already know some Spanish words?
             </h1>
             <p className="text-muted-foreground text-sm md:text-base mb-12 text-center max-w-lg px-4">
-                We'll set up your list to match where you actually are.
+                We'll set up your word list to match your level.
             </p>
 
             <div className="w-full max-w-2xl px-4 flex flex-col gap-4">

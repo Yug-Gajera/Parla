@@ -141,7 +141,7 @@ export default function StepDiagnostic() {
                 </button>
                 <h2 className="text-3xl font-serif text-foreground mb-4">Let's find your level.</h2>
                 <p className="text-muted-foreground mb-8 max-w-md">
-                    Based on your words, we are starting your test at <strong>{estimatedLevel}</strong>. 
+                    We'll start your test at <strong>{estimatedLevel}</strong>.
                     <br/><br/>Change this if it feels wrong.
                 </p>
                 <div className="mb-10">
@@ -178,9 +178,9 @@ export default function StepDiagnostic() {
                     <ArrowLeft size={18} />
                 </button>
                 <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-accent mb-8" />
-                <h2 className="text-2xl font-serif text-text-primary mb-3">Getting things ready for you...</h2>
+                <h2 className="text-2xl font-serif text-text-primary mb-3">Getting ready...</h2>
                 <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-text-muted text-center max-w-sm px-6 py-3 border border-border bg-card rounded-[18px] shadow-sm">
-                    Loading questions...
+                    Loading...
                 </p>
             </div>
         );
@@ -190,7 +190,7 @@ export default function StepDiagnostic() {
         return (
             <div className="flex flex-col items-center justify-center min-h-[500px] w-full animation-fade-in font-sans px-4">
                 <Loader2 size={48} strokeWidth={1.5} className="animate-spin text-accent mb-8" />
-                <h2 className="text-2xl font-serif text-text-primary mb-3">Checking your answers...</h2>
+                <h2 className="text-2xl font-serif text-text-primary mb-3">Checking answers...</h2>
                 <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-text-muted text-center px-6 py-3 border border-border bg-card rounded-[18px] shadow-sm">
                     Almost done...
                 </p>

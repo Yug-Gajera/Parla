@@ -41,7 +41,7 @@ export function PaywallModal({ isOpen, onClose, metric, plan }: PaywallModalProp
                         You've hit your free limit
                     </DialogTitle>
                     <DialogDescription className="text-text-secondary text-base leading-relaxed">
-                        Upgrade to Pro to get unlimited {label}. You'll also unlock AI features like speaking feedback and custom stories.
+                        Upgrade to Pro to get unlimited {label}. You'll also get AI feedback on your speaking and custom stories.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="flex flex-col sm:flex-row gap-3 mt-6">

@@ -65,7 +65,6 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
 
     const levelTabs = [
         { value: 'easier', label: 'Simplified' },
-        { value: 'easier', label: 'Simplified' },
         { value: userLevel, label: `My Level (${userLevel})` },
         { value: 'harder', label: 'Advanced' },
         { value: 'all', label: 'All Levels' },
@@ -102,7 +101,7 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 
                 {/* Level Tabs */}
-                <div className="flex bg-surface border border-border p-1 rounded-full w-full md:w-auto">
+                <div className="flex bg-surface border border-border p-1 rounded-full w-full md:w-auto overflow-x-auto hide-scrollbar">
                     {levelTabs.map(tab => {
                         const active = levelFilter === tab.value;
                         return (
@@ -110,7 +109,7 @@ export default function ArticleBrowser({ languageId, userLevel }: ArticleBrowser
                                 key={tab.value}
                                 variant="ghost"
                                 onClick={() => setLevelFilter(tab.value)}
-                                className={`flex-1 md:flex-none text-[10px] font-mono-num tracking-widest uppercase rounded-full h-8 px-5 transition-all
+                                className={`flex-shrink-0 md:flex-none text-[10px] font-mono-num tracking-widest uppercase rounded-full h-8 px-3 md:px-5 transition-all whitespace-nowrap
                                     ${active ? 'bg-card text-[#E8521A] shadow-md border border-border-strong' : 'text-text-muted hover:text-text-secondary'}
                                 `}
                             >

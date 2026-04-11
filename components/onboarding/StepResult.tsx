@@ -133,7 +133,7 @@ export default function StepResult() {
             >
                 <h2 className="text-3xl font-serif mb-4 text-text-primary tracking-wide">{getLevelName(assessedLevel || 'A1')}</h2>
                 <p className="text-text-muted font-sans text-center max-w-sm leading-relaxed">
-                    You're all set. We've built your custom learning path to help you reach your goals.
+                    You're all set. We made a learning plan just for you.
                 </p>
             </motion.div>
 
