@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 export async function POST(req: Request) {
     try {
@@ -34,6 +35,22 @@ export async function POST(req: Request) {
         if (langError || !language) {
             console.error('[onboarding/complete] Language lookup error:', langError);
             return NextResponse.json({ error: 'Language not found' }, { status: 404 });
+        }
+
+        // 1.5 FAILSAFE: Ensure user exists in public.users to prevent foreign key violations.
+        // Triggers can sometimes lag or fail during local dev Google OAuth signups.
+        if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+            const adminClient = createSupabaseClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL,
+                process.env.SUPABASE_SERVICE_ROLE_KEY
+            );
+            
+            await adminClient.from('users').upsert({
+                id: user.id,
+                email: user.email,
+                full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+                avatar_url: user.user_metadata?.avatar_url
+            }, { onConflict: 'id' });
         }
 
         // 2. Save user_languages
