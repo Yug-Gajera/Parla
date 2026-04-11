@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { GuidedScenario } from '@/lib/data/guided_scenarios';
 import { X, Volume2, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent } from '@/lib/posthog';
-import { playSpanishAudio } from '@/lib/playAudio';
+import { playFromCache, prefetchPhrases, prefetchAudio, clearCache } from '@/lib/ttsCache';
 
 interface PhaseProps {
     scenario: GuidedScenario;
@@ -16,17 +16,37 @@ export default function Phase1Learn({ scenario, onComplete, onClose }: PhaseProp
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const phrases = scenario.phrases;
 
-    // We don't have real audio files for these dummy phrases yet,
-    // so we'll use a mocked TTS synthesis for demonstration.
-    const speakPhrase = (text: string) => {
+    // Prefetch first 3 phrases on mount
+    useEffect(() => {
+        const initialPhrases = phrases
+            .slice(0, 3)
+            .map(p => p.text);
+        prefetchPhrases(initialPhrases, 'veryslow');
+
+        // Cleanup cache on unmount
+        return () => {
+            clearCache();
+        };
+    }, [phrases]);
+
+    // Prefetch next phrase when current index changes
+    useEffect(() => {
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < phrases.length) {
+            prefetchAudio(phrases[nextIndex].text, 'veryslow');
+        }
+    }, [currentIndex, phrases]);
+
+    // Play phrase from cache (instant if prefetched)
+    const speakPhrase = useCallback((text: string) => {
         const cleanText = text.replace(/\.\.\./g, '');
-        playSpanishAudio(cleanText, 'veryslow');
-    };
+        playFromCache(cleanText, 'veryslow');
+    }, []);
 
     useEffect(() => {
         // Auto-play TTS when phrase changes
         speakPhrase(phrases[currentIndex].text);
-    }, [currentIndex, phrases]);
+    }, [currentIndex, phrases, speakPhrase]);
 
     const handleNext = () => {
         if (currentIndex < phrases.length - 1) {

@@ -3,7 +3,7 @@ let currentAbortController: AbortController | null = null;
 
 export type AudioSpeed = 'veryslow' | 'slow' | 'normal' | 'fast';
 
-const SPEED_MAP: Record<AudioSpeed, number> = {
+export const SPEED_MAP: Record<AudioSpeed, number> = {
     veryslow: 0.75,
     slow: 0.85,
     normal: 0.95,
