@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import DashboardView from '@/components/dashboard/DashboardView';
+import DashboardTour from '@/components/onboarding/DashboardTour';
 import { Suspense } from 'react';
 import { HeaderSkeleton } from '@/components/dashboard/Header';
 import { GoalProgressSkeleton } from '@/components/dashboard/GoalProgress';
@@ -185,8 +186,11 @@ async function DashboardData() {
 // ── EXPORTED PAGE COMPONENT ──
 export default function HomePage() {
     return (
-        <Suspense fallback={<DashboardSkeleton />}>
-            <DashboardData />
-        </Suspense>
+        <>
+            <Suspense fallback={<DashboardSkeleton />}>
+                <DashboardData />
+            </Suspense>
+            <DashboardTour />
+        </>
     );
 }

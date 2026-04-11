@@ -33,7 +33,7 @@ export default function Header({ userName, languageName, languageEmoji, level, s
                     <span className="text-[16px]" aria-hidden="true">{languageEmoji}</span>
                     <span className="text-caption font-medium">{languageName}</span>
                     <span className="w-1 h-1 rounded-full bg-border-strong" />
-                    <span className="badge-level">
+                    <span className="badge-level" data-tour="level-indicator">
                         {level}
                     </span>
                 </div>

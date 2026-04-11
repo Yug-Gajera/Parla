@@ -107,7 +107,7 @@ export default function SignupForm() {
             toast.success('Check your email to confirm your account');
             router.push('/login');
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : 'Failed to create account');
+            toast.error(error instanceof Error ? error.message : "Couldn't create account");
         } finally {
             setIsLoading(false);
         }
@@ -125,7 +125,7 @@ export default function SignupForm() {
 
             if (error) throw new Error(error.message);
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : 'Failed to sign up with Google');
+            toast.error(error instanceof Error ? error.message : "Couldn't sign up with Google");
             setIsGoogleLoading(false);
         }
     }

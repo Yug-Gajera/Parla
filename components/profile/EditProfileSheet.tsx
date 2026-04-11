@@ -105,7 +105,7 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
             <SheetContent side="bottom" className="sm:max-w-md mx-auto rounded-t-3xl bg-card border-border border-b-0 px-8 py-10 font-sans shadow-[0_-20px_50px_rgba(30,30,26,0.08)]">
                 <SheetHeader className="mb-10">
                     <SheetTitle className="text-3xl font-serif text-text-primary tracking-tight">Edit Profile</SheetTitle>
-                    <SheetDescription className="text-text-muted text-sm">Modify your identification and linguistic baseline parameters.</SheetDescription>
+                    <SheetDescription className="text-text-muted text-sm">Update your profile and language settings.</SheetDescription>
                 </SheetHeader>
 
                 <div className="flex flex-col gap-8">
@@ -145,7 +145,7 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
 
                     <div className="space-y-6">
                         <div className="space-y-3">
-                            <Label htmlFor="name" className="text-[10px] font-mono uppercase tracking-widest text-text-muted font-bold">Nominal Identity</Label>
+                            <Label htmlFor="name" className="text-[10px] font-mono uppercase tracking-widest text-text-muted font-bold">Full Name</Label>
                             <Input
                                 id="name"
                                 value={name}
@@ -156,7 +156,7 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
                         </div>
 
                         <div className="space-y-3">
-                            <Label htmlFor="native_lang" className="text-[10px] font-mono uppercase tracking-widest text-text-muted font-bold">Base Language</Label>
+                            <Label htmlFor="native_lang" className="text-[10px] font-mono uppercase tracking-widest text-text-muted font-bold">Native Language</Label>
                             <select
                                 id="native_lang"
                                 value={nativeLang}
@@ -190,7 +190,7 @@ export function EditProfileSheet({ isOpen, onClose, user, onSave }: EditProfileS
                         disabled={isSaving} 
                         className="w-full h-12 rounded-full font-mono uppercase tracking-widest text-xs font-bold bg-accent text-white hover:bg-accent-hover transition-all shadow-lg shadow-accent/20"
                     >
-                        {isSaving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Transmitting...</> : 'Save Profile Specs'}
+                        {isSaving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</> : 'Save Profile'}
                     </Button>
                 </SheetFooter>
             </SheetContent>

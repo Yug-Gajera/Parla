@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { Loader2, Mail, Palette, Database, Brain, Mic, BookOpen } from 'lucide-react';
+import { Loader2, Mail, Palette, Database, Brain, Mic, BookOpen, Compass } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { trackEvent } from '@/lib/posthog';
 
@@ -40,6 +40,7 @@ export default function SettingsPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [showSpeakConfirm, setShowSpeakConfirm] = useState(false);
     const [showGuidedConfirm, setShowGuidedConfirm] = useState(false);
+    const [isReplayingTour, setIsReplayingTour] = useState(false);
     const supabase = createClient();
 
     const handleGuidedToggleClick = (checked: boolean) => {
@@ -109,6 +110,26 @@ export default function SettingsPage() {
     const handleDeleteAccount = async () => {
         if (deleteConfirm !== 'PURGE') return;
         toast.error("Operation requires root privileges. Contact sysadmin.");
+    };
+
+    const handleReplayTour = async () => {
+        setIsReplayingTour(true);
+        try {
+            const res = await fetch('/api/tour/status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ has_seen_tour: false }),
+            });
+            if (res.ok) {
+                window.location.href = '/home';
+            } else {
+                toast.error('Failed to restart tour');
+            }
+        } catch (error) {
+            toast.error('Failed to restart tour');
+        } finally {
+            setIsReplayingTour(false);
+        }
     };
 
     if (isLoading) {
@@ -316,6 +337,38 @@ export default function SettingsPage() {
                             <span className="text-[10px] font-mono bg-accent/5 text-accent border border-accent-border font-bold px-4 py-2 rounded-lg uppercase tracking-widest whitespace-nowrap text-center shadow-sm">
                                 CURRENT THEME
                             </span>
+                        </div>
+                    </Card>
+                </section>
+
+                {/* Onboarding */}
+                <section>
+                    <div className="flex items-center gap-3 mb-6 border-b border-border pb-4 font-serif">
+                        <Compass className="w-4 h-4 text-accent" />
+                        <h2 className="text-xl tracking-tight text-text-primary">App Tour</h2>
+                    </div>
+                    <Card className="p-10 bg-card border border-border shadow-sm rounded-[32px] transition-all hover:border-accent-border">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                            <div>
+                                <h4 className="font-serif text-2xl text-text-primary mb-2">Replay Tour</h4>
+                                <p className="text-text-muted text-sm leading-relaxed max-w-md">See the guided tour again to re-familiarize yourself with the app.</p>
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleReplayTour}
+                                disabled={isReplayingTour}
+                                className="rounded-full bg-accent/5 border-accent-border text-accent hover:bg-accent/10 hover:text-accent font-mono text-[10px] uppercase tracking-widest h-10 px-6 transition-all whitespace-nowrap"
+                            >
+                                {isReplayingTour ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                                        Loading...
+                                    </>
+                                ) : (
+                                    'Start Tour'
+                                )}
+                            </Button>
                         </div>
                     </Card>
                 </section>

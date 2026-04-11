@@ -73,7 +73,7 @@ export default function StepDiagnostic() {
             setQuestions(data.data);
             setViewState('testing');
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : 'System Error');
+            toast.error(err instanceof Error ? err.message : 'Something went wrong');
             setViewState('error');
         }
     }
@@ -114,7 +114,7 @@ export default function StepDiagnostic() {
             const data = await res.json();
 
             if (!res.ok || !data.success) {
-                throw new Error(data.error || 'Diagnostic evaluation failed');
+                throw new Error(data.error || "Couldn't check your test");
             }
 
             const result = data.data as DiagnosticResult;
@@ -122,7 +122,7 @@ export default function StepDiagnostic() {
             nextStep();
 
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : 'Process Terminated');
+            toast.error(err instanceof Error ? err.message : 'Something went wrong');
             setViewState('error');
         }
     };

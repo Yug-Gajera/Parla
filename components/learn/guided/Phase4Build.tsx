@@ -80,7 +80,7 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
                 setLoading(false);
             } catch (error) {
                 console.error(error);
-                toast.error("Failed to load Phase 4 exercises.");
+                toast.error("Couldn't load Phase 4 exercises.");
                 setLoading(false);
             }
         };
@@ -174,7 +174,7 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
             setR1Finished(true);
 
         } catch (e) {
-            toast.error("Error analyzing speech.");
+            toast.error("Couldn't understand your voice.");
         } finally {
             setIsScoring(false);
         }
@@ -337,7 +337,7 @@ export default function Phase4Build({ scenario, userId, onComplete, onClose }: P
         return (
             <div className="flex flex-col h-[100dvh] items-center justify-center bg-background">
                 <Loader2 className="w-8 h-8 text-[#E8521A] animate-spin mb-4" />
-                <p className="text-text-muted font-mono uppercase tracking-widest text-xs">Generating Exercises...</p>
+                <p className="text-text-muted font-mono uppercase tracking-widest text-xs">Creating Exercises...</p>
             </div>
         );
     }

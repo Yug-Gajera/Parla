@@ -64,7 +64,7 @@ export default function LoginForm() {
             router.refresh();
 
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : 'Invalid login credentials');
+            toast.error(error instanceof Error ? error.message : 'Wrong email or password');
         } finally {
             setIsLoading(false);
         }

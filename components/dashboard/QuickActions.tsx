@@ -18,7 +18,8 @@ const ACTIONS = [
         subtitle: '3 topics ready',
         variant: 'gold' as VariantName, // kept variant name for logic but updated styles
         hoverStyles: 'group-hover:bg-[#E8521A]/10 group-hover:border-[#E8521A]/20 group-hover:text-[#E8521A]',
-        iconColor: 'text-[#E8521A]'
+        iconColor: 'text-[#E8521A]',
+        tourId: 'start-conversation',
     },
     {
         href: '/learn',
@@ -27,7 +28,8 @@ const ACTIONS = [
         subtitle: '12 words to review',
         variant: 'neutral' as VariantName,
         hoverStyles: 'group-hover:bg-accent-subtle group-hover:border-accent-border group-hover:text-accent',
-        iconColor: 'text-accent'
+        iconColor: 'text-accent',
+        tourId: 'vocabulary-section',
     },
     {
         href: '/learn?tab=lessons',
@@ -36,7 +38,8 @@ const ACTIONS = [
         subtitle: 'Today: Past Tense',
         variant: 'success' as VariantName,
         hoverStyles: 'group-hover:bg-success-subtle group-hover:border-success-border group-hover:text-success',
-        iconColor: 'text-success'
+        iconColor: 'text-success',
+        tourId: null,
     },
     {
         href: '/compete',
@@ -45,7 +48,8 @@ const ACTIONS = [
         subtitle: 'Rank #4 in Silver',
         variant: 'gold' as VariantName,
         hoverStyles: 'group-hover:bg-[#E8521A]/10 group-hover:border-[#E8521A]/20 group-hover:text-[#E8521A]',
-        iconColor: 'text-[#E8521A]'
+        iconColor: 'text-[#E8521A]',
+        tourId: null,
     }
 ];
 
@@ -59,6 +63,7 @@ export default function QuickActions() {
                     <Link
                         key={i}
                         href={action.href}
+                        data-tour={action.tourId || undefined}
                         className="group flex flex-col p-4 rounded-[18px] bg-card border border-border hover:border-accent-border hover:shadow-md transition-all duration-300 relative overflow-hidden w-full h-full"
                     >
                         <div className="flex items-center justify-between mb-8 w-full">
